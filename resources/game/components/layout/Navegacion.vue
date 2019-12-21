@@ -15,23 +15,23 @@
     </div>
     <div class="d-flex bd-highlight">
         <div class="flex-fill bd-highlight" :title="$t('resources.wood')">
-            <img src="/img/icon/icon_wood.png">
+            <img :src="require('Img/icon/icon_wood.png')">
             <span>{{data.wood}}</span>
         </div>
         <div class="flex-fill bd-highlight" :title="$t('resources.wine')">
-            <img src="/img/icon/icon_wine.png">
+            <img :src="require('Img/icon/icon_wine.png')">
             <span>{{data.wine}}</span>
         </div>
         <div class="flex-fill bd-highlight" :title="$t('resources.marble')">
-            <img src="/img/icon/icon_marble.png">
+            <img :src="require('Img/icon/icon_marble.png')">
             <span>{{data.marble}}</span>
         </div>
         <div class="flex-fill bd-highlight" :title="$t('resources.glass')">
-            <img src="/img/icon/icon_glass.png">
+            <img :src="require('Img/icon/icon_glass.png')">
             <span>{{data.glass}}</span>
         </div>
         <div class="flex-fill bd-highlight" :title="$t('resources.sulfur')">
-            <img src="/img/icon/icon_sulfur.png">
+            <img :src="require('Img/icon/icon_sulfur.png')">
             <span>{{data.sulfur}}</span>
         </div>
     </div>

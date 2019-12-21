@@ -1,6 +1,6 @@
 <template>
-  <div class="float-right marcoSuperior">
-    <div class="d-inline-block marco" v-for="index in 4" :key='index'>
+  <div class="marcoSuperior">
+    <div class="marco" v-for="index in 4" :key='index'>
       <div class="consejeros" :class="`consejero_${index}`"></div>
       <div class="nombre">{{$t(`advisor[${index-1}]`)}}</div>
     </div>
@@ -15,8 +15,10 @@ export default {
 <style lang="css" scoped>
 .marcoSuperior {
   z-index: 2;
-  position: relative;
   margin-top: 24px;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 .consejeros {
   height: 90px;
@@ -51,6 +53,7 @@ export default {
 .marco {
   background: #bf9e72;
   cursor: pointer;
+  display: inline-block;
 }
 .marco:first-child {
   border-top-left-radius: 5px;

@@ -26,10 +26,8 @@ export default {
 
 .marcoSuperior {
   z-index: 2;
-  margin-top: 24px;
   position: absolute;
-  top: 0;
-  right: 0;
+  right: 5px;
 }
 .consejeros {
   height: 90px;
@@ -41,13 +39,9 @@ export default {
   width: 100%;
   text-align: center;
   background: #cecece;
-  border: 1px solid #cecece;
 }
 .marco:hover {
   background: #967a54;
-}
-.marco:hover .nombre {
-  border: 1px solid black;
 }
 .marco {
   background: #bf9e72;

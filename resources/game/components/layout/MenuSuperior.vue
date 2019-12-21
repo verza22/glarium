@@ -1,10 +1,10 @@
 <template>
   <div class="fixed-top">
     <div class="opciones">Opciones</div>
-    <Navegacion></Navegacion>
-
-    <Consejeros></Consejeros>
-
+    <div class="marco">
+      <Navegacion></Navegacion>
+      <Consejeros></Consejeros>
+    </div>
   </div>
 </template>
 
@@ -24,9 +24,11 @@ export default {
   font-weight: bold;
 }
 .opciones {
-  position: fixed;
   width: 100%;
   text-align: center;
   background: white;
+}
+.marco{
+  position: relative;
 }
 </style>

@@ -1,36 +1,36 @@
 <template>
   <div class="float-left mr-2 marcoSuperior">
-    <div class="row marcoNavegacion">
-        <div class="col-md-3">
+    <div class="marcoNavegacion">
+        <div class="marco">
         </div>
-        <div class="col-md-3">
+        <div class="marco">
         </div>
-        <div class="col-md-3">
+        <div class="marco">
             <router-link v-if="data.island_id" :to="{ name: 'Island', params: { island: data.island_id }}">{{$t('options.showIsland')}}</router-link>
             <a href="#" v-else>{{$t('options.showIsland')}}</a>
         </div>
-        <div class="col-md-3">
+        <div class="marco">
             <router-link :to="{ name: 'City', params: { city: city_id }}">{{$t('options.showCity')}}</router-link>
         </div>
     </div>
-    <div class="d-flex bd-highlight">
-        <div class="flex-fill bd-highlight" :title="$t('resources.wood')">
+    <div class="resourceF">
+        <div class="resource" :title="$t('resources.wood')">
             <img :src="require('Img/icon/icon_wood.png')">
             <span>{{data.wood}}</span>
         </div>
-        <div class="flex-fill bd-highlight" :title="$t('resources.wine')">
+        <div class="resource" :title="$t('resources.wine')">
             <img :src="require('Img/icon/icon_wine.png')">
             <span>{{data.wine}}</span>
         </div>
-        <div class="flex-fill bd-highlight" :title="$t('resources.marble')">
+        <div class="resource" :title="$t('resources.marble')">
             <img :src="require('Img/icon/icon_marble.png')">
             <span>{{data.marble}}</span>
         </div>
-        <div class="flex-fill bd-highlight" :title="$t('resources.glass')">
+        <div class="resource" :title="$t('resources.glass')">
             <img :src="require('Img/icon/icon_glass.png')">
             <span>{{data.glass}}</span>
         </div>
-        <div class="flex-fill bd-highlight" :title="$t('resources.sulfur')">
+        <div class="resource" :title="$t('resources.sulfur')">
             <img :src="require('Img/icon/icon_sulfur.png')">
             <span>{{data.sulfur}}</span>
         </div>
@@ -79,6 +79,11 @@
 <style lang="css" scoped>
     .marcoNavegacion{
         height: 70px;
+        display: flex;
+    }
+    .marco{
+        display: flex;
+        flex: auto;
     }
     .col-md-3{
         padding-left:5px;
@@ -86,12 +91,18 @@
     }
     .marcoSuperior{
         background: #bf9e72;
-        z-index: 5;
+        z-index: 2;
         width: 420px;
-        height: 116px;
-        margin-top: 24px;
-        position: relative;
         padding: 15px;
         border-radius: 5px;
+        position: absolute;
+        left: 5px;
+    }
+    .resourceF{
+        display: flex
+    }
+    .resource{
+        display: flex;
+        flex: auto;
     }
 </style>

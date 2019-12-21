@@ -5,7 +5,7 @@ const webpack = require('webpack')
 module.exports = {
     mode: 'development',
     entry: {
-        main: './resources/js/test.js',
+        main: './resources/game/js/main.js',
     },
     output: {
         path: path.resolve(__dirname, 'public/dist'),
@@ -49,8 +49,14 @@ module.exports = {
     resolve: {
         alias: {
             vue: 'vue/dist/vue.js',
-            Components: path.resolve(__dirname, 'resources/components/'),
-            Img: path.resolve(__dirname, 'resources/img/'),
+            Components: path.resolve(__dirname, 'resources/game/components/'),
+            Views: path.resolve(__dirname, 'resources/game/views/'),
+            Js: path.resolve(__dirname, 'resources/game/js/'),
+            Prototypes: path.resolve(__dirname, 'resources/game/prototypes/'),
+            Lang: path.resolve(__dirname, 'resources/game/lang/'),
+            Sass: path.resolve(__dirname, 'resources/game/sass/'),
+            Stores: path.resolve(__dirname, 'resources/game/stores/'),
+            Img: path.resolve(__dirname, 'resources/game/img/')
         }
     },
     plugins:[

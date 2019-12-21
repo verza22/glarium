@@ -39,7 +39,8 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        return redirect(route('Game',['city' => $user->capital->city_id]));
+        $city_id = $user->capital->city_id;
+        return redirect('/game/city/'.$city_id);
     }
 
     public function __construct()

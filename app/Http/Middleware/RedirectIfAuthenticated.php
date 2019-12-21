@@ -19,7 +19,8 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect(RouteServiceProvider::HOME);
+            $city_id = Auth::user()->capital->city_id;
+            return redirect('/game/city/'.$city_id);
         }
 
         return $next($request);

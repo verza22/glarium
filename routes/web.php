@@ -14,7 +14,7 @@
 Route::get('/', function () {return view('Login');})->name('login');
 Route::get('/register', function () {return view('Register');});
 
-Route::get('/game/city/{city}', 'Game\GameController@index')->name('Game');
+Route::get('/game/{any}','Game\GameController@index')->where('any', '.*');
 
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/register', 'Auth\RegisterController@register');

@@ -111,7 +111,7 @@ export default {
     },
     city_id(){
       return $store.state.city_id;
-    }
+    },
   },
   watch:{
     timeConstruct(newval){
@@ -124,9 +124,15 @@ export default {
       this.getBuilds();
     }
   },
-  mounted() {
-    if(this.city_id!=null)
+  beforeMount(){
+    if(this.$route.params.buildings!=undefined){
+      this.buildings = this.$route.params.buildings;
+    }else{
+      if(this.city_id!=null)
       this.getBuilds();
+    }
+  },
+  mounted() {
 
     $store.subscribe(action => {
       if (action.type === 'reloadBuilding') {

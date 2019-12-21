@@ -6,11 +6,11 @@
         <div class="marco">
         </div>
         <div class="marco">
-            <router-link v-if="data.island_id" :to="{ name: 'Island', params: { island: data.island_id }}">{{$t('options.showIsland')}}</router-link>
-            <a href="#" v-else>{{$t('options.showIsland')}}</a>
+            <span v-if="data.island_id" @click='toIsland(data.island_id)'>{{$t('options.showIsland')}}</span>
+            <span v-else>{{$t('options.showIsland')}}</span>
         </div>
         <div class="marco">
-            <router-link :to="{ name: 'City', params: { city: city_id }}">{{$t('options.showCity')}}</router-link>
+            <span @click='toCity()'>{{$t('options.showCity')}}</span>
         </div>
     </div>
     <div class="resourceF">
@@ -59,6 +59,24 @@
                     catchAxios(err);
                 });
             },
+            toIsland(island_id){
+                axios('island/'+island_id)
+                .then(res =>{
+                    this.$router.push({ name: 'Island', params: { island:island_id,data: res.data }})
+                })
+                .catch(err => {
+                    catchAxios(err);
+                });
+            },
+            toCity(){
+                axios("building/" + this.city_id)
+                .then(res => {
+                    this.$router.push({ name: 'City', params: { city:this.city_id,buildings: res.data }})
+                })
+                .catch(err => {
+                    catchAxios(err);
+                });
+            }
         },
         computed:{
             city_id(){

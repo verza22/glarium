@@ -48,7 +48,7 @@ export default {
                 return x.position == index
             });
         }
-    }
+    },
 }
 </script>
 

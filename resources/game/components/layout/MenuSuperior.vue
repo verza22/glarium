@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed-top">
+  <div class="fixed">
     <div class="opciones">Opciones</div>
     <div class="marco">
       <Navegacion></Navegacion>
@@ -30,5 +30,12 @@ export default {
 }
 .marco{
   position: relative;
+}
+.fixed{
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: 100%;
 }
 </style>

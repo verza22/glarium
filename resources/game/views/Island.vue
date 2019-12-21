@@ -33,20 +33,19 @@ export default {
       data:{}
     }
   },
-  methods:{
-      getCities(){
-        axios('island/'+this.$route.params.island)
-        .then(res =>{
-          this.data = res.data;
-        })
-        .catch(err => {
-            catchAxios(err);
-        });
+  beforeMount(){
+    if(this.$route.params.data!=undefined){
+      this.data = this.$route.params.data;
+    }else{
+      axios('island/'+this.$route.params.island)
+      .then(res =>{
+        this.data = res.data;
+      })
+      .catch(err => {
+          catchAxios(err);
+      });
     }
   },
-  mounted(){
-      this.getCities()
-  }
 };
 
 </script>

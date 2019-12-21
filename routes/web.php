@@ -11,8 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return 'Hello';
-});
+Route::get('/', function () {return view('Login');})->name('login');
+Route::get('/register', function () {return view('Register');});
+
+Route::get('/game', 'Game\GameController@index')->name('Game');
+
+Route::post('/login', 'Auth\LoginController@login');
+Route::post('/register', 'Auth\RegisterController@register');
+Route::get('/logout', 'Auth\LoginController@logout');
 
 //Auth::routes();

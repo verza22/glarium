@@ -144,16 +144,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-@mixin building($n) {
-  background-image: url('~Img/ciudad/'+$n+'.png');
-}
-
-@for $i from 1 through 19 {
-  .building_#{$i}{
-    @include building($i);
-  }
-}
+@import "~Sass/buildings";
 
 .object {
   position: absolute;

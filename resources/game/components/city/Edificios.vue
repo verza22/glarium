@@ -2,7 +2,7 @@
   <div class="divBuilds" v-if="buildings.length>0">
     <div
       class="object"
-      :style="{top:object.top,left:object.left}"
+      :style="{top:object.top+'px',left:object.left+'px'}"
       v-for="(object,i) in objects"
       :key="i"
     >
@@ -18,7 +18,6 @@
         :class='[(building.constructed_at!=null ? "construct" : ""),"building_"+building.building_id]'
         v-for="(building,i2) in buildingPosition(i)"
         :key="i2"
-        :style="{background: 'url(/img/ciudad/'+building.building_id+'.png)'}"
         :title="$t(`buildings[${building.building_id}].name`)+' ('+building.level+')'"
       >
         <div class="builCclockDiv" v-if="building.constructed_at!=null">
@@ -120,10 +119,12 @@ export default {
         this.constructed_at = null;
         this.getBuilds();
       }
+    },
+    city_id(){
+      this.getBuilds();
     }
   },
   mounted() {
-    this.getBuilds();
     $store.subscribe(action => {
       if (action.type === 'reloadBuilding') {
         this.getBuilds();
@@ -133,7 +134,18 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+
+@mixin building($n) {
+  background-image: url('~Img/ciudad/'+$n+'.png');
+}
+
+@for $i from 1 through 19 {
+  .building_#{$i}{
+    @include building($i);
+  }
+}
+
 .object {
   position: absolute;
   cursor: pointer;
@@ -144,6 +156,7 @@ export default {
   height: 125px;
   width: 140px;
 }
+/*
 .building_16{
   height: 143px;
   width: 211px;
@@ -156,12 +169,12 @@ export default {
   top: 10px;
   right: 37px;
   background-size: contain!important;
-}
+}*/
 .construct {
-  background: url(/img/ciudad/construct.png) no-repeat !important;
+  background: url('~Img/ciudad/construct.png') no-repeat !important;
 }
 .terreno {
-  background: url(/img/ciudad/terreno.png) no-repeat;
+  background: url('~Img/ciudad/terreno.png') no-repeat;
   background-position: center;
 }
 .builCclockDiv {
@@ -174,7 +187,7 @@ export default {
   height: 11px;
   display: inline-block;
   margin-right: 10px;
-  background: url(/img/icon/arrow_upgrade.png);
+  background: url('~Img/icon/arrow_upgrade.png');
 }
 .builCclock {
   width: fit-content;

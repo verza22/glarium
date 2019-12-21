@@ -55,7 +55,7 @@ export default {
 .ocean{
   width: 2400px;
   height: 1800px;
-  background: url(/img/island/ocean.jpg);
+  background: url('~Img/island/ocean.jpg');
 }
 .islandContainer {
   cursor: grab;
@@ -65,11 +65,11 @@ export default {
 }
 .island{
   position:relative;
-  top: 430;
-  left: 500;
+  top: 430px;
+  left: 500px;
   width: 1386px;
   height: 924px;
   z-index: 1;
-  background: url(/img/island/0.jpg);
+  background: url('~Img/island/0.jpg');
 }
 </style>

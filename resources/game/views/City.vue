@@ -35,19 +35,20 @@ export default {
 .cityContainer {
   cursor: grab;
   height: 100%;
-  overflow: hidden;
   width: 100%;
+  position: absolute;
+  overflow: hidden;
 }
 .forest{
   width:3600px;
-  height:1794;
-  background: url("/img/ciudad/forest.jpg");
+  height:1794px;
+  background: url("~Img/ciudad/forest.jpg");
 }
 .city{
   position:relative;
   left: 830px;
   width:1920px;
-  height:1794;
-  background: url("/img/ciudad/city.jpg");
+  height:1794px;
+  background: url("~Img/ciudad/city.jpg");
 }
 </style>

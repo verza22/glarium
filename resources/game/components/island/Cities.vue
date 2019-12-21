@@ -1,7 +1,7 @@
 <template>
     <div class="objectContainer">
         <div class="object" 
-        :style="{top:object.top,left:object.left}"
+        :style="{top:object.top+'px',left:object.left+'px'}"
         v-for="(object,index) in objects"
         :key='index'
         >
@@ -60,10 +60,10 @@ export default {
         height: 70px;
     }
     .blue{
-        background-image: url(/img/island/city_blue.png);
+        background-image: url('~Img/island/city_blue.png');
     }
     .red{
-        background-image: url(/img/island/city_red.png);
+        background-image: url('~Img/island/city_red.png');
     }
     .city{
         background-position: -3px 0px;
@@ -72,7 +72,7 @@ export default {
         margin: 0 15;
     }
     .flag{
-        background-image: url(/img/island/flag.png);
+        background-image: url('~Img/island/flag.png');
         width: 70px;
         height: 70px;
         margin: 0 35;
@@ -83,7 +83,7 @@ export default {
         position:relative;
     }
     .name{
-        background-image: url(/img/island/name1.png);
+        background-image: url('~Img/island/name1.png');
         position: absolute;
         bottom: -25px;
         padding: 3px 4px;
@@ -92,7 +92,7 @@ export default {
         font-size: 0.85rem;
     }
     .name::after {
-        background-image: url(/img/island/name2.png);
+        background-image: url('~Img/island/name2.png');
         width: 12px;
         height: 26px;
         content: '';
@@ -103,7 +103,7 @@ export default {
         background-size: cover;
     }
     .name::before {
-        background-image: url(/img/island/name3.png);
+        background-image: url('~Img/island/name3.png');
         width: 12px;
         height: 26px;
         content: '';

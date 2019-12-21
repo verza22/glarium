@@ -1,7 +1,7 @@
 <template>
   <div class="marcoSuperior">
     <div class="marco" v-for="index in 4" :key='index'>
-      <div class="consejeros" :class="`consejero_${index}`"></div>
+      <div class="consejeros" :class="`advisor_${index}`"></div>
       <div class="nombre">{{$t(`advisor[${index-1}]`)}}</div>
     </div>
   </div>
@@ -12,7 +12,18 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+
+@mixin advisor($n) {
+  background-image: url('~Img/advisor/'+($n - 1)+'.png');
+}
+
+@for $i from 1 through 4 {
+  .advisor_#{$i}{
+    @include advisor($i);
+  }
+}
+
 .marcoSuperior {
   z-index: 2;
   margin-top: 24px;
@@ -25,18 +36,6 @@ export default {
   width: 90px;
   background-repeat: no-repeat;
   background-position: center;
-}
-.consejero_1{
-  background-image: url('~Img/advisor/0.png');
-}
-.consejero_2{
-  background-image: url('~Img/advisor/1.png');
-}
-.consejero_3{
-  background-image: url('~Img/advisor/2.png');
-}
-.consejero_4{
-  background-image: url('~Img/advisor/3.png');
 }
 .nombre {
   width: 100%;

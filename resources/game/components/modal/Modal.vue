@@ -6,7 +6,7 @@
                 <div class="btn-close" @click='close'></div>
             </div>
             <div class="mBody">
-                <ListaEdificios :info='info' v-if='type==0'></ListaEdificios>
+                <ListaEdificios :close='close' :info='info' v-if='type==0'></ListaEdificios>
             </div> 
             <div class="mFooter"></div>
         </div>
@@ -82,16 +82,15 @@
         margin: auto;
     }
     .mDiv{
-        position: relative;
+        position: fixed;
         background: beige;
         z-index: 100;
         width: 720px;
-        top: 110px;
-        bottom: 0;
         margin: auto;
         left: 0;
         right: 0;
         touch-action: none;
+        margin-top: 120px; 
     }
     .mBody{
         overflow-y: scroll;

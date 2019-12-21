@@ -129,6 +129,9 @@ export default {
         return null;
       }
     },
+    now(){
+      return $store.state.now;
+    },
     city_id() {
       return $store.state.city_id;
     }
@@ -147,6 +150,7 @@ export default {
   beforeMount() {
     if (this.$route.params.buildings != undefined) {
       this.buildings = this.$route.params.buildings;
+      this.checkConstructed();
     } else {
       if (this.city_id != null) this.getBuilds();
     }

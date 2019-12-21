@@ -44,7 +44,7 @@ import customPrototypes from 'Prototypes/customPrototypes.js'
 import $store from 'Stores/store.js'
 
 export default {
-    props:['info'],
+    props:['info','close'],
     methods:{
         construir(id){
             axios.put('building/'+this.info.city_id,{
@@ -53,9 +53,9 @@ export default {
             })
             .then(res =>{
                 if(res.data=='ok'){
-                    this.$modal.hide("buildModal");
                     $store.commit('reloadBuilding');
                     $store.commit('reloadResources');
+                    this.close();
                 }else{
                     callError(res);
                 }

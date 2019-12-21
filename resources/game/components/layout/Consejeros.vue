@@ -1,10 +1,7 @@
 <template>
   <div class="float-right marcoSuperior">
     <div class="d-inline-block marco" v-for="index in 4" :key='index'>
-      <div
-        class="consejeros"
-        v-bind:style="{'background-image': backgroundImage(index-1)}"
-      ></div>
+      <div class="consejeros" :class="`consejero_${index}`"></div>
       <div class="nombre">{{$t(`advisor[${index-1}]`)}}</div>
     </div>
   </div>
@@ -12,11 +9,6 @@
 
 <script>
 export default {
-  methods: {
-    backgroundImage(imagen) {
-      return "url(/img/advisor/" + imagen + ".png)";
-    }
-  }
 };
 </script>
 
@@ -31,6 +23,18 @@ export default {
   width: 90px;
   background-repeat: no-repeat;
   background-position: center;
+}
+.consejero_1{
+  background-image: url('~Img/advisor/0.png');
+}
+.consejero_2{
+  background-image: url('~Img/advisor/1.png');
+}
+.consejero_3{
+  background-image: url('~Img/advisor/2.png');
+}
+.consejero_4{
+  background-image: url('~Img/advisor/3.png');
 }
 .nombre {
   width: 100%;

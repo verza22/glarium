@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Game from 'Js/Game.vue'
-import Lang from 'Lang/index'
+import i18n  from 'Lang/index.js'
 
 new Vue({
     el:'#app',
-    Lang,
+    i18n,
     name:'App',
     components:{
         Game

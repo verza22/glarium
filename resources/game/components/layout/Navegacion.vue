@@ -65,8 +65,12 @@
                 return $store.state.city_id;
             }
         },
+        watch:{
+            city_id(newval){
+                this.getResources()
+            }
+        },
         mounted(){
-            this.getResources();
             $store.subscribe(action => {
                 if (action.type === 'reloadResources') {
                    this.getResources();

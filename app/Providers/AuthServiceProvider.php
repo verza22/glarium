@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\UserCity;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
+        Gate::define('isMyCity', function ($user,$city) {
+            return UserCity::where('user_id',$user->id)->where('city_id',$city->id)->exists();
+        });
+        Gate::define('isNotMyCity', function ($user,$city) {
+            return UserCity::where('user_id',$user->id)->where('city_id',$city->id)->count() === 0;
+        });
     }
 }

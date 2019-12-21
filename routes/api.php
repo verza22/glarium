@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
   //  return $request->user();
 //});
+
+Route::get('building/{city}', 'Game\BuildingController@buildings');
+Route::post('building/{city}', 'Game\BuildingController@buildingsAvaible');
+Route::put('building/{city}', 'Game\BuildingController@create');
+
+Route::get('city/getResources/{city}', 'Game\CityController@getResources');
+
+Route::get('island/{island}', 'Game\IslandController@show');

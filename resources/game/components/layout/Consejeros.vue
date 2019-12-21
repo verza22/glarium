@@ -1,7 +1,7 @@
 <template>
   <div class="marcoSuperior">
     <div class="marco" v-for="index in 4" :key='index'>
-      <div class="consejeros" :class="`advisor_${index}`"></div>
+      <div class="advisors" :class="`advisor_${index}`"></div>
       <div class="nombre">{{$t(`advisor[${index-1}]`)}}</div>
     </div>
   </div>
@@ -29,7 +29,7 @@ export default {
   position: absolute;
   right: 5px;
 }
-.consejeros {
+.advisors {
   height: 90px;
   width: 90px;
   background-repeat: no-repeat;

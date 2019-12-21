@@ -1,12 +1,12 @@
 <template>
     <div class="mBorder" v-if='show'>
-        <div class="mDiv" v-if='building!=null'>
+        <div class="mDiv">
             <div class="mHeader">
                 <div>Terreno vacio</div>
                 <div class="btn-close" @click='close'></div>
             </div>
             <div class="mBody">
-                <ListaEdificios :info='info' v-if='building==0'></ListaEdificios>
+                <ListaEdificios :info='info' v-if='type==0'></ListaEdificios>
             </div> 
             <div class="mFooter"></div>
         </div>
@@ -14,9 +14,10 @@
 </template>
 
 <script>
-    import ListaEdificios from 'Components/city/modal/ListaEdificios.vue';
+    import ListaEdificios from 'Components/modal/ListaEdificios.vue';
     import axios from 'axios'
     import interact from 'interactjs'
+    import $modal from 'Stores/modal.js'
 
     export default {
         name: 'Modal',
@@ -26,16 +27,15 @@
         data(){
             return {
                 show:false,
+                type:null,
                 info:{},
-                building:null
             }
         },
         methods:{
-            open (event) {
-                this.building = event.building
-                this.info.data = event.data
-                this.info.position = event.position
-                this.info.city_id = event.city_id
+            open ({type,info}) {
+                this.info = info;
+                this.type = type;
+                this.show = true;
             },
             close(){
                 this.show = false;
@@ -61,18 +61,11 @@
         },
         mounted(){
             this.drag();
-            /*axios
-            .post("building/" + 1, {
-                position: 1
-            })
-            .then(res => {
-                this.open({
-                    building: 0,
-                    data: res.data,
-                    position:0,
-                    city_id: 1
-                });
-            })*/
+            $modal.subscribe((action,state) => {
+                if (action.type === "openModal") {
+                    this.open(state);
+                }
+            });
         }
     }
 </script>
@@ -89,12 +82,11 @@
         margin: auto;
     }
     .mDiv{
-        position: fixed;
-        height: 80%;
+        position: relative;
         background: beige;
         z-index: 100;
         width: 720px;
-        top: 0;
+        top: 110px;
         bottom: 0;
         margin: auto;
         left: 0;
@@ -107,6 +99,7 @@
         border-image: url('~Img/icon/bg_maincontentbox_left.png') 0% 50%;
         border-style: solid;
         border-width: 0px 3px;
+        max-height: 75vh;
     }
     .mHeader{
         cursor: grab;

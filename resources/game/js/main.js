@@ -3,6 +3,7 @@ import Game from 'Js/Game.vue'
 import i18n  from 'Lang/index.js'
 
 import "bootstrap-css-only";
+import "Sass/main.scss"
 
 require('Js/config')
 

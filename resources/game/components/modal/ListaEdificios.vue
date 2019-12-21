@@ -1,18 +1,18 @@
 <template>
     <div class="box">
-        <div class="text-justify mb-3">{{$t('building.text')}}</div>
+        <div class="text-justify mb-3 texto">{{$t('building.text')}}</div>
         <!--<div><h6><small>{{$t('building.text')}}</small></h6></div>
         <div class="text-center font-weight-bold mb-3">{{$t('building.title')}}</div>-->
         <div>
-            <div class="row mx-0 pb-3 mb-3 buildRow" v-for="(build,index) in info.data" :key='index'>
-                <div class="col-3 m-auto">
+            <div class="d-flex mx-0 pb-3 mb-3 buildRow" v-for="(build,index) in info.data" :key='index'>
+                <div class="flex-1 m-auto">
                     <div class="build" :class='[(build.research ? "" : "inactive"),"building_"+build.id]'></div>
                 </div>
-                <div class="col-6" >
+                <div class="flex-3 px-3">
                     <div>
                         <div class="font-weight-bold mb-2">{{$t(`buildings[${build.id}].name`)}}</div>
                         <div class="text-justify mb-2 pb-2 borderRed">
-                            <h6><small>{{$t(`buildings[${build.id}].text`)}}</small></h6>
+                            <div class="texto">{{$t(`buildings[${build.id}].text`)}}</div>
                         </div>
                     </div>
                     <div>
@@ -24,7 +24,7 @@
                         <div class="d-inline-block" :title="$t('resources.time')" v-if="build.time!=0"><img :src="require('Img/icon/icon_time.png')"> {{build.time.sectotime()}}</div>
                     </div>
                 </div>
-                <div class="col-3 m-auto">
+                <div class="flex-1 m-auto">
                     <div class="text-center btnConstruir" v-if='build.research' @click='construir(build.id)'>{{$t('building.action')}}</div>
                     <div v-else class="research">
                         <div>{{$t('building.research')}}</div>
@@ -93,5 +93,10 @@ export default {
     .research{
         text-align: center;
         font-size:0.9rem
+    }
+    .texto{
+        line-height: 1;
+        font-weight: 400;
+        font: normal 12px Arial,Helvetica,sans-serif;
     }
 </style>

@@ -10,7 +10,7 @@
 import router from 'Js/router.js'
 import MenuSuperior from "Components/layout/MenuSuperior.vue"
 import $store from 'Stores/store.js'
-import Modal from "Components/Modal.vue";
+import Modal from "Components/modal/Modal.vue";
 
 export default {
     name:'Game',

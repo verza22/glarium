@@ -36,6 +36,7 @@ import axios from "axios";
 import { catchAxios } from "Js/util.js";
 import moment from "moment";
 import $store from "Stores/store.js";
+import $modal from "Stores/modal.js";
 
 export default {
   name: "Edificios",
@@ -92,12 +93,14 @@ export default {
           position: position
         })
         .then(res => {
-          this.$modal.show("buildModal", {
-            building: 0,
-            data: res.data,
-            position:position,
-            city_id: this.city_id
-          });
+          $modal.commit('openModal',{
+            type:0,
+            info:{
+              data:res.data,
+              position:position,
+              city_id:this.city_id
+            }
+          })
         })
         .catch(err => {
           catchAxios(err);

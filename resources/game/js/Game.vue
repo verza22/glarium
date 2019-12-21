@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Modal></Modal>
         <MenuSuperior></MenuSuperior>
         <router-view></router-view>
     </div>
@@ -9,12 +10,14 @@
 import router from 'Js/router.js'
 import MenuSuperior from "Components/layout/MenuSuperior.vue"
 import $store from 'Stores/store.js'
+import Modal from "Components/Modal.vue";
 
 export default {
     name:'Game',
     router,
     components:{
-        MenuSuperior
+        MenuSuperior,
+        Modal
     },
     mounted(){
         if(localStorage.city_id==undefined)

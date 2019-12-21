@@ -1,9 +1,9 @@
 <template>
-  <div class="divBuilds" v-if="buildings.length>0">
+  <div class="divBuilds" v-if="buildings.length > 0">
     <div
       class="object"
-      :style="{top:object.top+'px',left:object.left+'px'}"
-      v-for="(object,i) in objects"
+      :style="{ top: object.top + 'px', left: object.left + 'px' }"
+      v-for="(object, i) in objects"
       :key="i"
     >
       <div
@@ -15,14 +15,15 @@
       <div
         v-else
         class="building"
-        :class='[(building.constructed_at!=null ? "construct" : ""),"building_"+building.building_id]'
-        v-for="(building,i2) in buildingPosition(i)"
+        :class="[building.constructed_at != null ? 'construct' : '','building_' + building.building_id]"
+        v-for="(building, i2) in buildingPosition(i)"
         :key="i2"
-        :title="$t(`buildings[${building.building_id}].name`)+' ('+building.level+')'"
+        :title="$t(`buildings[${building.building_id}].name`) +' (' +building.level +')'"
       >
-        <div class="builCclockDiv" v-if="building.constructed_at!=null">
+        <div class="builCclockDiv" v-if="building.constructed_at != null">
           <div class="builCclock">
-            <div class="arrowUpgrade"></div><div class="d-inline-block">{{(timeConstruct==null ? '00s' : timeConstruct)}}</div>
+            <div class="arrowUpgrade"></div>
+            <div class="d-inline-block">{{ timeConstruct == null ? "00s" : timeConstruct }}</div>
           </div>
         </div>
       </div>
@@ -33,8 +34,8 @@
 <script>
 import axios from "axios";
 import { catchAxios } from "Js/util.js";
-import moment from 'moment'
-import $store from 'Stores/store.js'
+import moment from "moment";
+import $store from "Stores/store.js";
 
 export default {
   name: "Edificios",
@@ -58,7 +59,7 @@ export default {
         { top: 660, left: 490 },
         { top: 230, left: 440 },
         { top: 685, left: 665 }
-      ],
+      ]
     };
   },
   methods: {
@@ -77,65 +78,79 @@ export default {
     getBuilds() {
       //Consultamos los edificios
       axios("building/" + this.city_id)
-      .then(res => {
-        this.buildings = res.data;
-        this.checkConstructed();
-      })
-      .catch(err => {
-        catchAxios(err);
-      });
+        .then(res => {
+          this.buildings = res.data;
+          this.checkConstructed();
+        })
+        .catch(err => {
+          catchAxios(err);
+        });
     },
     modalConstruir(position) {
-      this.$modal.show("buildModal", {
-        building: 0,
-        position: position,
-        city_id: this.city_id
-      });
+      axios
+        .post("building/" + this.city_id, {
+          position: position
+        })
+        .then(res => {
+          this.$modal.show("buildModal", {
+            building: 0,
+            data: res.data,
+            position:position,
+            city_id: this.city_id
+          });
+        })
+        .catch(err => {
+          catchAxios(err);
+        });
     },
     checkConstructed() {
       var building = this.buildings.filter(x => {
         return x.constructed_at != null;
       });
-      if(building.length>0){
-        this.constructed_at = moment(building[0].constructed_at).add(2, 'seconds');
+      if (building.length > 0) {
+        this.constructed_at = moment(building[0].constructed_at).add(
+          2,
+          "seconds"
+        );
       }
-    },
+    }
   },
   computed: {
-    timeConstruct(){
-        if(this.constructed_at!=null){
-            return moment.duration(moment(this.constructed_at).diff(moment($store.state.now))).asSeconds().sectotime(); 
-        }else{
-            return null;
-        }
+    timeConstruct() {
+      if (this.constructed_at != null) {
+        return moment
+          .duration(moment(this.constructed_at).diff(moment($store.state.now)))
+          .asSeconds()
+          .sectotime();
+      } else {
+        return null;
+      }
     },
-    city_id(){
+    city_id() {
       return $store.state.city_id;
-    },
+    }
   },
-  watch:{
-    timeConstruct(newval){
-      if(newval=='00s'){
+  watch: {
+    timeConstruct(newval) {
+      if (newval == "00s") {
         this.constructed_at = null;
         this.getBuilds();
       }
     },
-    city_id(){
+    city_id() {
       this.getBuilds();
     }
   },
-  beforeMount(){
-    if(this.$route.params.buildings!=undefined){
+  beforeMount() {
+    if (this.$route.params.buildings != undefined) {
       this.buildings = this.$route.params.buildings;
-    }else{
-      if(this.city_id!=null)
-      this.getBuilds();
+    } else {
+      if (this.city_id != null) this.getBuilds();
     }
   },
   mounted() {
-
     $store.subscribe(action => {
-      if (action.type === 'reloadBuilding') {
+      if (action.type === "reloadBuilding") {
         this.getBuilds();
       }
     });
@@ -171,10 +186,10 @@ export default {
   background-size: contain!important;
 }*/
 .construct {
-  background: url('~Img/ciudad/construct.png') no-repeat !important;
+  background: url("~Img/ciudad/construct.png") no-repeat !important;
 }
 .terreno {
-  background: url('~Img/ciudad/terreno.png') no-repeat;
+  background: url("~Img/ciudad/terreno.png") no-repeat;
   background-position: center;
 }
 .builCclockDiv {
@@ -187,7 +202,7 @@ export default {
   height: 11px;
   display: inline-block;
   margin-right: 10px;
-  background: url('~Img/icon/arrow_upgrade.png');
+  background: url("~Img/icon/arrow_upgrade.png");
 }
 .builCclock {
   width: fit-content;

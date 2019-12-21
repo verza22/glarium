@@ -7,7 +7,6 @@
         </div>
       </div>
     </div>
-    <EdificiosModal></EdificiosModal>
   </div>
 </template>
 
@@ -16,7 +15,7 @@ import { dragscroll } from 'vue-dragscroll'
 import { autoscroll } from 'vue-autoscroll'
 
 import Edificios from "Components/city/Edificios.vue";
-import EdificiosModal from "Components/city/EdificiosModal.vue";
+
 
 export default {
   name: "City",
@@ -26,7 +25,6 @@ export default {
   },
   components:{
     Edificios,
-    EdificiosModal
   },
 };
 </script>

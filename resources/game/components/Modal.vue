@@ -1,0 +1,156 @@
+<template>
+    <div class="mBorder" v-if='show'>
+        <div class="mDiv" v-if='building!=null'>
+            <div class="mHeader">
+                <div>Terreno vacio</div>
+                <div class="btn-close" @click='close'></div>
+            </div>
+            <div class="mBody">
+                <ListaEdificios :info='info' v-if='building==0'></ListaEdificios>
+            </div> 
+            <div class="mFooter"></div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import ListaEdificios from 'Components/city/modal/ListaEdificios.vue';
+    import axios from 'axios'
+    import interact from 'interactjs'
+
+    export default {
+        name: 'Modal',
+        components: {
+            ListaEdificios
+        },
+        data(){
+            return {
+                show:false,
+                info:{},
+                building:null
+            }
+        },
+        methods:{
+            open (event) {
+                this.building = event.building
+                this.info.data = event.data
+                this.info.position = event.position
+                this.info.city_id = event.city_id
+            },
+            close(){
+                this.show = false;
+            },
+            drag(){
+                const position = { x: 0, y: 0 }
+                interact('.mDiv')
+                .draggable({
+                    allowFrom:'.mHeader',
+                    //inertia: true,
+                    restrict: {
+                        restriction: 'parent',
+                    },
+                    listeners: {
+                        move (event) {
+                            position.x += event.dx
+                            position.y += event.dy
+                            event.target.style.transform =`translate(${position.x}px, ${position.y}px)`
+                        },
+                    }
+                })
+            }
+        },
+        mounted(){
+            this.drag();
+            /*axios
+            .post("building/" + 1, {
+                position: 1
+            })
+            .then(res => {
+                this.open({
+                    building: 0,
+                    data: res.data,
+                    position:0,
+                    city_id: 1
+                });
+            })*/
+        }
+    }
+</script>
+
+<style lang="scss" scoped>
+    .mBorder{
+        position: absolute;
+        width: 90%;
+        height: 90%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+    }
+    .mDiv{
+        position: fixed;
+        height: 80%;
+        background: beige;
+        z-index: 100;
+        width: 720px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        left: 0;
+        right: 0;
+        touch-action: none;
+    }
+    .mBody{
+        overflow-y: scroll;
+        height: calc(100% - 26px);
+        border-image: url('~Img/icon/bg_maincontentbox_left.png') 0% 50%;
+        border-style: solid;
+        border-width: 0px 3px;
+    }
+    .mHeader{
+        cursor: grab;
+        height: 26px;
+        width: 100%;
+        font-weight: bold;
+        font-size: 0.9rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url('~Img/icon/modal_header.jpg');
+        color: #542c0f;
+        touch-action: none;
+        user-select: none;
+    }
+    .mFooter{
+        background-image: url('~Img/icon/bg_maincontentbox_footer.png');
+        height:4px;
+    }
+    .btn-close{
+        background-image: url('~Img/icon/close.png');
+        height: 19px;
+        width: 18px;
+        position: absolute;
+        right: 4px;
+        top: 4px;
+        cursor: pointer;
+    }
+    .btn-close:hover{
+        background-image: url('~Img/icon/close-hover.png');
+    }
+    .mBody::-webkit-scrollbar-track
+    {
+        background-image: url('~Img/icon/scroll_bg.png');
+    }
+    .mBody::-webkit-scrollbar
+    {
+        width: 20px;
+        background-color: #F5F5F5;
+    }
+    .mBody::-webkit-scrollbar-thumb
+    {
+        background-image: url('~Img/icon/scroll_mid.png');
+    }
+</style>

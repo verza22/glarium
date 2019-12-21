@@ -67,15 +67,15 @@ export default {
     }
     .city{
         background-position: -3px 0px;
-        width: 70;
-        height: 70;
-        margin: 0 15;
+        width: 70px;
+        height: 70px;
+        margin: 0px 15px;
     }
     .flag{
         background-image: url('~Img/island/flag.png');
         width: 70px;
         height: 70px;
-        margin: 0 35;
+        margin: 0px 35px;
         background-repeat: no-repeat;
         background-position-x: right;
     }

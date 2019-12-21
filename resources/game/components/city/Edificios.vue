@@ -125,6 +125,9 @@ export default {
     }
   },
   mounted() {
+    if(this.city_id!=null)
+      this.getBuilds();
+
     $store.subscribe(action => {
       if (action.type === 'reloadBuilding') {
         this.getBuilds();

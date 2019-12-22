@@ -6,6 +6,7 @@ import "bootstrap-css-only";
 import "Sass/main.scss"
 
 require('Js/config')
+require('Js/prototypes')
 
 
 new Vue({

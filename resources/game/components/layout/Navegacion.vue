@@ -16,17 +16,14 @@
                         <div class="action"></div>
                         <div>3</div>
                     </div>
-                    <div class="flex-2 d-flex">
-                        <div class="population"></div>
-                        <div>60 (60)</div>
-                    </div>
+                    <Population></Population>
                   </div>
               </div>
               <div class="flex-3 d-flex btn-game">
                   <div class="flex-1 btn-world" :title="$t('options.navigation.worldTitle')">
                       <div class="btn-game-text">{{$t('options.navigation.world')}}</div>
                   </div>
-                  <div class="flex-1 btn-island" @click='toIsland(data.island_id)' :title="$t('options.navigation.islandTitle')">
+                  <div class="flex-1 btn-island" :title="$t('options.navigation.islandTitle')">
                       <div class="btn-game-text">{{$t('options.navigation.island')}}</div>
                   </div>
                   <div class="flex-1 btn-city" @click='toCity()' :title="$t('options.navigation.cityTitle')">
@@ -34,63 +31,30 @@
                   </div>
               </div>
           </div>
-          <div class="flex-1 d-flex resources">
-              <div class="flex-1 d-flex">
-                  <div class="d-flex align-items-center">
-                      <img class="mr-1" :src="require('Img/icon/icon_wood.png')">
-                      <span>{{data.wood}}</span>
-                  </div>
-              </div>
-              <div class="flex-1 d-flex">
-                  <div class="d-flex align-items-center">
-                      <img class="mr-1" :src="require('Img/icon/icon_wine.png')">
-                      <span>{{data.wine}}</span>
-                  </div>
-              </div>
-              <div class="flex-1 d-flex">
-                  <div class="d-flex align-items-center">
-                      <img class="mr-1" :src="require('Img/icon/icon_marble.png')">
-                      <span>{{data.marble}}</span>
-                  </div>
-              </div>
-              <div class="flex-1 d-flex">
-                  <div class="d-flex align-items-center">
-                      <img class="mr-1" :src="require('Img/icon/icon_glass.png')">
-                      <span>{{data.glass}}</span>
-                  </div>
-              </div>
-              <div class="flex-1 d-flex">
-                  <div class="d-flex align-items-center">
-                      <img class="mr-1" :src="require('Img/icon/icon_sulfur.png')">
-                      <span>{{data.sulfur}}</span>
-                  </div>
-              </div>
-          </div>
+        <Resources></Resources>
       </div>
   </div>
 </template>
 
 <script>
     import axios from 'axios'
+    import Resources from 'Components/layout/navigation/Resources.vue'
+    import Population from 'Components/layout/navigation/Population.vue'
     import { catchAxios } from "Js/util.js";
     import $store from 'Stores/store.js'
 
     export default {
+        name:'Navegacion',
+        components:{
+            Resources,
+            Population
+        },
         data(){
             return {
                 data:{}
             }
         },
         methods:{
-            getResources(){
-                axios("city/getResources/" + this.city_id)
-                .then(res => {
-                    this.data = res.data;
-                })
-                .catch(err => {
-                    catchAxios(err);
-                });
-            },
             toIsland(island_id){
                 axios('island/'+island_id)
                 .then(res =>{
@@ -115,18 +79,6 @@
                 return $store.state.city_id;
             }
         },
-        watch:{
-            city_id(newval){
-                this.getResources()
-            }
-        },
-        mounted(){
-            $store.subscribe(action => {
-                if (action.type === 'reloadResources') {
-                   this.getResources();
-                }
-            });
-        }
     }
 </script>
 
@@ -198,12 +150,6 @@
         width: 25px;
         height: 25px;
     }
-    .population{
-        background-image: url('~Img/icon/population.png');
-        width: 35px;
-        height: 23px;
-        margin-right: 5px;
-    }
     .btn-navi-popu{
         padding-left: 2px;
     }
@@ -214,8 +160,5 @@
         background-image: url('~Img/icon/navigation.jpg');
         height: 24px;
         background-size: cover;
-    }
-    .resources{
-        padding-left: 5px;
     }
 </style>

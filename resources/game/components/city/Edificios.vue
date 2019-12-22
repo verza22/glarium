@@ -121,10 +121,9 @@ export default {
   computed: {
     timeConstruct() {
       if (this.constructed_at != null) {
-        return moment
+        return this.$sectotime(moment
           .duration(moment(this.constructed_at).diff(moment($store.state.now)))
-          .asSeconds()
-          .sectotime();
+          .asSeconds());
       } else {
         return null;
       }

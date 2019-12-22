@@ -1,11 +1,11 @@
 
-
+import Vue from 'vue'
+/*
 String.prototype.capitalize = function (){
     return this.charAt(0).toUpperCase()+this.slice(1);
 }
-
-Number.prototype.sectotime = function(){
-  var secs = this;
+*/
+Vue.prototype.$sectotime = function(secs){
   var minutes = Math.floor(secs / 60);
   secs = secs%60;
   var hours = Math.floor(minutes/60)
@@ -21,4 +21,8 @@ Number.prototype.sectotime = function(){
 
 function pad(num) {
     return ("0"+num).slice(-2);
+}
+
+Vue.prototype.$ceil = function (number){
+  return Math.ceil(number);
 }

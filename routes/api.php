@@ -22,6 +22,7 @@ Route::post('building/{city}', 'Game\BuildingController@buildingsAvaible');
 Route::put('building/{city}', 'Game\BuildingController@create');
 
 Route::get('city/getResources/{city}', 'Game\CityController@getResources');
+Route::get('city/getPopulation/{city}', 'Game\CityController@getPopulation');
 
 Route::post('island/donation/{island}', 'Game\IslandController@donation');
 Route::get('island/{island}', 'Game\IslandController@show');

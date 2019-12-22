@@ -55,7 +55,6 @@ module.exports = {
             Components: path.resolve(__dirname, 'resources/game/components/'),
             Views: path.resolve(__dirname, 'resources/game/views/'),
             Js: path.resolve(__dirname, 'resources/game/js/'),
-            Prototypes: path.resolve(__dirname, 'resources/game/prototypes/'),
             Lang: path.resolve(__dirname, 'resources/game/lang/'),
             Sass: path.resolve(__dirname, 'resources/game/sass/'),
             Stores: path.resolve(__dirname, 'resources/game/stores/'),

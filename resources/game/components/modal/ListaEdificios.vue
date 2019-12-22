@@ -21,7 +21,7 @@
                         <div class="d-inline-block" :title="$t('resources.marble')" v-if="build.marble!=0"><img :src="require('Img/icon/icon_marble.png')"> {{build.marble}}</div>
                         <div class="d-inline-block" :title="$t('resources.glass')" v-if="build.glass!=0"><img :src="require('Img/icon/icon_glass.png')"> {{build.glass}}</div>
                         <div class="d-inline-block" :title="$t('resources.sulfur')" v-if="build.sulfur!=0"><img :src="require('Img/icon/icon_sulfur.png')"> {{build.sulfur}}</div>
-                        <div class="d-inline-block" :title="$t('resources.time')" v-if="build.time!=0"><img :src="require('Img/icon/icon_time.png')"> {{build.time.sectotime()}}</div>
+                        <div class="d-inline-block" :title="$t('resources.time')" v-if="build.time!=0"><img :src="require('Img/icon/icon_time.png')"> {{$sectotime(build.time)}}</div>
                     </div>
                 </div>
                 <div class="flex-1 m-auto">
@@ -40,7 +40,6 @@
 
 import axios from 'axios'
 import {catchAxios,callError} from 'Js/util.js'
-import customPrototypes from 'Prototypes/customPrototypes.js'
 import $store from 'Stores/store.js'
 
 export default {

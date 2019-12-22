@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\UserCity')->where('capital',1);
     }
+
+    public function resources()
+    {
+        return $this->hasOne('App\Models\UserResource');
+    }
 }

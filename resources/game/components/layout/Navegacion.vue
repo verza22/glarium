@@ -1,10 +1,6 @@
 <template>
   <div class="marcoSuperior d-flex">
-      <div class="flex-1">
-          <div class="premium"></div>
-          <div class="ships"></div>
-          <div class="gold"></div>
-      </div>
+      <UserResources></UserResources>
       <div class="flex-4 d-flex flex-column">
           <div class="flex-2 d-flex">
               <div class="flex-2 d-flex flex-column btn-navi-popu">
@@ -28,6 +24,7 @@
     import ActionPoint from 'Components/layout/navigation/ActionPoint.vue'
     import Cities from 'Components/layout/navigation/Cities.vue'
     import Buttons from 'Components/layout/navigation/Buttons.vue'
+    import UserResources from 'Components/layout/navigation/UserResources.vue'
 
     export default {
         name:'Navegacion',
@@ -36,7 +33,8 @@
             Population,
             ActionPoint,
             Cities,
-            Buttons
+            Buttons,
+            UserResources
         }
     }
 </script>
@@ -52,23 +50,7 @@
         background-repeat: no-repeat;
         background-image: url('~Img/icon/navegacion_fondo.png');
     }
-    .ships{
-        background-image: url('~Img/icon/ships.jpg');
-        width: 110px;
-        height: 30px;
-    }
-    .gold{
-        background-image: url('~Img/icon/gold.jpg');
-        width: 110px;
-        height: 30px;
-    }
-    .premium{
-        background-image: url('~Img/icon/premium.png');
-        width: 110px;
-        height: 30px;
-        background-size: cover;
-    }
     .btn-navi-popu{
-        padding-left: 2px;
+        padding-left: 6px;
     }
 </style>

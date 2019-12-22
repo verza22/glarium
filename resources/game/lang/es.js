@@ -231,6 +231,12 @@ export default {
         },
     },
     options:{
+        userResources:{
+            premiumTitle:'Ver beneficios',
+            premiumActive:'Premium activo',
+            ships:'Barcos mercantes disponibles/total',
+            gold:'Ver informe de la tesoreria'
+        },
         navigation:{
             showCities: 'Ver ciudades',
             city:'Mostrar ciudad',

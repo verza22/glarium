@@ -23,6 +23,11 @@ function pad(num) {
     return ("0"+num).slice(-2);
 }
 
+Number.prototype.money = function(n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
+
 Vue.prototype.$floor = function (number){
-  return Math.floor(number);
+  return number==undefined ? 0 : Math.floor(number).money();
 }

@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     mutations: 
     {
       reloadBuilding(){},
+      reloadUserResources(){},
       reloadResources(){},
       reloadPopulation(){},
       reloadActionPoint(){},

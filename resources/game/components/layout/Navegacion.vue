@@ -23,9 +23,15 @@
                   </div>
               </div>
               <div class="flex-3 d-flex btn-game">
-                  <div class="flex-1 btn-world"></div>
-                  <div class="flex-1 btn-island"></div>
-                  <div class="flex-1 btn-city"></div>
+                  <div class="flex-1 btn-world" :title="$t('options.navigation.worldTitle')">
+                      <div class="btn-game-text">{{$t('options.navigation.world')}}</div>
+                  </div>
+                  <div class="flex-1 btn-island" @click='toIsland(data.island_id)' :title="$t('options.navigation.islandTitle')">
+                      <div class="btn-game-text">{{$t('options.navigation.island')}}</div>
+                  </div>
+                  <div class="flex-1 btn-city" @click='toCity()' :title="$t('options.navigation.cityTitle')">
+                      <div class="btn-game-text">{{$t('options.navigation.city')}}</div>
+                  </div>
               </div>
           </div>
           <div class="flex-1 d-flex resources">
@@ -61,42 +67,6 @@
               </div>
           </div>
       </div>
-    <!--
-    <div class="marcoNavegacion">
-        <div class="marco">
-        </div>
-        <div class="marco">
-        </div>
-        <div class="marco">
-            <span v-if="data.island_id" @click='toIsland(data.island_id)'>{{$t('options.showIsland')}}</span>
-            <span v-else>{{$t('options.showIsland')}}</span>
-        </div>
-        <div class="marco">
-            <span @click='toCity()'>{{$t('options.showCity')}}</span>
-        </div>
-    </div>
-    <div class="resourceF">
-        <div class="resource" :title="$t('resources.wood')">
-            <img :src="require('Img/icon/icon_wood.png')">
-            <span>{{data.wood}}</span>
-        </div>
-        <div class="resource" :title="$t('resources.wine')">
-            <img :src="require('Img/icon/icon_wine.png')">
-            <span>{{data.wine}}</span>
-        </div>
-        <div class="resource" :title="$t('resources.marble')">
-            <img :src="require('Img/icon/icon_marble.png')">
-            <span>{{data.marble}}</span>
-        </div>
-        <div class="resource" :title="$t('resources.glass')">
-            <img :src="require('Img/icon/icon_glass.png')">
-            <span>{{data.glass}}</span>
-        </div>
-        <div class="resource" :title="$t('resources.sulfur')">
-            <img :src="require('Img/icon/icon_sulfur.png')">
-            <span>{{data.sulfur}}</span>
-        </div>
-    </div>-->
   </div>
 </template>
 
@@ -189,23 +159,39 @@
     }
     .btn-game{
         padding: 0px 4px;
+        font-size: 11px;
+        user-select: none;
+    }
+    .btn-game-text{
+        position: absolute;
+        bottom: 1px;
+        width: 100%;
+        text-align: center;
     }
     .btn-world{
         background-image: url('~Img/icon/btn_world.jpg');
         background-repeat: no-repeat;
+        position: relative;
+        cursor: pointer;
         height: 53px;
     }
     .btn-island{
         background-image: url('~Img/icon/btn_island.jpg');
         background-repeat: no-repeat;
+        position: relative;
+        cursor: pointer;
         height: 53px;
     }
     .btn-city{
         background-image: url('~Img/icon/btn_city.png');
         background-repeat: no-repeat;
         position: relative;
+        cursor: pointer;
         bottom: 4px;
         height: 58px;
+    }
+    .btn-city:hover,.btn-island:hover,.btn-world:hover{
+        background-position-y: center;
     }
     .action{
         background-image: url('~Img/icon/action_point.png');

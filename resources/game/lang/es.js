@@ -229,10 +229,14 @@ export default {
         },
     },
     options:{
-        showCity:'Ver ciudad',
-        goCity:'Ir a la ciudad',
-        showIsland:'Ver isla',
-        goIsland:'Ir a la isla',
+        navigation:{
+            city:'Mostrar ciudad',
+            cityTitle:'Observar ciudad elegida',
+            island:'Mostrar isla',
+            islandTitle:'Ir al mapa de la isla de la ciudad elegida',
+            world:'Mostrar mundo',
+            worldTitle:'Centrar mapa del mundo sobre la ciudad elegida',
+        },
         header:{
             highscore: 'Clasificación',
             options: 'Opciones',

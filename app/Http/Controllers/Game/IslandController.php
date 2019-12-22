@@ -18,6 +18,8 @@ class IslandController extends Controller
     {
         $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
         $data = $island->only(['id','x','y','name','type','donated_forest','donated_mine']);
+        $data['level_forest'] = $island->forest->level;
+        $data['level_mine'] = $island->mine->level;
         $data['cities'] = $island->cities->map(function($insland_city) use($cities) {
             $data = $insland_city->only(['id','city_id','position']);
             $data['name'] = $insland_city->city->name;

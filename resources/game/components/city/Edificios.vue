@@ -178,7 +178,7 @@ export default {
   height: 125px;
   width: 140px;
 }
-/*
+
 .building_16{
   height: 143px;
   width: 211px;
@@ -191,7 +191,7 @@ export default {
   top: 10px;
   right: 37px;
   background-size: contain!important;
-}*/
+}
 .construct {
   background: url("~Img/ciudad/construct.png") no-repeat !important;
 }

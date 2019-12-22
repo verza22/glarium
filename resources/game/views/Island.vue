@@ -4,6 +4,7 @@
     <div class="ocean">
       <div class="island">
         <Cities :cities='data.cities' v-if="data.cities"></Cities>
+        <Resources :data='data'></Resources>
       </div>
     </div>
   </div>
@@ -18,6 +19,7 @@ import { catchAxios } from "Js/util.js";
 import axios from 'axios'
 
 import Cities from "Components/island/Cities.vue"
+import Resources from "Components/island/Resources.vue"
 
 export default {
   name: 'Isla',
@@ -26,7 +28,8 @@ export default {
     autoscroll
   },
   components:{
-    Cities
+    Cities,
+    Resources
   },
   data(){
     return {

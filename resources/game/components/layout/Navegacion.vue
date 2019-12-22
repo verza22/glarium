@@ -7,8 +7,8 @@
       </div>
       <div class="flex-4 d-flex flex-column">
           <div class="flex-2 d-flex">
-              <div class="flex-2 d-flex flex-column">
-                  <div class="flex-1">
+              <div class="flex-2 d-flex flex-column btn-navi-popu">
+                  <div class="flex-1 navigation-box">
                       <div class="navigation"></div>
                   </div>
                   <div class="flex-1 d-flex">
@@ -28,7 +28,38 @@
                   <div class="flex-1 btn-city"></div>
               </div>
           </div>
-          <div class="flex-1">0</div>
+          <div class="flex-1 d-flex resources">
+              <div class="flex-1 d-flex">
+                  <div class="d-flex align-items-center">
+                      <img class="mr-1" :src="require('Img/icon/icon_wood.png')">
+                      <span>{{data.wood}}</span>
+                  </div>
+              </div>
+              <div class="flex-1 d-flex">
+                  <div class="d-flex align-items-center">
+                      <img class="mr-1" :src="require('Img/icon/icon_wine.png')">
+                      <span>{{data.wine}}</span>
+                  </div>
+              </div>
+              <div class="flex-1 d-flex">
+                  <div class="d-flex align-items-center">
+                      <img class="mr-1" :src="require('Img/icon/icon_marble.png')">
+                      <span>{{data.marble}}</span>
+                  </div>
+              </div>
+              <div class="flex-1 d-flex">
+                  <div class="d-flex align-items-center">
+                      <img class="mr-1" :src="require('Img/icon/icon_glass.png')">
+                      <span>{{data.glass}}</span>
+                  </div>
+              </div>
+              <div class="flex-1 d-flex">
+                  <div class="d-flex align-items-center">
+                      <img class="mr-1" :src="require('Img/icon/icon_sulfur.png')">
+                      <span>{{data.sulfur}}</span>
+                  </div>
+              </div>
+          </div>
       </div>
     <!--
     <div class="marcoNavegacion">
@@ -131,6 +162,7 @@
 
 <style lang="css" scoped>
     .marcoSuperior{
+        font-size: 0.83rem;
         z-index: 2;
         width: 600px;
         padding: 25px 40px 10px 10px;
@@ -156,7 +188,7 @@
         background-size: cover;
     }
     .btn-game{
-        padding: 0px 10px;
+        padding: 0px 4px;
     }
     .btn-world{
         background-image: url('~Img/icon/btn_world.jpg');
@@ -186,7 +218,18 @@
         height: 23px;
         margin-right: 5px;
     }
+    .btn-navi-popu{
+        padding-left: 2px;
+    }
+    .navigation-box{
+        padding: 1px 0px 0px 4px;
+    }
     .navigation{
         background-image: url('~Img/icon/navigation.jpg');
+        height: 24px;
+        background-size: cover;
+    }
+    .resources{
+        padding-left: 5px;
     }
 </style>

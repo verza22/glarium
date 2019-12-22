@@ -25,6 +25,7 @@ class CityController extends Controller
             return [
                 'id' => $userCity->city_id,
                 'name' => $userCity->city->name,
+                'island_id' => $userCity->city->islandCity->island->id,
                 'x' => $userCity->city->islandCity->island->x,
                 'y' => $userCity->city->islandCity->island->y,
                 'type' => $userCity->city->islandCity->island->type

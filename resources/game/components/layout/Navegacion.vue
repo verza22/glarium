@@ -14,17 +14,7 @@
                     <Population></Population>
                   </div>
               </div>
-              <div class="flex-3 d-flex btn-game">
-                  <div class="flex-1 btn-world" :title="$t('options.navigation.worldTitle')">
-                      <div class="btn-game-text">{{$t('options.navigation.world')}}</div>
-                  </div>
-                  <div class="flex-1 btn-island" :title="$t('options.navigation.islandTitle')">
-                      <div class="btn-game-text">{{$t('options.navigation.island')}}</div>
-                  </div>
-                  <div class="flex-1 btn-city" @click='toCity()' :title="$t('options.navigation.cityTitle')">
-                      <div class="btn-game-text">{{$t('options.navigation.city')}}</div>
-                  </div>
-              </div>
+              <Buttons></Buttons>
           </div>
         <Resources></Resources>
       </div>
@@ -37,8 +27,7 @@
     import Population from 'Components/layout/navigation/Population.vue'
     import ActionPoint from 'Components/layout/navigation/ActionPoint.vue'
     import Cities from 'Components/layout/navigation/Cities.vue'
-    import { catchAxios } from "Js/util.js";
-    import $store from 'Stores/store.js'
+    import Buttons from 'Components/layout/navigation/Buttons.vue'
 
     export default {
         name:'Navegacion',
@@ -46,38 +35,9 @@
             Resources,
             Population,
             ActionPoint,
-            Cities
-        },
-        data(){
-            return {
-                data:{}
-            }
-        },
-        methods:{
-            toIsland(island_id){
-                axios('island/'+island_id)
-                .then(res =>{
-                    this.$router.push({ name: 'Island', params: { island:island_id,data: res.data }})
-                })
-                .catch(err => {
-                    catchAxios(err);
-                });
-            },
-            toCity(){
-                axios("building/" + this.city_id)
-                .then(res => {
-                    this.$router.push({ name: 'City', params: { city:this.city_id,buildings: res.data }})
-                })
-                .catch(err => {
-                    catchAxios(err);
-                });
-            }
-        },
-        computed:{
-            city_id(){
-                return $store.state.city_id;
-            }
-        },
+            Cities,
+            Buttons
+        }
     }
 </script>
 
@@ -107,42 +67,6 @@
         width: 110px;
         height: 30px;
         background-size: cover;
-    }
-    .btn-game{
-        padding: 0px 4px;
-        font-size: 11px;
-        user-select: none;
-    }
-    .btn-game-text{
-        position: absolute;
-        bottom: 1px;
-        width: 100%;
-        text-align: center;
-    }
-    .btn-world{
-        background-image: url('~Img/icon/btn_world.jpg');
-        background-repeat: no-repeat;
-        position: relative;
-        cursor: pointer;
-        height: 53px;
-    }
-    .btn-island{
-        background-image: url('~Img/icon/btn_island.jpg');
-        background-repeat: no-repeat;
-        position: relative;
-        cursor: pointer;
-        height: 53px;
-    }
-    .btn-city{
-        background-image: url('~Img/icon/btn_city.png');
-        background-repeat: no-repeat;
-        position: relative;
-        cursor: pointer;
-        bottom: 4px;
-        height: 58px;
-    }
-    .btn-city:hover,.btn-island:hover,.btn-world:hover{
-        background-position-y: center;
     }
     .btn-navi-popu{
         padding-left: 2px;

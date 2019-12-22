@@ -210,12 +210,24 @@ export default {
         sulfur:'Azufre',
         time:'Tiempo de construcción'
     },
-    advisor:[
-        "Mayor",
-        "General",
-        "Cientifico",
-        "Diplomatico"
-    ],
+    advisor:{
+        mayor:{
+            name:'Ciudades',
+            title:'Informe sobre ciudades y finanzas'
+        },
+        general:{
+            name:'Milicia',
+            title:'Informe militar'
+        },
+        scientist:{
+            name:'Investigacion',
+            title:'Informe sobre investigación'
+        },
+        diplomat:{
+            name:'Diplomacia',
+            title:'Informe sobre diplomacia y mensajería'
+        },
+    },
     options:{
         showCity:'Ver ciudad',
         goCity:'Ir a la ciudad',

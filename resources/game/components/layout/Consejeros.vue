@@ -1,57 +1,67 @@
 <template>
   <div class="marcoSuperior">
-    <div class="marco" v-for="index in 4" :key='index'>
-      <div class="advisors" :class="`advisor_${index}`"></div>
-      <div class="nombre">{{$t(`advisor[${index-1}]`)}}</div>
+    <div class="container">
+      <div class="advisor mayor" :title="$t('advisor.mayor.title')">
+        <div class="titulo">{{$t('advisor.mayor.name')}}</div>
+      </div>
+      <div class="advisor general" :title="$t('advisor.general.title')">
+        <div class="titulo">{{$t('advisor.general.name')}}</div>
+      </div>
+      <div class="advisor scientist" :title="$t('advisor.scientist.title')">
+        <div class="titulo">{{$t('advisor.scientist.name')}}</div>
+      </div>
+      <div class="advisor diplomat" :title="$t('advisor.diplomat.title')">
+        <div class="titulo">{{$t('advisor.diplomat.name')}}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: "Consejeros"
 };
 </script>
 
 <style lang="scss" scoped>
-
-@mixin advisor($n) {
-  background-image: url('~Img/advisor/'+($n - 1)+'.png');
-}
-
-@for $i from 1 through 4 {
-  .advisor_#{$i}{
-    @include advisor($i);
-  }
-}
-
 .marcoSuperior {
   z-index: 2;
   position: absolute;
   right: 5px;
 }
-.advisors {
-  height: 90px;
-  width: 90px;
-  background-repeat: no-repeat;
-  background-position: center;
+.container{
+  background-image: url('~Img/advisor/container.png');
+  height: 130px;
+  width: 394px;
+  padding: 19px 0 0 16px;
 }
-.nombre {
+.mayor{
+  background-image: url('~Img/advisor/mayor.png');
+}
+.general{
+  background-image: url('~Img/advisor/general.png');
+}
+.scientist{
+  background-image: url('~Img/advisor/scientist.png');
+}
+.diplomat{
+  background-image: url('~Img/advisor/diplomat.png');
+}
+.advisor{
+  position: relative;
+  float: left;
+  left: 0;
+  top: 0;
+  width: 90px;
+  height: 108px;
+  cursor: pointer;
+}
+.titulo{
+  position: absolute;
+  bottom: 0;
   width: 100%;
   text-align: center;
-  background: #cecece;
-}
-.marco:hover {
-  background: #967a54;
-}
-.marco {
-  background: #bf9e72;
-  cursor: pointer;
-  display: inline-block;
-}
-.marco:first-child {
-  border-top-left-radius: 5px;
-}
-.marco:last-child {
-  border-top-right-radius: 5px;
+  font-size: 11px;
+  padding: 2px 4px;
 }
 </style>

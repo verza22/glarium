@@ -31,7 +31,7 @@ export default {
 
 <style lang="css" scoped>
 .cityContainer {
-  cursor: grab;
+  cursor: all-scroll;
   height: 100%;
   width: 100%;
   position: absolute;

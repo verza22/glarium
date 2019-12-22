@@ -1,7 +1,7 @@
 <template>
-    <div class="flex-2 d-flex box" :title="$t('resources.population')">
-        <div class="population"></div>
-        <div v-if='data.population'>{{$floor(data.population)}} ({{$floor(data.population_max)}})</div>
+    <div class="flex-1 d-flex box">
+        <div class="action"></div>
+        <div>{{data.point}}/{{data.point_max}}</div>
     </div>
 </template>
 
@@ -10,15 +10,15 @@ import axios from 'axios'
 import $store from 'Stores/store.js'
 
 export default {
-    name:'Population',
+    name:'ActionPoint',
     data(){
         return {
             data:{}
         }
     },
     methods:{
-        getPopulation(){
-            axios("city/getPopulation/" + this.city_id)
+        getActionPoint(){
+            axios("city/getActionPoint/" + this.city_id)
             .then(res => {
                 this.data = res.data;
             })
@@ -31,13 +31,13 @@ export default {
     },
     watch:{
         city_id(newval){
-            this.getPopulation()
+            this.getActionPoint()
         }
     },
     mounted(){
         $store.subscribe(action => {
-            if (action.type === 'reloadPopulation') {
-                this.getPopulation();
+            if (action.type === 'reloadActionPoint') {
+                this.getActionPoint();
             }
         });
     }
@@ -45,11 +45,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.population{
-    background-image: url('~Img/icon/population.png');
-    width: 35px;
-    height: 23px;
-    margin-right: 5px;
+.action{
+    background-image: url('~Img/icon/action_point.png');
+    width: 25px;
+    height: 25px;
 }
 .box{
     user-select: none;

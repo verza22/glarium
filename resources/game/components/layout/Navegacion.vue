@@ -12,10 +12,7 @@
                       <div class="navigation"></div>
                   </div>
                   <div class="flex-1 d-flex">
-                    <div class="flex-1 d-flex">
-                        <div class="action"></div>
-                        <div>3</div>
-                    </div>
+                    <ActionPoint></ActionPoint>
                     <Population></Population>
                   </div>
               </div>
@@ -40,6 +37,7 @@
     import axios from 'axios'
     import Resources from 'Components/layout/navigation/Resources.vue'
     import Population from 'Components/layout/navigation/Population.vue'
+    import ActionPoint from 'Components/layout/navigation/ActionPoint.vue'
     import { catchAxios } from "Js/util.js";
     import $store from 'Stores/store.js'
 
@@ -47,7 +45,8 @@
         name:'Navegacion',
         components:{
             Resources,
-            Population
+            Population,
+            ActionPoint
         },
         data(){
             return {
@@ -144,11 +143,6 @@
     }
     .btn-city:hover,.btn-island:hover,.btn-world:hover{
         background-position-y: center;
-    }
-    .action{
-        background-image: url('~Img/icon/action_point.png');
-        width: 25px;
-        height: 25px;
     }
     .btn-navi-popu{
         padding-left: 2px;

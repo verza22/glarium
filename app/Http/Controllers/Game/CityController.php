@@ -20,7 +20,10 @@ class CityController extends Controller
     {
         $this->authorize('isMyCity',$city);
         PopulationHelper::satisfaction($city->population,false);
-        return $city->population->only(['population_max','population']);
+        $data = $city->population;
+        $data['population_max'] = $data->population;
+        $data['population'] = $data->population - ($data->worker_forest + $data->worker_mine + $data->scientists);
+        return $data;
     }
 
     public function getResources(City $city)

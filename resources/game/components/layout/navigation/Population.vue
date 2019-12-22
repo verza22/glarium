@@ -1,7 +1,7 @@
 <template>
-    <div class="flex-2 d-flex" v-if='data!={}'>
+    <div class="flex-2 d-flex box" :title="$t('resources.population')">
         <div class="population"></div>
-        <div>{{$ceil(data.population)}} ({{$ceil(data.population_max)}})</div>
+        <div v-if='data.population'>{{$floor(data.population)}} ({{$floor(data.population_max)}})</div>
     </div>
 </template>
 
@@ -50,5 +50,8 @@ export default {
     width: 35px;
     height: 23px;
     margin-right: 5px;
+}
+.box{
+    user-select: none;
 }
 </style>

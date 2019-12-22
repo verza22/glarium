@@ -23,6 +23,6 @@ function pad(num) {
     return ("0"+num).slice(-2);
 }
 
-Vue.prototype.$ceil = function (number){
-  return Math.ceil(number);
+Vue.prototype.$floor = function (number){
+  return Math.floor(number);
 }

@@ -208,7 +208,8 @@ export default {
         marble:'Marmol',
         glass:'Cristal',
         sulfur:'Azufre',
-        time:'Tiempo de construcción'
+        time:'Tiempo de construcción',
+        population: 'Población'
     },
     advisor:{
         mayor:{

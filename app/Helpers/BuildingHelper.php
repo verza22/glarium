@@ -32,6 +32,14 @@ class BuildingHelper {
                             })->exists();
     }
 
+    public static function building(City $city,$building_id)
+    {
+        return CityBuilding::where('city_id',$city->id)
+                            ->whereHas('building_level',function($level) use($building_id) {
+                                $level->where('building_id',$building_id);
+                            })->first();
+    }
+
     public static function updateConstructedTime(City $city)
     {
         CityBuilding::where('city_id',$city->id)

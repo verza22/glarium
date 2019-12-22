@@ -18,6 +18,7 @@
     import ListaEdificios from 'Components/modal/ListaEdificios.vue';
     import IslandResources from 'Components/modal/IslandResources.vue';
     import axios from 'axios'
+    import {catchAxios,callError} from 'Js/util.js'
     import interact from 'interactjs'
     import $modal from 'Stores/modal.js'
 
@@ -38,14 +39,7 @@
             open ({type,info}) {
                 this.info = info;
                 this.type = type;
-                
-                switch(type){
-                    case 0:
-                        this.show = true;
-                    break;
-                    case 2:
-                    break;
-                }
+                this.show = true;
             },
             getTitle(type){
                 switch(type){

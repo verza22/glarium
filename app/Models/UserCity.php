@@ -16,4 +16,9 @@ class UserCity extends Model
     {
         return $this->belongsTo('App\Models\City');
     }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

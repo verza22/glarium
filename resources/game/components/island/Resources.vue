@@ -11,6 +11,8 @@
 
 <script>
 import $modal from "Stores/modal.js";
+import axios from 'axios'
+    import {catchAxios,callError} from 'Js/util.js'
 
 export default {
     name:'Resources',
@@ -36,16 +38,15 @@ export default {
             return title;
         },
         openForest(){
-            var data = {
-                donated_forest:this.data.donated_forest,
-                level_forest:this.data.level_forest
-            }
-            $modal.commit('openModal',{
-                type:2,
-                info:{
-                    data:data
-                }
-          })
+            axios.post('island/donation/'+this.$route.params.island,{
+                type:1
+            })
+            .then(res =>{
+                $modal.commit('openModal',{type:2,info:res.data})
+            })
+            .catch(err =>{
+                catchAxios(err)
+            })
         }
     }
 }

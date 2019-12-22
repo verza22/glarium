@@ -20,6 +20,16 @@ class Island extends Model
         return $this->belongsTo('App\Models\Forest');
     }
 
+    public function donation_forest()
+    {
+        return $this->hasMany('App\Models\IslandDonation')->where('type',1);
+    }
+
+    public function donation_mine()
+    {
+        return $this->hasMany('App\Models\IslandDonation')->where('type',0);
+    }
+
     public function mine()
     {
         return $this->belongsTo('App\Models\Mine');

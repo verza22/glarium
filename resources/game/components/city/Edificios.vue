@@ -171,7 +171,7 @@ export default {
 .object {
   position: absolute;
   cursor: pointer;
-  z-index: 5;
+  z-index: 1;
 }
 .terreno,
 .building {

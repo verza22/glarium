@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-1 d-flex box">
+    <div class="flex-1 d-flex box" :title="$t('resources.apoint')">
         <div class="action"></div>
         <div>{{data.point}}/{{data.point_max}}</div>
     </div>

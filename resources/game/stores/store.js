@@ -15,6 +15,7 @@ const store = new Vuex.Store({
       reloadResources(){},
       reloadPopulation(){},
       reloadActionPoint(){},
+      reloadCities(){},
       changeCity(state,{city_id}){
         state.city_id = city_id;
       }

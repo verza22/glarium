@@ -209,7 +209,8 @@ export default {
         glass:'Cristal',
         sulfur:'Azufre',
         time:'Tiempo de construcción',
-        population: 'Población'
+        population: 'Población',
+        apoint: 'Puntos de acción'
     },
     advisor:{
         mayor:{
@@ -231,6 +232,7 @@ export default {
     },
     options:{
         navigation:{
+            showCities: 'Ver ciudades',
             city:'Mostrar ciudad',
             cityTitle:'Observar ciudad elegida',
             island:'Mostrar isla',

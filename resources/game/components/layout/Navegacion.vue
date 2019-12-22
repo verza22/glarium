@@ -8,9 +8,7 @@
       <div class="flex-4 d-flex flex-column">
           <div class="flex-2 d-flex">
               <div class="flex-2 d-flex flex-column btn-navi-popu">
-                  <div class="flex-1 navigation-box">
-                      <div class="navigation"></div>
-                  </div>
+                  <Cities></Cities>
                   <div class="flex-1 d-flex">
                     <ActionPoint></ActionPoint>
                     <Population></Population>
@@ -38,6 +36,7 @@
     import Resources from 'Components/layout/navigation/Resources.vue'
     import Population from 'Components/layout/navigation/Population.vue'
     import ActionPoint from 'Components/layout/navigation/ActionPoint.vue'
+    import Cities from 'Components/layout/navigation/Cities.vue'
     import { catchAxios } from "Js/util.js";
     import $store from 'Stores/store.js'
 
@@ -46,7 +45,8 @@
         components:{
             Resources,
             Population,
-            ActionPoint
+            ActionPoint,
+            Cities
         },
         data(){
             return {
@@ -146,13 +146,5 @@
     }
     .btn-navi-popu{
         padding-left: 2px;
-    }
-    .navigation-box{
-        padding: 1px 0px 0px 4px;
-    }
-    .navigation{
-        background-image: url('~Img/icon/navigation.jpg');
-        height: 24px;
-        background-size: cover;
     }
 </style>

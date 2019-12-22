@@ -233,6 +233,12 @@ export default {
         goCity:'Ir a la ciudad',
         showIsland:'Ver isla',
         goIsland:'Ir a la isla',
+        header:{
+            highscore: 'Clasificación',
+            options: 'Opciones',
+            board: 'Foro',
+            logout: 'Salir'
+        }
     },
     island:{
         workers: 'Asignar trabajadores',

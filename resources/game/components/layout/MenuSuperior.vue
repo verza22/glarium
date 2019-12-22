@@ -1,13 +1,14 @@
 <template>
   <div class="fixed">
     <div class="opciones gtitle">
-      <div class="opcion">Clasificación</div>
-      <div class="opcion">Opciones</div>
-      <div class="opcion">Foro</div>
-      <div class="opcion">Salir</div>
-      <div class="opcion">Salir</div>
+      <div class="opcion">{{$t('options.header.highscore')}}</div>
+      <div class="opcion">{{$t('options.header.options')}}</div>
+      <div class="opcion">{{$t('options.header.board')}}</div>
+      <div class="opcion"><a href="/logout">{{$t('options.header.logout')}}</a></div>
       <div class="opcion">v1.0.0</div>
-      <div class="fecha">Fecha</div>
+      <div class="fecha">
+        <div class="position-absolute">{{fecha}}</div>
+      </div>
     </div>
     <div class="marco">
       <Navegacion></Navegacion>
@@ -19,11 +20,18 @@
 <script>
 import Consejeros from "Components/layout/Consejeros.vue";
 import Navegacion from "Components/layout/Navegacion.vue";
+import $store from "Stores/store.js";
 
 export default {
+  name:'MenuSuperior',
   components: {
     Consejeros,
     Navegacion
+  },
+  computed:{
+    fecha(){
+      return $store.state.now;
+    }
   }
 };
 </script>

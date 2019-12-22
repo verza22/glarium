@@ -38,7 +38,14 @@
             open ({type,info}) {
                 this.info = info;
                 this.type = type;
-                this.show = true;
+                
+                switch(type){
+                    case 1:
+                        this.show = true;
+                    break;
+                    case 2:
+                    break;
+                }
             },
             getTitle(type){
                 switch(type){

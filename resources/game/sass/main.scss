@@ -19,6 +19,8 @@
     background-repeat: repeat no-repeat;
     background-size: contain;
     font-size: 0.85rem;
+    min-width: 35px;
+    text-align: center;
 }
 .valores::after {
     background-image: url('~Img/island/name2.png');

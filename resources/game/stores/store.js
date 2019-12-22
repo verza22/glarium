@@ -17,6 +17,7 @@ const store = new Vuex.Store({
       reloadActionPoint(){},
       reloadCities(){},
       changeCity(state,{city_id}){
+        localStorage.setItem('city_id', city_id)
         state.city_id = city_id;
       }
     }

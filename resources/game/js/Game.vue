@@ -20,10 +20,6 @@ export default {
         Modal
     },
     mounted(){
-        if(localStorage.city_id==undefined)
-        {
-            localStorage.setItem('city_id', this.$route.params.city)
-        }
         $store.commit('changeCity',{city_id:localStorage.city_id});
     }
 }

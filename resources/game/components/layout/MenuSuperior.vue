@@ -4,7 +4,7 @@
       <div class="opcion">{{$t('options.header.highscore')}}</div>
       <div class="opcion">{{$t('options.header.options')}}</div>
       <div class="opcion">{{$t('options.header.board')}}</div>
-      <div class="opcion"><a href="/logout">{{$t('options.header.logout')}}</a></div>
+      <div class="opcion" @click='logout'>{{$t('options.header.logout')}}</div>
       <div class="opcion">v1.0.0</div>
       <div class="fecha">
         <div class="position-absolute">{{fecha}}</div>
@@ -27,6 +27,12 @@ export default {
   components: {
     Consejeros,
     Navegacion
+  },
+  methods:{
+    logout(){
+      localStorage.clear();
+      window.location = '/logout'
+    }
   },
   computed:{
     fecha(){

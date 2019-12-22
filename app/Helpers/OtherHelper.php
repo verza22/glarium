@@ -106,7 +106,7 @@ class OtherHelper
             ->first()->id;
 
         //Obtenemos la posicion de esa isla
-        $citys = IslandCity::whereId($island_id)->get();
+        $citys = IslandCity::where('island_id',$island_id)->get();
         for($i=0;$i<16;$i++)
         {
             if($citys->where('position',$i)->count()==0)

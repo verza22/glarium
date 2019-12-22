@@ -40,7 +40,7 @@
                 this.type = type;
                 
                 switch(type){
-                    case 1:
+                    case 0:
                         this.show = true;
                     break;
                     case 2:

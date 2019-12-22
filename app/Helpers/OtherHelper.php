@@ -9,6 +9,7 @@ use App\Models\CityBuilding;
 use App\Models\CityPopulation;
 use App\Models\IslandCity;
 use App\Models\UserResource;
+use App\Models\IslandDonation;
 use DB;
 
 class OtherHelper
@@ -125,6 +126,9 @@ class OtherHelper
         UserCity::create(['user_id' => $user->id, 'city_id' => $city->id, 'capital' => $capital]);
 
         IslandCity::create(['island_id' => $island_id, 'city_id' => $city->id, 'position' => $position]);
+
+        IslandDonation::create(['island_id' => $island_id, 'city_id' => $city->id, 'type' => 0]);
+        IslandDonation::create(['island_id' => $island_id, 'city_id' => $city->id, 'type' => 1]);
 
         //Creamos la poblacion
         CityPopulation::create(['city_id' => $city->id]);

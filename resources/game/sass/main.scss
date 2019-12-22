@@ -3,3 +3,42 @@
         flex: $i;
     }
 }
+
+.gtitle{
+    font-weight: bold;
+    font-size: 0.83rem;
+    line-height: 0.83rem;
+    color: #542c0f;
+}
+
+.valores{
+    background-image: url('~Img/island/name1.png');
+    position: absolute;
+    bottom: -25px;
+    padding: 3px 4px;
+    background-repeat: repeat no-repeat;
+    background-size: contain;
+    font-size: 0.85rem;
+}
+.valores::after {
+    background-image: url('~Img/island/name2.png');
+    width: 12px;
+    height: 26px;
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 0px;
+    background-repeat: repeat no-repeat;
+    background-size: cover;
+}
+.valores::before {
+    background-image: url('~Img/island/name3.png');
+    width: 12px;
+    height: 26px;
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: 0px;
+    background-repeat: repeat no-repeat;
+    background-size: cover;
+}

@@ -94,9 +94,5 @@ export default {
         text-align: center;
         font-size:0.9rem
     }
-    .texto{
-        line-height: 1;
-        font-weight: 400;
-        font: normal 12px Arial,Helvetica,sans-serif;
-    }
+    
 </style>

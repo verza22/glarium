@@ -7,7 +7,7 @@
         >
             <div class="d-flex justify-content-center" v-if='checkCity(index)'>
                 <div class="city" :class='cities[index].type ? "blue" : "red"'></div>
-                <div class="name">{{cities[index].name}}</div>
+                <div class="valores">{{cities[index].name}}</div>
             </div>
             <div class="flag" v-else></div>
         </div>
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-
 
 export default {
     name:'Ciudades',
@@ -52,7 +51,7 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
     .object{
         position: absolute;
         cursor: pointer;
@@ -81,36 +80,5 @@ export default {
     }
     .objectContainer{
         position:relative;
-    }
-    .name{
-        background-image: url('~Img/island/name1.png');
-        position: absolute;
-        bottom: -25px;
-        padding: 3px 4px;
-        background-repeat: repeat no-repeat;
-        background-size: contain;
-        font-size: 0.85rem;
-    }
-    .name::after {
-        background-image: url('~Img/island/name2.png');
-        width: 12px;
-        height: 26px;
-        content: '';
-        position: absolute;
-        left: -10px;
-        top: 0px;
-        background-repeat: repeat no-repeat;
-        background-size: cover;
-    }
-    .name::before {
-        background-image: url('~Img/island/name3.png');
-        width: 12px;
-        height: 26px;
-        content: '';
-        position: absolute;
-        right: -10px;
-        top: 0px;
-        background-repeat: repeat no-repeat;
-        background-size: cover;
     }
 </style>

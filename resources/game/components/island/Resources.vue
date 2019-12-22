@@ -1,19 +1,53 @@
 <template>
     <div>
-        <div class="forest">
+        <div class="forest" :title='$t(`island.forest`)+` `+data.level_forest' @click='openForest'>
             <div class="forest_active"></div>
         </div>
-        <div class="mine" :class='"mine_"+data.type'>
+        <div class="mine" :class='"mine_"+data.type' :title='mineTitle(data.type)'>
             <div :class='"mine_"+data.type+"_active"'></div>
         </div>
     </div>
 </template>
 
 <script>
+import $modal from "Stores/modal.js";
 
 export default {
     name:'Resources',
-    props:['data']
+    props:['data'],
+    methods:{
+        mineTitle(type){
+            var title = '';
+            switch(type){
+                case 1:
+                    title += this.$t('island.vines')
+                break;
+                case 2:
+                    title += this.$t('island.quarry')
+                break;
+                case 3:
+                    title += this.$t('island.crystal')
+                break;
+                case 4:
+                    title += this.$t('island.sulfur')
+                break;
+            }
+            title += ' '+this.data.level_mine;
+            return title;
+        },
+        openForest(){
+            var data = {
+                donated_forest:this.data.donated_forest,
+                level_forest:this.data.level_forest
+            }
+            $modal.commit('openModal',{
+                type:2,
+                info:{
+                    data:data
+                }
+          })
+        }
+    }
 }
 </script>
 

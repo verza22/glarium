@@ -2,11 +2,12 @@
     <div class="mBorder" v-if='show'>
         <div class="mDiv">
             <div class="mHeader">
-                <div>Terreno vacio</div>
+                <div class="gtitle">{{getTitle(type)}}</div>
                 <div class="btn-close" @click='close'></div>
             </div>
             <div class="mBody">
                 <ListaEdificios :close='close' :info='info' v-if='type==0'></ListaEdificios>
+                <IslandResources :close='close' :info='info' v-else-if='type==2'></IslandResources>
             </div> 
             <div class="mFooter"></div>
         </div>
@@ -15,6 +16,7 @@
 
 <script>
     import ListaEdificios from 'Components/modal/ListaEdificios.vue';
+    import IslandResources from 'Components/modal/IslandResources.vue';
     import axios from 'axios'
     import interact from 'interactjs'
     import $modal from 'Stores/modal.js'
@@ -22,7 +24,8 @@
     export default {
         name: 'Modal',
         components: {
-            ListaEdificios
+            ListaEdificios,
+            IslandResources
         },
         data(){
             return {
@@ -36,6 +39,16 @@
                 this.info = info;
                 this.type = type;
                 this.show = true;
+            },
+            getTitle(type){
+                switch(type){
+                    case 0:
+                        return this.$t('building.title');
+                    break;
+                    case 2:
+                        return this.$t('island.forest');
+                    break;
+                }
             },
             close(){
                 this.show = false;
@@ -104,15 +117,12 @@
         cursor: grab;
         height: 26px;
         width: 100%;
-        font-weight: bold;
-        font-size: 0.9rem;
         display: flex;
         justify-content: center;
         align-items: center;
         background-size: contain;
         background-repeat: no-repeat;
         background-image: url('~Img/icon/modal_header.jpg');
-        color: #542c0f;
         touch-action: none;
         user-select: none;
     }

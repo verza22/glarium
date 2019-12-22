@@ -196,7 +196,8 @@ export default {
         }
     ],
     building:{
-        title:'Construir edificio',
+        title:'Terreno vacio',
+        title2:'Construir edificio',
         text:'Un terreno vasto y vacío inspira grandes creaciones. ¿Qué monumental edificio deberán construir aquí tus ciudadanos?',
         research:'Investigación necesaria:',
         action:'Construir'
@@ -220,5 +221,14 @@ export default {
         goCity:'Ir a la ciudad',
         showIsland:'Ver isla',
         goIsland:'Ir a la isla',
-    }
+    },
+    island:{
+        workers: 'Asignar trabajadores',
+        forest: 'Bosque',
+        forestTitle: 'En el aserradero se corta la madera de los bosques de la cercanía para elaborar tablones que a su vez sirven como material básico para la construcción de edificios y muchas cosas más. El aserradero se va ampliando gracias al trabajo de todos los habitantes de la isla. Cuando mayor sea, más trabajadores podrás emplear en él.',
+        crystal: 'Mina de cristal',
+        quarry: 'Cantera',
+        vines: 'Viñedo',
+        sulfur: 'Mina de azufre'
+    },
 };

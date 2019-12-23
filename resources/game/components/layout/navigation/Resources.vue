@@ -3,31 +3,31 @@
         <div class="flex-1 d-flex">
             <div class="d-flex align-items-center" :title="$t('resources.wood')">
                 <img class="mr-1" :src="require('Img/icon/icon_wood.png')">
-                <span>{{$floor(resources.wood)}}</span>
+                <span>{{$money(resources.wood)}}</span>
             </div>
         </div>
         <div class="flex-1 d-flex">
             <div class="d-flex align-items-center" :title="$t('resources.wine')">
                 <img class="mr-1" :src="require('Img/icon/icon_wine.png')">
-                <span>{{$floor(resources.wine)}}</span>
+                <span>{{$money(resources.wine)}}</span>
             </div>
         </div>
         <div class="flex-1 d-flex">
             <div class="d-flex align-items-center" :title="$t('resources.marble')">
                 <img class="mr-1" :src="require('Img/icon/icon_marble.png')">
-                <span>{{$floor(resources.marble)}}</span>
+                <span>{{$money(resources.marble)}}</span>
             </div>
         </div>
         <div class="flex-1 d-flex">
             <div class="d-flex align-items-center" :title="$t('resources.glass')">
                 <img class="mr-1" :src="require('Img/icon/icon_glass.png')">
-                <span>{{$floor(resources.glass)}}</span>
+                <span>{{$money(resources.glass)}}</span>
             </div>
         </div>
         <div class="flex-1 d-flex">
             <div class="d-flex align-items-center" :title="$t('resources.sulfur')">
                 <img class="mr-1" :src="require('Img/icon/icon_sulfur.png')">
-                <span>{{$floor(resources.sulfur)}}</span>
+                <span>{{$money(resources.sulfur)}}</span>
             </div>
         </div>
     </div>

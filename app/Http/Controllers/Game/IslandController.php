@@ -41,6 +41,7 @@ class IslandController extends Controller
             $workers = 'worker_forest';
             $tipo = 'donated_forest';
             $data['info']['level'] = $island->forest->level;
+            $data['info']['workers'] = $island->forest->workers;
             $next = Forest::where('level',($island->forest->level+1))->first();
         }
         else
@@ -48,9 +49,10 @@ class IslandController extends Controller
             $donations = $island->donation_mine;
             $workers = 'worker_mine';
             $tipo = 'donated_mine';
-            $data['info']['level'] = $island->forest->level;
-            $data['info']['required'] = $island->forest->level;
-            $next = Mine::where('level',($island->forest->level+1))->first();
+            $data['info']['level'] = $island->mine->level;
+            $data['info']['required'] = $island->mine->level;
+            $data['info']['workers'] = $island->mine->workers;
+            $next = Mine::where('level',($island->mine->level+1))->first();
         }
 
         //Obtenemos informacion de el bosque o mina

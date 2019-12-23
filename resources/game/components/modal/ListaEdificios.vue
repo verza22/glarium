@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="flex-1 m-auto">
-                    <div class="text-center btnConstruir" v-if='build.research' @click='construir(build.id)'>{{$t('building.action')}}</div>
+                    <div class="text-center btnGeneral" v-if='build.research' @click='construir(build.id)'>{{$t('building.action')}}</div>
                     <div v-else class="research">
                         <div>{{$t('building.research')}}</div>
                         <div>{{$t(`research[${build.research_id}].name`)}}</div>
@@ -78,10 +78,6 @@ export default {
     .buildRow:last-child{
         border-bottom:0px;
         padding-bottom: 0px!important;
-    }
-    .btnConstruir{
-        background: #eccf8e;
-        cursor:pointer;
     }
     .borderRed{
         border-bottom: 1px solid #bc575d;

@@ -7,7 +7,7 @@
             <div class="ships">{{resources.trade_ship}}/{{resources.trade_ship_available}}</div>
         </div>
         <div class="btn-gold" :title="$t('options.userResources.gold')">
-            <div class="gold">{{$floor(resources.gold)}}</div>
+            <div class="gold">{{$money(resources.gold)}}</div>
         </div>
     </div>
 </template>

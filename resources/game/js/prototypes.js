@@ -28,6 +28,9 @@ Number.prototype.money = function(n, x) {
   return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
 
-Vue.prototype.$floor = function (number){
+Vue.prototype.$money = function (number){
   return number==undefined ? 0 : Math.floor(number).money();
+}
+Vue.prototype.$floor = function (number){
+  return number==undefined ? 0 : Math.floor(number);
 }

@@ -1,13 +1,14 @@
 <template>
     <div class="flex-2 d-flex box" :title="$t('resources.population')">
         <div class="population"></div>
-        <div v-if='data.population'>{{$floor(data.population)}} ({{$floor(data.population_max)}})</div>
+        <div v-if='data.population'>{{$floor(data.population)}} ({{$floor(data.population_now)}})</div>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
 import $store from 'Stores/store.js'
+import $resources from 'Stores/resources'
 
 export default {
     name:'Population',
@@ -21,6 +22,8 @@ export default {
             axios("city/getPopulation/" + this.city_id)
             .then(res => {
                 this.data = res.data;
+                this.data.population_now = this.data.population + (this.data.worker_forest + this.data.worker_mine + this.data.scientists);
+                $resources.commit('updatePopulation',this.data)
             })
         },
     },

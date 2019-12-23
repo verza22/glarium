@@ -7,7 +7,7 @@
             </div>
             <div class="mBody">
                 <ListaEdificios :close='close' :info='info' v-if='type==0'></ListaEdificios>
-                <IslandResources :close='close' :info='info' v-else-if='type==2'></IslandResources>
+                <IslandResources :close='close' :data='info' v-else-if='type==2'></IslandResources>
             </div> 
             <div class="mFooter"></div>
         </div>

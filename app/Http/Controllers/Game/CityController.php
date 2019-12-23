@@ -38,8 +38,12 @@ class CityController extends Controller
         $this->authorize('isMyCity',$city);
         PopulationHelper::satisfaction($city->population,false);
         $data = $city->population;
-        $response['population_max'] = $data->population;
-        $response['population'] = $data->population - ($data->worker_forest + $data->worker_mine + $data->scientists);
+        $response['population_max'] = $data->population_max;
+        $response['population'] = $data->population;
+        $response['worker_forest'] = $data->worker_forest;
+        $response['worker_mine'] = $data->worker_mine;
+        $response['scientists_max'] = $data->scientists_max;
+        $response['scientists'] = $data->scientists;
         return $response;
     }
 

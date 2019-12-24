@@ -25,6 +25,9 @@ export default new Vuex.Store({
             state.marble = marble;
             state.glass = glass;
             state.sulfur = sulfur;
+        },
+        donate(state,{wood}){
+            state.wood = state.wood - wood;
         }
     }
 });

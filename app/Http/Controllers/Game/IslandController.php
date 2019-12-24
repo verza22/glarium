@@ -50,6 +50,7 @@ class IslandController extends Controller
             $tipo = 'donated_forest';
             $data['info']['level'] = $island->forest->level;
             $data['info']['workers'] = $island->forest->workers;
+            $data['info']['constructed_at'] = $island->forest_constructed_at;
             $next = Forest::where('level',($island->forest->level+1))->first();
         }
         else
@@ -60,6 +61,7 @@ class IslandController extends Controller
             $data['info']['level'] = $island->mine->level;
             $data['info']['required'] = $island->mine->level;
             $data['info']['workers'] = $island->mine->workers;
+            $data['info']['constructed_at'] = $island->mine_constructed_at;
             $next = Mine::where('level',($island->mine->level+1))->first();
         }
 
@@ -130,9 +132,8 @@ class IslandController extends Controller
         return 'ok';
     }
 
-    public function donate(Request $request,Island $island)
+    public function setDonation(Request $request,Island $island)
     {
-        $this->authorize('update',$island);
         $request->validate([
             'city' => 'required|integer|min:1',
             'wood' => 'required|integer|min:1',
@@ -182,7 +183,7 @@ class IslandController extends Controller
         $nextLevel = Forest::where('level',($island->forest->level+1))->first();
         $needToUpgrade =  $nextLevel->wood - $island->donated_forest;
 
-        if($collect->wood>$needToUpgrade)
+        if($collect->wood>=$needToUpgrade)
         {
             //Apliamos la isla
             $collect->wood = $needToUpgrade;
@@ -224,7 +225,7 @@ class IslandController extends Controller
         $nextLevel = Mine::where('level',($island->mine->level+1))->first();
         $needToUpgrade =  $nextLevel->wood - $island->donated_mine;
 
-        if($collect->wood>$needToUpgrade)
+        if($collect->wood>=$needToUpgrade)
         {
             //Apliamos la isla
             $collect->wood = $needToUpgrade;

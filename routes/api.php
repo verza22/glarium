@@ -29,6 +29,7 @@ Route::get('city/getCities', 'Game\CityController@getCities');
 Route::get('user/getUserResources', 'Game\UserController@getUserResources');
 
 Route::post('island/donation/{island}', 'Game\IslandController@donation');
+Route::put('island/donation/{island}', 'Game\IslandController@setDonation');
 Route::post('island/setWorker/{city}', 'Game\IslandController@setWorker');
 Route::get('island/{island}', 'Game\IslandController@show');
 

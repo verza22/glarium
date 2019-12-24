@@ -26,7 +26,7 @@
             <div class="mt-2">
                 <input class="w-50" type="number" v-model="value">
             </div>
-            <div class="mb-3 button" @click='setMax'>max</div>
+            <div class="mb-3 max" @click='setMax'>max</div>
             <div class="btnGeneral w-75 py-1 m-auto">
                 <div @click='confirmar'>Confirmar</div>
             </div>
@@ -36,7 +36,9 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 import $resources from 'Stores/resources'
+import $store from 'Stores/store'
 import {catchAxios} from 'Js/util.js'
 
 export default {
@@ -54,23 +56,33 @@ export default {
         },
         confirmar(){
             if(this.value!=0){
-                axios.post('island/setWorker/'+this.city_id,{
+                axios.put('island/donation/'+this.$route.params.island,{
                     type:1,
-                    workers:this.value
+                    wood:this.value,
+                    city:this.city_id
                 })
                 .then(res =>{
-                    Swal.fire('Exito','Trabajadores cambiados','success')
-                    $resources.commit('setWorkerForest',{population:this.population_available,worker_forest:this.value})
+                    Swal.fire('Exito','Donacion exitosa','success')
+                    $resources.commit('donate',{wood:this.value})
+                    this.setDonation()
                 })
                 .catch(err =>{
                     catchAxios(err)
                 })
             }
+        },
+        setDonation(){
+            this.data.donated_forest += parseInt(this.value);
+            this.max = this.max - this.value;
+            this.value = 0;
         }
     },
     computed:{
         wood(){
             return this.$floor($resources.state.wood);
+        },
+        city_id(){
+            return $store.state.city_id;
         }
     },
     watch:{
@@ -118,5 +130,6 @@ export default {
     }
     .max{
         cursor: pointer;
+        user-select: none;
     }
 </style>

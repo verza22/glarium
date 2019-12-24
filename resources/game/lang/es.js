@@ -232,8 +232,8 @@ export default {
     },
     options:{
         userResources:{
-            premiumTitle:'Ver beneficios',
-            premiumActive:'Premium activo',
+            patreonTitle:'Ver beneficios',
+            patreon:'Patreon',
             ships:'Barcos mercantes disponibles/total',
             gold:'Ver informe de la tesoreria'
         },

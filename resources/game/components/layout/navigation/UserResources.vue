@@ -1,7 +1,7 @@
 <template>
     <div class="flex-1 box">
-        <div class="btn-premium" :title="$t('options.userResources.premiumTitle')">
-            <div class="premium">{{$t('options.userResources.premiumActive')}}</div>
+        <div class="btn-premium" :title="$t('options.userResources.patreonTitle')">
+            <div class="premium">{{$t('options.userResources.patreon')}}</div>
         </div>
         <div class="btn-ships" :title="$t('options.userResources.ships')">
             <div class="ships">{{resources.trade_ship}}/{{resources.trade_ship_available}}</div>

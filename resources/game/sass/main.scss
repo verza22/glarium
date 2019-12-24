@@ -62,3 +62,28 @@ a:hover{
     background: #eccf8e;
     cursor:pointer;
 }
+
+.table-row{
+    border-bottom: none!important
+}
+.table-row.is-header{
+    background: #e2c897;
+}
+.table-row.is-header:hover {
+    background-color: #e2c897;
+}
+.table-body .table-row:hover {
+    background-color: initial!important;
+}
+.sort-ascending{
+    border-bottom-color: #f5f5dc!important;
+}
+.table-sort .sort-ascending.activated{
+    border-bottom-color: #409eff!important;
+}
+.sort-descending{
+    border-top-color: #f5f5dc!important;
+}
+.table-sort .sort-descending.activated{
+    border-top-color: #409eff!important;
+}

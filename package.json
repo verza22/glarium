@@ -28,6 +28,7 @@
     "vue-loader": "^15.7.0",
     "vue-router": "^3.1.3",
     "vue-slider-component": "^3.1.0",
+    "vue-table-dynamic": "0.0.7",
     "vue-template-compiler": "^2.6.11",
     "vuex": "^3.1.2",
     "webpack": "^4.41.4",

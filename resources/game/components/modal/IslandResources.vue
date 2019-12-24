@@ -1,5 +1,5 @@
 <template>
-    <div class="box pb-5">
+    <div class="box">
         <div class="text-justify mb-3 texto">{{$t('island.forestTitle')}}</div>
         <div class="gtitle text-center">{{$t('island.workers')}}</div>
         <div class="d-flex mt-3">
@@ -8,12 +8,22 @@
                 <div class="valores">{{population_available}}</div>
             </div>
             <div class="flex-3">
-                <div class="d-flex">
+                <div class="d-flex texto">
+                    <div class="flex-1">
+                        <div>Ingresos: </div>
+                        <div>{{population_available*3}} <img :src="require('Img/icon/icon_gold.png')"> por hora</div>
+                    </div>
+                    <div class="flex-1 text-right">
+                        <div>Produccion: </div>
+                        <div>{{value}} <img :src="require('Img/icon/icon_wood.png')"> por hora</div>
+                    </div>
+                </div>
+                <div class="d-flex my-3">
                     <div class="flex-1 min" @click='setMin'></div>
                     <div class="flex-10"><vue-slider ref="slider" :height='16' silent :max='max' v-model="value"></vue-slider></div>
                     <div class="flex-1 max" @click='setMax'></div>
                 </div>
-                <div class="d-flex justify-content-center mt-3">
+                <div class="d-flex justify-content-center">
                     <div class="campo">
                         <input class="w-100" type="number" v-model="value">
                     </div>
@@ -27,11 +37,16 @@
                 <div class="valores">{{value}}</div>
             </div>
         </div>
+         <div>
+            <div class="gtitle mt-5 mb-3 text-center">Ciudades en esta isla</div>
+            <vue-table-dynamic :params="params"></vue-table-dynamic>
+        </div>
     </div>
 </template>
 
 <script>
 import VueSlider from 'vue-slider-component'
+import VueTableDynamic from 'vue-table-dynamic'
 import 'vue-slider-component/theme/default.css'
 import $resources from 'Stores/resources'
 
@@ -39,13 +54,21 @@ export default {
     name:'IslandResources',
     props:['data'],
     components: {
-        VueSlider
+        VueSlider,
+        VueTableDynamic 
     },
     data(){
         return {
             value:0,
             population:0,
-            max:0
+            max:0,
+            params: {
+                data: [
+                    ['Jugador', 'Ciudad', 'Nivel', 'Trabajadores', 'Donacion']
+                ],
+                header: 'row',
+                sort: [0,1,2,3,4]
+            }
         }
     },
     methods:{
@@ -86,6 +109,7 @@ export default {
         this.population = this.population_aux + this.worker_forest;
         this.max = this.data.info.workers>this.population ? this.population : this.data.info.workers;
         this.value = this.worker_forest;
+        this.params.data.push(...this.data.donations);
     }
 }
 </script>
@@ -96,6 +120,7 @@ export default {
         position: relative;
         display: flex;
         justify-content: center;
+        align-self: flex-start;
     }
     .min{
         background-image: url('~Img/icon/btn_min.png');

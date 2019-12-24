@@ -63,12 +63,12 @@ class IslandController extends Controller
         //Obtenemos la informacion detallada de las donaciones
         $data['donations'] = $donations->map(function($city_donation) use($workers) {
             $building_level = BuildingHelper::building($city_donation->city,1)->building_level;
-            $data['user_id'] = $city_donation->city->userCity->user->id;
             $data['user'] = $city_donation->city->userCity->user->name;
+            $data['city'] = $city_donation->city->name;
             $data['level'] = $building_level->level;
             $data['workers'] = $city_donation->city->population[$workers];
             $data['donated'] = $city_donation->donated;
-            return $data;
+            return array_values($data);
         });
 
         return $data;

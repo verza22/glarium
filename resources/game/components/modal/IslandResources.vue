@@ -92,6 +92,14 @@ export default {
             .catch(err =>{
                 catchAxios(err)
             })
+        },
+        iniData(){
+            this.population = this.population_aux + this.worker_forest;
+            this.max = this.data.info.workers>this.population ? this.population : this.data.info.workers;
+            this.value = this.worker_forest;
+            this.params.data = [];
+            this.params.data.push(this.$t('island.donationTable'));
+            this.params.data.push(...this.data.donations);
         }
     },
     computed:{
@@ -121,14 +129,15 @@ export default {
             }
             if(control)
             this.value = newval.toString().replace(/^0+/, '');
+        },
+        data(newval,oldval){
+            if(newval.info.level!=oldval.info.level){
+                this.iniData()
+            }
         }
     },
     mounted(){
-        this.population = this.population_aux + this.worker_forest;
-        this.max = this.data.info.workers>this.population ? this.population : this.data.info.workers;
-        this.value = this.worker_forest;
-        this.params.data.push(this.$t('island.donationTable'));
-        this.params.data.push(...this.data.donations);
+        this.iniData()
     }
 }
 </script>

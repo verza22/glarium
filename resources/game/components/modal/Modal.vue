@@ -16,7 +16,7 @@
                 <div class="gtitle">{{getTitle(type)}}</div>
             </div>
             <div class="mBody">
-                <IslandDonation :data='info.info' v-if='type==2'></IslandDonation>
+                <IslandDonation :reloadDonation='reloadDonation' :data='info.info' v-if='type==2'></IslandDonation>
             </div> 
             <div class="mFooter"></div>
         </div>
@@ -99,6 +99,18 @@
                             event.target.style.transform =`translate(${position.x}px, ${position.y}px)`
                         },
                     }
+                })
+            },
+            reloadDonation(){
+                //Actualizamos la donacion de la isla
+                axios.post('island/donation/'+this.$route.params.island,{
+                    type:1
+                })
+                .then(res =>{
+                    this.info = res.data;
+                })
+                .catch(err =>{
+                    catchAxios(err)
                 })
             }
         },

@@ -21,7 +21,7 @@
                 <div class="ml-2">{{$money(data.donated_forest)}}</div>
             </div>
         </div>
-        <div>
+        <div v-if="data.constructed_at==null">
             <div class="gtitle mt-3">Donar</div>
             <div class="mt-2">
                 <input class="w-50" type="number" v-model="value">
@@ -31,19 +31,24 @@
                 <div @click='confirmar'>Confirmar</div>
             </div>
         </div>
+        <div v-else class="mt-3">
+            <div>En ampliacion</div>
+            <div>{{timeConstruct}}</div>
+        </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import moment from "moment";
 import $resources from 'Stores/resources'
 import $store from 'Stores/store'
 import {catchAxios} from 'Js/util.js'
 
 export default {
     name:'IslandDonation',
-    props:['data'],
+    props:['data','reloadDonation'],
     data(){
         return {
             value:0,
@@ -75,6 +80,14 @@ export default {
             this.data.donated_forest += parseInt(this.value);
             this.max = this.max - this.value;
             this.value = 0;
+            //Si hay que ampliar lo mostramos
+            if(this.max==0){
+                this.data.constructed_at = moment(this.now).add(this.data.required_time, 'seconds');
+            }
+        },
+        initMax(){
+            var max = this.data.required_wood - this.data.donated_forest;
+            this.max = this.wood>max ? max : this.wood;
         }
     },
     computed:{
@@ -83,6 +96,18 @@ export default {
         },
         city_id(){
             return $store.state.city_id;
+        },
+        timeConstruct() {
+            if (this.data.constructed_at != null) {
+                return this.$sectotime(moment
+                .duration(moment(this.data.constructed_at).diff(moment($store.state.now)))
+                .asSeconds());
+            }else {
+                return null;
+            }
+        },
+        now(){
+            return $store.state.now;
         }
     },
     watch:{
@@ -99,10 +124,20 @@ export default {
             if(control)
             this.value = newval.toString().replace(/^0+/, '');
         },
+        timeConstruct(newval){
+            if (newval == "00s") {
+                this.constructed_at = null;
+                this.reloadDonation();
+            }
+        },
+        data(newval,oldval){
+            if(newval.level!=oldval.level){
+                this.initMax();
+            }
+        }
     },
     mounted(){
-        var max = this.data.required_wood - this.data.donated_forest;
-        this.max = this.wood>max ? max : this.wood;
+        this.initMax();
     }
 }
 </script>

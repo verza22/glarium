@@ -11,11 +11,13 @@ use App\Models\Mine;
 use App\Models\City;
 use App\Models\CityPopulation;
 use App\Models\IslandCity;
+use App\Models\IslandDonation;
 use App\Helpers\BuildingHelper;
 use App\Helpers\CityHelper;
 use App\Helpers\PopulationHelper;
 use App\Helpers\UserResourceHelper;
 use App\Helpers\UnitHelper;
+use App\Helpers\IslandHelper;
 use Carbon\Carbon;
 use Auth;
 
@@ -43,6 +45,7 @@ class IslandController extends Controller
     public function donation(Request $request,Island $island)
     {
         $request->validate(['type' => 'required|boolean']);
+        IslandHelper::checkUpgrades($island);
         if($request->input('type'))
         {
             $donations = $island->donation_forest;
@@ -188,8 +191,8 @@ class IslandController extends Controller
             //Apliamos la isla
             $collect->wood = $needToUpgrade;
             CityHelper::removeResources($city,$collect);
-            $island->donated_forest = 0;
-            $island->forest_id = $nextLevel->id;
+            //$island->donated_forest = 0;
+            //$island->forest_id = $nextLevel->id;
             $island->forest_constructed_at = Carbon::now()->addSeconds($nextLevel->time);
         }
         else
@@ -198,6 +201,8 @@ class IslandController extends Controller
             CityHelper::removeResources($city,$collect);
             $island->donated_forest += $collect->wood;
         }
+        //Actualizamos la donacion individual
+        IslandDonation::where('island_id',$island->id)->where('city_id',$city->id)->where('type',1)->increment('donated',$collect->wood);
         $island->save();
         return 'ok';
     }
@@ -230,8 +235,8 @@ class IslandController extends Controller
             //Apliamos la isla
             $collect->wood = $needToUpgrade;
             CityHelper::removeResources($city,$collect);
-            $island->donated_mine = 0;
-            $island->mine_id = $nextLevel->id;
+            //$island->donated_mine = 0;
+            //$island->mine_id = $nextLevel->id;
             $island->mine_constructed_at = Carbon::now()->addSeconds($nextLevel->time);
         }
         else
@@ -240,6 +245,7 @@ class IslandController extends Controller
             CityHelper::removeResources($city,$collect);
             $island->donated_mine += $collect->wood;
         }
+        IslandDonation::where('island_id',$island->id)->where('city_id',$city->id)->where('type',0)->increment('donated', $collect->wood);
         $island->save();
         return 'ok';
     }

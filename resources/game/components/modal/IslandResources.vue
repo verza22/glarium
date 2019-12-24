@@ -28,7 +28,7 @@
                         <input class="w-100" type="number" v-model="value">
                     </div>
                     <div class="btnGeneral px-3 ml-3 d-flex">
-                        <div class="m-auto">Confirmar</div>
+                        <div class="m-auto" @click='confirmar'>{{$t('other.confirm')}}</div>
                     </div>
                 </div>
             </div>
@@ -45,10 +45,14 @@
 </template>
 
 <script>
+import axios from 'axios';
 import VueSlider from 'vue-slider-component'
 import VueTableDynamic from 'vue-table-dynamic'
 import 'vue-slider-component/theme/default.css'
+import {catchAxios} from 'Js/util.js'
 import $resources from 'Stores/resources'
+import $store from 'Stores/store'
+import Swal from 'sweetalert2'
 
 export default {
     name:'IslandResources',
@@ -76,6 +80,19 @@ export default {
         setMax(){
             this.$refs.slider.setValue(this.max)
         },
+        confirmar(){
+            axios.post('island/setWorker/'+this.city_id,{
+                type:1,
+                workers:this.value
+            })
+            .then(res =>{
+                Swal.fire('Exito','Trabajadores cambiados','success')
+                $resources.commit('setWorkerForest',{population:this.population_available,worker_forest:this.value})
+            })
+            .catch(err =>{
+                catchAxios(err)
+            })
+        }
     },
     computed:{
         population_available(){
@@ -86,6 +103,9 @@ export default {
         },
         worker_forest(){
             return this.$floor($resources.state.population.worker_forest);
+        },
+        city_id(){
+            return $store.state.city_id;
         }
     },
     watch:{

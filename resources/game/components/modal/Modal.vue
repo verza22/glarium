@@ -11,12 +11,22 @@
             </div> 
             <div class="mFooter"></div>
         </div>
+        <div class="mDiv2" v-if='type==2'>
+            <div class="mHeader2">
+                <div class="gtitle">{{getTitle(type)}}</div>
+            </div>
+            <div class="mBody">
+                <IslandDonation :data='info' v-if='type==2'></IslandDonation>
+            </div> 
+            <div class="mFooter"></div>
+        </div>
     </div>
 </template>
 
 <script>
     import ListaEdificios from 'Components/modal/ListaEdificios.vue';
     import IslandResources from 'Components/modal/IslandResources.vue';
+    import IslandDonation from 'Components/modal/IslandDonation.vue';
     import axios from 'axios'
     import {catchAxios,callError} from 'Js/util.js'
     import interact from 'interactjs'
@@ -26,7 +36,8 @@
         name: 'Modal',
         components: {
             ListaEdificios,
-            IslandResources
+            IslandResources,
+            IslandDonation
         },
         data(){
             return {
@@ -71,10 +82,29 @@
                         },
                     }
                 })
+            },
+            drag2(){
+                const position = { x: 0, y: 0 }
+                interact('.mDiv2')
+                .draggable({
+                    allowFrom:'.mHeader2',
+                    //inertia: true,
+                    restrict: {
+                        restriction: 'parent',
+                    },
+                    listeners: {
+                        move (event) {
+                            position.x += event.dx
+                            position.y += event.dy
+                            event.target.style.transform =`translate(${position.x}px, ${position.y}px)`
+                        },
+                    }
+                })
             }
         },
         mounted(){
             this.drag();
+            this.drag2();
             $modal.subscribe((action,state) => {
                 if (action.type === "openModal") {
                     this.open(state);
@@ -95,7 +125,7 @@
         right: 0;
         margin: auto;
     }
-    .mDiv{
+    .mDiv,.mDiv2{
         position: fixed;
         background: beige;
         z-index: 100;
@@ -106,22 +136,26 @@
         touch-action: none;
         margin-top: 120px; 
     }
+    .mDiv2{
+        width: 230px;
+        left: -950px;
+    }
     .mBody{
-        overflow-y: scroll;
+        overflow-y: auto;
         height: calc(100% - 26px);
         border-image: url('~Img/icon/bg_maincontentbox_left.png') 0% 50%;
         border-style: solid;
         border-width: 0px 3px;
         max-height: 75vh;
     }
-    .mHeader{
+    .mHeader,.mHeader2{
         cursor: grab;
         height: 26px;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        background-size: contain;
+        background-size: auto;
         background-repeat: no-repeat;
         background-image: url('~Img/icon/modal_header.jpg');
         touch-action: none;

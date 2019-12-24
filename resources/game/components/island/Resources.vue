@@ -12,7 +12,7 @@
 <script>
 import $modal from "Stores/modal.js";
 import axios from 'axios'
-    import {catchAxios,callError} from 'Js/util.js'
+import {catchAxios,callError} from 'Js/util.js'
 
 export default {
     name:'Resources',

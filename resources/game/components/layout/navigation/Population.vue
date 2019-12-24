@@ -1,7 +1,7 @@
 <template>
     <div class="flex-2 d-flex box" :title="$t('resources.population')">
         <div class="population"></div>
-        <div v-if='data.population'>{{$floor(data.population)}} ({{$floor(data.population_now)}})</div>
+        <div>{{$floor(population)}} ({{$floor(population_now)}})</div>
     </div>
 </template>
 
@@ -12,24 +12,25 @@ import $resources from 'Stores/resources'
 
 export default {
     name:'Population',
-    data(){
-        return {
-            data:{}
-        }
-    },
     methods:{
         getPopulation(){
             axios("city/getPopulation/" + this.city_id)
             .then(res => {
-                this.data = res.data;
-                this.data.population_now = this.data.population + (this.data.worker_forest + this.data.worker_mine + this.data.scientists);
-                $resources.commit('updatePopulation',this.data)
+                var data = res.data;
+                data.population_now = data.population + (data.worker_forest + data.worker_mine + data.scientists);
+                $resources.commit('updatePopulation',data)
             })
         },
     },
     computed:{
         city_id(){
             return $store.state.city_id;
+        },
+        population(){
+            return $resources.state.population.population;
+        },
+        population_now(){
+            return $resources.state.population.population_now;
         }
     },
     watch:{

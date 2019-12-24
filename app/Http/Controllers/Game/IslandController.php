@@ -8,7 +8,13 @@ use App\Models\Island;
 use App\Models\UserCity;
 use App\Models\Forest;
 use App\Models\Mine;
+use App\Models\City;
+use App\Models\CityPopulation;
+use App\Models\IslandCity;
 use App\Helpers\BuildingHelper;
+use App\Helpers\CityHelper;
+use App\Helpers\PopulationHelper;
+use App\Helpers\UserResourceHelper;
 use Auth;
 
 class IslandController extends Controller
@@ -72,5 +78,53 @@ class IslandController extends Controller
         });
 
         return $data;
+    }
+
+    public function setWorker(Request $request,City $city)
+    {
+        $this->authorize('isMyCity',$city);
+        $request->validate(['workers' => 'required|numeric|min:0','type' => 'required|boolean']);
+
+        if($request->input('type'))
+        {
+            //Asigna trabajadores al aserradero
+            $type = 'forest';
+            $type_workers = 'worker_forest';
+        }
+        else
+        {
+            //Asigna trabajadores a la mina
+            $type = 'mine';
+            $type_workers = 'worker_mine';
+        }
+
+        $workers = $request->input('workers');
+        $cityPopulation = CityPopulation::where('city_id',$city->id)->first();
+
+        //Obtenemos la isla de la ciudad
+        $islandCity = IslandCity::where('city_id',$city->id)->first();
+        if( $workers > $islandCity->island[$type]->workers )
+        {
+            //Error No puedes asignar mas de lo que esta ampliado
+            return 'No puedes asignar mas trabajadores de lo que permite la isla';
+        }
+
+        PopulationHelper::satisfaction($cityPopulation);
+
+        $workers_diff = $workers - $cityPopulation[$type_workers];
+
+        if( $workers_diff > $cityPopulation->population )
+        {
+            return 'No puedes asignar mas trabajadores de los ciudadanos que tienes';
+        }
+
+        $cityPopulation->population -= $workers_diff;
+        $cityPopulation[$type_workers] = $workers;
+
+        CityHelper::updateResources($city);
+        $cityPopulation->save();
+        UserResourceHelper::updateResources();
+
+        return 'ok';
     }
 }

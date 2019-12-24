@@ -2,6 +2,7 @@
 export default {
     state: {
         population_max:0,
+        population_now:0,
         population:0,
         worker_forest:0,
         worker_mine:0,
@@ -19,6 +20,10 @@ export default {
             state.worker_mine = worker_mine;
             state.scientists_max = scientists_max;
             state.scientists = scientists;
+        },
+        setWorkerForest(state,{population,worker_forest}){
+            state.population = population;
+            state.worker_forest = worker_forest;
         }
     }
 }

@@ -265,6 +265,7 @@ export default {
         sulfur: 'Mina de azufre'
     },
     other:{
+        confirm: 'Confirmar',
         income:'Ingresos',
         production:'Produccion',
         perHour:'por hora'

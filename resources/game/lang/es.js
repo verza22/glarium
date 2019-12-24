@@ -254,6 +254,8 @@ export default {
         }
     },
     island:{
+        donationTable:['Jugador', 'Ciudad', 'Nivel', 'Trabajadores', 'Donacion'],
+        islandCities:'Ciudades en esta isla',
         workers: 'Asignar trabajadores',
         forest: 'Bosque',
         forestTitle: 'En el aserradero se corta la madera de los bosques de la cercanía para elaborar tablones que a su vez sirven como material básico para la construcción de edificios y muchas cosas más. El aserradero se va ampliando gracias al trabajo de todos los habitantes de la isla. Cuando mayor sea, más trabajadores podrás emplear en él.',
@@ -262,4 +264,9 @@ export default {
         vines: 'Viñedo',
         sulfur: 'Mina de azufre'
     },
+    other:{
+        income:'Ingresos',
+        production:'Produccion',
+        perHour:'por hora'
+    }
 };

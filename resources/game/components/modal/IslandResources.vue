@@ -10,12 +10,12 @@
             <div class="flex-3">
                 <div class="d-flex texto">
                     <div class="flex-1">
-                        <div>Ingresos: </div>
-                        <div>{{population_available*3}} <img :src="require('Img/icon/icon_gold.png')"> por hora</div>
+                        <div>{{$t('other.income')}}: </div>
+                        <div>{{population_available*3}} <img :src="require('Img/icon/icon_gold.png')"> {{$t('other.perHour')}}</div>
                     </div>
                     <div class="flex-1 text-right">
-                        <div>Produccion: </div>
-                        <div>{{value}} <img :src="require('Img/icon/icon_wood.png')"> por hora</div>
+                        <div>{{$t('other.production')}}: </div>
+                        <div>{{value}} <img :src="require('Img/icon/icon_wood.png')"> {{$t('other.perHour')}}</div>
                     </div>
                 </div>
                 <div class="d-flex my-3">
@@ -38,7 +38,7 @@
             </div>
         </div>
          <div>
-            <div class="gtitle mt-5 mb-3 text-center">Ciudades en esta isla</div>
+            <div class="gtitle mt-5 mb-3 text-center">{{$t('island.islandCities')}}</div>
             <vue-table-dynamic :params="params"></vue-table-dynamic>
         </div>
     </div>
@@ -63,9 +63,7 @@ export default {
             population:0,
             max:0,
             params: {
-                data: [
-                    ['Jugador', 'Ciudad', 'Nivel', 'Trabajadores', 'Donacion']
-                ],
+                data: [],
                 header: 'row',
                 sort: [0,1,2,3,4]
             }
@@ -109,6 +107,7 @@ export default {
         this.population = this.population_aux + this.worker_forest;
         this.max = this.data.info.workers>this.population ? this.population : this.data.info.workers;
         this.value = this.worker_forest;
+        this.params.data.push(this.$t('island.donationTable'));
         this.params.data.push(...this.data.donations);
     }
 }

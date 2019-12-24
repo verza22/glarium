@@ -1,7 +1,7 @@
 <template>
     <div class="py-3 box">
         <div class="position-relative">
-            <img :src="require('Img/island/img_wood.jpg')">
+            <img :src="getImage()">
             <div class="box-level">
                 <div class="box-level2">
                     <div>Nivel:</div>
@@ -88,6 +88,26 @@ export default {
         initMax(){
             var max = this.data.required_wood - this.data.donated;
             this.max = this.wood>max ? max : this.wood;
+        },
+        getImage(){
+             if(this.data.type==1){
+                return require('Img/island/img_wood.jpg');
+            }else{
+                switch(this.data.island_type){
+                    case 1:
+                        return require('Img/island/img_wine.jpg');
+                    break;
+                    case 2:
+                        return require('Img/island/img_marble.jpg');
+                    break;
+                    case 3:
+                        return require('Img/island/img_glass.jpg');
+                    break;
+                    case 4:
+                        return require('Img/island/img_sulfur.jpg');
+                    break;
+                }
+            }
         }
     },
     computed:{
@@ -126,7 +146,6 @@ export default {
         },
         timeConstruct(newval){
             if (newval == "00s") {
-                debugger
                 this.constructed_at = null;
                 this.reloadDonation();
             }

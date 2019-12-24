@@ -1,6 +1,6 @@
 <template>
     <div class="box">
-        <div class="text-justify mb-3 texto">{{$t('island.forestTitle')}}</div>
+        <div class="text-justify mb-3 texto">{{getTitle()}}</div>
         <div class="gtitle text-center">{{$t('island.workers')}}</div>
         <div class="d-flex mt-3">
             <div class="flex-1 citizen">
@@ -15,7 +15,7 @@
                     </div>
                     <div class="flex-1 text-right">
                         <div>{{$t('other.production')}}: </div>
-                        <div>{{value}} <img :src="require('Img/icon/icon_wood.png')"> {{$t('other.perHour')}}</div>
+                        <div>{{value}} <img :src="getIcon()"> {{$t('other.perHour')}}</div>
                     </div>
                 </div>
                 <div class="d-flex my-3">
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="flex-1 workers">
-                <img class="mb-2" :src="require('Img/island/worker.png')">
+                <img class="mb-2" :src="getWorkerIcon()">
                 <div class="valores">{{value}}</div>
             </div>
         </div>
@@ -106,6 +106,53 @@ export default {
             this.params.data = [];
             this.params.data.push(this.$t('island.donationTable'));
             this.params.data.push(...this.data.donations);
+        },
+        getTitle(){
+            if(this.data.info.type==1){
+                return this.$t('island.forestTitle');
+            }else{
+                switch(this.data.info.island_type){
+                    case 1:
+                        return this.$t('island.vinesTitle');
+                    break;
+                    case 2:
+                        return this.$t('island.quarryTitle');
+                    break;
+                    case 3:
+                        return this.$t('island.crystalTitle');
+                    break;
+                    case 4:
+                        return this.$t('island.sulfurTitle');
+                    break;
+                }
+            }
+        },
+        getIcon(){
+            if(this.data.info.type==1){
+                return require('Img/icon/icon_wood.png');
+            }else{
+                switch(this.data.info.island_type){
+                    case 1:
+                        return require('Img/icon/icon_wine.png');
+                    break;
+                    case 2:
+                        return require('Img/icon/icon_marble.png');
+                    break;
+                    case 3:
+                        return require('Img/icon/icon_glass.png');
+                    break;
+                    case 4:
+                        return require('Img/icon/icon_sulfur.png');
+                    break;
+                }
+            }
+        },
+        getWorkerIcon(){
+            if(this.data.info.type==1){
+                return require('Img/island/worker.png');
+            }else{
+                return require('Img/island/worker_mine.png');
+            }
         }
     },
     computed:{

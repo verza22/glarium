@@ -25,7 +25,7 @@ export default {
             state.population = population;
             state.worker_forest = worker_forest;
         },
-        setWorkerForest(state,{population,worker_mine}){
+        setWorkerMine(state,{population,worker_mine}){
             state.population = population;
             state.worker_mine = worker_mine;
         }

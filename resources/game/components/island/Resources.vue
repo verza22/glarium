@@ -43,6 +43,7 @@ export default {
             })
             .then(res =>{
                 res.data.info.type = type
+                res.data.info.island_type = this.data.type
                 $modal.commit('openModal',{type:2,info:res.data})
             })
             .catch(err =>{

@@ -1,9 +1,9 @@
 <template>
     <div class="mBorder">
-        <Ventana1 :close='close' :titulo="$t('island.forest')">
+        <Ventana1 :close='close' :titulo="getTitle()">
             <IslandResources :data='info'></IslandResources>
         </Ventana1>
-        <Ventana2 :titulo="$t('island.forest')">
+        <Ventana2 :titulo="getTitle()">
             <IslandDonation :type='info.type' :reloadDonation='reloadDonation' :data='info.info'></IslandDonation>
         </Ventana2>
     </div>
@@ -40,11 +40,32 @@ export default {
             })
             .then(res =>{
                 res.data.info.type = this.info.info.type
+                res.data.info.island_type = this.info.info.island_type
                 this.info = res.data;
             })
             .catch(err =>{
                 catchAxios(err)
             })
+        },
+        getTitle(){
+            if(this.info.info.type==1){
+                return this.$t('island.forest');
+            }else{
+                switch(this.info.info.island_type){
+                    case 1:
+                        return this.$t('island.vines');
+                    break;
+                    case 2:
+                        return this.$t('island.quarry');
+                    break;
+                    case 3:
+                        return this.$t('island.crystal');
+                    break;
+                    case 4:
+                        return this.$t('island.sulfur');
+                    break;
+                }
+            }
         }
     },
     beforeMount(){

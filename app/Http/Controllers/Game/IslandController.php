@@ -46,7 +46,7 @@ class IslandController extends Controller
     {
         $request->validate(['type' => 'required|boolean']);
         IslandHelper::checkUpgrades($island);
-        if($request->input('type'))
+        if($request->input('type')=='1')
         {
             $donations = $island->donation_forest;
             $workers = 'worker_forest';
@@ -62,14 +62,13 @@ class IslandController extends Controller
             $workers = 'worker_mine';
             $tipo = 'donated_mine';
             $data['info']['level'] = $island->mine->level;
-            $data['info']['required'] = $island->mine->level;
             $data['info']['workers'] = $island->mine->workers;
             $data['info']['constructed_at'] = $island->mine_constructed_at;
             $next = Mine::where('level',($island->mine->level+1))->first();
         }
 
         //Obtenemos informacion de el bosque o mina
-        $data['info'][$tipo] = $island[$tipo];
+        $data['info']['donated'] = $island[$tipo];
         $data['info']['required_wood'] =$next->wood;
         $data['info']['required_time'] =$next->time;
 
@@ -83,7 +82,7 @@ class IslandController extends Controller
             $data['donated'] = $city_donation->donated;
             return array_values($data);
         });
-
+        
         return $data;
     }
 

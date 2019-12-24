@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="forest" :title='$t(`island.forest`)+` `+data.level_forest' @click='openForest'>
+        <div class="forest" :title='$t(`island.forest`)+` `+data.level_forest' @click='openDonation(1)'>
             <div class="forest_active"></div>
         </div>
-        <div class="mine" :class='"mine_"+data.type' :title='mineTitle(data.type)'>
+        <div class="mine" :class='"mine_"+data.type' :title='mineTitle(data.type)' @click='openDonation(0)'>
             <div :class='"mine_"+data.type+"_active"'></div>
         </div>
     </div>
@@ -37,11 +37,12 @@ export default {
             title += ' '+this.data.level_mine;
             return title;
         },
-        openForest(){
+        openDonation(type){
             axios.post('island/donation/'+this.$route.params.island,{
-                type:1
+                type:type
             })
             .then(res =>{
+                res.data.info.type = type
                 $modal.commit('openModal',{type:2,info:res.data})
             })
             .catch(err =>{

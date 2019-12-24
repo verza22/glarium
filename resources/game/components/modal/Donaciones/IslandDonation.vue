@@ -18,7 +18,7 @@
             <div class="gtitle my-2">Existente:</div>
             <div class="text-left pl-5 d-flex align-items-center">
                 <div><img :src="require('Img/icon/icon_wood.png')"></div>
-                <div class="ml-2">{{$money(data.donated_forest)}}</div>
+                <div class="ml-2">{{$money(data.donated)}}</div>
             </div>
         </div>
         <div v-if="data.constructed_at==null">
@@ -62,7 +62,7 @@ export default {
         confirmar(){
             if(this.value!=0){
                 axios.put('island/donation/'+this.$route.params.island,{
-                    type:1,
+                    type:this.data.type,
                     wood:this.value,
                     city:this.city_id
                 })
@@ -77,7 +77,7 @@ export default {
             }
         },
         setDonation(){
-            this.data.donated_forest += parseInt(this.value);
+            this.data.donated += parseInt(this.value);
             this.max = this.max - this.value;
             this.value = 0;
             //Si hay que ampliar lo mostramos
@@ -86,7 +86,7 @@ export default {
             }
         },
         initMax(){
-            var max = this.data.required_wood - this.data.donated_forest;
+            var max = this.data.required_wood - this.data.donated;
             this.max = this.wood>max ? max : this.wood;
         }
     },
@@ -126,6 +126,7 @@ export default {
         },
         timeConstruct(newval){
             if (newval == "00s") {
+                debugger
                 this.constructed_at = null;
                 this.reloadDonation();
             }

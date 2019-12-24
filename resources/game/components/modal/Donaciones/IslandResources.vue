@@ -66,6 +66,7 @@ export default {
             value:0,
             population:0,
             max:0,
+            workers:0,
             params: {
                 data: [],
                 header: 'row',
@@ -82,21 +83,26 @@ export default {
         },
         confirmar(){
             axios.post('island/setWorker/'+this.city_id,{
-                type:1,
+                type:this.data.info.type,
                 workers:this.value
             })
             .then(res =>{
                 Swal.fire('Exito','Trabajadores cambiados','success')
-                $resources.commit('setWorkerForest',{population:this.population_available,worker_forest:this.value})
+                if(this.data.info.type === 1){
+                    $resources.commit('setWorkerForest',{population:this.population_available,worker_forest:this.value})
+                }else{
+                    $resources.commit('setWorkerMine',{population:this.population_available,worker_mine:this.value})
+                }
             })
             .catch(err =>{
                 catchAxios(err)
             })
         },
         iniData(){
-            this.population = this.population_aux + this.worker_forest;
+            this.workers = this.data.info.type === 1 ? this.worker_forest : this.worker_mine;
+            this.population = this.population_aux + this.workers;
             this.max = this.data.info.workers>this.population ? this.population : this.data.info.workers;
-            this.value = this.worker_forest;
+            this.value = this.workers;
             this.params.data = [];
             this.params.data.push(this.$t('island.donationTable'));
             this.params.data.push(...this.data.donations);
@@ -111,6 +117,9 @@ export default {
         },
         worker_forest(){
             return this.$floor($resources.state.population.worker_forest);
+        },
+        worker_mine(){
+            return this.$floor($resources.state.population.worker_mine);
         },
         city_id(){
             return $store.state.city_id;

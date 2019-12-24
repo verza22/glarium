@@ -1,20 +1,20 @@
 <template>
-    <div>
+    <div v-if='show'>
         <ListaEdificios :close='close' :info='info' v-if='type==0'></ListaEdificios>
-        <Bosque :close='close' :infop='info' v-else-if='type==2'></Bosque>
+        <Donaciones :close='close' :infop='info' v-else-if='type==2'></Donaciones>
     </div>
 </template>
 
 <script>
     import ListaEdificios from 'Components/modal/ListaEdificios.vue';
-    import Bosque from 'Components/modal/Bosque/Bosque.vue';
+    import Donaciones from 'Components/modal/Donaciones/Donaciones.vue';
     import $modal from 'Stores/modal.js'
 
     export default {
         name: 'Modal',
         components: {
             ListaEdificios,
-            Bosque
+            Donaciones
         },
         data(){
             return {

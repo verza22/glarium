@@ -15,6 +15,8 @@ use App\Helpers\BuildingHelper;
 use App\Helpers\CityHelper;
 use App\Helpers\PopulationHelper;
 use App\Helpers\UserResourceHelper;
+use App\Helpers\UnitHelper;
+use Carbon\Carbon;
 use Auth;
 
 class IslandController extends Controller
@@ -125,6 +127,119 @@ class IslandController extends Controller
         $cityPopulation->save();
         UserResourceHelper::updateResources();
 
+        return 'ok';
+    }
+
+    public function donate(Request $request,Island $island)
+    {
+        $this->authorize('update',$island);
+        $request->validate([
+            'city' => 'required|integer|min:1',
+            'wood' => 'required|integer|min:1',
+            'type' => 'required|boolean'
+        ]);
+        if(UserCity::where('user_id',Auth::id())->where('city_id',$request->input('city'))->doesntExist())
+        {
+            return 'Este ciudad no existe o no te pertenece';
+        }
+        if(IslandCity::where('island_id',$island->id)->where('city_id',$request->input('city'))->doesntExist())
+        {
+            return 'Esta ciudad no se encuentra en la isla que quieres donar';
+        }
+
+        
+        if($request->input('type')==1)
+        {
+            return $this->donatedForest($request,$island);
+        }
+        else
+        {
+            return $this->donatedMine($request,$island);
+        }
+        
+    }
+
+    private function donatedForest(Request $request,Island $island)
+    {
+        Island::where('forest_constructed_at','<',Carbon::now())->update(['forest_constructed_at'=>NULL]);
+        $island->refresh();
+        if($island->forest_constructed_at!=NULL)
+        {
+            return 'Ya se encuentra en ampliacion';
+        }
+
+        $city = City::whereId($request->input('city'))->first();
+        CityHelper::updateResources($city);
+
+        //Comparamos si tenemos los recursos
+        $collect = UnitHelper::newCollect();
+        $collect->wood = $request->input('wood');
+        if(!CityHelper::compareResources($city,$collect))
+        {
+            return 'No tienes los recursos';
+        }
+
+        $nextLevel = Forest::where('level',($island->forest->level+1))->first();
+        $needToUpgrade =  $nextLevel->wood - $island->donated_forest;
+
+        if($collect->wood>$needToUpgrade)
+        {
+            //Apliamos la isla
+            $collect->wood = $needToUpgrade;
+            CityHelper::removeResources($city,$collect);
+            $island->donated_forest = 0;
+            $island->forest_id = $nextLevel->id;
+            $island->forest_constructed_at = Carbon::now()->addSeconds($nextLevel->time);
+        }
+        else
+        {
+            //Solo donamos
+            CityHelper::removeResources($city,$collect);
+            $island->donated_forest += $collect->wood;
+        }
+        $island->save();
+        return 'ok';
+    }
+
+    private function donatedMine(Request $request,Island $island)
+    {
+        Island::where('mine_constructed_at','<',Carbon::now())->update(['mine_constructed_at'=>NULL]);
+        $island->refresh();
+        if($island->mine_constructed_at!=NULL)
+        {
+            return 'Ya se encuentra en ampliacion';
+        }
+
+        $city = City::whereId($request->input('city'))->first();
+        CityHelper::updateResources($city);
+
+        //Comparamos si tenemos los recursos
+        $collect = UnitHelper::newCollect();
+        $collect->wood = $request->input('wood');
+        if(!CityHelper::compareResources($city,$collect))
+        {
+            return 'No tienes los recursos';
+        }
+
+        $nextLevel = Mine::where('level',($island->mine->level+1))->first();
+        $needToUpgrade =  $nextLevel->wood - $island->donated_mine;
+
+        if($collect->wood>$needToUpgrade)
+        {
+            //Apliamos la isla
+            $collect->wood = $needToUpgrade;
+            CityHelper::removeResources($city,$collect);
+            $island->donated_mine = 0;
+            $island->mine_id = $nextLevel->id;
+            $island->mine_constructed_at = Carbon::now()->addSeconds($nextLevel->time);
+        }
+        else
+        {
+            //Solo donamos
+            CityHelper::removeResources($city,$collect);
+            $island->donated_mine += $collect->wood;
+        }
+        $island->save();
         return 'ok';
     }
 }

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 import VueSlider from 'vue-slider-component'
 import VueTableDynamic from 'vue-table-dynamic'
 import 'vue-slider-component/theme/default.css'

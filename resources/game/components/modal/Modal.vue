@@ -16,7 +16,7 @@
                 <div class="gtitle">{{getTitle(type)}}</div>
             </div>
             <div class="mBody">
-                <IslandDonation :data='info' v-if='type==2'></IslandDonation>
+                <IslandDonation :data='info.info' v-if='type==2'></IslandDonation>
             </div> 
             <div class="mFooter"></div>
         </div>

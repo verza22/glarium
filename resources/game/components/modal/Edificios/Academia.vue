@@ -1,5 +1,5 @@
 <template>
-    <div>Academia</div>
+    <div class="box">Academia</div>
 </template>
 
 <script>

@@ -201,7 +201,10 @@ export default {
         text:'Un terreno vasto y vacío inspira grandes creaciones. ¿Qué monumental edificio deberán construir aquí tus ciudadanos?',
         research:'Investigación necesaria:',
         action:'Construir',
-        upgrade:'Necesario para el nivel {level}:'
+        upgradeText:'Necesario para el nivel {level}:',
+        upgrade:'Ampliar',
+        demolition:'Demoler',
+        level:'Nivel'
     },
     resources:{
         wood:'Madera',

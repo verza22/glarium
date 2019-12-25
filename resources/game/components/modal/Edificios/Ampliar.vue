@@ -3,18 +3,18 @@
         <div class="d-flex justify-content-center">
             <div>
                 <div><img :src="require('Img/icon/btn_upgrade.jpg')"></div>
-                <div>Ampliar</div>
+                <div>{{$t('building.upgrade')}}</div>
             </div>
             <div class="px-2">
-                <div>Nivel</div>
-                <div class="number">3</div>
+                <div>{{$t('building.level')}}</div>
+                <div class="number">{{info.level-1}}</div>
             </div>
             <div>
                 <div><img :src="require('Img/icon/btn_downgrade.jpg')"></div>
-                <div>Demoler</div>
+                <div>{{$t('building.demolition')}}</div>
             </div>
         </div>
-        <div class="text-center mt-3">{{$t('building.upgrade', { level: info.level })}}</div>
+        <div class="text-center mt-3">{{$t('building.upgradeText', { level: info.level })}}</div>
         <div class="my-2">
             <div class="d-inline-block" :title="$t('resources.wood')" v-if="info.wood!=0"><img :src="require('Img/icon/icon_wood.png')"> {{info.wood}}</div>
             <div class="d-inline-block" :title="$t('resources.wine')" v-if="info.wine!=0"><img :src="require('Img/icon/icon_wine.png')"> {{info.wine}}</div>

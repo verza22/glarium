@@ -1,9 +1,9 @@
 <template>
     <div class="mBorder">
-        <Ventana1 :close='close' titulo="test2">
-            <Investigaciones></Investigaciones>
+        <Ventana1 :close='close' titulo="Consejero científico">
+            <Investigaciones :category='category' :data='info'></Investigaciones>
         </Ventana1>
-        <Ventana2 titulo="test1">
+        <Ventana2 titulo="Área de investigación">
             <Categorias></Categorias>
         </Ventana2>
     </div>
@@ -24,6 +24,11 @@ export default {
         Categorias,
         Investigaciones
     },
+    data(){
+        return {
+            category:1
+        }
+    }
 }
 </script>
 

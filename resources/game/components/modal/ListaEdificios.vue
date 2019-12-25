@@ -52,7 +52,7 @@ export default {
     },
     methods:{
         construir(id){
-            axios.put('building/'+this.info.city_id,{
+            axios.put('building/'+this.city_id,{
                 position:this.info.position,
                 building:id
             })
@@ -69,6 +69,11 @@ export default {
                 catchAxios(err)
             })
         },
+    },
+    computed:{
+        city_id() {
+            return $store.state.city_id;
+        }
     }
 }
 </script>

@@ -18,6 +18,7 @@
         :class="[building.constructed_at != null ? 'construct' : '','building_' + building.building_id]"
         v-for="(building, i2) in buildingPosition(i)"
         :key="i2"
+         @click="modalEdificio(building)"
         :title="$t(`buildings[${building.building_id}].name`) +' (' +building.level +')'"
       >
         <div class="builCclockDiv" v-if="building.constructed_at != null">
@@ -97,8 +98,7 @@ export default {
             type:0,
             info:{
               data:res.data,
-              position:position,
-              city_id:this.city_id
+              position:position
             }
           })
         })
@@ -116,6 +116,21 @@ export default {
           "seconds"
         );
       }
+    },
+    modalEdificio(building){
+      axios
+        .post("building/nextLevel/" + building.building_id, {
+          level: building.level
+        })
+        .then(res => {
+           $modal.commit('openModal',{
+            type:1,
+            info:res.data
+          })
+        })
+        .catch(err => {
+          catchAxios(err);
+        });
     }
   },
   computed: {

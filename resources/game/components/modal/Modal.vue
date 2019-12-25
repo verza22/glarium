@@ -1,6 +1,7 @@
 <template>
     <div v-if='show'>
         <ListaEdificios :close='close' :info='info' v-if='type==0'></ListaEdificios>
+        <Edificios :close='close' :info='info' v-else-if='type==1'></Edificios>
         <Donaciones :close='close' :infop='info' v-else-if='type==2'></Donaciones>
     </div>
 </template>
@@ -8,13 +9,15 @@
 <script>
     import ListaEdificios from 'Components/modal/ListaEdificios.vue';
     import Donaciones from 'Components/modal/Donaciones/Donaciones.vue';
+    import Edificios from 'Components/modal/Edificios/Edificios.vue';
     import $modal from 'Stores/modal.js'
 
     export default {
         name: 'Modal',
         components: {
             ListaEdificios,
-            Donaciones
+            Donaciones,
+            Edificios
         },
         data(){
             return {

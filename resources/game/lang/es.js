@@ -195,6 +195,7 @@ export default {
             text:'No solo el océano nos rodea. Otras islas esperan ser descubiertas. ¡No estamos solos! ¡Podemos establecernos en nuevos territorios, explotar nuevas materias primas, conocer otras culturas! ¡Nuestros funcionarios se alegran de poder administrar vastos territorios y sus riquezas!'
         }
     ],
+    researchCategories:['','Navegación','Economía','Ciencia','Milicia'],
     building:{
         title:'Terreno vacio',
         title2:'Construir edificio',

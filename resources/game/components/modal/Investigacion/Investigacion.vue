@@ -4,7 +4,7 @@
             <Investigaciones :category='category' :data='info'></Investigaciones>
         </Ventana1>
         <Ventana2 titulo="Área de investigación">
-            <Categorias></Categorias>
+            <Categorias :changeCategory='changeCategory'></Categorias>
         </Ventana2>
     </div>
 </template>
@@ -27,6 +27,11 @@ export default {
     data(){
         return {
             category:1
+        }
+    },
+    methods:{
+        changeCategory(category){
+            this.category = category
         }
     }
 }

@@ -31,6 +31,9 @@ Number.prototype.money = function(n, x) {
 Vue.prototype.$money = function (number){
   return number==undefined ? 0 : Math.floor(number).money();
 }
+Vue.prototype.$money_two = function (number){
+  return number==undefined ? 0 : Math.floor(number).money(2);
+}
 Vue.prototype.$floor = function (number){
   return number==undefined ? 0 : Math.floor(number);
 }

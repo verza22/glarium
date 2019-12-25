@@ -1,25 +1,25 @@
 <template>
     <div class="box">
-        <div class="gtitle text-center">Area: Navegación</div>
+        <div class="gtitle text-center">Area: {{$t('researchCategories['+category+']')}}</div>
         <div class="d-flex my-3 py-1 px-3 fondo">
             <div class="flex-1 d-flex">
                 <div class="mr-2"><img :src="require('Img/icon/icon_scientist.png')"></div>
-                <div>Investigadores: 16</div>
+                <div>Investigadores: {{total_scientists}}</div>
             </div>
             <div class="flex-1 d-flex justify-content-center">
                 <div class="mr-2"><img :src="require('Img/icon/icon_pi.png')"></div>
-                <div>Puntos de investigación: 5,578</div>
+                <div>Puntos de investigación: {{research_point}}</div>
             </div>
             <div class="flex-1 d-flex justify-content-end">
                 <div class="mr-2"><img :src="require('Img/icon/icon_research_time.png')"></div>
-                <div>Por hora: 48.96</div>
+                <div>Por hora: {{research_point_hour}}</div>
             </div>
         </div>
         <div class="d-flex">
-            <div class="flex-1 mr-2">
+            <div class="flex-1 mr-2 lista">
                 <div v-for='(research,index) in researchs' :key='index' @click='changeResearch(research,index)' class="d-flex py-1 px-2 research" :class="getClass(research)">
                     <div class="mr-2">{{research.level}}.</div>
-                    <div>{{$t('research['+research.id+'].name')}}</div>
+                    <div class="research-name">{{$t('research['+research.id+'].name')}}</div>
                 </div>
             </div>
             <div class="flex-2 p-2 borde">
@@ -27,7 +27,10 @@
                 <div class="text text-justify">{{$t('research['+selected.id+'].text')}}</div>
                 <div class="text-right mt-3">
                     <div v-if='selected.level>maxLevel+1' class="text-danger">Aun no has investigado el nivel anterior</div>
-                    <div v-else class="btnGeneral">Investigar</div>
+                    <div v-else>
+                        <div class="btnGeneral" v-if="research_point>=selected.cost" @click='investigar'>Investigar</div>
+                        <div class="text-danger" v-else>No tienes suficientes puntos de investigacion</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,6 +38,8 @@
 </template>
 
 <script>
+import $resources from 'Stores/resources'
+
 export default {
     name: 'Investigaciones',
     props:['data','category'],
@@ -50,6 +55,7 @@ export default {
             this.selected = {
                 id:research.id,
                 level:research.level,
+                cost:research.cost,
                 index:index
             };
         },
@@ -58,26 +64,48 @@ export default {
             clase += research.id==this.selected.id ? 'active ' : '';
             clase += research.level>this.maxLevel+1 ? 'inactive ' : '';
             return clase;
+        },
+        investigar(){
+            
+        },
+        initData(){
+            this.researchs = this.data.research.filter(x =>{
+                return x.category_id == this.category;
+            });
+            var userResearch = this.researchs.filter(x =>{
+                return this.data.user_research.includes(x.id);
+            });
+            if(userResearch.length>0){
+                this.maxLevel = Math.max.apply(Math, userResearch.map(function(o) { return o.level; }))
+            }else{
+                this.maxLevel = 0
+            }
+            this.researchs.some((research,index) =>{
+                if(research.level == this.maxLevel+1){
+                    this.changeResearch(research,index)
+                    return
+                }
+            });
+        }
+    },
+    computed:{
+        total_scientists(){
+            return $resources.state.userResources.total_scientists;
+        },
+        research_point(){
+            return this.$money($resources.state.userResources.research_point);
+        },
+        research_point_hour(){
+            return this.$money_two(this.total_scientists);
+        }
+    },
+    watch:{
+        category(newval){
+            this.initData()
         }
     },
     beforeMount(){
-        this.researchs = this.data.research.filter(x =>{
-            return x.category_id == this.category;
-        });
-        var userResearch = this.researchs.filter(x =>{
-            return this.data.user_research.includes(x.id);
-        });
-        if(userResearch.length>0){
-            this.maxLevel = Math.max.apply(Math, userResearch.map(function(o) { return o.level; }))
-        }else{
-            this.maxLevel = 0
-        }
-        this.researchs.some((research,index) =>{
-            if(research.level == this.maxLevel+1){
-                this.changeResearch(research,index)
-                return
-            }
-        });
+        this.initData()
     }
 }
 </script>
@@ -111,5 +139,12 @@ export default {
  .btnGeneral{
     display: inline-block;
     padding: 4px 25px;
+ }
+ .lista{
+    overflow: hidden;
+    user-select: none;
+ }
+ .research-name{
+    white-space: nowrap;
  }
 </style>

@@ -28,6 +28,10 @@ export default {
         setWorkerMine(state,{population,worker_mine}){
             state.population = population;
             state.worker_mine = worker_mine;
-        }
+        },
+        setScientists(state,{population,scientists}){
+            state.population = population;
+            state.scientists = scientists;
+        },
     }
 }

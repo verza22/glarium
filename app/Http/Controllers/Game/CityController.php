@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\UserCity;
+use App\Models\CityPopulation;
 use App\Helpers\PopulationHelper;
 use App\Helpers\CityHelper;
 use App\Helpers\MovementHelper;
+use App\Helpers\UserResourceHelper;
 
 use Auth;
 
@@ -61,4 +63,36 @@ class CityController extends Controller
         return $city->only(['wood','wine','marble','glass','sulfur']);
     }
 
+    public function setScientists(Request $request,City $city)
+    {
+        $this->authorize('isMyCity',$city);
+        $request->validate(['scientists' => 'required|numeric|min:0']);
+
+        $scientists = $request->input('scientists');
+        $cityPopulation = CityPopulation::where('city_id',$city->id)->first();
+
+        if($scientists>$cityPopulation->scientists_max)
+        {
+            return 'No puedes poner mas investigadores de lo que permite tu academia';
+        }
+
+        PopulationHelper::satisfaction($cityPopulation);
+
+        $scientists_diff = $scientists - $cityPopulation['scientists'];
+
+        if( $scientists_diff > $cityPopulation->population )
+        {
+            return 'No puedes asignar mas investigadores de los ciudadanos que tienes';
+        }
+
+        UserResourceHelper::updateResources();
+
+        $cityPopulation->population -= $scientists_diff;
+        $cityPopulation->scientists = $scientists;
+
+        $cityPopulation->save();
+        
+
+        return 'ok';
+    }
 }

@@ -1,9 +1,9 @@
 <template>
     <div class="mBorder">
-        <Ventana1 :close='close' :titulo="$t(`buildings[${info.building_id}].name`)">
-            <div class="gtitle box">{{$t(`buildings[${info.building_id}].text`)}}</div>
-            <Intendencia v-if='info.building_id==1' :data='info'></Intendencia>
-            <Academia v-else-if='info.building_id==2' :data='info'></Academia>
+        <Ventana1 :close='close' :titulo="$t(`buildings[${building_id}].name`)">
+            <div class="gtitle box">{{$t(`buildings[${building_id}].text`)}}</div>
+            <Intendencia v-if='building_id==1' :data='info'></Intendencia>
+            <Academia v-else-if='building_id==2' :data='info'></Academia>
         </Ventana1>
         <Ventana2 titulo="Ampliar">
             <Ampliar :info='info'></Ampliar>
@@ -28,6 +28,14 @@ export default {
         Intendencia,
         Academia
     },
+    data(){
+        return {
+            building_id:0
+        }
+    },
+    beforeMount(){
+        this.building_id = this.info.building_id;
+    }
 }
 </script>
 

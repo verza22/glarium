@@ -36,3 +36,4 @@ Route::put('island/donation/{island}', 'Game\IslandController@setDonation');
 Route::post('island/setWorker/{city}', 'Game\IslandController@setWorker');
 Route::get('island/{island}', 'Game\IslandController@show');
 
+Route::get('research', 'Game\ResearchController@getData');

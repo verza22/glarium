@@ -7,7 +7,7 @@
       <div class="advisor general" :title="$t('advisor.general.title')">
         <div class="titulo">{{$t('advisor.general.name')}}</div>
       </div>
-      <div class="advisor scientist" :title="$t('advisor.scientist.title')">
+      <div class="advisor scientist" :title="$t('advisor.scientist.title')" @click='scientist'>
         <div class="titulo">{{$t('advisor.scientist.name')}}</div>
       </div>
       <div class="advisor diplomat" :title="$t('advisor.diplomat.title')">
@@ -18,8 +18,26 @@
 </template>
 
 <script>
+import axios from "axios";
+import { catchAxios } from "Js/util.js";
+import $modal from "Stores/modal.js";
+
 export default {
-  name: "Consejeros"
+  name: "Consejeros",
+  methods:{
+    scientist(){
+      axios("research")
+        .then(res => {
+          $modal.commit('openModal',{
+            type:3,
+            info:res.data
+          })
+        })
+        .catch(err => {
+          catchAxios(err);
+        });
+    }
+  }
 };
 </script>
 

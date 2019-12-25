@@ -4,10 +4,10 @@
             <div class="premium">{{$t('options.userResources.patreon')}}</div>
         </div>
         <div class="btn-ships" :title="$t('options.userResources.ships')">
-            <div class="ships">{{resources.trade_ship}}/{{resources.trade_ship_available}}</div>
+            <div class="ships">{{trade_ship}}/{{trade_ship_available}}</div>
         </div>
         <div class="btn-gold" :title="$t('options.userResources.gold')">
-            <div class="gold">{{$money(resources.gold)}}</div>
+            <div class="gold">{{$money(gold)}}</div>
         </div>
     </div>
 </template>
@@ -15,20 +15,28 @@
 <script>
 import axios from 'axios'
 import $store from 'Stores/store.js'
+import $resources from 'Stores/resources'
 
 export default {
     name:'UserResources',
-    data(){
-        return {
-            resources:{}
-        }
-    },
     methods:{
         getResources(){
             axios("user/getUserResources")
             .then(res => {
-                this.resources = res.data;
+                //this.resources = res.data;
+                $resources.commit('updateUserResources',res.data);
             })
+        }
+    },
+    computed:{
+        trade_ship(){
+            return $resources.state.userResources.trade_ship;
+        },
+        trade_ship_available(){
+            return $resources.state.userResources.trade_ship_available;
+        },
+        gold(){
+            return $resources.state.userResources.gold;
         }
     },
     mounted(){

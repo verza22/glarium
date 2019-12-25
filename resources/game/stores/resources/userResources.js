@@ -3,7 +3,17 @@ export default {
     state: {
         gold:0,
         research_point:0,
+        total_scientists:0,
         trade_ship:0,
         trade_ship_available:0
     },
+    mutations:{
+        updateUserResources(state,{gold,research_point,total_scientists,trade_ship,trade_ship_available}){
+            state.gold = gold;
+            state.research_point = research_point;
+            state.total_scientists = total_scientists;
+            state.trade_ship = trade_ship;
+            state.trade_ship_available = trade_ship_available;
+        },
+    }
 }

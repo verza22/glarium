@@ -6,7 +6,7 @@
             <Academia v-else-if='info.building_id==2' :data='info'></Academia>
         </Ventana1>
         <Ventana2 titulo="Ampliar">
-            <div>blabla</div>
+            <Ampliar :info='info'></Ampliar>
         </Ventana2>
     </div>
 </template>
@@ -14,6 +14,7 @@
 <script>
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import Ventana2 from 'Components/modal/Ventanas/Ventana2.vue'
+import Ampliar from 'Components/modal/Edificios/Ampliar.vue'
 import Intendencia from 'Components/modal/Edificios/Intendencia.vue';
 import Academia from 'Components/modal/Edificios/Academia.vue';
 
@@ -23,15 +24,10 @@ export default {
     components:{
         Ventana1,
         Ventana2,
+        Ampliar,
         Intendencia,
         Academia
     },
-    data(){
-        return {
-
-        }
-    },
-
 }
 </script>
 

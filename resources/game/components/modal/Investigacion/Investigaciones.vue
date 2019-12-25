@@ -25,8 +25,13 @@
             <div class="flex-2 p-2 borde">
                 <div class="gtitle mb-2">{{$t('research['+selected.id+'].name')}}</div>
                 <div class="text text-justify">{{$t('research['+selected.id+'].text')}}</div>
+                <div class="d-flex mt-3">
+                    <div class="costos mr-2">Costos: </div>
+                    <div>{{$money(selected.cost)}} <img :src="require('Img/icon/icon_pi.png')"></div>
+                </div>
                 <div class="text-right mt-3">
                     <div v-if='selected.level>maxLevel+1' class="text-danger">Aun no has investigado el nivel anterior</div>
+                    <div v-else-if='researchs[selected.index].finish'>Ya investigado</div>
                     <div v-else>
                         <div class="btnGeneral" v-if="research_point>=selected.cost" @click='investigar'>Investigar</div>
                         <div class="text-danger" v-else>No tienes suficientes puntos de investigacion</div>
@@ -38,6 +43,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import {catchAxios,callError} from 'Js/util.js'
 import $resources from 'Stores/resources'
 
 export default {
@@ -66,17 +73,32 @@ export default {
             return clase;
         },
         investigar(){
-            
+            axios.post('research/'+this.selected.id)
+            .then(res =>{
+                if(res.data=='ok'){
+                    $resources.commit('research',{research_point:this.selected.cost})
+                }else{
+                    callError(res);
+                }
+            })
+            .catch(err =>{
+                catchAxios(err)
+            })
         },
         initData(){
             this.researchs = this.data.research.filter(x =>{
                 return x.category_id == this.category;
             });
             var userResearch = this.researchs.filter(x =>{
-                return this.data.user_research.includes(x.id);
+                var res =  this.data.user_research.includes(x.id);
+                x.finish = res;
+                return res;
             });
             if(userResearch.length>0){
                 this.maxLevel = Math.max.apply(Math, userResearch.map(function(o) { return o.level; }))
+                if(userResearch.length==this.researchs.length){
+                    this.maxLevel -= 1;
+                }
             }else{
                 this.maxLevel = 0
             }
@@ -146,5 +168,9 @@ export default {
  }
  .research-name{
     white-space: nowrap;
+ }
+ .costos{
+    color: #542c0f;
+    font-weight: bold;
  }
 </style>

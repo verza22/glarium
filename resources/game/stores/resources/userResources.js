@@ -15,5 +15,8 @@ export default {
             state.trade_ship = trade_ship;
             state.trade_ship_available = trade_ship_available;
         },
+        research(state,{research_point}){
+            state.research_point -= research_point;
+        }
     }
 }

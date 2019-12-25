@@ -2,7 +2,7 @@
     <div class="box">
         <div class="d-flex justify-content-center">
             <div>
-                <div><img :src="require('Img/icon/btn_upgrade.jpg')"></div>
+                <div @click='ampliar' class="btn-apliar"><img :src="require('Img/icon/btn_upgrade.jpg')"></div>
                 <div>{{$t('building.upgrade')}}</div>
             </div>
             <div class="px-2">
@@ -27,9 +27,30 @@
 </template>
 
 <script>
+import axios from 'axios'
+import {catchAxios,callError} from 'Js/util.js'
+import $store from 'Stores/store'
+import $resources from 'Stores/resources'
+
 export default {
     name:'Ampliar',
-    props:['info']
+    props:['info'],
+    methods:{
+        ampliar(){
+            axios.put('building/upgrade/'+this.info.city_building_id)
+            .then(res =>{
+                if(res.data!='ok'){
+                    callError(res)
+                }else{
+                    $store.commit('reloadBuilding');
+                    $resources.commit('removeResources',{wood:this.info.wood,wine:this.info.wine,marble:this.info.marble,glass:this.info.glass,sulfur:this.info.sulfur});
+                }
+            })
+            .catch(err =>{
+                catchAxios(err)
+            })
+        }
+    }
 }
 </script>
 

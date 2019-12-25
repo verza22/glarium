@@ -123,6 +123,7 @@ export default {
           level: building.level
         })
         .then(res => {
+          res.data.city_building_id = building.id
            $modal.commit('openModal',{
             type:1,
             info:res.data

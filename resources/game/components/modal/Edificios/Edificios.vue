@@ -33,6 +33,11 @@ export default {
             building_id:0
         }
     },
+    watch:{
+        info(){
+            this.building_id = this.info.building_id;
+        }
+    },
     beforeMount(){
         this.building_id = this.info.building_id;
     }

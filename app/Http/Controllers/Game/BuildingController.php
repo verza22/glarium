@@ -240,4 +240,46 @@ class BuildingController extends Controller
         $request->validate(['level' => 'required|integer|min:1']);
         return BuildingLevel::where('building_id',$building->id)->where('level',$request->input('level')+1)->first();
     }
+
+    public function upgrade(CityBuilding $cityBuilding)
+    {
+        //Upgrade building
+        $this->authorize('update',$cityBuilding);
+        $city = City::whereId($cityBuilding->city_id)->first();
+
+        $nowLevel = $cityBuilding->building_level()->first();
+        $nextLevel = BuildingLevel::where('building_id',$nowLevel->building_id)->where('level',$nowLevel->level+1)->first();
+
+        if($nextLevel == NULL)
+        {
+            return 'No existe ese nivel';
+        }
+
+        BuildingHelper::updateConstructedTime($city);
+
+        if(BuildingHelper::isContructed($city))
+        {
+            return 'Estas construyendo algo en esta ciudad';
+        }
+
+        //Aplicamos descuentos de investigaciones y edificios
+        BuildingHelper::lessBuildingCost($city,$nextLevel);
+
+        //Compare if user have resources for upgrade and constructed building
+        if(CityHelper::compareResources($city,$nextLevel))
+        {
+            CityHelper::removeResources($city,$nextLevel);
+
+            //Upgrade building
+            //$cityBuilding->building_level_id = $nextLevel->id;
+            $cityBuilding->constructed_at = Carbon::now()->addSeconds($nextLevel->time);
+            $cityBuilding->save();
+
+            return 'ok';
+        }
+        else
+        {
+            return 'No tienes recursos';
+        }
+    }
 }

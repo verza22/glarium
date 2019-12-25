@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 Route::get('building/{city}', 'Game\BuildingController@buildings');
 Route::post('building/nextLevel/{building}', 'Game\BuildingController@nextLevel');
 Route::post('building/{city}', 'Game\BuildingController@buildingsAvaible');
+Route::put('building/upgrade/{cityBuilding}', 'Game\BuildingController@upgrade');
 Route::put('building/{city}', 'Game\BuildingController@create');
 
 Route::get('city/getResources/{city}', 'Game\CityController@getResources');

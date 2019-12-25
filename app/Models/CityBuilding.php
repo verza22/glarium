@@ -26,7 +26,7 @@ class CityBuilding extends Model
         self::created(function($model){
             PopulationHelper::setPopulationMax($model);
         });
-        self::updated(function($model){
+        self::saved(function($model){
             PopulationHelper::setPopulationMax($model);
         });
     }

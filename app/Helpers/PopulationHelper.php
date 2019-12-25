@@ -152,6 +152,7 @@ class PopulationHelper {
 
     public static function setPopulationMax(CityBuilding $cityBuilding)
     {
+        $cityBuilding->refresh();
         $building = $cityBuilding->building_level->building->name;
         $level = $cityBuilding->building_level->level;
         $cityPopulation = CityPopulation::where('city_id',$cityBuilding->city_id)->first();

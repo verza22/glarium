@@ -28,6 +28,13 @@ export default new Vuex.Store({
         },
         donate(state,{wood}){
             state.wood = state.wood - wood;
-        }
+        },
+        removeResources(state,{wood,wine,marble,glass,sulfur}){
+            state.wood -= wood;
+            state.wine -= wine;
+            state.marble -= marble;
+            state.glass -= glass;
+            state.sulfur -= sulfur;
+        },
     }
 });

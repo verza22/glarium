@@ -3,6 +3,7 @@
         <ListaEdificios :close='close' :info='info' v-if='type==0'></ListaEdificios>
         <Edificios :close='close' :info='info' v-else-if='type==1'></Edificios>
         <Donaciones :close='close' :infop='info' v-else-if='type==2'></Donaciones>
+        <Investigacion :close='close' :info='info' v-else-if='type==3'></Investigacion>
     </div>
 </template>
 
@@ -10,6 +11,7 @@
     import ListaEdificios from 'Components/modal/ListaEdificios.vue';
     import Donaciones from 'Components/modal/Donaciones/Donaciones.vue';
     import Edificios from 'Components/modal/Edificios/Edificios.vue';
+    import Investigacion from 'Components/modal/Investigacion/Investigacion.vue';
     import $modal from 'Stores/modal.js'
 
     export default {
@@ -17,7 +19,8 @@
         components: {
             ListaEdificios,
             Donaciones,
-            Edificios
+            Edificios,
+            Investigacion
         },
         data(){
             return {

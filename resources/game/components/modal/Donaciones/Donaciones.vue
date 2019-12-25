@@ -16,7 +16,6 @@ import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import Ventana2 from 'Components/modal/Ventanas/Ventana2.vue'
 import IslandResources from 'Components/modal/Donaciones/IslandResources.vue'
 import IslandDonation from 'Components/modal/Donaciones/IslandDonation.vue'
-import $modal from 'Stores/modal.js'
 
 export default {
     name:'Donaciones',

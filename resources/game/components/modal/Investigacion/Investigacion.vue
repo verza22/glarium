@@ -1,7 +1,7 @@
 <template>
     <div class="mBorder">
         <Ventana1 :close='close' titulo="Consejero científico">
-            <Investigaciones :category='category' :data='info'></Investigaciones>
+            <Investigaciones :category='category' :data_aux='info'></Investigaciones>
         </Ventana1>
         <Ventana2 titulo="Área de investigación">
             <Categorias :changeCategory='changeCategory'></Categorias>

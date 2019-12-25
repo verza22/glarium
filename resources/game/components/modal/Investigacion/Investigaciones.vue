@@ -8,7 +8,7 @@
             </div>
             <div class="flex-1 d-flex justify-content-center">
                 <div class="mr-2"><img :src="require('Img/icon/icon_pi.png')"></div>
-                <div>Puntos de investigación: {{research_point}}</div>
+                <div>Puntos de investigación: {{$money(research_point)}}</div>
             </div>
             <div class="flex-1 d-flex justify-content-end">
                 <div class="mr-2"><img :src="require('Img/icon/icon_research_time.png')"></div>
@@ -49,9 +49,10 @@ import $resources from 'Stores/resources'
 
 export default {
     name: 'Investigaciones',
-    props:['data','category'],
+    props:['data_aux','category'],
     data(){
         return {
+            data:{},
             researchs:[],
             selected:{},
             maxLevel:0
@@ -76,7 +77,10 @@ export default {
             axios.post('research/'+this.selected.id)
             .then(res =>{
                 if(res.data=='ok'){
-                    $resources.commit('research',{research_point:this.selected.cost})
+                    axios("research").then(res => {
+                        $resources.commit('research',{research_point:this.selected.cost})
+                        this.data = res.data;
+                    })
                 }else{
                     callError(res);
                 }
@@ -115,7 +119,7 @@ export default {
             return $resources.state.userResources.total_scientists;
         },
         research_point(){
-            return this.$money($resources.state.userResources.research_point);
+            return $resources.state.userResources.research_point;
         },
         research_point_hour(){
             return this.$money_two(this.total_scientists);
@@ -124,9 +128,13 @@ export default {
     watch:{
         category(newval){
             this.initData()
+        },
+        data(){
+            this.initData()
         }
     },
     beforeMount(){
+        this.data = this.data_aux;
         this.initData()
     }
 }

@@ -46,7 +46,7 @@ class BuildingController extends Controller
     {
         //Devuelve los edificios disponibles para construir segun su posicion
         $request->validate(['position' => 'required|integer|min:1|max:15']);
-        //Obtenemos los edificios investigador por el usuario
+        //Obtenemos los edificios investigados por el usuario
         $research_id = UserResearch::where('user_id',Auth::id())->pluck('research_id');
 
         //Obtenemos los edificios construidos
@@ -54,24 +54,46 @@ class BuildingController extends Controller
             return ['building_id'=>$cityBuilding->building_level->building_id];
         })->pluck('building_id');
 
+        //Consultamos los edificios que se investigan y que aun no tengo sus investigaciones
+        $researchBuilding = ResearchBuilding::whereNotIn('research_id',$research_id)->pluck('building_id');
+
         //Consultamos los edificios
-        $query = Building::whereHas('research',function($query) use($research_id) {
-            $query->whereIn('research_id',$research_id);
-        })->doesntHave('research', 'or');
+        $query = Building::whereNotIn('id',$researchBuilding);
 
         //Quitamos los edificios construidos
         $query->whereNotIn('id',$cityBuilding);
 
         //Verifiamos si es capital
-
         $query2 = ResearchBuilding::whereNotIn('research_id',$research_id)->whereNotIn('building_id',$cityBuilding);
         if($city->userCity->capital==1)
         {
             $query2->where('building_id','!=',18);
+            $query->where('id','!=',18);
         }
         else
         {
             $query2->where('building_id','!=',19);
+            $query->where('id','!=',19);
+        }
+
+        //Quitamos los edificios que no se construyen en la isla
+        switch($city->islandCity->island->type){
+            case 1:
+                $query->whereNotIn('id',[12,13,15]);
+                $query2->whereNotIn('building_id',[12,13,15]);
+            break;
+            case 2:
+                $query->whereNotIn('id',[12,13,14]);
+                $query2->whereNotIn('building_id',[12,13,14]);
+            break;
+            case 3:
+                $query->whereNotIn('id',[13,14,15]);
+                $query2->whereNotIn('building_id',[13,14,15]);
+            break;
+            case 4:
+                $query->whereNotIn('id',[12,14,15]);
+                $query2->whereNotIn('building_id',[12,14,15]);
+            break;
         }
 
         //Verificamos las posiciones

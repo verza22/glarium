@@ -4,6 +4,7 @@
             <div class="gtitle box">{{$t(`buildings[${building_id}].text`)}}</div>
             <Intendencia v-if='building_id==1' :data='info'></Intendencia>
             <Academia v-else-if='building_id==2' :data='info'></Academia>
+            <Deposito v-else-if='building_id==3' :data='info'></Deposito>
         </Ventana1>
         <Ventana2 titulo="Ampliar">
             <Ampliar :info='info'></Ampliar>
@@ -15,8 +16,9 @@
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import Ventana2 from 'Components/modal/Ventanas/Ventana2.vue'
 import Ampliar from 'Components/modal/Edificios/Ampliar.vue'
-import Intendencia from 'Components/modal/Edificios/Intendencia.vue';
-import Academia from 'Components/modal/Edificios/Academia.vue';
+import Intendencia from 'Components/modal/Edificios/Intendencia.vue'
+import Academia from 'Components/modal/Edificios/Academia.vue'
+import Deposito from 'Components/modal/Edificios/Deposito.vue'
 
 export default {
     name: 'Edificios',
@@ -26,7 +28,8 @@ export default {
         Ventana2,
         Ampliar,
         Intendencia,
-        Academia
+        Academia,
+        Deposito
     },
     data(){
         return {

@@ -1,0 +1,12 @@
+<template>
+    <div class="d-inline-block" :title="$t('resources.sulfur')">
+        <img :src="require('Img/icon/icon_sulfur.png')"> {{$money(cant)}}
+    </div>
+</template>
+
+<script>
+export default {
+    name:'sulfur',
+    props:['cant']
+}
+</script>

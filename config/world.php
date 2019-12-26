@@ -5,9 +5,11 @@ return [
     'load_speed' => 5000,//Carga base del puerto
     'load_attack_return' => 5,//Tiempo que demora en cargar los recursos de un saqueo
     'load_defend_return' => 5,//Tiempo que demora en cargar las tropas al regresar de una defensa
-    'resource_protected' => 100,//Capacidad base de proteccion de recursos
     'warehouse' => [
         'resource_protected' => 400,//Capacidad de recursos protegidos por nivel de deposito
+        'resource_protected_base' => 100,//Capacidad base de proteccion de recursos
+        'capacity' => 8000, //Capacidad de almacenamiento por nivel
+        'capacity_base' => 2500 //Capacidad base
     ],
     'distance' => [
         'same_island' => 5

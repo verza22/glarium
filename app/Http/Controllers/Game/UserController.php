@@ -26,4 +26,10 @@ class UserController extends Controller
         $data['total_scientists'] = intval($total_scientists);
         return $data;
     }
+
+    public function config()
+    {
+        //Devuelve las configuraciones del juego
+        return config('world');
+    }
 }

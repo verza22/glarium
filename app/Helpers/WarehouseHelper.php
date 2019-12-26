@@ -10,8 +10,8 @@ class WarehouseHelper {
     public static function checkCapacity(City $city) 
     {
         //Verificamos que no pase el limite de la ciudad
-        $capacity = 2500;//Capacidad base de la ciudad
-        $wareHouse = 8000;//Capacidad por nivel
+        $capacity = config('world.warehouse.capacity_base');//Capacidad base de la ciudad
+        $wareHouse = config('world.warehouse.capacity');//Capacidad por nivel
 
         $cityBuilding = CityBuilding::where('city_id',$city->id)->whereHas('building_level',function($query){
             $query->where('building_id',3);

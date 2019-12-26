@@ -287,5 +287,12 @@ export default {
         finished:'Ya investigado',
         previusLevel:'Aun no has investigado el nivel anterior',
         dontHave:'No tienes suficientes puntos de investigacion'
+    },
+    warehouse:{
+        title: 'Visión general de mercancías de la ciudad',
+        safe:'Seguro',
+        notSafe:'Inseguro',
+        total:'Total',
+        capacity:'Capacidad'
     }
 };

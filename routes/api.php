@@ -30,6 +30,7 @@ Route::get('city/getCities', 'Game\CityController@getCities');
 Route::post('city/setScientists/{city}', 'Game\CityController@setScientists');
 
 Route::get('user/getUserResources', 'Game\UserController@getUserResources');
+Route::get('user/config', 'Game\UserController@config');
 
 Route::post('island/donation/{island}', 'Game\IslandController@donation');
 Route::put('island/donation/{island}', 'Game\IslandController@setDonation');

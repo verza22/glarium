@@ -195,7 +195,7 @@ class CombatHelper {
 
         //verificamos si tiene un deposito para proteger recursos
         $capacity = WarehouseHelper::checkProtected($city);
-        $totalCapacity = $capacity + config('world.resource_protected');
+        $totalCapacity = $capacity + config('world.warehouse.resource_protected_base');
 
         $collect = UnitHelper::newCollect();
         //Asignamos los recursos robables menos los que estan protegidos

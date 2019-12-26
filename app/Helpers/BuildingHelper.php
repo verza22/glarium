@@ -48,9 +48,7 @@ class BuildingHelper {
             //Mejoramos el edificio
             $after = $cityBuilding->building_level;
             $before = BuildingLevel::where('building_id',$after->building_id)->where('level',$after->level+1)->first();
-            if($after->level!=1){
-                $cityBuilding->building_level_id = $before->id;
-            }
+            $cityBuilding->building_level_id = $before->id;
             $cityBuilding->constructed_at = NULL;
             $cityBuilding->save();
         });

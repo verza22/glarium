@@ -138,7 +138,7 @@ export default {
             return this.sulfur>this.safe ? this.sulfur-this.safe : 0;
         },
         warehouse(){
-            return $config.state.warehouse;
+            return $config.state.world.warehouse;
         }
     },
     beforeMount(){

@@ -158,6 +158,7 @@ class BuildingController extends Controller
         $request->validate(['position' => 'required|numeric|min:1|max:15','building'=>'required|numeric|min:1']);
 
         $nextLevel = BuildingLevel::where('building_id',$request->input('building'))->where('level',1)->first();
+        $ceroLevel = BuildingLevel::where('building_id',$request->input('building'))->where('level',0)->first();
 
         if($nextLevel==NULL)
         {
@@ -244,7 +245,7 @@ class BuildingController extends Controller
             $cityBuilding = new CityBuilding();
             $cityBuilding->city_id = $city->id;
             $cityBuilding->position = $request->input('position');
-            $cityBuilding->building_level_id = $nextLevel->id;
+            $cityBuilding->building_level_id = $ceroLevel->id;
             $cityBuilding->constructed_at = Carbon::now()->addSeconds($nextLevel->time);
             $cityBuilding->save();
 

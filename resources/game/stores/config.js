@@ -6,11 +6,13 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-    state: {}
+    state: {
+        world:{}
+    }
 })
 
 axios('/api/user/config').then(res =>{
-    store.replaceState(res.data);
+    store.state.world = res.data;
 })
 
 export default store;

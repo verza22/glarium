@@ -4,15 +4,15 @@
         <div class="d-flex my-3 py-1 px-3 fondo">
             <div class="flex-1 d-flex">
                 <div class="mr-2"><img :src="require('Img/icon/icon_scientist.png')"></div>
-                <div>Investigadores: {{total_scientists}}</div>
+                <div>{{$t('research2.scientist')}}: {{total_scientists}}</div>
             </div>
             <div class="flex-1 d-flex justify-content-center">
                 <div class="mr-2"><img :src="require('Img/icon/icon_pi.png')"></div>
-                <div>Puntos de investigación: {{$money(research_point)}}</div>
+                <div>{{$t('research2.pi')}} {{$money(research_point)}}</div>
             </div>
             <div class="flex-1 d-flex justify-content-end">
                 <div class="mr-2"><img :src="require('Img/icon/icon_research_time.png')"></div>
-                <div>Por hora: {{research_point_hour}}</div>
+                <div>{{$t('other.perHour')}}: {{research_point_hour}}</div>
             </div>
         </div>
         <div class="d-flex">
@@ -26,15 +26,15 @@
                 <div class="gtitle mb-2">{{$t('research['+selected.id+'].name')}}</div>
                 <div class="text text-justify">{{$t('research['+selected.id+'].text')}}</div>
                 <div class="d-flex mt-3">
-                    <div class="costos mr-2">Costos: </div>
+                    <div class="costos mr-2">{{$t('other.cost')}}: </div>
                     <div>{{$money(selected.cost)}} <img :src="require('Img/icon/icon_pi.png')"></div>
                 </div>
                 <div class="text-right mt-3">
-                    <div v-if='selected.level>maxLevel+1' class="text-danger">Aun no has investigado el nivel anterior</div>
-                    <div v-else-if='researchs[selected.index].finish'>Ya investigado</div>
+                    <div v-if='selected.level>maxLevel+1' class="text-danger">{{$t('research2.previusLevel')}}</div>
+                    <div v-else-if='researchs[selected.index].finish'>{{$t('research2.finished')}}</div>
                     <div v-else>
-                        <div class="btnGeneral" v-if="research_point>=selected.cost" @click='investigar'>Investigar</div>
-                        <div class="text-danger" v-else>No tienes suficientes puntos de investigacion</div>
+                        <div class="btnGeneral" v-if="research_point>=selected.cost" @click='investigar'>{{$t('research2.button')}}</div>
+                        <div class="text-danger" v-else>{{$t('research2.dontHave')}}</div>
                     </div>
                 </div>
             </div>

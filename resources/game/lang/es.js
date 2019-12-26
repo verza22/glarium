@@ -277,6 +277,15 @@ export default {
         confirm: 'Confirmar',
         income:'Ingresos',
         production:'Produccion',
-        perHour:'por hora'
+        perHour:'por hora',
+        cost:'Costos'
+    },
+    research2:{
+        scientist:'Investigadores',
+        pi:'Puntos de investigación:',
+        button: 'Investigar',
+        finished:'Ya investigado',
+        previusLevel:'Aun no has investigado el nivel anterior',
+        dontHave:'No tienes suficientes puntos de investigacion'
     }
 };

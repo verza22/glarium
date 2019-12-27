@@ -6,6 +6,7 @@
             <Academia v-else-if='building_id==2' :data='info'></Academia>
             <Deposito v-else-if='building_id==3' :data='info'></Deposito>
             <Reductores v-else-if='building_id>=6&&building_id<=10' :data='info'></Reductores>
+            <Productores v-else-if='building_id>=11&&building_id<=15' :data='info'></Productores>
         </Ventana1>
         <Ventana2 titulo="Ampliar">
             <Ampliar :info='info'></Ampliar>
@@ -21,6 +22,7 @@ import Intendencia from 'Components/modal/Edificios/Intendencia.vue'
 import Academia from 'Components/modal/Edificios/Academia.vue'
 import Deposito from 'Components/modal/Edificios/Deposito.vue'
 import Reductores from 'Components/modal/Edificios/Reductores.vue'
+import Productores from 'Components/modal/Edificios/Productores.vue'
 
 export default {
     name: 'Edificios',
@@ -32,7 +34,8 @@ export default {
         Intendencia,
         Academia,
         Deposito,
-        Reductores
+        Reductores,
+        Productores
     },
     data(){
         return {

@@ -300,5 +300,9 @@ export default {
         unit:'Estadísticas de {building_id}. Unidades',
         costBase:'Costos básicos',
         research:'Investigaciones'
+    },
+    buildingProducer:{
+        productionBase:'Producción básica',
+        title:'Estadísticas de {building}'
     }
 };

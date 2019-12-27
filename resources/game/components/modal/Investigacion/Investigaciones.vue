@@ -46,6 +46,7 @@
 import axios from 'axios'
 import {catchAxios,callError} from 'Js/util.js'
 import $resources from 'Stores/resources'
+import $config from 'Stores/config'
 
 export default {
     name: 'Investigaciones',
@@ -77,10 +78,9 @@ export default {
             axios.post('research/'+this.selected.id)
             .then(res =>{
                 if(res.data=='ok'){
-                    axios("research").then(res => {
-                        $resources.commit('research',{research_point:this.selected.cost})
-                        this.data = res.data;
-                    })
+                    $resources.commit('research',{research_point:this.selected.cost})
+                    this.data.user_research.push(this.selected.id)
+                    this.initData()
                 }else{
                     callError(res);
                 }

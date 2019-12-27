@@ -294,5 +294,11 @@ export default {
         notSafe:'Inseguro',
         total:'Total',
         capacity:'Capacidad'
+    },
+    buildingReducer:{
+        building:'Estadísticas de {building_id}. Edificio',
+        unit:'Estadísticas de {building_id}. Unidades',
+        costBase:'Costos básicos',
+        research:'Investigaciones'
     }
 };

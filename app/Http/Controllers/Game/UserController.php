@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CityPopulation;
 use App\Models\UserCity;
+use App\Models\Research;
+use App\Models\UserResearch;
 use App\Helpers\UserResourceHelper;
 use Auth;
 
@@ -30,6 +32,9 @@ class UserController extends Controller
     public function config()
     {
         //Devuelve las configuraciones del juego
-        return config('world');
+        $data['world'] = config('world');
+        $data['research'] = Research::select(['id','research_category_id as category_id','level','cost'])->get();
+        $data['user_research'] = UserResearch::where('user_id',Auth::id())->pluck('research_id');
+        return $data;
     }
 }

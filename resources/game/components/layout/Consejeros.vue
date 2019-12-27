@@ -26,7 +26,8 @@ export default {
   name: "Consejeros",
   methods:{
     scientist(){
-      axios("research")
+      $modal.commit('openModal',{type:3,info:{}})
+      /*axios("research")
         .then(res => {
           $modal.commit('openModal',{
             type:3,
@@ -35,7 +36,7 @@ export default {
         })
         .catch(err => {
           catchAxios(err);
-        });
+        });*/
     }
   }
 };

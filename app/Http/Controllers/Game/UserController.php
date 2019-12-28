@@ -9,6 +9,8 @@ use App\Models\UserCity;
 use App\Models\Research;
 use App\Models\UserResearch;
 use App\Models\UserResource;
+use App\Models\Message;
+use App\User;
 use App\Helpers\UserResourceHelper;
 use App\Helpers\CombatHelper;
 use Auth;
@@ -70,6 +72,21 @@ class UserController extends Controller
         $userResource->trade_ship += 1;
         $userResource->trade_ship_available += 1;
         $userResource->save();
+
+        return 'ok';
+    }
+
+    public function sendMessage(Request $request,User $user)
+    {
+        $request->validate([
+            'message' => 'required|string|max:20'
+        ]);
+
+        $message = new Message();
+        $message->user_from = Auth::id();
+        $message->user_to = $user->id;
+        $message->message = $request->input('message');
+        $message->save();
 
         return 'ok';
     }

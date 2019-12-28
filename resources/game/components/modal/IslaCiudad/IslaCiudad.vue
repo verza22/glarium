@@ -1,7 +1,7 @@
 <template>
     <div class="mBorder">
         <Ventana1 :close='close' v-if='type!=0' titulo="Escribir mensaje">
-            <Diplomacia v-if='type==1'></Diplomacia>
+            <Diplomacia :changeType='changeType' :data='info' v-if='type==1'></Diplomacia>
         </Ventana1>
         <Ventana2 titulo="Info">
             <Info :data='info'></Info>

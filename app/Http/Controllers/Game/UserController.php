@@ -79,7 +79,7 @@ class UserController extends Controller
     public function sendMessage(Request $request,User $user)
     {
         $request->validate([
-            'message' => 'required|string|max:20'
+            'message' => 'required|string|max:1500'
         ]);
 
         $message = new Message();

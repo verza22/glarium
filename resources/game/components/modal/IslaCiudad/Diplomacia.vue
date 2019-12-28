@@ -7,6 +7,8 @@
             <div class="mt-2"><b>Mensaje:</b></div>
             <div>
                 <textarea v-model='message' class="w-100" rows='10'></textarea>
+                <div v-if="error" class="text-danger">Debes ingresar el mensaje</div>
+                <div>{{messageLength}} caracteres disponibles.</div>
             </div>
             <div class="text-center mt-2">
                 <div class="btnGeneral" title="Enviar" @click='enviar'>Enviar</div>
@@ -24,11 +26,17 @@ export default {
     props:['data','changeType'],
     data(){
         return {
-            message:''
+            message:'',
+            error:false,
+            maxLength:1500
         }
     },
     methods:{
         enviar(){
+            if(this.message.trim()==''){
+                this.error = true
+                return
+            }
             axios.post('user/sendMessage/'+this.data.city.user_id,{
                 message:this.message
             })
@@ -43,6 +51,18 @@ export default {
             .catch(err =>{
                 catchAxios(err)
             })
+        }
+    },
+    computed:{
+        messageLength(){
+            return this.maxLength - this.message.length;
+        }
+    },
+    watch:{
+        message(newval){
+            if(newval.length>this.maxLength){
+                 this.message = this.message.substr(0, this.maxLength);
+            }
         }
     }
 }

@@ -17,6 +17,11 @@ export default {
         },
         research(state,{research_point}){
             state.research_point -= research_point;
+        },
+        buyTradeShip(state,{goldCost}){
+            state.gold -= goldCost;
+            state.trade_ship += 1;
+            state.trade_ship_available += 1;
         }
     }
 }

@@ -205,7 +205,17 @@ export default {
         upgradeText:'Necesario para el nivel {level}:',
         upgrade:'Ampliar',
         demolition:'Demoler',
-        level:'Nivel'
+        level:'Nivel',
+        port:{
+            speedTitle:'Velocidad de carga',
+            speedText: 'La velocidad de carga indica con qué rapidez se cargan y descargan los barcos mercantes.',
+            speedMin: 'Bienes/minuto',
+            tradeShipBuyTitle:'Comprar barco mercante',
+            tradeShipBuyText: 'Los barcos mercantes son el apoyo más importante de tu imperio, puesto que con estos barcos puedes transportar tus bienes y unidades.',
+            tradeShipBuyBtn: 'Comprar barco mercante',
+            tradeShipBuyMissing1: '¡No dispones de suficiente oro!',
+            tradeShipBuyMissing2: '¡Todavía hacen falta {goldMissing} piezas de oro!'
+        }
     },
     resources:{
         wood:'Madera',
@@ -304,5 +314,5 @@ export default {
     buildingProducer:{
         productionBase:'Producción básica',
         title:'Estadísticas de {building}'
-    }
+    },
 };

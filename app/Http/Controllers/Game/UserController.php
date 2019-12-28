@@ -8,7 +8,9 @@ use App\Models\CityPopulation;
 use App\Models\UserCity;
 use App\Models\Research;
 use App\Models\UserResearch;
+use App\Models\UserResource;
 use App\Helpers\UserResourceHelper;
+use App\Helpers\CombatHelper;
 use Auth;
 
 class UserController extends Controller
@@ -36,5 +38,39 @@ class UserController extends Controller
         $data['research'] = Research::select(['id','research_category_id as category_id','level','cost'])->get();
         $data['user_research'] = UserResearch::where('user_id',Auth::id())->pluck('research_id');
         return $data;
+    }
+
+    public function buyTradeShip()
+    {
+        UserResourceHelper::updateResources();
+        $userResource = UserResource::where('user_id',Auth::id())->first();
+
+        if($userResource->trade_ship==200)
+        {
+            return 'Alcanzaste el limite maximo de barcos';
+        }
+
+        $level = $userResource->trade_ship + 1;
+        if($level<10)
+        {
+            $goldCost = $level*490;
+        }
+        else
+        {
+            $coeficiente = ($level/1000)+1.8;
+            $goldCost = floor(pow($level,$coeficiente)*(80+($level/10)));
+        }
+
+        if($goldCost>$userResource->gold)
+        {
+            return 'No tienes suficiente oro';
+        }
+
+        $userResource->gold -= $goldCost;
+        $userResource->trade_ship += 1;
+        $userResource->trade_ship_available += 1;
+        $userResource->save();
+
+        return 'ok';
     }
 }

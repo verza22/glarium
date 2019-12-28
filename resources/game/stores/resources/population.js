@@ -1,3 +1,5 @@
+import axios from 'axios'
+import $store from 'Stores/store'
 //Modolo de los recursos de poblacion
 export default {
     state: {
@@ -12,15 +14,6 @@ export default {
         wine:0,
     },
     mutations:{
-        updatePopulation(state,{population_max,population,population_now,worker_forest,worker_mine,scientists_max,scientists}){
-            state.population = population;
-            state.population_max = population_max;
-            state.population_now = population_now;
-            state.worker_forest = worker_forest;
-            state.worker_mine = worker_mine;
-            state.scientists_max = scientists_max;
-            state.scientists = scientists;
-        },
         setWorkerForest(state,{population,worker_forest}){
             state.population = population;
             state.worker_forest = worker_forest;
@@ -30,8 +23,23 @@ export default {
             state.worker_mine = worker_mine;
         },
         setScientists(state,{population,scientists}){
+            //Sumamos a los investigadores globales
+            this.state.userResources.total_scientists += (scientists - state.scientists)
             state.population = population;
             state.scientists = scientists;
         },
+        reloadPopulation(state){
+            axios("city/getPopulation/" + $store.state.city_id)
+            .then(res => {
+                var data = res.data;
+                state.population = data.population;
+                state.population_max = data.population_max;
+                state.population_now = data.population + (data.worker_forest + data.worker_mine + data.scientists);
+                state.worker_forest = data.worker_forest;
+                state.worker_mine = data.worker_mine;
+                state.scientists_max = data.scientists_max;
+                state.scientists = data.scientists;
+            })
+        }
     }
 }

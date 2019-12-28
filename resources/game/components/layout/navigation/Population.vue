@@ -14,12 +14,7 @@ export default {
     name:'Population',
     methods:{
         getPopulation(){
-            axios("city/getPopulation/" + this.city_id)
-            .then(res => {
-                var data = res.data;
-                data.population_now = data.population + (data.worker_forest + data.worker_mine + data.scientists);
-                $resources.commit('updatePopulation',data)
-            })
+            $resources.commit('reloadPopulation');
         },
     },
     computed:{

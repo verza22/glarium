@@ -122,9 +122,12 @@ export default {
             this.value = newval.toString().replace(/^0+/, '');
         },
         data(newval,oldval){
-            if(newval.info.level!=oldval.info.level){
+            if(newval.level!=oldval.level){
                 this.initData()
             }
+        },
+        scientists_max(){
+            this.initData()
         }
     },
     mounted(){

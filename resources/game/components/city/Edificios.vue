@@ -38,6 +38,7 @@ import { catchAxios } from "Js/util.js";
 import moment from "moment";
 import $store from "Stores/store.js";
 import $modal from "Stores/modal.js";
+import $resources from 'Stores/resources'
 
 export default {
   name: "Edificios",
@@ -45,6 +46,7 @@ export default {
     return {
       buildings: [],
       constructed_at: null,
+      constructed_building: null,
       objects: [
         { top: 396, left: 830 },
         { top: 350, left: 480 },
@@ -79,14 +81,17 @@ export default {
     },
     getBuilds() {
       //Consultamos los edificios
-      axios("building/" + this.city_id)
+      return new Promise((resolve,reject) => {
+        axios("building/" + this.city_id)
         .then(res => {
           this.buildings = res.data;
           this.checkConstructed();
+          resolve(res.data)
         })
         .catch(err => {
           catchAxios(err);
         });
+      })
     },
     modalConstruir(position) {
       axios
@@ -111,10 +116,8 @@ export default {
         return x.constructed_at != null;
       });
       if (building.length > 0) {
-        this.constructed_at = moment(building[0].constructed_at).add(
-          2,
-          "seconds"
-        );
+        this.constructed_at = moment(building[0].constructed_at).add(3,"seconds");
+        this.constructed_building = building[0];
       }
     },
     modalEdificio(building){
@@ -132,6 +135,16 @@ export default {
         .catch(err => {
           catchAxios(err);
         });
+    },
+    updateBuilding(){
+      //Verficamos cuando se construyan los edificios
+      switch(this.constructed_building.building_id){
+        case 2:
+          //Actualizamos los investigadores
+          $resources.commit('reloadPopulation');
+        break;
+      }
+      this.constructed_building = null;
     }
   },
   computed: {
@@ -152,10 +165,13 @@ export default {
     }
   },
   watch: {
-    timeConstruct(newval) {
-      if (newval == "00s") {
+    timeConstruct(newval,oldval) {
+      if (newval == "00s" && this.constructed_at!=null) {
         this.constructed_at = null;
-        this.getBuilds();
+        this.getBuilds()
+        .then(res => {
+          this.updateBuilding()
+        })
       }
     },
     city_id() {

@@ -32,7 +32,7 @@ Vue.prototype.$money = function (number){
   return number==undefined ? 0 : Math.floor(number).money();
 }
 Vue.prototype.$money_two = function (number){
-  return number==undefined ? 0 : number.money(2);
+  return number==undefined ? 0 : parseFloat(number).money(2);
 }
 Vue.prototype.$floor = function (number){
   return number==undefined ? 0 : Math.floor(number);

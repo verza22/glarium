@@ -15,12 +15,12 @@ export default {
     },
     mutations:{
         setWorkerForest(state,{population,worker_forest}){
-            state.population = population;
-            state.worker_forest = worker_forest;
+            state.population = parseInt(population);
+            state.worker_forest = parseInt(worker_forest);
         },
         setWorkerMine(state,{population,worker_mine}){
-            state.population = population;
-            state.worker_mine = worker_mine;
+            state.population = parseInt(population);
+            state.worker_mine = parseInt(worker_mine);
         },
         setScientists(state,{population,scientists}){
             //Sumamos a los investigadores globales

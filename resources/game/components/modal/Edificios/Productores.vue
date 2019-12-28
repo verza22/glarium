@@ -63,8 +63,24 @@ export default {
             level:0,
             workers:0,
             per:0,
-            buildingName:'',
+            building_name:'',
             dataBuilding:[]
+        }
+    },
+    methods:{
+        init(){
+            this.level = this.data.level - 1;
+            this.building_id = this.data.building_id;
+            this.per = ((this.level*2)/100);
+            this.building_name = this.$t('buildings['+this.building_id+'].name');
+            //Seteamos el tipo de productor
+            if(this.data.building_id==11){
+                this.type = 1;
+                this.workers = this.worker_forest;
+            }else{
+                this.type = 0;
+                this.workers = this.worker_mine;
+            }
         }
     },
     computed:{
@@ -75,19 +91,15 @@ export default {
             return $resources.state.population.worker_mine;
         }
     },
-    beforeMount(){
-        this.level = this.data.level - 1;
-        this.building_id = this.data.building_id;
-        this.per = ((this.level*2)/100);
-        this.building_name = this.$t('buildings['+this.building_id+'].name');
-        //Seteamos el tipo de productor
-        if(this.data.building_id==11){
-            this.type = 1;
-            this.workers = this.worker_forest;
-        }else{
-            this.type = 0;
-            this.workers = this.worker_mine;
+    watch:{
+        data(newval,oldval){
+            if(newval.building_id!=oldval.building_id){
+                this.init()
+            }
         }
+    },
+    beforeMount(){
+        this.init()
     }
 }
 </script>

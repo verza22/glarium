@@ -81,6 +81,30 @@ export default {
             research += this.user_research.includes(7) ? 4 : 0;
             research += this.user_research.includes(10) ? 8 : 0;
             return research;
+        },
+        init(){
+            this.level = this.data.level - 1;
+            this.building_id = this.data.building_id;
+            this.building_name = this.$t('buildings['+this.building_id+'].name');
+            this.setDataBuilding();
+            //Seteamos el tipo de reductor
+            switch(this.data.building_id){
+                case 6:
+                    this.type = 0;
+                break;
+                case 7:
+                    this.type = 3;
+                break;
+                case 8:
+                    this.type = 4;
+                break;
+                case 9:
+                    this.type = 1;
+                break;
+                case 10:
+                    this.type = 2;
+                break;
+            }
         }
     },
     computed:{
@@ -88,29 +112,15 @@ export default {
             return $config.state.user_research;
         }
     },
-    beforeMount(){
-        this.level = this.data.level - 1;
-        this.building_id = this.data.building_id;
-        this.building_name = this.$t('buildings['+this.building_id+'].name');
-        this.setDataBuilding();
-        //Seteamos el tipo de reductor
-        switch(this.data.building_id){
-            case 6:
-                this.type = 0;
-            break;
-            case 7:
-                this.type = 3;
-            break;
-            case 8:
-                this.type = 4;
-            break;
-            case 9:
-                this.type = 1;
-            break;
-            case 10:
-                this.type = 2;
-            break;
+    watch:{
+        data(newval,oldval){
+            if(newval.building_id!=oldval.building_id){
+                this.init()
+            }
         }
+    },
+    beforeMount(){
+        this.init()
     }
 }
 </script>

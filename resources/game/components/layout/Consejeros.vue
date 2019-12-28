@@ -10,7 +10,7 @@
       <div class="advisor scientist" :title="$t('advisor.scientist.title')" @click='scientist'>
         <div class="titulo">{{$t('advisor.scientist.name')}}</div>
       </div>
-      <div class="advisor diplomat" :title="$t('advisor.diplomat.title')">
+      <div class="advisor diplomat" :title="$t('advisor.diplomat.title')" @click='diplomat'>
         <div class="titulo">{{$t('advisor.diplomat.name')}}</div>
       </div>
     </div>
@@ -27,16 +27,15 @@ export default {
   methods:{
     scientist(){
       $modal.commit('openModal',{type:3,info:{}})
-      /*axios("research")
+    },
+    diplomat(){
+        axios("user/getMessage")
         .then(res => {
-          $modal.commit('openModal',{
-            type:3,
-            info:res.data
-          })
+            $modal.commit('openModal',{type:5,info:res.data})
         })
         .catch(err => {
           catchAxios(err);
-        });*/
+        });
     }
   }
 };

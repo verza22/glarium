@@ -62,6 +62,7 @@ a:hover{
 .btnGeneral{
     background: #eccf8e;
     cursor:pointer;
+    user-select: none;
 }
 
 .table-row{
@@ -87,4 +88,18 @@ a:hover{
 }
 .table-sort .sort-descending.activated{
     border-top-color: #409eff!important;
+}
+
+.table thead th {
+    border-bottom: 2px solid #e5c999;
+}
+.table td, .table th {
+    border-top: 1px solid #e5c999;
+}
+thead{
+    background: #e5c999;
+}
+
+tbody tr:hover{
+    background: #f2ddbc;
 }

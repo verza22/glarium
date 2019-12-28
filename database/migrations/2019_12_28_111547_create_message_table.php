@@ -16,6 +16,8 @@ class CreateMessageTable extends Migration
         Schema::create('message', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->dateTime('deleted_at_from')->nullable();
+            $table->dateTime('deleted_at_to')->nullable();
             $table->unsignedBigInteger('user_from');
             $table->unsignedBigInteger('user_to');
             $table->integer('type');

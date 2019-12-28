@@ -31,8 +31,10 @@ Route::post('city/setScientists/{city}', 'Game\CityController@setScientists');
 
 Route::get('user/getUserResources', 'Game\UserController@getUserResources');
 Route::get('user/config', 'Game\UserController@config');
+Route::get('user/getMessage', 'Game\UserController@getMessage');
 Route::post('user/buyTradeShip', 'Game\UserController@buyTradeShip');
 Route::post('user/sendMessage/{user}', 'Game\UserController@sendMessage');
+Route::post('user/message', 'Game\UserController@deleteMessage');
 
 Route::post('island/donation/{island}', 'Game\IslandController@donation');
 Route::put('island/donation/{island}', 'Game\IslandController@setDonation');

@@ -12,7 +12,9 @@ class Message extends Model
         'user_from',
         'user_to',
         'type',
-        'message'
+        'message',
+        'deleted_at_from',
+        'deleted_at_to'
     ];
 
     protected $attributes = [
@@ -21,11 +23,11 @@ class Message extends Model
 
     public function from()
     {
-        return $this->belongsTo('App/Users','user_from');
+        return $this->belongsTo('App\User','user_from');
     }
 
     public function to()
     {
-        return $this->belongsTo('App/Users','user_to');
+        return $this->belongsTo('App\User','user_to');
     }
 }

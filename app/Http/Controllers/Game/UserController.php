@@ -13,6 +13,7 @@ use App\Models\Message;
 use App\User;
 use App\Helpers\UserResourceHelper;
 use App\Helpers\CombatHelper;
+use Carbon\Carbon;
 use Auth;
 
 class UserController extends Controller
@@ -88,6 +89,43 @@ class UserController extends Controller
         $message->message = $request->input('message');
         $message->save();
 
+        return 'ok';
+    }
+
+    public function getMessage()
+    {
+        $data['received'] = Message::where('user_to',Auth::id())->whereNull('deleted_at_to')
+        ->get()->map(function($message){
+            return [
+                'id' => $message->id,
+                'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
+                'user' => $message->from->only(['id','name']),
+                'message' => $message->message
+            ];
+        });
+        $data['sended'] = Message::where('user_from',Auth::id())->whereNull('deleted_at_from')
+        ->get()->map(function($message){
+            return [
+                'id' => $message->id,
+                'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
+                'user' => $message->to->only(['id','name']),
+                'message' => $message->message
+            ];
+        });
+        return $data;
+    }
+
+    public function deleteMessage(Request $request)
+    {
+        $request->validate([
+            'messages' => 'required|array',
+            'messages.*' => 'integer',
+            'type' => 'required|boolean'
+        ]);
+
+        $type = $request->input('type') ? 'user_from' : 'user_to';
+        $delete = $request->input('type') ? 'deleted_at_from' : 'deleted_at_to';
+        $messages = Message::where($type,Auth::id())->whereIn('id',$request->input('messages'))->update([$delete => Carbon::now()]);
         return 'ok';
     }
 }

@@ -144,7 +144,21 @@ export default {
           $resources.commit('reloadPopulation');
         break;
       }
-      this.constructed_building = null;
+      //Actualizamos el edificio si tiene abierto el modal
+      axios
+        .post("building/nextLevel/" + this.constructed_building.building_id, {
+          level: this.constructed_building.level +1
+        })
+        .then(res => {
+          res.data.city_building_id = this.constructed_building.id
+           $modal.commit('updateModal',{
+            type:1,
+            info:res.data
+          })
+        })
+        .then(() => {
+          this.constructed_building = null;
+        });
     }
   },
   computed: {

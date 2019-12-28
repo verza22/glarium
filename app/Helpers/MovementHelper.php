@@ -8,6 +8,7 @@ use App\Models\UserResource;
 use App\Models\Island;
 use App\Models\MovementColonize;
 use App\Helpers\OtherHelper;
+use App\Helpers\BuildingHelper;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -17,7 +18,11 @@ class MovementHelper {
     public static function loadedSpeed(City $city_from,$size)
     {
         //Obtenemos el nivel del puerto para calcular su capacidad de carga
-        $loaded = config('world.load_speed');//Carga base
+        $loaded = config('world.load_speed_base');//Carga base
+
+        //Obtenemos el puerto
+        $level = BuildingHelper::building($city_from,16)->building_level->level;
+        $loaded += ($level*config('world.load_speed'));
 
         $loadedTime = $loaded/60;//Carga por minuto
         

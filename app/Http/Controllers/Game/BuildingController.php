@@ -261,7 +261,12 @@ class BuildingController extends Controller
     {
         //Obtiene la informacion del siguiente nivel de edificio
         $request->validate(['level' => 'required|integer|min:1']);
-        return BuildingLevel::where('building_id',$building->id)->where('level',$request->input('level')+1)->first();
+        $nextLevel = BuildingLevel::where('building_id',$building->id)->where('level',$request->input('level')+1)->first();
+        if($nextLevel===NULL){
+            $nextLevel = BuildingLevel::where('building_id',$building->id)->where('level',$request->input('level'))->first();
+            $nextLevel['maximum'] = true;
+        }
+        return $nextLevel;
     }
 
     public function upgrade(CityBuilding $cityBuilding)

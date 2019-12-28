@@ -35,6 +35,11 @@
                 this.type = type;
                 this.show = true;
             },
+            update ({type,info}) {
+                if(this.show && this.type == type){
+                    this.info = info;
+                }
+            },
             close(){
                 this.show = false;
                 this.info = {};
@@ -45,6 +50,8 @@
             $modal.subscribe((action,state) => {
                 if (action.type === "openModal") {
                     this.open(state);
+                }else if(action.type === "updateModal"){
+                    this.update(state);
                 }
             });
         }

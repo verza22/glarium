@@ -13,6 +13,10 @@ export default new Vuex.Store({
         openModal(state,{info,type}){
             state.info = info;
             state.type = type;
+        },
+        updateModal(state,{info,type}){
+            state.info = info;
+            state.type = type;
         }
     },
 })

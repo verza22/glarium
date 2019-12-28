@@ -1,13 +1,13 @@
 <template>
     <div class="box">
         <div class="d-flex justify-content-center">
-            <div>
+            <div v-if="!this.info.maximum">
                 <div @click='ampliar' class="btn-apliar"><img :src="require('Img/icon/btn_upgrade.jpg')"></div>
                 <div>{{$t('building.upgrade')}}</div>
             </div>
             <div class="px-2">
                 <div>{{$t('building.level')}}</div>
-                <div class="number">{{info.level-1}}</div>
+                <div class="number">{{level}}</div>
             </div>
             <div>
                 <div><img :src="require('Img/icon/btn_downgrade.jpg')"></div>
@@ -49,6 +49,11 @@ export default {
             .catch(err =>{
                 catchAxios(err)
             })
+        }
+    },
+    computed:{
+        level(){
+            return this.info.maximum ? this.info.level : this.info.level -1;
         }
     }
 }

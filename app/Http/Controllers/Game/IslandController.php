@@ -34,7 +34,9 @@ class IslandController extends Controller
         $data['level_forest'] = $island->forest->level;
         $data['level_mine'] = $island->mine->level;
         $data['cities'] = $island->cities->map(function($insland_city) use($cities) {
-            $data = $insland_city->only(['id','city_id','position']);
+            $data = $insland_city->only(['city_id','position']);
+            $data['level'] = BuildingHelper::building($insland_city->city,1)->building_level->level;
+            $data['user'] = $insland_city->city->userCity->user->name;
             $data['name'] = $insland_city->city->name;
             $data['type'] = $cities->contains($insland_city->city->id);
             return $data;

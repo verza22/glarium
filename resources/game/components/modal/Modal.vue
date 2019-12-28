@@ -4,14 +4,16 @@
         <Edificios :close='close' :info='info' v-else-if='type==1'></Edificios>
         <Donaciones :close='close' :infop='info' v-else-if='type==2'></Donaciones>
         <Investigacion :close='close' :info='info' v-else-if='type==3'></Investigacion>
+        <IslaCiudad :close='close' :info='info' v-else-if='type==4'></IslaCiudad>
     </div>
 </template>
 
 <script>
-    import ListaEdificios from 'Components/modal/ListaEdificios.vue';
-    import Donaciones from 'Components/modal/Donaciones/Donaciones.vue';
-    import Edificios from 'Components/modal/Edificios/Edificios.vue';
-    import Investigacion from 'Components/modal/Investigacion/Investigacion.vue';
+    import ListaEdificios from 'Components/modal/ListaEdificios.vue'
+    import Donaciones from 'Components/modal/Donaciones/Donaciones.vue'
+    import Edificios from 'Components/modal/Edificios/Edificios.vue'
+    import Investigacion from 'Components/modal/Investigacion/Investigacion.vue'
+    import IslaCiudad from 'Components/modal/IslaCiudad/IslaCiudad.vue'
     import $modal from 'Stores/modal.js'
 
     export default {
@@ -20,7 +22,8 @@
             ListaEdificios,
             Donaciones,
             Edificios,
-            Investigacion
+            Investigacion,
+            IslaCiudad
         },
         data(){
             return {

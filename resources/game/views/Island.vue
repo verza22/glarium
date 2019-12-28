@@ -3,7 +3,7 @@
   <div class="islandContainer" v-dragscroll="true" v-autoscroll="'center'">
     <div class="ocean">
       <div class="island">
-        <Cities :cities='data.cities' v-if="data.cities"></Cities>
+        <Cities :data='data' v-if="data.cities"></Cities>
         <Resources :data='data'></Resources>
       </div>
     </div>

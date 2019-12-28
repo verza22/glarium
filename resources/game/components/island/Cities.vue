@@ -5,9 +5,9 @@
         v-for="(object,index) in objects"
         :key='index'
         >
-            <div class="d-flex justify-content-center" v-if='checkCity(index)'>
-                <div class="city" :class='cities[index].type ? "blue" : "red"'></div>
-                <div class="valores">{{cities[index].name}}</div>
+            <div class="d-flex justify-content-center" :title='data.cities[index].name' v-if='checkCity(index)' @click='openCityInfo(data.cities[index])'>
+                <div class="city" :class='data.cities[index].type ? "blue" : "red"'></div>
+                <div class="valores">{{data.cities[index].name}}</div>
             </div>
             <div class="flag" v-else></div>
         </div>
@@ -15,10 +15,11 @@
 </template>
 
 <script>
+import $modal from 'Stores/modal'
 
 export default {
     name:'Ciudades',
-    props:['cities'],
+    props:['data'],
     data(){
         return {
             objects:[
@@ -43,9 +44,17 @@ export default {
     },
     methods:{
         checkCity(index){
-            return this.cities.some(x =>{
+            return this.data.cities.some(x =>{
                 return x.position == index
             });
+        },
+        openCityInfo(city){
+            $modal.commit('openModal',{
+                type:4,
+                info:{
+                    city:city
+                }
+            })
         }
     },
 }

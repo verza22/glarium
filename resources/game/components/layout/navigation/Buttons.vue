@@ -21,6 +21,12 @@ export default {
     name:'Buttons',
     methods:{
         toIsland(){
+            //Verificamos que no este en la misma isla
+            if(this.$route.name=='Island'){
+                if(this.$route.params.island==this.island_id){
+                    return;
+                }
+            }
             axios('island/'+this.island_id)
             .then(res =>{
                 this.$router.push({ name: 'Island', params: { island:this.island_id,data: res.data }})

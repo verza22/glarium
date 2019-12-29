@@ -7,10 +7,10 @@ use App\Helpers\BuildingModifierHelper;
 use App\Helpers\UnitHelper;
 use App\Helpers\MovementHelper;
 use Carbon\Carbon;
- 
+
 class CityHelper {
 
-    public static function compareResources(City $city,$resources) 
+    public static function compareResources(City $city,$resources)
     {
         CityHelper::updateResources($city);
         if(
@@ -25,7 +25,7 @@ class CityHelper {
             return false;
         }
     }
-    
+
     public static function removeResources(City $city,$resources)
     {
         //Update resources in city
@@ -85,11 +85,11 @@ class CityHelper {
         }
 
         //Asignamos los recursos
-        $city->wood   += $collect->wood;
-        $city->wine   += $collect->wine;
-        $city->marble += $collect->marble;
-        $city->glass  += $collect->glass;
-        $city->sulfur += $collect->sulfur;
+        $city->wood   += config('world.bonus.resources') * $collect->wood;
+        $city->wine   += config('world.bonus.resources') * $collect->wine;
+        $city->marble += config('world.bonus.resources') * $collect->marble;
+        $city->glass  += config('world.bonus.resources') * $collect->glass;
+        $city->sulfur += config('world.bonus.resources') * $collect->sulfur;
 
         $cityPopulation = CityPopulation::where('city_id',$city->id)->first();
         if($cityPopulation->wine>0)
@@ -112,7 +112,7 @@ class CityHelper {
                 $city->wine -= ( $diffTime * $cityPopulation->wine );
             }
         }
-        
+
         $city->save();
     }
 
@@ -123,7 +123,7 @@ class CityHelper {
 
         MovementHelper::returnMovementResources($city);
         MovementHelper::deliveredResourcesTo($city);
-        
+
         CombatHelper::endAndReturnAttackFromCity($city);
         CombatHelper::endAndReturnAttackToCity($city);
 

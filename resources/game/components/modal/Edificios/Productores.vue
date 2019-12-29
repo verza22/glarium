@@ -7,7 +7,7 @@
                     <div>{{$t('buildingProducer.productionBase')}}:</div>
                 </div>
                 <div class="flex-1 d-flex align-items-center">
-                    <div>{{$money_two(workers)}}</div>
+                    <div>{{$money_two(production_base)}}</div>
                 </div>
                 <div class="flex-4">
                     <div class="bar_cell" :style="{width:(100-(workers*per))+'%'}">
@@ -22,7 +22,7 @@
                     <div>{{building_name}}:</div>
                 </div>
                 <div class="flex-1 d-flex align-items-center">
-                    <div>{{$money_two(workers*per)}}</div>
+                    <div>{{$money_two(production_base*per)}}</div>
                 </div>
                 <div class="flex-4">
                     <div class="bar_cell" :style="{width:(workers*per)+'%'}">
@@ -37,7 +37,7 @@
                     <div>Total:</div>
                 </div>
                 <div class="flex-1 d-flex align-items-center">
-                    <div>{{$money_two(workers+(workers*per))}}</div>
+                    <div>{{$money_two(production_base+(production_base*per))}}</div>
                 </div>
                 <div class="flex-4">
                     <div class="bar_cell">
@@ -53,6 +53,7 @@
 
 <script>
 import $resources from 'Stores/resources'
+import $config from 'Stores/config'
 
 export default {
     name: 'Productores',
@@ -84,6 +85,9 @@ export default {
         }
     },
     computed:{
+        production_base(){
+            return $config.state.world.bonus.resources * this.workers;
+        },
         worker_forest(){
             return $resources.state.population.worker_forest;
         },
@@ -93,7 +97,7 @@ export default {
     },
     watch:{
         data(newval,oldval){
-            if(newval.building_id!=oldval.building_id){
+            if(newval.building_id!=oldval.building_id || newval.level != oldval.level){
                 this.init()
             }
         }

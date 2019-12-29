@@ -16,11 +16,11 @@
         </div>
         <div class="text-center mt-3">{{$t('building.upgradeText', { level: info.level })}}</div>
         <div class="my-2">
-            <div class="d-inline-block" :title="$t('resources.wood')" v-if="info.wood!=0"><img :src="require('Img/icon/icon_wood.png')"> {{info.wood}}</div>
-            <div class="d-inline-block" :title="$t('resources.wine')" v-if="info.wine!=0"><img :src="require('Img/icon/icon_wine.png')"> {{info.wine}}</div>
-            <div class="d-inline-block" :title="$t('resources.marble')" v-if="info.marble!=0"><img :src="require('Img/icon/icon_marble.png')"> {{info.marble}}</div>
-            <div class="d-inline-block" :title="$t('resources.glass')" v-if="info.glass!=0"><img :src="require('Img/icon/icon_glass.png')"> {{info.glass}}</div>
-            <div class="d-inline-block" :title="$t('resources.sulfur')" v-if="info.sulfur!=0"><img :src="require('Img/icon/icon_sulfur.png')"> {{info.sulfur}}</div>
+            <div class="d-inline-block" :title="$t('resources.wood')" v-if="info.wood!=0"><img :src="require('Img/icon/icon_wood.png')"> {{$money(info.wood)}}</div>
+            <div class="d-inline-block" :title="$t('resources.wine')" v-if="info.wine!=0"><img :src="require('Img/icon/icon_wine.png')"> {{$money(info.wine)}}</div>
+            <div class="d-inline-block" :title="$t('resources.marble')" v-if="info.marble!=0"><img :src="require('Img/icon/icon_marble.png')"> {{$money(info.marble)}}</div>
+            <div class="d-inline-block" :title="$t('resources.glass')" v-if="info.glass!=0"><img :src="require('Img/icon/icon_glass.png')"> {{$money(info.glass)}}</div>
+            <div class="d-inline-block" :title="$t('resources.sulfur')" v-if="info.sulfur!=0"><img :src="require('Img/icon/icon_sulfur.png')"> {{$money(info.sulfur)}}</div>
         </div>
         <div class="text-center" :title="$t('resources.time')" v-if="info.time!=0"><img :src="require('Img/icon/icon_time.png')"> {{$sectotime(info.time)}}</div>
     </div>

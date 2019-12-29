@@ -6,6 +6,9 @@ return [
     'load_speed_base' => 30,//Carga base del puerto
     'load_attack_return' => 5,//Tiempo que demora en cargar los recursos de un saqueo
     'load_defend_return' => 5,//Tiempo que demora en cargar las tropas al regresar de una defensa
+    'bonus' => [ //Modificadores en la velocidad de recursos etc
+        'resources' => 100
+    ],
     'warehouse' => [
         'resource_protected' => 400,//Capacidad de recursos protegidos por nivel de deposito
         'resource_protected_base' => 100,//Capacidad base de proteccion de recursos

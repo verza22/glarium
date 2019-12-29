@@ -11,11 +11,11 @@
                 <div class="d-flex texto">
                     <div class="flex-1">
                         <div>{{$t('other.income')}}: </div>
-                        <div>{{population_available*3}} <img :src="require('Img/icon/icon_gold.png')"> {{$t('other.perHour')}}</div>
+                        <div>{{$money(population_available*3)}} <img :src="require('Img/icon/icon_gold.png')"> {{$t('other.perHour')}}</div>
                     </div>
                     <div class="flex-1 text-right">
                         <div>{{$t('other.production')}}: </div>
-                        <div>{{value}} <img :src="getIcon()"> {{$t('other.perHour')}}</div>
+                        <div>{{$money(value*bonus_resources)}} <img :src="getIcon()"> {{$t('other.perHour')}}</div>
                     </div>
                 </div>
                 <div class="d-flex my-3">
@@ -52,6 +52,7 @@ import 'vue-slider-component/theme/default.css'
 import $resources from 'Stores/resources'
 import $store from 'Stores/store'
 import $notification from 'Stores/notification'
+import $config from 'Stores/config'
 
 export default {
     name:'IslandResources',
@@ -173,6 +174,9 @@ export default {
         },
         city_id(){
             return $store.state.city_id;
+        },
+        bonus_resources(){
+            return $config.state.world.bonus.resources;
         }
     },
     watch:{

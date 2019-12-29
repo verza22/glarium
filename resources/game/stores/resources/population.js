@@ -39,7 +39,15 @@ export default {
                 state.worker_mine = data.worker_mine;
                 state.scientists_max = data.scientists_max;
                 state.scientists = data.scientists;
+                state.wine_max = data.wine_max;
+                state.wine = data.wine;
             })
+        },
+        setWineTavern(state,{wine}){
+            state.wine = wine;
+        },
+        setTavernWineMax(state,{level}){
+            state.wine_max = 12*level;
         }
     }
 }

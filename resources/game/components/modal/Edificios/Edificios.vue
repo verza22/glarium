@@ -5,6 +5,7 @@
             <Intendencia v-if='building_id==1' :data='info'></Intendencia>
             <Academia v-else-if='building_id==2' :data='info'></Academia>
             <Deposito v-else-if='building_id==3' :data='info'></Deposito>
+            <Taberna v-else-if='building_id==5' :data='info'></Taberna>
             <Reductores v-else-if='building_id>=6&&building_id<=10' :data='info'></Reductores>
             <Productores v-else-if='building_id>=11&&building_id<=15' :data='info'></Productores>
             <Puerto v-else-if='building_id==16' :data='info'></Puerto>
@@ -25,6 +26,7 @@ import Deposito from 'Components/modal/Edificios/Deposito.vue'
 import Reductores from 'Components/modal/Edificios/Reductores.vue'
 import Productores from 'Components/modal/Edificios/Productores.vue'
 import Puerto from 'Components/modal/Edificios/Puerto.vue'
+import Taberna from 'Components/modal/Edificios/Taberna.vue'
 
 export default {
     name: 'Edificios',
@@ -38,7 +40,8 @@ export default {
         Deposito,
         Reductores,
         Productores,
-        Puerto
+        Puerto,
+        Taberna
     },
     data(){
         return {

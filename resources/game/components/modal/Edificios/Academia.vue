@@ -42,8 +42,6 @@
 <script>
 import axios from 'axios'
 import VueSlider from 'vue-slider-component'
-import VueTableDynamic from 'vue-table-dynamic'
-import 'vue-slider-component/theme/default.css'
 import $resources from 'Stores/resources'
 import $store from 'Stores/store'
 import $notification from 'Stores/notification'
@@ -52,8 +50,7 @@ export default {
     name:'Academia',
     props:['data'],
     components: {
-        VueSlider,
-        VueTableDynamic
+        VueSlider
     },
     data(){
         return {

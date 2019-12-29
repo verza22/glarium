@@ -46,6 +46,8 @@ class CityController extends Controller
         $response['worker_mine'] = $data->worker_mine;
         $response['scientists_max'] = $data->scientists_max;
         $response['scientists'] = $data->scientists;
+        $response['wine'] = $data->wine;
+        $response['wine_max'] = $data->wine_max;
         return $response;
     }
 
@@ -91,8 +93,40 @@ class CityController extends Controller
         $cityPopulation->scientists = $scientists;
 
         $cityPopulation->save();
-        
+
 
         return 'ok';
     }
+
+    public function setWine(Request $request,City $city)
+    {
+        $this->authorize('isMyCity',$city);
+        $request->validate(['wine' => 'required|numeric|min:0']);
+
+        $wine = $request->input('wine');
+        $cityPopulation = CityPopulation::where('city_id',$city->id)->first();
+
+        if($wine>$cityPopulation->wine_max)
+        {
+            return 'No puedes servir mas vino que la cantidad maxima';
+        }
+
+        if($wine>$city->wine)
+        {
+            return 'No puedes servir mas vino del que tienes en la ciudad';
+        }
+
+        //Actualizamos los recursos de la ciudad
+        CityHelper::updateResources($city);
+
+        //Actualizamos la poblacion
+        PopulationHelper::satisfaction($cityPopulation);
+
+        $cityPopulation->wine = $wine;
+        $cityPopulation->save();
+        UserResourceHelper::updateResources();
+
+        return 'ok';
+    }
+
 }

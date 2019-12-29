@@ -167,6 +167,9 @@ export default {
                 case 3:
                     $resources.commit('setDepositLevel',{level:building.level});
                 break;
+                case 5:
+                    $resources.commit('setTavernWineMax',{level:building.level});
+                break;
                 case 6:
                     $resources.commit('setReducerWood',{level:building.level});
                 break;

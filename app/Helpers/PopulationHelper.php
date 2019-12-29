@@ -13,7 +13,7 @@ use App\Helpers\BuildingHelper;
 use App\User;
 use Carbon\Carbon;
 use Auth;
- 
+
 class PopulationHelper {
 
     public static function getCorruption(City $city)
@@ -44,7 +44,7 @@ class PopulationHelper {
         $cityPopulation->save();
         UserResourceHelper::updateResources();
     }
-    
+
     public static function satisfaction(CityPopulation $cityPopulation,$updatedResources = true)
     {
         //Actualiza la satisfancion y los ciudadanos disponibles de una ciudad
@@ -80,7 +80,7 @@ class PopulationHelper {
         $userCity = UserCity::where('user_id',Auth::id())->where('city_id',$cityPopulation->city_id)->first();
         $capital = $userCity->capital;
 
-        if($userResearchs->count() > 0) 
+        if($userResearchs->count() > 0)
         {
             $researchBonuses = $userResearchs->map(function($userResearch) use ($capital) {
                 switch($userResearch->research->name)
@@ -99,7 +99,7 @@ class PopulationHelper {
 
             $bonuses += $researchBonuses->sum();
         }
-        
+
         //Obtenemos los contrabuff
         $deduction = ($cityPopulation->population + $otherPopulation);
 
@@ -113,7 +113,7 @@ class PopulationHelper {
                 $deduction += $bonuses * $corruption;
             }
         }
-        
+
         $population = $cityPopulation->population;
 
         $diffTime_decimal = $diffTime-floor($diffTime);
@@ -147,7 +147,7 @@ class PopulationHelper {
         {
             UserResourceHelper::updateResources();
         }
-        
+
     }
 
     public static function setPopulationMax(CityBuilding $cityBuilding)
@@ -170,15 +170,14 @@ class PopulationHelper {
                 $city->save();
             break;
             case 'Academy':
-                //Actualiza la capacidad maxima de cientificos 
+                //Actualiza la capacidad maxima de cientificos
                 $scientists_max = ceil( ( 7 + pow($level,1.8) ) );
                 $cityPopulation->scientists_max = $scientists_max;
                 $cityPopulation->save();
             break;
             case 'Tavern':
                 //Actualiza la capacidad de vino maxima si se actualiza la taberna
-                $wine_max = ceil( ( 4 + pow($level,1.75) ) );
-                $cityPopulation->wine_max = $wine_max;
+                $cityPopulation->wine_max = $level * 12;
                 $cityPopulation->save();
             break;
         }

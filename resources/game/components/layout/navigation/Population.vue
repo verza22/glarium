@@ -26,6 +26,12 @@ export default {
         },
         population_now(){
             return $resources.state.population.population_now;
+        },
+        tavern_wine_max(){
+            return $resources.state.population.wine_max;
+        },
+        tavern_wine(){
+            return $resources.state.population.wine;
         }
     },
     watch:{

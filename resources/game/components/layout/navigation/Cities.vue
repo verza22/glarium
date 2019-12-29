@@ -39,7 +39,11 @@ export default {
             this.data.forEach(x =>{
                 if(x.id == this.city_id){
                     x.selected = true;
-                    $store.commit('changeCityIsland',{city_island_id:x.island_id,island_type:x.type});
+                    $store.commit('changeCityIsland',{
+                        city_island_id:x.island_id,
+                        island_type:x.type,
+                        capital:x.capital
+                    });
                 }else{
                     x.selected = false;
                 }

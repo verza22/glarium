@@ -16,6 +16,14 @@ export default {
         getPopulation(){
             $resources.commit('reloadPopulation');
         },
+        setProducirPoblacion(){
+            //Se encarga de producir pobladores cada segundo
+            setInterval(this.producirPoblacion, 1000);
+        },
+        producirPoblacion(){
+            var increasePopulation = (((this.bonuses-this.debuff)*0.02)/3600);
+            $resources.commit('increasePopulation',{increasePopulation:increasePopulation})
+        }
     },
     computed:{
         city_id(){
@@ -32,6 +40,12 @@ export default {
         },
         tavern_wine(){
             return $resources.state.population.wine;
+        },
+        bonuses(){
+            return $resources.getters.bonuses;
+        },
+        debuff(){
+            return $resources.getters.debuff;
         }
     },
     watch:{
@@ -40,6 +54,7 @@ export default {
         }
     },
     mounted(){
+        this.setProducirPoblacion();
         $store.subscribe(action => {
             if (action.type === 'reloadPopulation') {
                 this.getPopulation();

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import $store from 'Stores/store'
+import $config from 'Stores/config'
 //Modolo de los recursos de poblacion
 export default {
     state: {
@@ -48,6 +49,30 @@ export default {
         },
         setTavernWineMax(state,{level}){
             state.wine_max = 12*level;
+        },
+        increasePopulation(state,{increasePopulation}){
+            state.population += increasePopulation;
+            state.population_now += increasePopulation;
+        }
+    },
+    getters: {
+        bonuses: state => {
+            //Obtenemos los buff de la ciudad
+            var bonuses = 196;
+            var tavern_level = state.wine_max/12;
+            if(tavern_level>0){
+                var per_wine = state.wine/state.wine_max;
+                var bonus_wine = ( ( tavern_level * 60 ) * per_wine );
+                bonuses += bonus_wine; //Sumamos el bonus por servir vino
+                bonuses += (tavern_level * 12); //12 de bonus por cada nivel de taberna
+            }
+            bonuses += $config.state.user_research.includes(9) ? 25 : 0;
+            var capital = $store.state.capital;
+            bonuses += capital==1&&$config.state.user_research.includes(12) ? 50 : 0;
+            return bonuses;
+        },
+        debuff: state => {
+            return state.population_now;
         }
     }
 }

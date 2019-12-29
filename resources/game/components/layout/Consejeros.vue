@@ -13,6 +13,7 @@
       <div class="advisor diplomat" :title="$t('advisor.diplomat.title')" @click='diplomat'>
         <div class="titulo">{{$t('advisor.diplomat.name')}}</div>
       </div>
+      <Notification></Notification>
     </div>
   </div>
 </template>
@@ -21,9 +22,13 @@
 import axios from "axios";
 import { catchAxios } from "Js/util.js";
 import $modal from "Stores/modal.js";
+import Notification from 'Components/layout/Notification.vue'
 
 export default {
   name: "Consejeros",
+  components:{
+      Notification
+  },
   methods:{
     scientist(){
       $modal.commit('openModal',{type:3,info:{}})

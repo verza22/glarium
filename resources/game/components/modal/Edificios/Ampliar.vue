@@ -28,9 +28,9 @@
 
 <script>
 import axios from 'axios'
-import {catchAxios,callError} from 'Js/util.js'
 import $store from 'Stores/store'
 import $resources from 'Stores/resources'
+import $notification from 'Stores/notification'
 
 export default {
     name:'Ampliar',
@@ -40,14 +40,15 @@ export default {
             axios.put('building/upgrade/'+this.info.city_building_id)
             .then(res =>{
                 if(res.data!='ok'){
-                    callError(res)
+                    $notification.commit('show',{advisor:1,type:false,message:res.data});
                 }else{
                     $store.commit('reloadBuilding');
+                    $notification.commit('show',{advisor:1,type:true,message:'Tu orden se ha cumplido'});
                     $resources.commit('removeResources',{wood:this.info.wood,wine:this.info.wine,marble:this.info.marble,glass:this.info.glass,sulfur:this.info.sulfur});
                 }
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:1,type:false,message:err});
             })
         }
     },

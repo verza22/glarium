@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import $notification from 'Stores/notification'
+
 export default {
     name:'Notification',
     data(){
@@ -27,6 +29,12 @@ export default {
                 type:type,
                 message:message,
                 status:true
+            }
+            //Verificamos que no haya otra notificacion del mismo consejero
+            for(var i=0;i<this.notifications.length;i++){
+                if(this.notifications[i].advisor==advisor){
+                    return;
+                }
             }
             var index = this.notifications.push(notify) - 1;
             setTimeout(this.hidden, time, index);
@@ -59,18 +67,12 @@ export default {
             this.notifications.splice(index,1);
         }
     },
-    beforeMount(){
-        this.setNotification({
-            advisor:1,
-            type:true,
-            message:'Hola prueba'
-        })
-        this.setNotification({
-            advisor:2,
-            type:true,
-            message:'Hola prueba',
-            time:2000
-        })
+    mounted(){
+        $notification.subscribe((action,state) => {
+            if (action.type === "show") {
+                this.setNotification(state);
+            }
+        });
     }
 }
 </script>

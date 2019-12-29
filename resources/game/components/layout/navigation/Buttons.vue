@@ -15,7 +15,7 @@
 <script>
 import axios from 'axios'
 import $store from 'Stores/store.js'
-import { catchAxios } from "Js/util.js";
+import $notification from 'Stores/notification'
 
 export default {
     name:'Buttons',
@@ -32,7 +32,7 @@ export default {
                 this.$router.push({ name: 'Island', params: { island:this.island_id,data: res.data }})
             })
             .catch(err => {
-                catchAxios(err);
+                $notification.commit('show',{advisor:1,type:false,message:err});
             });
         },
         toCity(){
@@ -47,7 +47,7 @@ export default {
                 this.$router.push({ name: 'City', params: { city:this.city_id,buildings: res.data }})
             })
             .catch(err => {
-                catchAxios(err);
+                $notification.commit('show',{advisor:1,type:false,message:err});
             });
         }
     },

@@ -11,11 +11,11 @@
 
 <script>
 import axios from 'axios'
-import {catchAxios,callError} from 'Js/util.js'
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import Ventana2 from 'Components/modal/Ventanas/Ventana2.vue'
 import IslandResources from 'Components/modal/Donaciones/IslandResources.vue'
 import IslandDonation from 'Components/modal/Donaciones/IslandDonation.vue'
+import $notification from 'Stores/notification'
 
 export default {
     name:'Donaciones',
@@ -43,7 +43,7 @@ export default {
                 this.info = res.data;
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:1,type:false,message:err});
             })
         },
         getTitle(){

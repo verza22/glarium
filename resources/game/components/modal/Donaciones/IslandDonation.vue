@@ -40,11 +40,10 @@
 
 <script>
 import axios from 'axios'
-import Swal from 'sweetalert2'
 import moment from "moment";
 import $resources from 'Stores/resources'
 import $store from 'Stores/store'
-import {catchAxios} from 'Js/util.js'
+import $notification from 'Stores/notification'
 
 export default {
     name:'IslandDonation',
@@ -67,12 +66,16 @@ export default {
                     city:this.city_id
                 })
                 .then(res =>{
-                    Swal.fire('Exito','Donacion exitosa','success')
-                    $resources.commit('donate',{wood:this.value})
-                    this.setDonation()
+                    if(res.data=='ok'){
+                        $resources.commit('donate',{wood:this.value})
+                        this.setDonation()
+                        $notification.commit('show',{advisor:1,type:true})
+                    }else{
+                        $notification.commit('show',{advisor:1,type:false,message:res.data});
+                    }
                 })
                 .catch(err =>{
-                    catchAxios(err)
+                    $notification.commit('show',{advisor:1,type:false,message:err});
                 })
             }
         },
@@ -134,11 +137,11 @@ export default {
          value(newval){
             var control = true;
             if(newval>this.max){
-                this.value = this.max; 
+                this.value = this.max;
                 control = false;
             }
             if(newval<0||newval==''){
-                this.value = 0; 
+                this.value = 0;
                 control = false;
             }
             if(control)

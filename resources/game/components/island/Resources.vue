@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import $modal from "Stores/modal.js";
 import axios from 'axios'
-import {catchAxios,callError} from 'Js/util.js'
+import $notification from 'Stores/notification'
+import $modal from "Stores/modal.js"
 
 export default {
     name:'Resources',
@@ -47,7 +47,7 @@ export default {
                 $modal.commit('openModal',{type:2,info:res.data})
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:1,type:false,message:err});
             })
         }
     }

@@ -34,11 +34,11 @@
 
 <script>
 import axios from "axios";
-import { catchAxios } from "Js/util.js";
 import moment from "moment";
 import $store from "Stores/store.js";
 import $modal from "Stores/modal.js";
 import $resources from 'Stores/resources'
+import $notification from 'Stores/notification'
 
 export default {
   name: "Edificios",
@@ -89,7 +89,7 @@ export default {
           resolve(res.data)
         })
         .catch(err => {
-          catchAxios(err);
+          $notification.commit('show',{advisor:1,type:false,message:err});
         });
       })
     },
@@ -108,7 +108,7 @@ export default {
           })
         })
         .catch(err => {
-          catchAxios(err);
+          $notification.commit('show',{advisor:1,type:false,message:err});
         });
     },
     checkConstructed() {
@@ -133,7 +133,7 @@ export default {
           })
         })
         .catch(err => {
-          catchAxios(err);
+          $notification.commit('show',{advisor:1,type:false,message:err});
         });
     },
     updateBuilding(){

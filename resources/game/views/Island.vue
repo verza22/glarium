@@ -14,7 +14,7 @@
 <script>
 import { dragscroll } from 'vue-dragscroll'
 import { autoscroll } from 'vue-autoscroll'
-import { catchAxios } from "Js/util.js";
+import $notification from 'Stores/notification'
 
 import axios from 'axios'
 
@@ -45,7 +45,7 @@ export default {
         this.data = res.data;
       })
       .catch(err => {
-          catchAxios(err);
+          $notification.commit('show',{advisor:1,type:false,message:err});
       });
     }
   },

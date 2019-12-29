@@ -20,9 +20,9 @@
 
 <script>
 import axios from "axios";
-import { catchAxios } from "Js/util.js";
 import $modal from "Stores/modal.js";
 import Notification from 'Components/layout/Notification.vue'
+import $notification from 'Stores/notification'
 
 export default {
   name: "Consejeros",
@@ -39,7 +39,7 @@ export default {
             $modal.commit('openModal',{type:5,info:res.data})
         })
         .catch(err => {
-          catchAxios(err);
+          $notification.commit('show',{advisor:1,type:false,message:err});
         });
     }
   }

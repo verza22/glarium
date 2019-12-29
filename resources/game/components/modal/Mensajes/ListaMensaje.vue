@@ -51,6 +51,7 @@ export default {
                 var tableRef = document.getElementById('tableMessage').getElementsByTagName('tbody')[0];
                 var newRow   = tableRef.insertRow(rowRef.rowIndex);
                 newRow.id = 'sub_identifier_'+msg.id;
+                newRow.setAttribute("name", "sub_identifier");
                 var newCell  = newRow.insertCell(0);
                 newCell.setAttribute("colspan", "6");
                 var newText  = document.createTextNode(msg.message);
@@ -96,6 +97,14 @@ export default {
                 .catch(err =>{
                     catchAxios(err)
                 })
+            }
+        }
+    },
+    watch:{
+        data(newval){
+            var rows = document.getElementsByName('sub_identifier');
+            for(var i=rows.length-1;i>=0;i--){
+                rows[i].remove();
             }
         }
     }

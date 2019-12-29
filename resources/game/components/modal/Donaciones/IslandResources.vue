@@ -59,7 +59,7 @@ export default {
     props:['data'],
     components: {
         VueSlider,
-        VueTableDynamic 
+        VueTableDynamic
     },
     data(){
         return {
@@ -176,23 +176,23 @@ export default {
         value(newval){
             var control = true;
             if(newval>this.max){
-                this.value = this.max; 
+                this.value = this.max;
                 control = false;
             }
             if(newval<0||newval==''){
-                this.value = 0; 
+                this.value = 0;
                 control = false;
             }
             if(control)
             this.value = newval.toString().replace(/^0+/, '');
         },
         data(newval,oldval){
-            if(newval.info.level!=oldval.info.level){
+            if(newval.info.level!=oldval.info.level || newval.info.type != oldval.info.type){
                 this.iniData()
             }
         }
     },
-    mounted(){
+    beforeMount(){
         this.iniData()
     }
 }

@@ -67,6 +67,11 @@ export default {
             }
         }
     },
+    watch:{
+        infop(newval){
+            this.info = newval
+        }
+    },
     beforeMount(){
         this.info = this.infop
     }

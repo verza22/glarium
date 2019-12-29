@@ -46,6 +46,11 @@
                     this.info = info;
                 }
             },
+            changeRoute(){
+                if(!(this.type==3||this.type==5)){
+                    this.close();
+                }
+            },
             close(){
                 this.show = false;
                 this.info = {};
@@ -58,6 +63,8 @@
                     this.open(state);
                 }else if(action.type === "updateModal"){
                     this.update(state);
+                }else if(action.type === "changeRoute"){
+                    this.changeRoute();
                 }
             });
         }

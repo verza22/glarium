@@ -4,11 +4,11 @@
             <thead>
                 <tr>
                     <th style="width:37px"></th>
-                    <th style="width:70px">Accion</th>
-                    <th>Destinatario</th>
-                    <th>Asunto</th>
-                    <th>Ciudad</th>
-                    <th style="width:150px">Fecha</th>
+                    <th style="width:70px">{{$t('actions.titleS')}}</th>
+                    <th>{{$t('diplomacy.receiver')}}</th>
+                    <th>{{$t('diplomacy.subject')}}</th>
+                    <th>{{$t('diplomacy.city')}}</th>
+                    <th style="width:150px">{{$t('other.date')}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,7 +16,7 @@
                     <td><input type="checkbox" :msg_id='msg.id' name="check"></td>
                     <td class="text-center"><div class="btn-action"></div></td>
                     <td>{{msg.user.name}}</td>
-                    <td>Mensaje</td>
+                    <td>{{$t('diplomacy.message')}}</td>
                     <td>Polis</td>
                     <td>{{msg.date}}</td>
                 </tr>
@@ -24,11 +24,11 @@
         </table>
         <div>
             <div class="mb-2">
-                <div class="btn-picker" @click='checked(true)'>Todos</div>
+                <div class="btn-picker" @click='checked(true)'>{{$t('messages.all')}}</div>
                 <div class="d-inline-block"> | </div>
-                <div class="btn-picker" @click='checked(false)'>Ninguno</div>
+                <div class="btn-picker" @click='checked(false)'>{{$t('messages.none')}}</div>
             </div>
-            <div class="btnGeneral" @click='borrar'>Borrar</div>
+            <div class="btnGeneral" @click='borrar'>{{$t('other.remove')}}</div>
         </div>
     </div>
 </template>

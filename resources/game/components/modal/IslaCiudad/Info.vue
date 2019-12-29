@@ -1,19 +1,19 @@
 <template>
     <div class="box">
         <div class="d-flex my-1">
-            <div class="flex-1">Nombre:</div>
+            <div class="flex-1">{{$t('actions.info.name')}}:</div>
             <div class="flex-2">{{data.city.name}} ({{data.city.level}})</div>
         </div>
         <div class="d-flex my-1">
-            <div class="flex-1">Jugador:</div>
+            <div class="flex-1">{{$t('actions.info.player')}}:</div>
             <div class="flex-2">{{data.city.user}}</div>
         </div>
         <div class="d-flex my-1">
-            <div class="flex-1">Alianza:</div>
+            <div class="flex-1">{{$t('actions.info.alliance')}}:</div>
             <div class="flex-2">-</div>
         </div>
         <div class="d-flex my-1">
-            <div class="flex-1">Puntos:</div>
+            <div class="flex-1">{{$t('actions.info.points')}}:</div>
             <div class="flex-2">-</div>
         </div>
     </div>

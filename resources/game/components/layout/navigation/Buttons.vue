@@ -14,7 +14,8 @@
 
 <script>
 import axios from 'axios'
-import $store from 'Stores/store.js'
+import $store from 'Stores/store'
+import $modal from 'Stores/modal'
 import $notification from 'Stores/notification'
 
 export default {
@@ -29,6 +30,7 @@ export default {
             }
             axios('island/'+this.island_id)
             .then(res =>{
+                $modal.commit('changeRoute')
                 this.$router.push({ name: 'Island', params: { island:this.island_id,data: res.data }})
             })
             .catch(err => {
@@ -44,6 +46,7 @@ export default {
             }
             axios("building/" + this.city_id)
             .then(res => {
+                $modal.commit('changeRoute')
                 this.$router.push({ name: 'City', params: { city:this.city_id,buildings: res.data }})
             })
             .catch(err => {

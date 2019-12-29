@@ -195,7 +195,13 @@ export default {
             text:'No solo el océano nos rodea. Otras islas esperan ser descubiertas. ¡No estamos solos! ¡Podemos establecernos en nuevos territorios, explotar nuevas materias primas, conocer otras culturas! ¡Nuestros funcionarios se alegran de poder administrar vastos territorios y sus riquezas!'
         }
     ],
-    researchCategories:['','Navegación','Economía','Ciencia','Milicia'],
+    researchCategories:[
+        '',
+        'Navegación',
+        'Economía',
+        'Ciencia',
+        'Milicia'
+    ],
     building:{
         title:'Terreno vacio',
         title2:'Construir edificio',
@@ -288,7 +294,9 @@ export default {
         income:'Ingresos',
         production:'Produccion',
         perHour:'por hora',
-        cost:'Costos'
+        cost:'Costos',
+        date:'Fecha',
+        remove:'Borrar'
     },
     research2:{
         scientist:'Investigadores',
@@ -315,4 +323,35 @@ export default {
         productionBase:'Producción básica',
         title:'Estadísticas de {building}'
     },
+    actions:{
+        title:'Acciones',
+        titleS:'Accion',
+        diplomacy:'Diplomacia',
+        transport:'Transportar bienes',
+        defend:'¡Defender ciudad!',
+        attack:'¡Atacar ciudad!',
+        info:{
+            name:'Nombre',
+            player:'Jugador',
+            alliance:'Alianza',
+            points:'Puntos'
+        }
+    },
+    diplomacy:{
+        text:'Aquí puedes escribir mensajes a otros jugadores u ofrecerles acuerdos en tanto hayas ya investigado los distintos tipos de acuerdos existentes.',
+        receiver:'Destinatario',
+        subject:'Asunto',
+        message:'Mensaje',
+        errorMessage:'Debes ingresar el mensaje',
+        characters:'caracteres disponibles.',
+        send:'Enviar',
+        city:'Ciudad'
+    },
+    messages:{
+        inbox:'Entrada',
+        outbox:'Salida',
+        noMessage:'No hay mensajes',
+        all:'Todos',
+        none:'Ninguno'
+    }
 };

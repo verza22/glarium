@@ -17,6 +17,7 @@ export default new Vuex.Store({
         updateModal(state,{info,type}){
             state.info = info;
             state.type = type;
-        }
+        },
+        changeRoute(){}
     },
 })

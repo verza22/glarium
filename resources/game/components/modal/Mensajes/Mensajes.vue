@@ -1,19 +1,19 @@
 <template>
     <div class="mBorder">
-        <Ventana1 :close='close' titulo="Consejero diplomático">
+        <Ventana1 :close='close' :titulo="$t('advisor.diplomat.title')">
         <div class="box">
             <div class="d-flex">
                 <div class="selectContainer" :class="type==0 ? 'active' : ''" title="Mensajes Recibidos" @click='change(0)'>
                     <div class="imagen"></div>
-                    <div class="texto">Entrada ({{this.info.received.length}})</div>
+                    <div class="texto">{{$t('messages.inbox')}} ({{this.info.received.length}})</div>
                 </div>
                 <div class="selectContainer" :class="type==1 ? 'active' : ''" title="Mensajes Enviados" @click='change(1)'>
                     <div class="imagen"></div>
-                    <div class="texto">Salida ({{this.info.sended.length}})</div>
+                    <div class="texto">{{$t('messages.outbox')}} ({{this.info.sended.length}})</div>
                 </div>
             </div>
             <ListaMensaje :remove='remove' :type='type' :data='messages' v-if="messages.length>0"></ListaMensaje>
-            <div v-else class="nomessage">No hay mensajes</div>
+            <div v-else class="nomessage">{{$t('messages.noMessage')}}</div>
         </div>
         </Ventana1>
     </div>

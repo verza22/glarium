@@ -1,17 +1,17 @@
 <template>
     <div class="box">
-        <div>Aquí puedes escribir mensajes a otros jugadores u ofrecerles acuerdos en tanto hayas ya investigado los distintos tipos de acuerdos existentes.</div>
+        <div>{{$t('diplomacy.text')}}</div>
         <div class="mt-3">
-            <div class="my-2"><b>Destinatario:</b> {{data.city.user}}</div>
-            <div class="my-2"><b>Asunto:</b> Mensaje</div>
-            <div class="mt-2"><b>Mensaje:</b></div>
+            <div class="my-2"><b>{{$t('diplomacy.receiver')}}:</b> {{data.city.user}}</div>
+            <div class="my-2"><b>{{$t('diplomacy.subject')}}:</b> {{$t('diplomacy.message')}}</div>
+            <div class="mt-2"><b>{{$t('diplomacy.message')}}:</b></div>
             <div>
                 <textarea v-model='message' class="w-100" rows='10'></textarea>
-                <div v-if="error" class="text-danger">Debes ingresar el mensaje</div>
-                <div>{{messageLength}} caracteres disponibles.</div>
+                <div v-if="error" class="text-danger">{{$t('diplomacy.errorMessage')}}</div>
+                <div>{{messageLength}} {{$t('diplomacy.characters')}}</div>
             </div>
             <div class="text-center mt-2">
-                <div class="btnGeneral" title="Enviar" @click='enviar'>Enviar</div>
+                <div class="btnGeneral" title="Enviar" @click='enviar'>{{$t('diplomacy.send')}}</div>
             </div>
         </div>
     </div>

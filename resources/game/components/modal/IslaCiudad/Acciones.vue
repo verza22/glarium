@@ -1,31 +1,31 @@
 <template>
     <div>
         <div class="mHeader2">
-            <div class="gtitle">Acciones</div>
+            <div class="gtitle">{{$t('actions.title')}}</div>
         </div>
         <div class="py-2">
             <div class="box-acciones">
-                <div class="btn-accion" title="Diplomacia" @click='changeType(1)'>
+                <div class="btn-accion" :title="$t('actions.diplomacy')" @click='changeType(1)'>
                     <div class="btn-image btn-diplomacy"></div>
-                    <div class="mt-1">Diplomacia</div>
+                    <div class="mt-1">{{$t('actions.diplomacy')}}</div>
                 </div>
             </div>
             <div class="box-acciones">
-                <div class="btn-accion" title="Transportar bienes">
+                <div class="btn-accion" :title="$t('actions.transport')">
                     <div class="btn-image btn-transport"></div>
-                    <div class="mt-1">Transportar bienes</div>
+                    <div class="mt-1">{{$t('actions.transport')}}</div>
                 </div>
             </div>
             <div class="box-acciones">
-                <div class="btn-accion" title="¡Defender ciudad!">
+                <div class="btn-accion" :title="$t('actions.defend')">
                     <div class="btn-image btn-defend inactive"></div>
-                    <div class="mt-1">¡Defender ciudad!</div>
+                    <div class="mt-1">{{$t('actions.defend')}}</div>
                 </div>
             </div>
             <div class="box-acciones">
-                <div class="btn-accion" title="¡Atacar ciudad!">
+                <div class="btn-accion" :title="$t('actions.attack')">
                     <div class="btn-image btn-attack inactive"></div>
-                    <div class="mt-1">¡Atacar ciudad!</div>
+                    <div class="mt-1">{{$t('actions.attack')}}</div>
                 </div>
             </div>
         </div>

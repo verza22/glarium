@@ -86,6 +86,7 @@ export default {
         .then(res => {
           this.buildings = res.data;
           this.checkConstructed();
+          this.checkBuildingLevel();
           resolve(res.data)
         })
         .catch(err => {
@@ -159,6 +160,24 @@ export default {
         .then(() => {
           this.constructed_building = null;
         });
+    },
+    checkBuildingLevel(){
+        this.buildings.forEach(building =>{
+            switch(building.building_id){
+                case 3:
+                    $resources.commit('setDepositLevel',{level:building.level});
+                break;
+                case 11:
+                    $resources.commit('setProducerWood',{level:building.level});
+                break;
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                    $resources.commit('setProducerMiner',{level:building.level});
+                break;
+            }
+        })
     }
   },
   computed: {

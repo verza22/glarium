@@ -9,8 +9,9 @@ const store = new Vuex.Store({
       now: moment().format('YYYY-MM-DD HH:mm:ss'),
       city_id:null,
       city_island_id:null,
+      island_type:null
     },
-    mutations: 
+    mutations:
     {
       reloadBuilding(){},
       reloadUserResources(){},
@@ -18,12 +19,14 @@ const store = new Vuex.Store({
       reloadPopulation(){},
       reloadActionPoint(){},
       reloadCities(){},
-      changeCityIsland(state,{city_island_id}){
+      changeCityIsland(state,{city_island_id,island_type}){
         state.city_island_id = city_island_id;
+        state.island_type = island_type;
       },
-      changeCity(state,{city_id}){
+      changeCity(state,{city_id,island_type=null}){
         localStorage.setItem('city_id', city_id)
         state.city_id = city_id;
+        state.island_type = island_type;
       }
     }
 })

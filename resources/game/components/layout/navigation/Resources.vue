@@ -37,6 +37,7 @@
 import axios from 'axios'
 import $store from 'Stores/store.js'
 import $resources from 'Stores/resources'
+import $config from 'Stores/config'
 
 export default {
     name:'Resources',
@@ -53,6 +54,64 @@ export default {
                 $resources.commit('updateResources',res.data);
             })
         },
+        setProducirRecursos(){
+            //Se encarga de producir recursos cada segundo
+            setInterval(this.producirRecursos, 1000);
+        },
+        producirRecursos(){
+            //Calculamos la produccion de madera
+            var woodProducer = (this.worker_forest * (1+((this.producerWoodLevel*2)/100)) * this.bonus_resources) / 3600;
+            if(this.wood>=this.maxCapacity){
+                woodProducer = 0;
+            }
+            var minerProducer = (this.worker_mine * (1+((this.producerMinerLevel*2)/100)) * this.bonus_resources) / 3600;
+            var minerResource = this.getMinerResource()
+
+            if(minerResource>=this.maxCapacity){
+                minerProducer = 0;
+            }
+
+            if(woodProducer!=0||minerProducer!=0){
+                var minerObj = this.setMinerProducer(minerProducer);
+                var obj = {
+                    ...minerObj,
+                    wood:woodProducer
+                }
+                $resources.commit('produceResources',obj)
+            }
+        },
+        getMinerResource(){
+            switch(this.island_type){
+                case 1:
+                    return this.wine;
+                break;
+                case 2:
+                    return this.marble;
+                break;
+                case 3:
+                    return this.glass;
+                break;
+                case 4:
+                    return this.sulfur;
+                break;
+            }
+        },
+        setMinerProducer(minerProducer){
+            switch(this.island_type){
+                case 1:
+                    return {wine:minerProducer};
+                break;
+                case 2:
+                    return {marble:minerProducer};
+                break;
+                case 3:
+                    return {glass:minerProducer};
+                break;
+                case 4:
+                    return {sulfur:minerProducer};
+                break;
+            }
+        }
     },
     computed:{
         city_id(){
@@ -72,6 +131,30 @@ export default {
         },
         sulfur(){
             return $resources.state.sulfur;
+        },
+        island_type(){
+            return $store.state.island_type;
+        },
+        worker_forest(){
+            return $resources.state.population.worker_forest;
+        },
+        worker_mine(){
+            return $resources.state.population.worker_mine;
+        },
+        producerWoodLevel(){
+            return $resources.state.producerWoodLevel;
+        },
+        producerMinerLevel(){
+            return $resources.state.producerMinerLevel;
+        },
+        depositLevel(){
+            return $resources.state.depositLevel;
+        },
+        bonus_resources(){
+            return $config.state.world.bonus.resources;
+        },
+        maxCapacity(){
+            return ($config.state.world.warehouse.capacity * this.depositLevel) + $config.state.world.warehouse.capacity_base;
         }
     },
     watch:{
@@ -85,6 +168,7 @@ export default {
                 this.getResources();
             }
         });
+        this.setProducirRecursos();
     }
 }
 </script>

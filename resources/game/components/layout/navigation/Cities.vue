@@ -4,7 +4,7 @@
             <div class="city">{{getSelected()}}</div>
         </div>
         <div class="nav-other-container" v-if="show">
-            <div class="nav nav-other" v-for='(city,i) in getOther()' :key='i' @click='changeCity(city.id)'>
+            <div class="nav nav-other" v-for='(city,i) in getOther()' :key='i' @click='changeCity(city)'>
                 <div class="city">{{`[${city.x}:${city.y}] ${city.name}`}}</div>
             </div>
             <div class="nav-footer"></div>
@@ -39,7 +39,7 @@ export default {
             this.data.forEach(x =>{
                 if(x.id == this.city_id){
                     x.selected = true;
-                    $store.commit('changeCityIsland',{city_island_id:x.island_id});
+                    $store.commit('changeCityIsland',{city_island_id:x.island_id,island_type:x.type});
                 }else{
                     x.selected = false;
                 }
@@ -56,12 +56,12 @@ export default {
                     return x.selected;
                 })[0]
                 return `[${city.x}:${city.y}] ${city.name}`;
-            } 
+            }
         },
-        changeCity(city_id){
+        changeCity(city){
             this.show = false;
-            this.$router.push({ name: 'City', params: { city:city_id}})
-            $store.commit('changeCity',{city_id:city_id});
+            this.$router.push({ name: 'City', params: { city:city.id}})
+            $store.commit('changeCity',{city_id:city.id,island_type:city.type});
         }
     },
     computed:{

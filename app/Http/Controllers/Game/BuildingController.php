@@ -30,7 +30,7 @@ class BuildingController extends Controller
         $this->authorize('isMyCity',$city);
         //Actualizamos los tiempos de construccion de los edificios
         BuildingHelper::updateConstructedTime($city);
-        
+
         return $city->building->map(function($building){
             return [
                 'id' => $building->id,
@@ -138,7 +138,7 @@ class BuildingController extends Controller
                 'time' => $buildingLevel->time,
                 'research' => false,
                 'research_id' => $researchBuilding->research_id
-            ]; 
+            ];
         });
 
         $buildings = [];
@@ -146,8 +146,8 @@ class BuildingController extends Controller
         $buildings = $building_research->merge($buildings);
         if($building_available->count()>0)
         $buildings = $building_available->merge($buildings);
-        
-        
+
+
         return $buildings;
     }
 
@@ -181,7 +181,7 @@ class BuildingController extends Controller
         {
             return 'Ya hay un edificio en esta posicion';
         }
-        
+
         if(BuildingHelper::buildingExist($city,$request->input('building')))
         {
             return 'El edificio ya esta construido en otra posicion';
@@ -231,7 +231,7 @@ class BuildingController extends Controller
                 break;
             }
         }
-       
+
 
         //Aplicamos descuentos de investigaciones y edificios
         BuildingHelper::lessBuildingCost($city,$nextLevel);
@@ -275,7 +275,7 @@ class BuildingController extends Controller
         $this->authorize('update',$cityBuilding);
         $city = City::whereId($cityBuilding->city_id)->first();
 
-        $nowLevel = $cityBuilding->building_level()->first();
+        $nowLevel = $cityBuilding->building_level;
         $nextLevel = BuildingLevel::where('building_id',$nowLevel->building_id)->where('level',$nowLevel->level+1)->first();
 
         if($nextLevel == NULL)

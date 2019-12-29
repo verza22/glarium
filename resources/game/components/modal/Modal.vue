@@ -42,7 +42,7 @@
                 this.show = true;
             },
             update ({type,info}) {
-                if(this.show && this.type == type){
+                if(this.show && this.type == type && this.info.building_id == info.building_id){
                     this.info = info;
                 }
             },

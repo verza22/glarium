@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import $resources from 'Stores/resources'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,11 @@ const store = new Vuex.Store({
     mutations:{
         updateResearch(state,{user_research}){
             state.user_research = user_research
+            var reducerBuilding = 0;
+            reducerBuilding += user_research.includes(3) ? 0.02 : 0;
+            reducerBuilding += user_research.includes(7) ? 0.04 : 0;
+            reducerBuilding += user_research.includes(10) ? 0.08 : 0;
+            $resources.commit('setReducerResearchBuilding',{level:reducerBuilding})
         }
     }
 })
@@ -21,7 +27,7 @@ const store = new Vuex.Store({
 axios('/api/user/config').then(res =>{
     store.state.world = res.data.world;
     store.state.research = res.data.research;
-    store.state.user_research = res.data.user_research;
+    store.commit('updateResearch',{user_research:res.data.user_research})
 })
 
 export default store;

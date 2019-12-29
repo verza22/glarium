@@ -5,17 +5,19 @@ namespace App\Helpers;
 use App\Models\City;
 use App\Models\CityBuilding;
 use App\Models\BuildingLevel;
- 
+use App\Helpers\BuildingHelper;
+
 class BuildingModifierHelper {
 
     public static function lessCost(City $city,$resources)
     {
+        $discountResearch = BuildingHelper::lessCostResearch();
         //Obtenemos los edificios que descuentan recursos de la ciudad
         $cityBuildings = CityBuilding::where('city_id',$city->id)->select('building_level_id')->pluck('building_level_id');
         $buildingLevels = BuildingLevel::whereIn('id',$cityBuildings)->whereIn('building_id',[6,7,8,9,10])->get();
 
-        $buildingLevels->map(function($buildingLevel) use($resources) {
-            $discount = 1 - ($buildingLevel->level * 0.01);
+        $buildingLevels->map(function($buildingLevel) use($resources,$discountResearch) {
+            $discount = 1 - ($buildingLevel->level * 0.01) - $discountResearch;
             switch($buildingLevel->building_id)
             {
                 case 6://Carpinteria
@@ -50,7 +52,7 @@ class BuildingModifierHelper {
                 break;
             }
         });
-        
+
     }
 
     public static function improvedResources(City $city,$resources)
@@ -96,6 +98,6 @@ class BuildingModifierHelper {
             }
         });
 
-        
+
     }
 }

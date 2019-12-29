@@ -11,7 +11,7 @@ use App\Models\Research;
 use App\Helpers\BuildingModifierHelper;
 use Carbon\Carbon;
 use Auth;
- 
+
 class BuildingHelper {
 
     public static function isContructed(City $city)
@@ -72,11 +72,10 @@ class BuildingHelper {
 
     public static function lessBuildingCost(City $city,BuildingLevel $buildingLevel)
     {
-        self::lessCostResearch($buildingLevel);
         BuildingModifierHelper::lessCost($city,$buildingLevel);
     }
 
-    private static function lessCostResearch(BuildingLevel $buildingLevel)
+    public static function lessCostResearch()
     {
         $resarchs = Research::whereIn('name',['Pulley','Geometry','Spirit Level'])->select('id')->pluck('id');
         $userResearchs = UserResearch::where('user_id',Auth::id())->whereIn('research_id',$resarchs)->get();
@@ -84,7 +83,7 @@ class BuildingHelper {
         //Si hay investigaciones aplicamos descuentos
         if($userResearchs->count()>0)
         {
-            $totalDiscount = 1 - $userResearchs->map(function($userResearch) use($buildingLevel) {
+            $totalDiscount = $userResearchs->map(function($userResearch) {
                 //Aplicamos los descuentos para cada investigacion
                 switch($userResearch->research->name)
                 {
@@ -99,12 +98,11 @@ class BuildingHelper {
                     break;
                 }
             })->sum();
-
-            $buildingLevel->wood   = $buildingLevel->wood * $totalDiscount;
-            $buildingLevel->wine   = $buildingLevel->wine * $totalDiscount;
-            $buildingLevel->marble = $buildingLevel->marble * $totalDiscount;
-            $buildingLevel->glass  = $buildingLevel->glass * $totalDiscount;
-            $buildingLevel->sulfur = $buildingLevel->sulfur * $totalDiscount;
+            return $totalDiscount;
+        }
+        else
+        {
+            return 0;
         }
     }
 }

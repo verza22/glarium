@@ -167,6 +167,21 @@ export default {
                 case 3:
                     $resources.commit('setDepositLevel',{level:building.level});
                 break;
+                case 6:
+                    $resources.commit('setReducerWood',{level:building.level});
+                break;
+                case 7:
+                    $resources.commit('setReducerGlass',{level:building.level});
+                break;
+                case 8:
+                    $resources.commit('setReducerSulfur',{level:building.level});
+                break;
+                case 9:
+                    $resources.commit('setReducerWine',{level:building.level});
+                break;
+                case 10:
+                    $resources.commit('setReducerMarble',{level:building.level});
+                break;
                 case 11:
                     $resources.commit('setProducerWood',{level:building.level});
                 break;

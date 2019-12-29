@@ -23,7 +23,10 @@ export default {
         }
     },
     methods:{
-        setNotification({advisor,type,message,time = 5000}){
+        setNotification({advisor,type,message = null,time = 2500}){
+            if(message == null){
+                message = type ? 'Tu orden se ha cumplido' : 'Error desconocido';
+            }
             var notify = {
                 advisor:advisor,
                 type:type,

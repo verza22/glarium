@@ -19,7 +19,7 @@
 
 <script>
 import axios from 'axios'
-import {catchAxios,callError} from 'Js/util.js'
+import $notification from 'Stores/notification'
 
 export default {
     name: 'Diplomacia',
@@ -42,14 +42,15 @@ export default {
             })
             .then(res =>{
                 if(res.data!='ok'){
-                    callError(res)
+                    $notification.commit('show',{advisor:4,type:false,message:res.data});
                 }else{
                     this.message = ''
                     this.changeType(0)
+                    $notification.commit('show',{advisor:4,type:true});
                 }
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:4,type:false,message:err});
             })
         }
     },

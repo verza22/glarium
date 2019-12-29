@@ -43,7 +43,7 @@ export default {
                     $notification.commit('show',{advisor:1,type:false,message:res.data});
                 }else{
                     $store.commit('reloadBuilding');
-                    $notification.commit('show',{advisor:1,type:true,message:'Tu orden se ha cumplido'});
+                    $notification.commit('show',{advisor:1,type:true});
                     $resources.commit('removeResources',{wood:this.info.wood,wine:this.info.wine,marble:this.info.marble,glass:this.info.glass,sulfur:this.info.sulfur});
                 }
             })

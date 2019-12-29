@@ -41,7 +41,7 @@
 <script>
 
 import axios from 'axios'
-import {catchAxios,callError} from 'Js/util.js'
+import $notification from 'Stores/notification'
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import $store from 'Stores/store.js'
 
@@ -61,12 +61,13 @@ export default {
                     $store.commit('reloadBuilding');
                     $store.commit('reloadResources');
                     this.close();
+                    $notification.commit('show',{advisor:1,type:true})
                 }else{
-                    callError(res);
+                    $notification.commit('show',{advisor:1,type:false,message:res.data});
                 }
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:1,type:false,message:err});
             })
         },
     },
@@ -100,5 +101,5 @@ export default {
         text-align: center;
         font-size:0.9rem
     }
-    
+
 </style>

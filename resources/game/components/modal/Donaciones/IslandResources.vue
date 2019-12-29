@@ -49,10 +49,9 @@ import axios from 'axios'
 import VueSlider from 'vue-slider-component'
 import VueTableDynamic from 'vue-table-dynamic'
 import 'vue-slider-component/theme/default.css'
-import {catchAxios} from 'Js/util.js'
 import $resources from 'Stores/resources'
 import $store from 'Stores/store'
-import Swal from 'sweetalert2'
+import $notification from 'Stores/notification'
 
 export default {
     name:'IslandResources',
@@ -87,15 +86,19 @@ export default {
                 workers:this.value
             })
             .then(res =>{
-                Swal.fire('Exito','Trabajadores cambiados','success')
-                if(this.data.info.type === 1){
-                    $resources.commit('setWorkerForest',{population:this.population_available,worker_forest:this.value})
+                if(res.data=='ok'){
+                    $notification.commit('show',{advisor:1,type:true});
+                    if(this.data.info.type === 1){
+                        $resources.commit('setWorkerForest',{population:this.population_available,worker_forest:this.value})
+                    }else{
+                        $resources.commit('setWorkerMine',{population:this.population_available,worker_mine:this.value})
+                    }
                 }else{
-                    $resources.commit('setWorkerMine',{population:this.population_available,worker_mine:this.value})
+                    $notification.commit('show',{advisor:1,type:false,message:res.data});
                 }
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:1,type:false,message:err});
             })
         },
         iniData(){

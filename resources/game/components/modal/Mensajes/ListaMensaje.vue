@@ -35,7 +35,7 @@
 
 <script>
 import axios from 'axios'
-import {catchAxios,callError} from 'Js/util.js'
+import $notification from 'Stores/notification'
 
 export default {
     name:'Enviados',
@@ -88,14 +88,15 @@ export default {
                                 sub.remove()
                             }
                         });
-                    this.remove(msg)
-                    this.checked(false)
+                        this.remove(msg)
+                        this.checked(false)
+                        $notification.commit('show',{advisor:4,type:true});
                     }else{
-                        callError(res);
+                        $notification.commit('show',{advisor:4,type:false,message:res.data});
                     }
                 })
                 .catch(err =>{
-                    catchAxios(err)
+                    $notification.commit('show',{advisor:4,type:false,message:err});
                 })
             }
         }

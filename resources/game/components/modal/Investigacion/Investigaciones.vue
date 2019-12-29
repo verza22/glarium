@@ -44,7 +44,7 @@
 
 <script>
 import axios from 'axios'
-import {catchAxios,callError} from 'Js/util.js'
+import $notification from 'Stores/notification'
 import $resources from 'Stores/resources'
 import $config from 'Stores/config'
 
@@ -81,12 +81,13 @@ export default {
                     $resources.commit('research',{research_point:this.selected.cost})
                     this.data.user_research.push(this.selected.id)
                     this.initData()
+                    $notification.commit('show',{advisor:3,type:true})
                 }else{
-                    callError(res);
+                    $notification.commit('show',{advisor:3,type:false,message:res.data});
                 }
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:3,type:false,message:err});
             })
         },
         initData(){

@@ -44,17 +44,16 @@ import axios from 'axios'
 import VueSlider from 'vue-slider-component'
 import VueTableDynamic from 'vue-table-dynamic'
 import 'vue-slider-component/theme/default.css'
-import {catchAxios} from 'Js/util.js'
 import $resources from 'Stores/resources'
 import $store from 'Stores/store'
-import Swal from 'sweetalert2'
+import $notification from 'Stores/notification'
 
 export default {
     name:'Academia',
     props:['data'],
     components: {
         VueSlider,
-        VueTableDynamic 
+        VueTableDynamic
     },
     data(){
         return {
@@ -76,11 +75,15 @@ export default {
                 scientists:this.value
             })
             .then(res =>{
-                Swal.fire('Exito','Trabajadores cambiados','success')
-                $resources.commit('setScientists',{population:this.population_available,scientists:this.value})
+                if(res.data=='ok'){
+                    $resources.commit('setScientists',{population:this.population_available,scientists:this.value})
+                    $notification.commit('show',{advisor:3,type:true})
+                }else{
+                    $notification.commit('show',{advisor:3,type:false,message:res.data});
+                }
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:3,type:false,message:err});
             })
         },
         initData(){
@@ -111,11 +114,11 @@ export default {
         value(newval){
             var control = true;
             if(newval>this.max){
-                this.value = this.max; 
+                this.value = this.max;
                 control = false;
             }
             if(newval<0||newval==''){
-                this.value = 0; 
+                this.value = 0;
                 control = false;
             }
             if(control)

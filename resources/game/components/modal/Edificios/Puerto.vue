@@ -6,7 +6,7 @@
             <div><img class="puerto" :src="require('Img/ciudad/16.png')"></div>
             <div>{{speed}} {{$t('building.port.speedMin')}}</div>
         </div>
-        
+
         <div class="gtitle text-center mt-3">{{$t('building.port.tradeShipBuyTitle')}}</div>
         <div>{{$t('building.port.tradeShipBuyText')}}</div>
         <div class="d-flex justify-content-center">
@@ -30,7 +30,7 @@
 
 <script>
 import axios from 'axios'
-import {catchAxios,callError} from 'Js/util.js'
+import $notification from 'Stores/notification'
 import $config from 'Stores/config'
 import $resources from 'Stores/resources'
 
@@ -42,13 +42,14 @@ export default {
             axios.post('user/buyTradeShip')
             .then(res =>{
                 if(res.data!='ok'){
-                    callError(res)
+                    $notification.commit('show',{advisor:1,type:false,message:res.data});
                 }else{
                     $resources.commit('buyTradeShip',{goldCost:this.goldCost});
+                    $notification.commit('show',{advisor:1,type:true})
                 }
             })
             .catch(err =>{
-                catchAxios(err)
+                $notification.commit('show',{advisor:1,type:false,message:err});
             })
         }
     },

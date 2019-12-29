@@ -28,6 +28,9 @@ export default new Vuex.Store({
     },
     mutations:
     {
+        updateWine(state,{wine}){
+            state.wine = wine;
+        },
         updateResources(state,{wood,wine,marble,glass,sulfur}){
             state.wood = wood;
             state.wine = wine;

@@ -71,11 +71,31 @@ export default {
                 minerProducer = 0;
             }
 
-            if(woodProducer!=0||minerProducer!=0){
+            if(woodProducer!=0||minerProducer!=0||this.tavernConsume>0){
                 var minerObj = this.setMinerProducer(minerProducer);
                 var obj = {
                     ...minerObj,
                     wood:woodProducer
+                }
+                //Calculo del consumo de vino
+                if(this.tavernConsume>0){
+                    if(this.island_type!=1){
+                        obj = {
+                            ...obj,
+                            wine:-this.tavernConsume
+                        }
+                    }else{
+                        obj.wine -= this.tavernConsume
+                    }
+                }
+                if(this.wine < 0){
+                    //Se cabao el vino
+                    obj.wine = 0;
+                    $resources.commit('updateWine',{wine:0})
+                    $resources.commit('setWineTavern',{wine:0})
+                    axios.post('city/setWine/'+this.city_id,{
+                        wine:0
+                    })
                 }
                 $resources.commit('produceResources',obj)
             }
@@ -155,6 +175,9 @@ export default {
         },
         maxCapacity(){
             return ($config.state.world.warehouse.capacity * this.depositLevel) + $config.state.world.warehouse.capacity_base;
+        },
+        tavernConsume(){
+            return (($resources.getters.tavernConsume*(1-($resources.state.reducerWineLevel*0.01)))/3600);
         }
     },
     watch:{

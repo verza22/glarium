@@ -92,6 +92,7 @@ class CityHelper {
         $city->sulfur += config('world.bonus.resources') * $collect->sulfur;
 
         $cityPopulation = CityPopulation::where('city_id',$city->id)->first();
+        $cityPopulation->wine = $cityPopulation->wine * config('world.bonus.tavern_consume');
         if($cityPopulation->wine>0)
         {
             //Si tiene sirviendo vino calculamos cuando hay que restarle
@@ -107,7 +108,7 @@ class CityHelper {
             else
             {
                 //Aplicamos reduccion de vino
-                BuildingModifierHelper::lessCost($city,$cityPopulation);
+                BuildingModifierHelper::lessCost($city,$cityPopulation,false);
                 //Si tiene vino se lo descontamos
                 $city->wine -= ( $diffTime * $cityPopulation->wine );
             }

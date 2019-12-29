@@ -7,7 +7,9 @@ return [
     'load_attack_return' => 5,//Tiempo que demora en cargar los recursos de un saqueo
     'load_defend_return' => 5,//Tiempo que demora en cargar las tropas al regresar de una defensa
     'bonus' => [ //Modificadores en la velocidad de recursos etc
-        'resources' => 100
+        'resources' => 100,
+        'tavern' => 100,
+        'tavern_consume' => 100
     ],
     'warehouse' => [
         'resource_protected' => 400,//Capacidad de recursos protegidos por nivel de deposito

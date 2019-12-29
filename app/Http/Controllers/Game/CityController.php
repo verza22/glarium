@@ -39,6 +39,7 @@ class CityController extends Controller
     public function getPopulation(City $city)
     {
         $this->authorize('isMyCity',$city);
+        CityHelper::updateResources($city);
         PopulationHelper::satisfaction($city->population,false);
         $data = $city->population;
         $response['population_max'] = $data->population_max;
@@ -112,13 +113,13 @@ class CityController extends Controller
             return 'No puedes servir mas vino que la cantidad maxima';
         }
 
+        //Actualizamos los recursos de la ciudad
+        CityHelper::updateResources($city);
+
         if($wine>$city->wine)
         {
             return 'No puedes servir mas vino del que tienes en la ciudad';
         }
-
-        //Actualizamos los recursos de la ciudad
-        CityHelper::updateResources($city);
 
         //Actualizamos la poblacion
         PopulationHelper::satisfaction($cityPopulation);

@@ -69,8 +69,8 @@ class PopulationHelper {
             $per_wine = $cityPopulation->wine/$cityPopulation->wine_max;//Porcentaje que esta dando de vino
             $bonus_wine = ( ( $taberna_level * 60 ) * $per_wine );
 
-            $bonuses += $bonus_wine; //Sumamos el bonus por servir vino
-            $bonuses += ($taberna_level * 12); //12 de bonus por cada nivel de taberna
+            $bonuses += ($bonus_wine * config('world.bonus.tavern')); //Sumamos el bonus por servir vino
+            $bonuses += (($taberna_level * 12) * config('world.bonus.tavern')); //12 de bonus por cada nivel de taberna
         }
 
         //Si tiene la investigaciones que dan bonus damos sus respectivos bonus

@@ -353,5 +353,9 @@ export default {
         noMessage:'No hay mensajes',
         all:'Todos',
         none:'Ninguno'
+    },
+    colonize:{
+        question:'¿Deseas colonizar aquí?',
+        title:'Colonizar'
     }
 };

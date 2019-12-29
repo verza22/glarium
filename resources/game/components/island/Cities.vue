@@ -1,6 +1,6 @@
 <template>
     <div class="objectContainer">
-        <div class="object" 
+        <div class="object"
         :style="{top:object.top+'px',left:object.left+'px'}"
         v-for="(object,index) in objects"
         :key='index'
@@ -9,7 +9,7 @@
                 <div class="city" :class='data.cities[index].type ? "blue" : "red"'></div>
                 <div class="valores">{{data.cities[index].name}}</div>
             </div>
-            <div class="flag" v-else></div>
+            <div class="flag" v-else :title="$t('colonize.question')" @click='openColonize(index)'></div>
         </div>
     </div>
 </template>
@@ -47,6 +47,13 @@ export default {
             return this.data.cities.some(x =>{
                 return x.position == index
             });
+        },
+        openColonize(index){
+            debugger
+            $modal.commit('openModal',{
+                type:6,
+                info:{}
+            })
         },
         openCityInfo(city){
             $modal.commit('openModal',{

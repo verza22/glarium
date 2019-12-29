@@ -6,6 +6,7 @@
         <Investigacion :close='close' :info='info' v-else-if='type==3'></Investigacion>
         <IslaCiudad :close='close' :info='info' v-else-if='type==4'></IslaCiudad>
         <Mensajes :close='close' :info='info' v-else-if='type==5'></Mensajes>
+        <Colonize :close='close' :info='info' v-else-if='type==6'></Colonize>
     </div>
 </template>
 
@@ -16,6 +17,7 @@
     import Investigacion from 'Components/modal/Investigacion/Investigacion.vue'
     import IslaCiudad from 'Components/modal/IslaCiudad/IslaCiudad.vue'
     import Mensajes from 'Components/modal/Mensajes/Mensajes.vue'
+    import Colonize from 'Components/modal/Colonize.vue'
     import $modal from 'Stores/modal.js'
 
     export default {
@@ -26,7 +28,8 @@
             Edificios,
             Investigacion,
             IslaCiudad,
-            Mensajes
+            Mensajes,
+            Colonize
         },
         data(){
             return {

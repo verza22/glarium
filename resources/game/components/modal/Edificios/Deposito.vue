@@ -106,6 +106,13 @@ export default {
             safe:0
         }
     },
+    methods:{
+        init(){
+            this.level = this.data.maximum ? this.data.level : this.data.level-1;
+            this.max_capacity = this.warehouse.capacity_base + (this.level * this.warehouse.capacity);
+            this.safe = this.warehouse.resource_protected_base + (this.level * this.warehouse.resource_protected);
+        }
+    },
     computed:{
         wood(){
             return $resources.state.wood;
@@ -141,10 +148,15 @@ export default {
             return $config.state.world.warehouse;
         }
     },
+    watch:{
+        data(newval,oldval){
+            if(newval.level!=oldval.level){
+                this.init()
+            }
+        }
+    },
     beforeMount(){
-        this.level = this.data.level-1;
-        this.max_capacity = this.warehouse.capacity_base + (this.level * this.warehouse.capacity);
-        this.safe = this.warehouse.resource_protected_base + (this.level * this.warehouse.resource_protected);
+        this.init()
     }
 }
 </script>

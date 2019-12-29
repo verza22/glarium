@@ -22,7 +22,9 @@ export default {
         },
         producirPoblacion(){
             var increasePopulation = (((this.bonuses-this.debuff)*0.02)/3600);
-            $resources.commit('increasePopulation',{increasePopulation:increasePopulation})
+            if(this.population_now+increasePopulation < this.population_max){
+                $resources.commit('increasePopulation',{increasePopulation:increasePopulation})
+            }
         }
     },
     computed:{
@@ -34,6 +36,9 @@ export default {
         },
         population_now(){
             return $resources.state.population.population_now;
+        },
+        population_max(){
+            return $resources.state.population.population_max;
         },
         tavern_wine_max(){
             return $resources.state.population.wine_max;

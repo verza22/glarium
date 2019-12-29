@@ -27,7 +27,7 @@ const store = new Vuex.Store({
       },
       changeCity(state,{city_id,island_type=null}){
         localStorage.setItem('city_id', city_id)
-        state.city_id = city_id;
+        state.city_id = parseInt(city_id);
         state.island_type = island_type;
       }
     }

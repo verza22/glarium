@@ -248,7 +248,7 @@ class MovementController extends Controller
 
         //Verificamos que no exista una ciudad en esa posicion
         $position = $request->input('position');
-        if(count($island->citys->where('position',$position))==1)
+        if(count($island->cities->where('position',$position))==1)
         {
             return 'Ya existe una ciudad en esa posicion';
         }

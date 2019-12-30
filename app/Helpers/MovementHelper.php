@@ -12,7 +12,7 @@ use App\Helpers\BuildingHelper;
 use App\User;
 use Auth;
 use Carbon\Carbon;
- 
+
 class MovementHelper {
 
     public static function loadedSpeed(City $city_from,$size)
@@ -25,11 +25,11 @@ class MovementHelper {
         $loaded += ($level*config('world.load_speed'));
 
         $loadedTime = $loaded/60;//Carga por minuto
-        
+
         return $size/$loadedTime;//Retornamos el tiempo en segundos
     }
 
-    public static function distanceTime(City $city_from,City $city_to) 
+    public static function distanceTime(City $city_from,City $city_to)
     {
         //Verificamos si estan en la misma isla
         if($city_to->islandCity->id === $city_to->islandCity->id)
@@ -38,7 +38,7 @@ class MovementHelper {
         }
     }
 
-    public static function distanceTimeColonize(City $city_from,Island $island) 
+    public static function distanceTimeColonize(City $city_from,Island $island)
     {
         //Verificamos si estan en la misma isla
         if($city_from->islandCity->id === $island->id)
@@ -49,13 +49,15 @@ class MovementHelper {
 
     public static function getActionPoint(City $city_from)
     {
-        return Movement::where('city_from',$city_from->id)->where('user_id',Auth::id())->count();
+        $movement = Movement::where('city_from',$city_from->id)->where('user_id',Auth::id())->count();
+        $colonize = MovementColonize::where('city_from',$city_from->id)->where('user_id',Auth::id())->count();
+        return $movement + $colonize;
     }
 
     public static function returnMovementResources(City $city_from)
     {
         self::deliveredResourcesFrom($city_from);
-        self::deliveredResourcesReturn($city_from); 
+        self::deliveredResourcesReturn($city_from);
     }
 
     public static function deliveredResourcesReturn($city_from)

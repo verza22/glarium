@@ -4,7 +4,7 @@
             <div class="premium">{{$t('options.userResources.patreon')}}</div>
         </div>
         <div class="btn-ships" :title="$t('options.userResources.ships')">
-            <div class="ships">{{trade_ship}}/{{trade_ship_available}}</div>
+            <div class="ships">{{trade_ship_available}}/{{trade_ship}}</div>
         </div>
         <div class="btn-gold" :title="$t('options.userResources.gold')">
             <div class="gold">{{$money(gold)}}</div>

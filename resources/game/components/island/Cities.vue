@@ -49,10 +49,16 @@ export default {
             });
         },
         openColonize(index){
-            debugger
+            var ojb = {
+                id:this.data.id,
+                name:this.data.name,
+                position:index,
+                x: this.data.x,
+                y: this.data.y
+            }
             $modal.commit('openModal',{
                 type:6,
-                info:{}
+                info:ojb
             })
         },
         openCityInfo(city){

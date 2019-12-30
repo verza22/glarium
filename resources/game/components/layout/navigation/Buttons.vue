@@ -44,6 +44,7 @@ export default {
                     return;
                 }
             }
+            $modal.commit('changeRoute')
             this.$router.push({ name: 'City', params: { city:this.city_id}})
         }
     },

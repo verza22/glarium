@@ -25,17 +25,17 @@
                 <div class="flex-1 d-flex align-items-center justify-content-center">
                     <div class="mr-2"><img :src="require('Img/icon/icon_journeytime.png')"></div>
                     <div>
-                        <div>Tiempo de carga: 27m 8s</div>
-                        <div>Tiempo de viaje: 3m 20s</div>
+                        <div>Tiempo de carga: {{tiempo_carga()}}</div>
+                        <div>Tiempo de viaje: {{distance}}</div>
                     </div>
                 </div>
                 <div class="flex-1 d-flex align-items-center justify-content-center">
                     <div class="mr-2"><img :src="require('Img/icon/icon_target2.png')"></div>
-                    <div>Objetivo: Ashoetia</div>
+                    <div>Objetivo: {{info.name}}</div>
                 </div>
             </div>
             <div class="text-center mt-3">
-                <div class="btnGeneral">¡Fundar una colonia!</div>
+                <div class="btnGeneral" @click='fundar()'>¡Fundar una colonia!</div>
             </div>
         </div>
         </Ventana1>
@@ -47,7 +47,9 @@ import axios from 'axios'
 import $notification from 'Stores/notification'
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import $store from 'Stores/store'
+import $config from 'Stores/config'
 import $resources from 'Stores/resources'
+import $building from 'Stores/building'
 
 export default {
     props:['info','close'],
@@ -63,6 +65,27 @@ export default {
         }
     },
     methods:{
+        tiempo_carga(){
+            var speed = this.load_speed_base + (this.load_speed * this.port_level)
+            return this.$sectotime(Math.ceil(this.wood/speed));
+        },
+        fundar(){
+            axios.post("movement/colonize/" + this.city_id, {
+                island: this.info.id,
+                position: this.info.position
+            })
+            .then(res => {
+                if(res.data=='ok'){
+                    this.close()
+                    $notification.commit('show',{advisor:1,type:true});
+                }else{
+                    $notification.commit('show',{advisor:1,type:false,message:res.data});
+                }
+            })
+            .catch(err => {
+                $notification.commit('show',{advisor:1,type:false,message:err});
+            });
+        }
     },
     computed:{
         city_id() {
@@ -70,6 +93,18 @@ export default {
         },
         ship_available(){
             return $resources.state.userResources.trade_ship_available;
+        },
+        distance(){
+            return this.$sectotime($config.state.world.distance.same_island);
+        },
+        load_speed_base(){
+            return $config.state.world.load_speed_base;
+        },
+        load_speed(){
+            return $config.state.world.load_speed;
+        },
+        port_level(){
+            return $building.getters.getBuildingLevel(16)
         }
     }
 }

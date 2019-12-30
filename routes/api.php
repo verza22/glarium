@@ -45,4 +45,5 @@ Route::get('island/{island}', 'Game\IslandController@show');
 Route::get('research', 'Game\ResearchController@getData');
 Route::post('research/{research}', 'Game\ResearchController@create');
 
+Route::get('movement', 'Game\MovementController@getMovement');
 Route::post('movement/colonize/{city}', 'Game\MovementController@colonize');

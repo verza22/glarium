@@ -286,4 +286,14 @@ class MovementController extends Controller
         return 'ok';
     }
 
+    public function getMovement()
+    {
+        //Devuelve los movimientos de colonizacion,recursos,ataques y defensas
+        MovementHelper::returnMovementResourcesAll();
+        MovementHelper::checkColonize();
+        $colonize = MovementColonize::where('user_id',Auth::id())->select(['start_at','end_at','user_id','city_from','island_to','position'])->get();
+        $movement = Movement::where('user_id',Auth::id())->get();
+        return $data;
+    }
+
 }

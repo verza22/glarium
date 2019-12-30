@@ -9,6 +9,7 @@ use App\Models\Island;
 use App\Models\MovementColonize;
 use App\Helpers\OtherHelper;
 use App\Helpers\BuildingHelper;
+use App\Models\UserCity;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -56,13 +57,21 @@ class MovementHelper {
 
     public static function returnMovementResources(City $city_from)
     {
-        self::deliveredResourcesFrom($city_from);
-        self::deliveredResourcesReturn($city_from);
+        $cities = [$city_from->id];
+        self::deliveredResourcesFrom($cities);
+        self::deliveredResourcesReturn($cities);
     }
 
-    public static function deliveredResourcesReturn($city_from)
+    public static function returnMovementResourcesAll()
     {
-        $movements = Movement::where('city_from',$city_from->id)
+        $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
+        self::deliveredResourcesFrom($cities);
+        self::deliveredResourcesReturn($cities);
+    }
+
+    public static function deliveredResourcesReturn($cities)
+    {
+        $movements = Movement::whereIn('city_from',$cities)
                             ->where('movement_type_id',1)
                             ->where('delivered',1)
                             ->where('return_at','<',Carbon::now())->get();
@@ -77,10 +86,10 @@ class MovementHelper {
         });
     }
 
-    public static function deliveredResourcesFrom(City $city_from)
+    public static function deliveredResourcesFrom($cities)
     {
         //Entrega los recursos desde una ciudad
-        $movements = Movement::where('city_from',$city_from->id)
+        $movements = Movement::whereIn('city_from',$cities)
                             ->where('movement_type_id',1)
                             ->where('delivered',0)
                             ->where('end_at','<',Carbon::now())->get();

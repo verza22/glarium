@@ -23,26 +23,29 @@ import axios from "axios";
 import $modal from "Stores/modal.js";
 import Notification from 'Components/layout/Notification.vue'
 import $notification from 'Stores/notification'
+import $movement from 'Stores/movement'
 
 export default {
-  name: "Consejeros",
-  components:{
-      Notification
-  },
-  methods:{
-    scientist(){
-      $modal.commit('openModal',{type:3,info:{}})
+    name: "Consejeros",
+    components:{
+        Notification
     },
-    diplomat(){
-        axios("user/getMessage")
-        .then(res => {
-            $modal.commit('openModal',{type:5,info:res.data})
-        })
-        .catch(err => {
-          $notification.commit('show',{advisor:1,type:false,message:err});
-        });
+    methods:{
+        scientist(){
+            $modal.commit('openModal',{type:3,info:{}})
+        },
+        diplomat(){
+            axios("user/getMessage").then(res => {
+                $modal.commit('openModal',{type:5,info:res.data})
+            })
+            .catch(err => {
+            $notification.commit('show',{advisor:1,type:false,message:err});
+            });
+        }
+    },
+    beforeMount(){
+        $movement.dispatch('updateMovemenet')
     }
-  }
 };
 </script>
 

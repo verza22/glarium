@@ -108,30 +108,6 @@ export default {
           $notification.commit('show',{advisor:1,type:false,message:err});
         });
     },
-    updateBuilding(){
-      //Verficamos cuando se construyan los edificios
-      switch(this.constructed_building.building_id){
-        case 2:
-          //Actualizamos los investigadores
-          $resources.commit('reloadPopulation');
-        break;
-      }
-      //Actualizamos el edificio si tiene abierto el modal
-      axios
-        .post("building/nextLevel/" + this.constructed_building.building_id, {
-          level: this.constructed_building.level +1
-        })
-        .then(res => {
-          res.data.city_building_id = this.constructed_building.id
-           $modal.commit('updateModal',{
-            type:1,
-            info:res.data
-          })
-        })
-        .then(() => {
-          this.constructed_building = null;
-        });
-    }
   },
   computed: {
     now(){

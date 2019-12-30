@@ -5,6 +5,8 @@ import axios from 'axios'
 import $store from 'Stores/store'
 import $notification from 'Stores/notification'
 import $config from 'Stores/config'
+import $resources from 'Stores/resources'
+import $modal from 'Stores/modal'
 import moment from "moment";
 
 Vue.use(Vuex)
@@ -71,6 +73,20 @@ setInterval(function () {
             //Construimos el edificio
             building[0].constructed_at = null;
             store.dispatch('updateBuilding')
+            .then(res =>{
+                switch(building[0].building_id){
+                    case 2:
+                        //Actualizamos los investigadores
+                        $resources.commit('reloadPopulation');
+                    break;
+                }
+                //Actualizamos el edificio si tiene abierto el modal
+                $modal.dispatch('updateBuildingModal',{
+                    id:building[0].id,
+                    building_id:building[0].building_id,
+                    level:building[0].level
+                })
+            })
         }
     }
 }, 1000)

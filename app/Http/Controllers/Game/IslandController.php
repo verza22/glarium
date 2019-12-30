@@ -18,6 +18,7 @@ use App\Helpers\PopulationHelper;
 use App\Helpers\UserResourceHelper;
 use App\Helpers\UnitHelper;
 use App\Helpers\IslandHelper;
+use App\Helpers\MovementHelper;
 use Carbon\Carbon;
 use Auth;
 
@@ -29,13 +30,15 @@ class IslandController extends Controller
     }
     public function show(Island $island)
     {
+        MovementHelper::endIslandColonize($island);
         $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
         $data = $island->only(['id','x','y','name','type']);
         $data['level_forest'] = $island->forest->level;
         $data['level_mine'] = $island->mine->level;
-        $data['cities'] = $island->cities->map(function($insland_city) use($cities) {
+        $data['cities'] = $island->islandCities->map(function($insland_city) use($cities) {
             $data = $insland_city->only(['city_id','position']);
             $data['level'] = BuildingHelper::building($insland_city->city,1)->building_level->level;
+            $data['constructed_at'] = $insland_city->city->constructed_at;
             $data['user'] = $insland_city->city->userCity->user->name;
             $data['user_id'] = $insland_city->city->userCity->user_id;
             $data['name'] = $insland_city->city->name;
@@ -85,7 +88,7 @@ class IslandController extends Controller
             $data['donated'] = $city_donation->donated;
             return array_values($data);
         });
-        
+
         return $data;
     }
 
@@ -153,7 +156,7 @@ class IslandController extends Controller
             return 'Esta ciudad no se encuentra en la isla que quieres donar';
         }
 
-        
+
         if($request->input('type')==1)
         {
             return $this->donatedForest($request,$island);
@@ -162,7 +165,7 @@ class IslandController extends Controller
         {
             return $this->donatedMine($request,$island);
         }
-        
+
     }
 
     private function donatedForest(Request $request,Island $island)

@@ -5,9 +5,10 @@
         v-for="(object,index) in objects"
         :key='index'
         >
-            <div class="d-flex justify-content-center" :title='getCity(index)[0].name' v-if='getCity(index).length>0' @click='openCityInfo(getCity(index)[0])'>
-                <div class="city" :class='getCity(index)[0].type ? "blue" : "red"'></div>
-                <div class="valores">{{getCity(index)[0].name}}</div>
+            <div class="d-flex justify-content-center" :title='getCity(index).name' v-if='checkCity(index)' @click='openCityInfo(getCity(index))'>
+                <div class="city" :class='getCity(index).type ? "blue" : "red"' v-if='getCity(index).constructed_at != null'></div>
+                <div class="city_constr" v-else></div>
+                <div class="valores">{{getCity(index).name}}</div>
             </div>
             <div class="flag" v-else :title="$t('colonize.question')" @click='openColonize(index)'></div>
         </div>
@@ -43,10 +44,16 @@ export default {
         }
     },
     methods:{
+        checkCity(index){
+            var cities =  this.data.cities.filter(x =>{
+                return x.position == index
+            });
+            return cities.length>0
+        },
         getCity(index){
             return this.data.cities.filter(x =>{
                 return x.position == index
-            });
+            })[0];
         },
         openColonize(index){
             var ojb = {
@@ -62,6 +69,9 @@ export default {
             })
         },
         openCityInfo(city){
+            if(city.constructed_at==null){
+                return
+            }
             $modal.commit('openModal',{
                 type:4,
                 info:{
@@ -91,6 +101,13 @@ export default {
         width: 70px;
         height: 70px;
         margin: 0px 15px;
+    }
+    .city_constr{
+        background-image: url('~Img/island/city_constr.png');
+        width: 70px;
+        height: 70px;
+        margin: 0px 15px;
+        background-repeat: no-repeat;
     }
     .flag{
         background-image: url('~Img/island/flag.png');

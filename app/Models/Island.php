@@ -10,7 +10,7 @@ class Island extends Model
 
     public $timestamps = false;
 
-    public function cities()
+    public function islandCities()
     {
         return $this->hasMany('App\Models\IslandCity');
     }

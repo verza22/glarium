@@ -66,7 +66,7 @@ export default {
     },
     methods:{
         tiempo_carga(){
-            var speed = this.load_speed_base + (this.load_speed * this.port_level)
+            var speed = (this.load_speed_base + (this.load_speed * this.port_level))/60
             return this.$sectotime(Math.ceil(this.wood/speed));
         },
         fundar(){

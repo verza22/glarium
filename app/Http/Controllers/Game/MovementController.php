@@ -199,7 +199,7 @@ class MovementController extends Controller
         UserResourceHelper::updateResources();
 
         //Validamos que tenga el oro
-        if($userResource->gold<config('colonize.gold'))
+        if($userResource->gold<config('world.colonize.gold'))
         {
             return 'No tienes oro suficiente para colonizar';
         }
@@ -207,8 +207,8 @@ class MovementController extends Controller
         PopulationHelper::satisfaction($city->population);
 
         $collect = UnitHelper::newCollect();
-        $collect->wood = config('colonize.wood');
-        $collect->population = config('colonize.population');
+        $collect->wood = config('world.colonize.wood');
+        $collect->population = config('world.colonize.population');
 
         //Validamos que tenga la poblacion
         if(!PopulationHelper::comparePopulation($city,$collect))
@@ -232,7 +232,7 @@ class MovementController extends Controller
         $position = $request->input('position');
         //Verificamos que no haya una ciudad en esa posicion
         $island = Island::whereId($request->input('island'))->firstOrFail();
-        $islandCity = $island->cities->where('position',$position)->count();
+        $islandCity = $island->islandCities->where('position',$position)->count();
         if($islandCity > 0)
         {
             return 'Ya hay una ciudad en esa posicion';
@@ -247,7 +247,7 @@ class MovementController extends Controller
         //Quitamos los recursos
         CityHelper::removeResources($city,$collect);
         PopulationHelper::removePopulation($city,$collect);
-        $userResource->gold -= config('colonize.gold');
+        $userResource->gold -= config('world.colonize.gold');
         $userResource->trade_ship_available -= 3;
         $userResource->save();
 

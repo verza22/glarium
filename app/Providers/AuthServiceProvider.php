@@ -26,7 +26,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Gate::define('isMyCity', function ($user,$city) {
-            return UserCity::where('user_id',$user->id)->where('city_id',$city->id)->exists();
+            return UserCity::where('user_id',$user->id)->where('city_id',$city->id)->whereHas('city',function($query){
+                $query->whereNotNull('constructed_at');
+            })->exists();
         });
         Gate::define('isNotMyCity', function ($user,$city) {
             return UserCity::where('user_id',$user->id)->where('city_id',$city->id)->count() === 0;

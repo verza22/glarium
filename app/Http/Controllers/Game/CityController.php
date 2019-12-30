@@ -23,7 +23,9 @@ class CityController extends Controller
 
     public function getCities()
     {
-        return UserCity::where('user_id',Auth::id())->get()->map(function($userCity){
+        return UserCity::where('user_id',Auth::id())->whereHas('city',function($query){
+            $query->whereNotNull('constructed_at');
+        })->get()->map(function($userCity){
             return [
                 'id' => $userCity->city_id,
                 'name' => $userCity->city->name,

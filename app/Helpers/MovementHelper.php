@@ -139,43 +139,43 @@ class MovementHelper {
             $movement->save();
         });
     }
-/*
-    public static function checkColonize()
-    {
-        self::endColonize();
-        return MovementColonize::where('user_id',Auth::id())->where('end_at','<',Carbon::now())->exists();
-    }
 
-    public static function endColonizeIsland(Island $island)
+    public static function endIslandColonize(Island $island)
     {
-        //Termina las colonizaciones de una isla
-        $movements = MovementColonize::where('island_to',$island->id)->where('end_at','<',Carbon::now())->get();
-        self::endColonizeAux($movements);
-        if($movements->count()>1)
+        $cities = $island->islandCities->pluck('city_id');
+        $movements = Movement::whereIn('city_to',$cities)
+                        ->where('movement_type_id',4)
+                        ->where('end_at','<',Carbon::now())->get();
+        self::endColonize($movements);
+        if($movements->count()>0)
         {
             $island->refresh();
         }
     }
 
-    public static function endColonize()
+    public static function endUserColonize()
     {
-        //Termina las colonizaciones de un jugador
-        $movements = MovementColonize::where('user_id',Auth::id())->where('end_at','<',Carbon::now())->get();
-        self::endColonizeAux($movements);
+        $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
+        $movements = Movement::whereIn('city_from',$cities)
+                        ->where('movement_type_id',4)
+                        ->where('end_at','<',Carbon::now())->get();
+        self::endColonize($movements);
     }
 
-    public static function endColonizeAux($movements)
+    private static function endColonize($movements)
     {
         $movements->map(function($movement){
             //Quitamos y borramos el movimiento
             $user = User::find($movement->user_id);
-            OtherHelper::createCity($user,$movement->island_to,$movement->position);
-            $movement->delete();
             //Damos los 3 mercantes
             $userResource = UserResource::where('user_id',$user->id)->first();
-            $userResource->trade_ship_available += 3;
+            $userResource->trade_ship_available += $movement->trade_ship;
             $userResource->save();
+
+            $movement->city_destine->constructed_at = Carbon::now();
+            $movement->city_destine->save();
+
+            $movement->delete();
         });
     }
-*/
 }

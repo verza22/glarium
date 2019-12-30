@@ -5,14 +5,14 @@
                 <div class="d-flex">
                     <div class="selectContainer" :class="type==0 ? 'active' : ''" title="Mensajes Recibidos" @click='change(0)'>
                         <div class="imagen"></div>
-                        <div class="texto">Movimientos ({{movement.length}})</div>
+                        <div class="texto">Movimientos ({{movements.length}})</div>
                     </div>
                     <div class="selectContainer" :class="type==1 ? 'active' : ''" title="Mensajes Enviados" @click='change(1)'>
                         <div class="imagen"></div>
                         <div class="texto">Informes de guerra (0)</div>
                     </div>
                 </div>
-                <Movimientos :movement='movement' v-if="movement.length>0"></Movimientos>
+                <Movimientos :movements='movements' v-if="movements.length>0"></Movimientos>
                 <div v-else class="nomessage">{{$t('messages.noMessage')}}</div>
             </div>
         </Ventana1>
@@ -37,8 +37,8 @@ export default {
         }
     },
     computed:{
-        movement(){
-            return $movement.state.movement;
+        movements(){
+            return $movement.state.movements;
         }
     }
 }

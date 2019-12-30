@@ -7,11 +7,11 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        movement:[]
+        movements:[]
     },
     mutations:{
-        updateMovemenet(state,{movement}){
-            state.movement = movement
+        updateMovemenet(state,{movements}){
+            state.movements = movements
         }
     },
     actions:{
@@ -19,7 +19,7 @@ const store = new Vuex.Store({
             axios('movement').then(res =>{
                 if(res.data.length>0){
                     context.commit('updateMovemenet',{
-                        movement:res.data
+                        movements:res.data
                     });
                 }
             })

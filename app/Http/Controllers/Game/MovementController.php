@@ -273,7 +273,17 @@ class MovementController extends Controller
     {
         //Devuelve los movimientos de colonizacion,recursos,ataques y defensas
         MovementHelper::returnMovementResourcesAll();
-        return Movement::where('user_id',Auth::id())->select(['id','start_at','end_at','return_at','delivered','user_id','city_from','city_to','movement_type_id','trade_ship'])->get();
+        $movements = Movement::where('user_id',Auth::id())->get();
+        return $movements->map(function($movement){
+            $data = $movement->only(['id','start_at','end_at','return_at','delivered','user_id','movement_type_id','trade_ship']);
+            $data['city_to']['id'] = $movement->city_destine->id;
+            $data['city_to']['name'] = $movement->city_destine->name;
+            $data['city_to']['user'] = $movement->city_destine->userCity->user->name;
+            $data['city_from']['id'] = $movement->city_origin->id;
+            $data['city_from']['name'] = $movement->city_origin->name;
+            $data['city_from']['user'] = $movement->city_origin->userCity->user->name;
+            return $data;
+        });
     }
 
 }

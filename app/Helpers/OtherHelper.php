@@ -11,6 +11,7 @@ use App\Models\IslandCity;
 use App\Models\UserResource;
 use App\Models\IslandDonation;
 use DB;
+use Carbon\Carbon;
 
 class OtherHelper
 {
@@ -116,13 +117,13 @@ class OtherHelper
             }
         }
 
-        return self::createCity($user,$island_id,$position,true);
+        return self::createCity($user,$island_id,$position,true,Carbon::now());
     }
 
-    public static function createCity(User $user,$island_id,$position,$capital = false)
+    public static function createCity(User $user,$island_id,$position,$capital = false,$constructed_at = null)
     {
         //Create new city
-        $city = City::create();
+        $city = City::create(['constructed_at' => $constructed_at]);
         UserCity::create(['user_id' => $user->id, 'city_id' => $city->id, 'capital' => $capital]);
 
         IslandCity::create(['island_id' => $island_id, 'city_id' => $city->id, 'position' => $position]);

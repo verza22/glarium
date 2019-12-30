@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\WarehouseHelper;
+use Carbon\Carbon;
 
 class City extends Model
 {
     protected $table = 'city';
 
     use SoftDeletes;
+
+    protected $fillable = ['constructed_at'];
 
     protected $attributes = [
         'name' => 'Polis',
@@ -45,7 +48,7 @@ class City extends Model
     public static function boot()
     {
         parent::boot();
-        
+
         self::updating(function($model){
             WarehouseHelper::checkCapacity($model);
         });

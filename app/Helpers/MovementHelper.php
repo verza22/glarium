@@ -6,7 +6,6 @@ use App\Models\City;
 use App\Models\Movement;
 use App\Models\UserResource;
 use App\Models\Island;
-use App\Models\MovementColonize;
 use App\Helpers\OtherHelper;
 use App\Helpers\BuildingHelper;
 use App\Models\UserCity;
@@ -22,7 +21,12 @@ class MovementHelper {
         $loaded = config('world.load_speed_base');//Carga base
 
         //Obtenemos el puerto
-        $level = BuildingHelper::building($city_from,16)->building_level->level;
+        if(BuildingHelper::building($city_from,16)!=null){
+            $level = BuildingHelper::building($city_from,16)->building_level->level;
+        }else{
+            $level = 0;
+        }
+
         $loaded += ($level*config('world.load_speed'));
 
         $loadedTime = $loaded/60;//Carga por minuto
@@ -33,7 +37,7 @@ class MovementHelper {
     public static function distanceTime(City $city_from,City $city_to)
     {
         //Verificamos si estan en la misma isla
-        if($city_to->islandCity->id === $city_to->islandCity->id)
+        if($city_from->islandCity->id === $city_to->islandCity->id)
         {
             return config('world.distance.same_island');
         }
@@ -50,9 +54,7 @@ class MovementHelper {
 
     public static function getActionPoint(City $city_from)
     {
-        $movement = Movement::where('city_from',$city_from->id)->where('user_id',Auth::id())->count();
-        $colonize = MovementColonize::where('city_from',$city_from->id)->where('user_id',Auth::id())->count();
-        return $movement + $colonize;
+        return Movement::where('city_from',$city_from->id)->where('user_id',Auth::id())->count();
     }
 
     public static function returnMovementResources(City $city_from)
@@ -137,16 +139,11 @@ class MovementHelper {
             $movement->save();
         });
     }
-
+/*
     public static function checkColonize()
     {
         self::endColonize();
         return MovementColonize::where('user_id',Auth::id())->where('end_at','<',Carbon::now())->exists();
-    }
-
-    public static function checkColonizeIsland(Island $island,$position)
-    {
-        return MovementColonize::where('island_to',$island->id)->where('position',$position)->exists();
     }
 
     public static function endColonizeIsland(Island $island)
@@ -180,5 +177,5 @@ class MovementHelper {
             $userResource->save();
         });
     }
-
+*/
 }

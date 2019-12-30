@@ -17,10 +17,9 @@ const store = new Vuex.Store({
     actions:{
         updateMovemenet: context =>{
             axios('movement').then(res =>{
-                if(res.data.movement.length>0){
-                    debugger
+                if(res.data.length>0){
                     context.commit('updateMovemenet',{
-                        movement:res.data.movement
+                        movement:res.data
                     });
                 }
             })

@@ -12,12 +12,13 @@ use App\Models\UserResource;
 use App\Models\CityBuilding;
 use App\Models\UserCity;
 use App\Models\Island;
-use App\Models\MovementColonize;
 use App\Helpers\UnitHelper;
 use App\Helpers\CityHelper;
 use App\Helpers\MovementHelper;
+use App\Helpers\OtherHelper;
 use App\Helpers\UserResourceHelper;
 use App\Helpers\PopulationHelper;
+use App\Models\IslandCity;
 use Carbon\Carbon;
 use Auth;
 
@@ -159,13 +160,6 @@ class MovementController extends Controller
         return 'ok';
     }
 
-    public function updateColonize()
-    {
-        MovementHelper::endColonize();
-
-        return 'ok';
-    }
-
     public function colonize(Request $request,City $city)
     {
         $this->authorize('isMyCity',$city);
@@ -173,12 +167,6 @@ class MovementController extends Controller
             'island' => 'required|integer|min:1',
             'position' => 'required|integer|min:1|max:16'
         ]);
-
-        //Verificamos que no tenga una colonizacion en proceso
-        if(MovementHelper::checkColonize())
-        {
-            return 'Ya estas colonizando otra ciudad';
-        }
 
         //Obtenemos la capital
         $capital = UserCity::where('user_id',Auth::id())->where('capital',1)->firstOrFail();
@@ -211,7 +199,7 @@ class MovementController extends Controller
         UserResourceHelper::updateResources();
 
         //Validamos que tenga el oro
-        if($userResource->gold<9000)
+        if($userResource->gold<config('colonize.gold'))
         {
             return 'No tienes oro suficiente para colonizar';
         }
@@ -219,8 +207,8 @@ class MovementController extends Controller
         PopulationHelper::satisfaction($city->population);
 
         $collect = UnitHelper::newCollect();
-        $collect->wood = 1250;
-        $collect->population = 40;
+        $collect->wood = config('colonize.wood');
+        $collect->population = config('colonize.population');
 
         //Validamos que tenga la poblacion
         if(!PopulationHelper::comparePopulation($city,$collect))
@@ -241,22 +229,13 @@ class MovementController extends Controller
             return 'Alcanzaste el maximo de puntos de accion de la ciudad';
         }
 
+        $position = $request->input('position');
         //Verificamos que no haya una ciudad en esa posicion
         $island = Island::whereId($request->input('island'))->firstOrFail();
-
-        MovementHelper::endColonizeIsland($island);
-
-        //Verificamos que no exista una ciudad en esa posicion
-        $position = $request->input('position');
-        if(count($island->cities->where('position',$position))==1)
+        $islandCity = $island->cities->where('position',$position)->count();
+        if($islandCity > 0)
         {
-            return 'Ya existe una ciudad en esa posicion';
-        }
-
-        //Verificamos que no esten colonizando en esa posicion
-        if(MovementHelper::checkColonizeIsland($island,$position))
-        {
-            return 'Ya estan colonizando esa posicion';
+            return 'Ya hay una ciudad en esa posicion';
         }
 
         $loadedTime = MovementHelper::loadedSpeed($city,1250);
@@ -268,20 +247,24 @@ class MovementController extends Controller
         //Quitamos los recursos
         CityHelper::removeResources($city,$collect);
         PopulationHelper::removePopulation($city,$collect);
-        $userResource->gold -= 9000;
+        $userResource->gold -= config('colonize.gold');
         $userResource->trade_ship_available -= 3;
         $userResource->save();
 
+        /*Creamos la ciudad*/
+        $city_to = OtherHelper::createCity(Auth::user(),$island->id,$position);
+
         //Creamos el movimiento
-        $movement = new MovementColonize();
+        $movement = new Movement();
         $movement->start_at = $start_at;
         $movement->end_at = $end_at;
         $movement->user_id = Auth::id();
         $movement->city_from = $city->id;
-        $movement->island_to = $island->id;
-        $movement->position = $position;
+        $movement->city_to = $city_to;
+        $movement->movement_type_id = 4;
+        $movement->trade_ship = 3;
+        $movement->delivered = 0;
         $movement->save();
-
 
         return 'ok';
     }
@@ -290,10 +273,7 @@ class MovementController extends Controller
     {
         //Devuelve los movimientos de colonizacion,recursos,ataques y defensas
         MovementHelper::returnMovementResourcesAll();
-        MovementHelper::checkColonize();
-        $colonize = MovementColonize::where('user_id',Auth::id())->select(['start_at','end_at','user_id','city_from','island_to','position'])->get();
-        $movement = Movement::where('user_id',Auth::id())->get();
-        return $data;
+        return Movement::where('user_id',Auth::id())->get();
     }
 
 }

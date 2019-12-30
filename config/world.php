@@ -22,5 +22,10 @@ return [
     ],
     'combat' => [
         'wall_bonus' => 0.01 //Bonus de la muralla por nivel 0.01 es 1%
+    ],
+    'colonize' => [
+        'wood' => 1250,
+        'gold' => 9000,
+        'population' => 40
     ]
 ];

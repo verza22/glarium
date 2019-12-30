@@ -23,7 +23,8 @@ class CreateMovementTypeTable extends Migration
             array(
                 array('name' => 'transport_resource'),
                 array('name' => 'ground_attack'),
-                array('name' => 'ground_defense')
+                array('name' => 'ground_defense'),
+                array('name' => 'colonize')
             )
         );
     }

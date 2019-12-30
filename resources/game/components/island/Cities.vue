@@ -5,9 +5,9 @@
         v-for="(object,index) in objects"
         :key='index'
         >
-            <div class="d-flex justify-content-center" :title='data.cities[index].name' v-if='checkCity(index)' @click='openCityInfo(data.cities[index])'>
-                <div class="city" :class='data.cities[index].type ? "blue" : "red"'></div>
-                <div class="valores">{{data.cities[index].name}}</div>
+            <div class="d-flex justify-content-center" :title='getCity(index)[0].name' v-if='getCity(index).length>0' @click='openCityInfo(getCity(index)[0])'>
+                <div class="city" :class='getCity(index)[0].type ? "blue" : "red"'></div>
+                <div class="valores">{{getCity(index)[0].name}}</div>
             </div>
             <div class="flag" v-else :title="$t('colonize.question')" @click='openColonize(index)'></div>
         </div>
@@ -43,8 +43,8 @@ export default {
         }
     },
     methods:{
-        checkCity(index){
-            return this.data.cities.some(x =>{
+        getCity(index){
+            return this.data.cities.filter(x =>{
                 return x.position == index
             });
         },

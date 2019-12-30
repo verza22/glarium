@@ -17,6 +17,7 @@ class CreateCityTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->softDeletes();
+            $table->dateTime('constructed_at')->nullable();
             $table->string('name',50);
             $table->float('wood',200,4);
             $table->float('wine',200,4);

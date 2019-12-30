@@ -31,6 +31,7 @@ import axios from 'axios'
 import $store from 'Stores/store'
 import $resources from 'Stores/resources'
 import $notification from 'Stores/notification'
+import $building from 'Stores/building'
 
 export default {
     name:'Ampliar',
@@ -63,19 +64,19 @@ export default {
             return this.info.maximum ? this.info.level : this.info.level -1;
         },
         reducerWoodBuilding(){
-            return $resources.getters.reducerWoodBuilding;
+            return $building.getters.reducerBuilding(6)
         },
         reducerWineBuilding(){
-            return $resources.getters.reducerWineBuilding;
+            return $building.getters.reducerBuilding(9)
         },
         reducerMarbleBuilding(){
-            return $resources.getters.reducerMarbleBuilding;
+            return $building.getters.reducerBuilding(10)
         },
         reducerGlassBuilding(){
-            return $resources.getters.reducerGlassBuilding;
+            return $building.getters.reducerBuilding(7)
         },
         reducerSulfurBuilding(){
-            return $resources.getters.reducerSulfurBuilding;
+            return $building.getters.reducerBuilding(8)
         }
     }
 }

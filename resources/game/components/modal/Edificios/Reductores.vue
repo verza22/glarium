@@ -83,6 +83,7 @@ export default {
             return research;
         },
         init(){
+            this.dataBuilding = []
             this.level = this.data.level - 1;
             this.building_id = this.data.building_id;
             this.building_name = this.$t('buildings['+this.building_id+'].name');

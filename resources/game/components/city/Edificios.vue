@@ -86,7 +86,6 @@ export default {
         .then(res => {
           this.buildings = res.data;
           this.checkConstructed();
-          $resources.commit('setBuilding',{buildings:this.buildings});
           resolve(res.data)
         })
         .catch(err => {

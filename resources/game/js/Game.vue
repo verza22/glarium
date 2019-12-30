@@ -13,6 +13,7 @@ import MenuSuperior from "Components/layout/MenuSuperior.vue"
 import $store from 'Stores/store'
 import $notification from 'Stores/notification'
 import $resources from 'Stores/resources'
+import $building from 'Stores/building'
 import Modal from "Components/modal/Modal.vue";
 
 export default {
@@ -29,16 +30,7 @@ export default {
             var city_id = localStorage.city_id;
         }
         $store.commit('changeCity',{city_id:city_id});
-        if(this.$route.name!='City'){
-            //Obtenemos los edificios de la ciudad
-            axios("building/" + city_id)
-            .then(res => {
-                $resources.commit('setBuilding',{buildings:res.data});
-            })
-            .catch(err => {
-                $notification.commit('show',{advisor:1,type:false,message:err});
-            });
-        }
+        $building.commit('updateBuilding')
     }
 }
 </script>

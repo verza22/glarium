@@ -38,6 +38,7 @@ import axios from 'axios'
 import $store from 'Stores/store.js'
 import $resources from 'Stores/resources'
 import $config from 'Stores/config'
+import $building from 'Stores/building'
 
 export default {
     name:'Resources',
@@ -161,13 +162,13 @@ export default {
             return $resources.state.population.worker_mine;
         },
         producerWoodLevel(){
-            return $resources.state.producerWoodLevel;
+            return $building.getters.getBuildingLevel(11);
         },
         producerMinerLevel(){
-            return $resources.state.producerMinerLevel;
+            return $building.getters.getProducerLevel(this.island_type);
         },
         depositLevel(){
-            return $resources.state.depositLevel;
+            return $building.getters.getBuildingLevel(3);
         },
         bonus_resources(){
             return $config.state.world.bonus.resources;

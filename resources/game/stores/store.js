@@ -14,7 +14,6 @@ const store = new Vuex.Store({
     },
     mutations:
     {
-      reloadBuilding(){},
       reloadUserResources(){},
       reloadResources(){},
       reloadPopulation(){},
@@ -35,6 +34,6 @@ const store = new Vuex.Store({
 
 setInterval(function () {
     store.state.now = moment().format('YYYY-MM-DD HH:mm:ss')
- }, 1000)
+}, 1000)
 
 export default store;

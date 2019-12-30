@@ -5,22 +5,31 @@ import axios from 'axios'
 import $store from 'Stores/store'
 import $notification from 'Stores/notification'
 import $config from 'Stores/config'
+import moment from "moment";
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
     state: {
         buildings:[],
     },
     mutations:{
-        updateBuilding(state){
-            axios("building/" + $store.state.city_id)
-            .then(res => {
-                state.buildings = res.data
+        updateBuilding(state,{buildings}){
+            state.buildings = buildings
+        }
+    },
+    actions:{
+        updateBuilding(context){
+            return new Promise((resolve,reject) => {
+                axios("building/" + $store.state.city_id)
+                .then(res => {
+                    context.commit('updateBuilding',{buildings:res.data})
+                    resolve()
+                })
+                .catch(err => {
+                    $notification.commit('show',{advisor:1,type:false,message:err})
+                })
             })
-            .catch(err => {
-                $notification.commit('show',{advisor:1,type:false,message:err});
-            });
         }
     },
     getters:{
@@ -51,3 +60,19 @@ export default new Vuex.Store({
         }
     }
 })
+
+//Intervalo que verifica el edificio construido y los construye
+setInterval(function () {
+    var building = store.state.buildings.filter(building =>{return building.constructed_at != null})
+    if(building.length>0){
+        var constructed_at = building[0].constructed_at
+        var time = moment.duration(moment(constructed_at).diff(moment($store.state.now))).asSeconds()
+        if(time<=0){
+            //Construimos el edificio
+            building[0].constructed_at = null;
+            store.dispatch('updateBuilding')
+        }
+    }
+}, 1000)
+
+export default store;

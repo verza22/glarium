@@ -30,7 +30,7 @@ export default {
             var city_id = localStorage.city_id;
         }
         $store.commit('changeCity',{city_id:city_id});
-        $building.commit('updateBuilding')
+        $building.dispatch('updateBuilding')
     }
 }
 </script>

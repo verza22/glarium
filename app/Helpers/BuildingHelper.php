@@ -43,7 +43,7 @@ class BuildingHelper {
     public static function updateConstructedTime(City $city)
     {
         CityBuilding::where('city_id',$city->id)
-        ->where('constructed_at','<',Carbon::now())
+        ->where('constructed_at','<',Carbon::now()->addSeconds(3))
         ->get()->map(function($cityBuilding){
             //Mejoramos el edificio
             $after = $cityBuilding->building_level;

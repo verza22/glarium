@@ -1,33 +1,25 @@
 <template>
   <div class="divBuilds" v-if="buildings.length > 0">
-    <div
-      class="object"
-      :style="{ top: object.top + 'px', left: object.left + 'px' }"
-      v-for="(object, i) in objects"
-      :key="i"
-    >
-      <div
-        v-if="!checkBuilding(i)"
-        class="terreno"
-        :title="$t('building.title')"
-        @click="modalConstruir(i)"
-      ></div>
-      <div
-        v-else
-        class="building"
-        :class="[building.constructed_at != null ? 'construct' : '','building_' + building.building_id]"
-        v-for="(building, i2) in buildingPosition(i)"
-        :key="i2"
-         @click="modalEdificio(building)"
-        :title="$t(`buildings[${building.building_id}].name`) +' (' +building.level +')'"
-      >
-        <div class="builCclockDiv" v-if="building.constructed_at != null">
-          <div class="builCclock">
-            <div class="arrowUpgrade"></div>
-            <div class="d-inline-block">{{ timeConstruct == null ? "00s" : timeConstruct }}</div>
-          </div>
+
+    <div v-for="(object, i) in objects" :key="i">
+        <div class="object" :style="{ top: object.top + 'px', left: object.left + 'px' }">
+            <div v-if="!checkBuilding(i)" class="terreno" :title="$t('building.title')" @click="modalConstruir(i)"></div>
         </div>
-      </div>
+    </div>
+
+    <div v-for="building in buildings" :key="'build_'+building.building_id">
+
+        <div class="object" :style="{ top: objects[building.position].top + 'px', left: objects[building.position].left + 'px' }">
+            <div
+            class="building d-flex justify-content-center"
+            :class="[building.constructed_at != null ? 'construct' : '','building_' + building.building_id]"
+            @click="modalEdificio(building)"
+            :title="$t(`buildings[${building.building_id}].name`) +' (' +building.level +')'"
+            >
+                <div class="valores" v-if="building.constructed_at != null" >{{ getConstructedTime(building.constructed_at) }}</div>
+            </div>
+        </div>
+
     </div>
   </div>
 </template>
@@ -39,12 +31,12 @@ import $store from "Stores/store.js";
 import $modal from "Stores/modal.js";
 import $resources from 'Stores/resources'
 import $notification from 'Stores/notification'
+import $building from 'Stores/building'
 
 export default {
   name: "Edificios",
   data() {
     return {
-      buildings: [],
       constructed_at: null,
       constructed_building: null,
       objects: [
@@ -67,6 +59,9 @@ export default {
     };
   },
   methods: {
+    getConstructedTime(constructed_at){
+        return this.$sectotime(moment.duration(moment(constructed_at).diff(moment(this.now))).asSeconds())
+    },
     checkBuilding(position) {
       return (
         this.buildings.filter(x => {
@@ -78,20 +73,6 @@ export default {
       return this.buildings.filter(x => {
         return x.position == position;
       });
-    },
-    getBuilds() {
-      //Consultamos los edificios
-      return new Promise((resolve,reject) => {
-        axios("building/" + this.city_id)
-        .then(res => {
-          this.buildings = res.data;
-          this.checkConstructed();
-          resolve(res.data)
-        })
-        .catch(err => {
-          $notification.commit('show',{advisor:1,type:false,message:err});
-        });
-      })
     },
     modalConstruir(position) {
       axios
@@ -110,15 +91,6 @@ export default {
         .catch(err => {
           $notification.commit('show',{advisor:1,type:false,message:err});
         });
-    },
-    checkConstructed() {
-      var building = this.buildings.filter(x => {
-        return x.constructed_at != null;
-      });
-      if (building.length > 0) {
-        this.constructed_at = moment(building[0].constructed_at).add(3,"seconds");
-        this.constructed_building = building[0];
-      }
     },
     modalEdificio(building){
       axios
@@ -162,51 +134,21 @@ export default {
     }
   },
   computed: {
-    timeConstruct() {
-      if (this.constructed_at != null) {
-        return this.$sectotime(moment
-          .duration(moment(this.constructed_at).diff(moment($store.state.now)))
-          .asSeconds());
-      } else {
-        return null;
-      }
-    },
     now(){
       return $store.state.now;
     },
     city_id() {
       return $store.state.city_id;
+    },
+    buildings(){
+      return $building.state.buildings
     }
   },
   watch: {
-    timeConstruct(newval,oldval) {
-      if (newval == "00s" && this.constructed_at!=null) {
-        this.constructed_at = null;
-        this.getBuilds()
-        .then(res => {
-          this.updateBuilding()
-        })
-      }
-    },
     city_id() {
-      this.getBuilds();
-    }
+      $building.dispatch('updateBuilding')
+    },
   },
-  beforeMount() {
-    if (this.$route.params.buildings != undefined) {
-      this.buildings = this.$route.params.buildings;
-      this.checkConstructed();
-    } else {
-      if (this.city_id != null) this.getBuilds();
-    }
-  },
-  mounted() {
-    $store.subscribe(action => {
-      if (action.type === "reloadBuilding") {
-        this.getBuilds();
-      }
-    });
-  }
 };
 </script>
 
@@ -244,28 +186,7 @@ export default {
   background: url("~Img/ciudad/terreno.png") no-repeat;
   background-position: center;
 }
-.builCclockDiv {
-  position: absolute;
-  width: 100%;
-  bottom: -5px;
-}
-.arrowUpgrade {
-  width: 15px;
-  height: 11px;
-  display: inline-block;
-  margin-right: 10px;
-  background: url("~Img/icon/arrow_upgrade.png");
-}
-.builCclock {
-  width: fit-content;
-  background: #fcf4de;
-  margin: auto;
-  border-radius: 20px;
-  padding: 0px 12px 0px 10px;
-  text-align: center;
-  border: 1px solid #c37e2d;
-  -webkit-box-shadow: 1px 2px 5px 0px rgba(50, 50, 50, 0.75);
-  -moz-box-shadow: 1px 2px 5px 0px rgba(50, 50, 50, 0.75);
-  box-shadow: 1px 2px 5px 0px rgba(50, 50, 50, 0.75);
+.valores{
+    bottom: -5px;
 }
 </style>

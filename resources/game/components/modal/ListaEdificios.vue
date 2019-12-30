@@ -43,7 +43,8 @@
 import axios from 'axios'
 import $notification from 'Stores/notification'
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
-import $store from 'Stores/store.js'
+import $store from 'Stores/store'
+import $building from 'Stores/building'
 
 export default {
     props:['info','close'],
@@ -58,7 +59,7 @@ export default {
             })
             .then(res =>{
                 if(res.data=='ok'){
-                    $store.commit('reloadBuilding');
+                    $building.dispatch('updateBuilding')
                     $store.commit('reloadResources');
                     this.close();
                     $notification.commit('show',{advisor:1,type:true})

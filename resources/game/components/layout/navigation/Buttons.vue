@@ -44,14 +44,7 @@ export default {
                     return;
                 }
             }
-            axios("building/" + this.city_id)
-            .then(res => {
-                $modal.commit('changeRoute')
-                this.$router.push({ name: 'City', params: { city:this.city_id,buildings: res.data }})
-            })
-            .catch(err => {
-                $notification.commit('show',{advisor:1,type:false,message:err});
-            });
+            this.$router.push({ name: 'City', params: { city:this.city_id}})
         }
     },
     computed:{

@@ -43,7 +43,7 @@ export default {
                 if(res.data!='ok'){
                     $notification.commit('show',{advisor:1,type:false,message:res.data});
                 }else{
-                    $store.commit('reloadBuilding');
+                    $building.dispatch('updateBuilding')
                     $notification.commit('show',{advisor:1,type:true});
                     $resources.commit('removeResources',{
                         wood:this.info.wood*this.reducerWoodBuilding,

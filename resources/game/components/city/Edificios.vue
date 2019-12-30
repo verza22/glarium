@@ -86,7 +86,7 @@ export default {
         .then(res => {
           this.buildings = res.data;
           this.checkConstructed();
-          this.checkBuildingLevel();
+          $resources.commit('setBuilding',{buildings:this.buildings});
           resolve(res.data)
         })
         .catch(err => {
@@ -160,42 +160,6 @@ export default {
         .then(() => {
           this.constructed_building = null;
         });
-    },
-    checkBuildingLevel(){
-        this.buildings.forEach(building =>{
-            switch(building.building_id){
-                case 3:
-                    $resources.commit('setDepositLevel',{level:building.level});
-                break;
-                case 5:
-                    $resources.commit('setTavernWineMax',{level:building.level});
-                break;
-                case 6:
-                    $resources.commit('setReducerWood',{level:building.level});
-                break;
-                case 7:
-                    $resources.commit('setReducerGlass',{level:building.level});
-                break;
-                case 8:
-                    $resources.commit('setReducerSulfur',{level:building.level});
-                break;
-                case 9:
-                    $resources.commit('setReducerWine',{level:building.level});
-                break;
-                case 10:
-                    $resources.commit('setReducerMarble',{level:building.level});
-                break;
-                case 11:
-                    $resources.commit('setProducerWood',{level:building.level});
-                break;
-                case 12:
-                case 13:
-                case 14:
-                case 15:
-                    $resources.commit('setProducerMiner',{level:building.level});
-                break;
-            }
-        })
     }
   },
   computed: {

@@ -55,33 +55,48 @@ export default new Vuex.Store({
             state.glass -= glass;
             state.sulfur -= sulfur;
         },
-        setProducerWood(state,{level}){
-            state.producerWoodLevel = level;
-        },
         setProducerMiner(state,{level}){
             state.producerMinerLevel = level;
-        },
-        setDepositLevel(state,{level}){
-            state.depositLevel = level;
-        },
-        setReducerWood(state,{level}){
-            state.reducerWoodLevel = level;
-        },
-        setReducerWine(state,{level}){
-            state.reducerWineLevel = level;
-        },
-        setReducerMarble(state,{level}){
-            state.reducerMarbleLevel = level;
-        },
-        setReducerGlass(state,{level}){
-            state.reducerGlassLevel = level;
-        },
-        setReducerSulfur(state,{level}){
-            state.reducerSulfurLevel = level;
         },
         setReducerResearchBuilding(state,{level}){
             state.reducerResearchBuilding = level;
         },
+        setBuilding(state,{buildings}){
+            buildings.forEach(building =>{
+                switch(building.building_id){
+                    case 3:
+                        state.depositLevel = building.level;
+                    break;
+                    case 5:
+                        state.population.wine_max = 12*building.level;
+                    break;
+                    case 6:
+                        state.reducerWoodLevel = building.level;
+                    break;
+                    case 7:
+                        state.reducerGlassLevel = building.level;
+                    break;
+                    case 8:
+                        state.reducerSulfurLevel = building.level;
+                    break;
+                    case 9:
+                        state.reducerWineLevel = building.level;
+                    break;
+                    case 10:
+                        state.reducerMarbleLevel = building.level;
+                    break;
+                    case 11:
+                        state.producerWoodLevel = building.level;
+                    break;
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                        state.producerMinerLevel = building.level;
+                    break;
+                }
+            })
+        }
     },
     getters: {
       reducerWoodBuilding: state => {

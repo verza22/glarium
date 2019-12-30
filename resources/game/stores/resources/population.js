@@ -47,9 +47,6 @@ export default {
         setWineTavern(state,{wine}){
             state.wine = wine;
         },
-        setTavernWineMax(state,{level}){
-            state.wine_max = 12*level;
-        },
         increasePopulation(state,{increasePopulation}){
             state.population += increasePopulation;
             state.population_now += increasePopulation;

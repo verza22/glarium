@@ -70,7 +70,6 @@ export default {
             if(minerResource>=this.maxCapacity){
                 minerProducer = 0;
             }
-
             if(woodProducer!=0||minerProducer!=0||this.tavernConsume>0){
                 var minerObj = this.setMinerProducer(minerProducer);
                 var obj = {

@@ -4,7 +4,7 @@
       <div class="advisor mayor" :title="$t('advisor.mayor.title')">
         <div class="titulo">{{$t('advisor.mayor.name')}}</div>
       </div>
-      <div class="advisor general" :title="$t('advisor.general.title')">
+      <div class="advisor general" :title="$t('advisor.general.title')" @click='general'>
         <div class="titulo">{{$t('advisor.general.name')}}</div>
       </div>
       <div class="advisor scientist" :title="$t('advisor.scientist.title')" @click='scientist'>
@@ -31,6 +31,9 @@ export default {
         Notification
     },
     methods:{
+        general(){
+            $modal.commit('openModal',{type:7,info:{}})
+        },
         scientist(){
             $modal.commit('openModal',{type:3,info:{}})
         },

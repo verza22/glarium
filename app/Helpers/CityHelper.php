@@ -73,8 +73,8 @@ class CityHelper {
         //Verificamos si es capital
         if($city->userCity->capital==0)
         {
-            $corruption = PopulationHelper::getCorruption($city);
-            if($corruption!=0)
+            $corruption = 1 - PopulationHelper::getCorruption($city);
+            if($corruption!=1)
             {
                 $collect->wood   =  $collect->wood   * $corruption;
                 $collect->wine   =  $collect->wine   * $corruption;

@@ -71,8 +71,14 @@ export default {
             bonuses += capital==1&&$config.state.user_research.includes(12) ? 50 : 0;
             return bonuses;
         },
-        debuff: state => {
-            return state.population_now;
+        debuff: (state,getters) => {
+            if($store.state.capital==1){
+                return state.population_now;
+            }else{
+                //Calculamos la corrupcion
+                var corruption = $store.getters.getCorruption;
+                return state.population_now + getters.bonuses * corruption
+            }
         },
         tavernConsume: state => {
             return state.wine * $config.state.world.bonus.tavern_consume;

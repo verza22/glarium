@@ -107,11 +107,7 @@ class PopulationHelper {
         if($capital==0)
         {
             $corruption = self::getCorruption($userCity->city);
-            if($corruption!=0)
-            {
-                //Aumentamos los contrabuff
-                $deduction += $bonuses * $corruption;
-            }
+            $deduction += $bonuses * $corruption;
         }
 
         $population = $cityPopulation->population;

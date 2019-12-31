@@ -42,7 +42,8 @@ export default {
                     $store.commit('changeCityIsland',{
                         city_island_id:x.island_id,
                         island_type:x.type,
-                        capital:x.capital
+                        capital:x.capital,
+                        total_cities:this.data.length
                     });
                 }else{
                     x.selected = false;

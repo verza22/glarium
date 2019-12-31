@@ -72,10 +72,10 @@ export default {
                 minerProducer = 0;
             }
             if(woodProducer!=0||minerProducer!=0||this.tavernConsume>0){
-                var minerObj = this.setMinerProducer(minerProducer);
+                var minerObj = this.setMinerProducer(minerProducer*this.corruption);
                 var obj = {
                     ...minerObj,
-                    wood:woodProducer
+                    wood:woodProducer*this.corruption
                 }
                 //Calculo del consumo de vino
                 if(this.tavernConsume>0){
@@ -137,6 +137,9 @@ export default {
         city_id(){
             return $store.state.city_id;
         },
+        corruption(){
+            return 1 - $store.getters.getCorruption;
+        },
         wood(){
             return $resources.state.wood;
         },
@@ -177,7 +180,7 @@ export default {
             return ($config.state.world.warehouse.capacity * this.depositLevel) + $config.state.world.warehouse.capacity_base;
         },
         tavernConsume(){
-            return (($resources.getters.tavernConsume*(1-($resources.state.reducerWineLevel*0.01)))/3600);
+            return (($resources.getters.tavernConsume*(1-($building.getters.getBuildingLevel(9)*0.01)))/3600);
         }
     },
     watch:{

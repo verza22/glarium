@@ -75,6 +75,7 @@ setInterval(function () {
             store.dispatch('updateBuilding')
             .then(res =>{
                 switch(building[0].building_id){
+                    case 1:
                     case 2:
                         //Actualizamos los investigadores
                         $resources.commit('reloadPopulation');

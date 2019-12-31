@@ -104,8 +104,8 @@ class UserResourceHelper
             else
             {
                 //Verificamos si tiene corrupcion
-                $corruption = PopulationHelper::getCorruption($cityPopulation->city);
-                return $corruption == 0 ? $cityPopulation->scientists : $cityPopulation->scientists * $corruption;
+                $corruption = 1 - PopulationHelper::getCorruption($cityPopulation->city);
+                return $corruption == 1 ? $cityPopulation->scientists : $cityPopulation->scientists * $corruption;
             }
         });
 
@@ -120,7 +120,7 @@ class UserResourceHelper
             $researchs_id = Research::whereIn('name',['Paper','Ink','Mechanical Pen'])->select('id')->pluck('id');
             $userResearchs = UserResearch::where('user_id',Auth::id())->whereIn('research_id',$researchs_id)->get();
 
-            if($userResearchs->count() > 0) 
+            if($userResearchs->count() > 0)
             {
                 $researchBonuses = 1 + $userResearchs->map(function($userResearch) {
                     switch($userResearch->research->name)

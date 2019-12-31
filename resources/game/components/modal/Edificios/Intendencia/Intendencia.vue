@@ -13,7 +13,7 @@ import Informacion from 'Components/modal/Edificios/Intendencia/Informacion.vue'
 import Aviso from 'Components/modal/Edificios/Intendencia/Aviso.vue'
 import Satisfaccion from 'Components/modal/Edificios/Intendencia/Satisfaccion.vue'
 import NombreCiudad from 'Components/modal/Edificios/Intendencia/NombreCiudad.vue'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 
 export default {
     name:'Intendencia',
@@ -35,10 +35,10 @@ export default {
     },
     computed:{
         city_name(){
-            return $store.state.city_name;
+            return $city.state.city.name;
         },
         capital(){
-            return $store.state.capital;
+            return $city.state.city.capital;
         }
     }
 }

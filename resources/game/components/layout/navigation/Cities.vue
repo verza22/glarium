@@ -14,7 +14,7 @@
 
 <script>
 import axios from 'axios'
-import $store from 'Stores/store.js'
+import $city from 'Stores/city'
 
 export default {
     name:'Cities',
@@ -32,22 +32,17 @@ export default {
             axios("city/getCities")
             .then(res => {
                 this.data = res.data;
+                $city.commit('setCities',{cities:res.data});
                 this.checkSelected()
             })
         },
         checkSelected(){
             this.data.forEach(x =>{
                 if(x.id == this.city_id){
-                    x.selected = true;
-                    $store.commit('changeCityIsland',{
-                        city_island_id:x.island_id,
-                        island_type:x.type,
-                        capital:x.capital,
-                        total_cities:this.data.length,
-                        city_name:x.name
-                    });
+                    x.selected = true
+                    $city.commit('changeCity',{city:x})
                 }else{
-                    x.selected = false;
+                    x.selected = false
                 }
             })
         },
@@ -66,13 +61,12 @@ export default {
         },
         changeCity(city){
             this.show = false;
-            //this.$router.push({ name: 'City', params: { city:city.id}})
-            $store.commit('changeCity',{city_id:city.id});
+            $city.commit('setCityId',{city_id:city.id});
         }
     },
     computed:{
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         },
     },
     watch:{
@@ -82,7 +76,7 @@ export default {
     },
     mounted(){
         this.getCities()
-        $store.subscribe(action => {
+        $city.subscribe(action => {
             if (action.type === 'reloadCities') {
                 this.getCities();
             }

@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $notification from 'Stores/notification'
 import $config from 'Stores/config'
 import $resources from 'Stores/resources'
@@ -23,7 +24,7 @@ const store = new Vuex.Store({
     actions:{
         updateBuilding(context){
             return new Promise((resolve,reject) => {
-                axios("building/" + $store.state.city_id)
+                axios("building/" + $city.state.city_id)
                 .then(res => {
                     context.commit('updateBuilding',{buildings:res.data})
                     resolve()

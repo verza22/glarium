@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 
 export default {
     name:'Aviso',
     computed:{
         corruption(){
-            return $store.getters.getCorruption;
+            return $city.getters.getCorruption;
         },
     }
 }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $config from 'Stores/config'
 //Modolo de los recursos de poblacion
 export default {
@@ -33,7 +33,7 @@ export default {
             state.scientists = scientists;
         },
         reloadPopulation(state){
-            axios("city/getPopulation/" + $store.state.city_id)
+            axios("city/getPopulation/" + $city.state.city_id)
             .then(res => {
                 var data = res.data;
                 state.population = data.population;
@@ -67,16 +67,16 @@ export default {
                 bonuses += tavern_level * 12; //12 de bonus por cada nivel de taberna
             }
             bonuses += $config.state.user_research.includes(9) ? 25 : 0;
-            var capital = $store.state.capital;
+            var capital = $city.state.city.capital;
             bonuses += capital==1&&$config.state.user_research.includes(12) ? 50 : 0;
             return bonuses;
         },
         debuff: (state,getters) => {
-            if($store.state.capital==1){
+            if($city.state.city.capital==1){
                 return state.population_now;
             }else{
                 //Calculamos la corrupcion
-                var corruption = $store.getters.getCorruption;
+                var corruption = $city.getters.getCorruption;
                 return state.population_now + getters.bonuses * corruption
             }
         },

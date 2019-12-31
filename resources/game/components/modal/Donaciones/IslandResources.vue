@@ -50,7 +50,7 @@ import VueSlider from 'vue-slider-component'
 import VueTableDynamic from 'vue-table-dynamic'
 import 'vue-slider-component/theme/default.css'
 import $resources from 'Stores/resources'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $notification from 'Stores/notification'
 import $config from 'Stores/config'
 
@@ -161,7 +161,7 @@ export default {
     },
     computed:{
         corruption(){
-            return 1 - $store.getters.getCorruption;
+            return 1 - $city.getters.getCorruption;
         },
         scientist_cost(){
             return $config.getters.scientists_cost;
@@ -182,7 +182,7 @@ export default {
             return this.$floor($resources.state.population.worker_mine);
         },
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         },
         bonus_resources(){
             return $config.state.world.bonus.resources;

@@ -43,7 +43,7 @@
 import axios from 'axios'
 import VueSlider from 'vue-slider-component'
 import $resources from 'Stores/resources'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $config from 'Stores/config'
 import $notification from 'Stores/notification'
 
@@ -93,7 +93,7 @@ export default {
     },
     computed:{
         corruption(){
-            return 1 - $store.getters.getCorruption;
+            return 1 - $city.getters.getCorruption;
         },
         scientist_cost(){
             return $config.getters.scientists_cost;
@@ -111,7 +111,7 @@ export default {
             return this.$floor($resources.state.population.scientists);
         },
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         }
     },
     watch:{

@@ -43,6 +43,7 @@ import axios from 'axios'
 import moment from "moment";
 import $resources from 'Stores/resources'
 import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $notification from 'Stores/notification'
 
 export default {
@@ -118,7 +119,7 @@ export default {
             return this.$floor($resources.state.wood);
         },
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         },
         timeConstruct() {
             if (this.data.constructed_at != null) {

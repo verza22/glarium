@@ -42,7 +42,7 @@
 import axios from 'axios'
 import VueSlider from 'vue-slider-component'
 import $resources from 'Stores/resources'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $config from 'Stores/config'
 import $notification from 'Stores/notification'
 
@@ -88,7 +88,7 @@ export default {
     },
     computed:{
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         },
         level(){
             return this.data.level - 1;

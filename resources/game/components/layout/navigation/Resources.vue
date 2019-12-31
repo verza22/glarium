@@ -35,7 +35,7 @@
 
 <script>
 import axios from 'axios'
-import $store from 'Stores/store.js'
+import $city from 'Stores/city'
 import $resources from 'Stores/resources'
 import $config from 'Stores/config'
 import $building from 'Stores/building'
@@ -135,10 +135,10 @@ export default {
     },
     computed:{
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         },
         corruption(){
-            return 1 - $store.getters.getCorruption;
+            return 1 - $city.getters.getCorruption;
         },
         wood(){
             return $resources.state.wood;
@@ -156,7 +156,7 @@ export default {
             return $resources.state.sulfur;
         },
         island_type(){
-            return $store.state.island_type;
+            return $city.state.city.island_type;
         },
         worker_forest(){
             return $resources.state.population.worker_forest;

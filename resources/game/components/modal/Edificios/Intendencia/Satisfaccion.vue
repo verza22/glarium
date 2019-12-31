@@ -62,7 +62,7 @@
 
 <script>
 import $resources from 'Stores/resources'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $config from 'Stores/config'
 import $building from 'Stores/building'
 
@@ -70,7 +70,7 @@ export default {
     name:'Satisfaccion',
     computed:{
         is_corruption(){
-            return $store.getters.getCorruption;
+            return $city.getters.getCorruption;
         },
         population_now(){
             return $resources.state.population.population_now;
@@ -82,7 +82,7 @@ export default {
             return this.population_now + this.corruption;
         },
         capital(){
-            return $store.state.capital;
+            return $city.state.city.capital;
         },
         tavern(){
             return $building.getters.getBuildingLevel(5) * 12;

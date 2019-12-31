@@ -28,7 +28,6 @@
 
 <script>
 import axios from 'axios'
-import $store from 'Stores/store'
 import $resources from 'Stores/resources'
 import $notification from 'Stores/notification'
 import $building from 'Stores/building'

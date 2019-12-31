@@ -28,6 +28,7 @@
 import axios from "axios";
 import moment from "moment";
 import $store from "Stores/store.js";
+import $city from 'Stores/city'
 import $modal from "Stores/modal.js";
 import $resources from 'Stores/resources'
 import $notification from 'Stores/notification'
@@ -114,7 +115,7 @@ export default {
       return $store.state.now;
     },
     city_id() {
-      return $store.state.city_id;
+      return $city.state.city_id;
     },
     buildings(){
       return $building.state.buildings

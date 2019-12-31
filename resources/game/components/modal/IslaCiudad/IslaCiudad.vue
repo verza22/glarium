@@ -2,10 +2,11 @@
     <div class="mBorder">
         <Ventana1 :close='close' v-if='type!=0' titulo="Escribir mensaje">
             <Diplomacia :changeType='changeType' :data='info' v-if='type==1'></Diplomacia>
+            <!--<Transport :changeType='changeType' :data='info' v-if='type==2'></Transport>-->
         </Ventana1>
         <Ventana2 titulo="Info">
             <Info :data='info'></Info>
-            <Acciones :changeType='changeType' v-if='city_id!=info.city.city_id'></Acciones>
+            <Acciones :data='info' :changeType='changeType' v-if='city_id!=info.city.city_id'></Acciones>
         </Ventana2>
     </div>
 </template>
@@ -16,7 +17,7 @@ import Ventana2 from 'Components/modal/Ventanas/Ventana2.vue'
 import Info from 'Components/modal/IslaCiudad/Info.vue'
 import Acciones from 'Components/modal/IslaCiudad/Acciones.vue'
 import Diplomacia from 'Components/modal/IslaCiudad/Diplomacia.vue'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 
 export default {
     name: 'IslaCiudad',
@@ -40,7 +41,7 @@ export default {
     },
     computed:{
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         }
     },
     beforeMount(){

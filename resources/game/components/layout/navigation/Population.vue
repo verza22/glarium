@@ -8,6 +8,7 @@
 <script>
 import axios from 'axios'
 import $store from 'Stores/store.js'
+import $city from 'Stores/city'
 import $resources from 'Stores/resources'
 
 export default {
@@ -29,7 +30,7 @@ export default {
     },
     computed:{
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         },
         population(){
             return $resources.state.population.population;

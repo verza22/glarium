@@ -43,7 +43,7 @@
 import axios from 'axios'
 import $notification from 'Stores/notification'
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $building from 'Stores/building'
 import $resources from 'Stores/resources'
 
@@ -76,7 +76,7 @@ export default {
     },
     computed:{
         city_id() {
-            return $store.state.city_id;
+            return $city.state.city_id;
         }
     }
 }

@@ -22,7 +22,7 @@
 <script>
 import axios from 'axios'
 import $notification from 'Stores/notification'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 
 export default {
     name:'NombreCiudad',
@@ -42,7 +42,7 @@ export default {
                 if(res.data!='ok'){
                     $notification.commit('show',{advisor:1,type:false,message:res.data});
                 }else{
-                    $store.dispatch('setCityName',{name:this.namey})
+                    $city.dispatch('setCityName',{name:this.namey})
                     this.name = '';
                     this.showChangeCity()
                     $notification.commit('show',{advisor:1,type:true});
@@ -55,7 +55,7 @@ export default {
     },
     computed:{
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         }
     }
 }

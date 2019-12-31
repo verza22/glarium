@@ -26,13 +26,13 @@
 <script>
 import $resources from 'Stores/resources'
 import $config from 'Stores/config'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 
 export default {
     name:'Informacion',
     computed:{
         corruption(){
-            return $store.getters.getCorruption * 100;
+            return $city.getters.getCorruption * 100;
         },
         population_max(){
             return $resources.state.population.population_max;

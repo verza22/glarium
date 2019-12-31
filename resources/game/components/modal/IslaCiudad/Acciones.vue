@@ -4,25 +4,25 @@
             <div class="gtitle">{{$t('actions.title')}}</div>
         </div>
         <div class="py-2">
-            <div class="box-acciones">
+            <div class="box-acciones" v-if='!data.city.type'>
                 <div class="btn-accion" :title="$t('actions.diplomacy')" @click='changeType(1)'>
                     <div class="btn-image btn-diplomacy"></div>
                     <div class="mt-1">{{$t('actions.diplomacy')}}</div>
                 </div>
             </div>
             <div class="box-acciones">
-                <div class="btn-accion" :title="$t('actions.transport')">
+                <div class="btn-accion" :title="$t('actions.transport')" @click='changeType(2)'>
                     <div class="btn-image btn-transport"></div>
                     <div class="mt-1">{{$t('actions.transport')}}</div>
                 </div>
             </div>
-            <div class="box-acciones">
+            <div class="box-acciones" v-if='!data.city.type'>
                 <div class="btn-accion" :title="$t('actions.defend')">
                     <div class="btn-image btn-defend inactive"></div>
                     <div class="mt-1">{{$t('actions.defend')}}</div>
                 </div>
             </div>
-            <div class="box-acciones">
+            <div class="box-acciones" v-if='!data.city.type'>
                 <div class="btn-accion" :title="$t('actions.attack')">
                     <div class="btn-image btn-attack inactive"></div>
                     <div class="mt-1">{{$t('actions.attack')}}</div>
@@ -35,7 +35,7 @@
 <script>
 export default {
     name:'Acciones',
-    props:['changeType']
+    props:['changeType','data']
 }
 </script>
 

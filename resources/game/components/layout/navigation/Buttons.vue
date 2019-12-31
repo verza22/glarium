@@ -14,7 +14,7 @@
 
 <script>
 import axios from 'axios'
-import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $modal from 'Stores/modal'
 import $notification from 'Stores/notification'
 
@@ -50,10 +50,10 @@ export default {
     },
     computed:{
         city_id(){
-            return $store.state.city_id;
+            return $city.state.city_id;
         },
         island_id(){
-            return $store.state.city_island_id;
+            return $city.state.city.island_id;
         }
     },
 }

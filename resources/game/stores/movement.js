@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
 import $store from 'Stores/store'
+import $city from 'Stores/city'
 import $resources from 'Stores/resources'
 
 Vue.use(Vuex)
@@ -48,7 +49,7 @@ setInterval(function () {
                 store.state.movements.splice(index,1)
                 axios.put('movement/'+movement.id).then(res =>{
                     $store.commit('reloadIslandData')
-                    $store.commit('reloadCities')
+                    $city.commit('reloadCities')
                     $resources.commit('addApoint')
                     $resources.commit('addTradeShip',{ships:movement.trade_ship})
                 })

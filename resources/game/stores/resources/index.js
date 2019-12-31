@@ -54,6 +54,9 @@ export default new Vuex.Store({
         },
         removeApoint(state){
             state.apoint -= 1
+        },
+        addApoint(state){
+            state.apoint += 1
         }
     }
 });

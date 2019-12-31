@@ -26,6 +26,9 @@ export default {
             state.gold -= goldCost;
             state.trade_ship += 1;
             state.trade_ship_available += 1;
+        },
+        addTradeShip(state,{ships}){
+            state.trade_ship_available += ships;
         }
     }
 }

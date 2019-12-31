@@ -288,4 +288,18 @@ class MovementController extends Controller
         });
     }
 
+    public function endMovement(Movement $movement)
+    {
+        //Finaliza un movimiento
+        $this->authorize('myMovement',$movement);
+        switch($movement->movement_type_id)
+        {
+            case 4:
+                MovementHelper::endUserColonize();
+            break;
+        }
+
+        return 'ok';
+    }
+
 }

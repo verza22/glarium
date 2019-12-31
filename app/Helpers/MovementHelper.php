@@ -158,7 +158,7 @@ class MovementHelper {
         $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
         $movements = Movement::whereIn('city_from',$cities)
                         ->where('movement_type_id',4)
-                        ->where('end_at','<',Carbon::now())->get();
+                        ->where('end_at','<',Carbon::now()->addSeconds(3))->get();
         self::endColonize($movements);
     }
 

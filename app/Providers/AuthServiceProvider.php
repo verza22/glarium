@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\UserCity;
+use App\Models\Movement;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -32,6 +33,9 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('isNotMyCity', function ($user,$city) {
             return UserCity::where('user_id',$user->id)->where('city_id',$city->id)->count() === 0;
+        });
+        Gate::define('myMovement', function ($user,$movement) {
+            return Movement::whereId($movement->id)->where('user_id',$user->id)->exists();
         });
     }
 }

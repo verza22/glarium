@@ -30,7 +30,7 @@ class IslandController extends Controller
     }
     public function show(Island $island)
     {
-        MovementHelper::endIslandColonize($island);
+        //MovementHelper::endIslandColonize($island);
         $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
         $data = $island->only(['id','x','y','name','type']);
         $data['level_forest'] = $island->forest->level;

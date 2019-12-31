@@ -64,7 +64,7 @@ export default {
                 var per_wine = state.wine/state.wine_max;
                 var bonus_wine = ( ( tavern_level * 60 ) * per_wine );
                 bonuses += (bonus_wine * $config.state.world.bonus.tavern); //Sumamos el bonus por servir vino
-                bonuses += ((tavern_level * 12) * $config.state.world.bonus.tavern); //12 de bonus por cada nivel de taberna
+                bonuses += tavern_level * 12; //12 de bonus por cada nivel de taberna
             }
             bonuses += $config.state.user_research.includes(9) ? 25 : 0;
             var capital = $store.state.capital;

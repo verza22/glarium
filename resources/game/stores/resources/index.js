@@ -15,7 +15,9 @@ export default new Vuex.Store({
         wine:0,
         marble:0,
         glass:0,
-        sulfur:0
+        sulfur:0,
+        apoint:0,
+        apoint_max:0
     },
     mutations:
     {
@@ -39,12 +41,19 @@ export default new Vuex.Store({
         donate(state,{wood}){
             state.wood = state.wood - wood;
         },
-        removeResources(state,{wood,wine,marble,glass,sulfur}){
+        removeResources(state,{wood = 0,wine = 0,marble = 0,glass = 0,sulfur = 0}){
             state.wood -= wood;
             state.wine -= wine;
             state.marble -= marble;
             state.glass -= glass;
             state.sulfur -= sulfur;
+        },
+        setApoint(state,{apoint,apoint_max}){
+            state.apoint = apoint
+            state.apoint_max = apoint_max
+        },
+        removeApoint(state){
+            state.apoint -= 1
         }
     }
 });

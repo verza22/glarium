@@ -17,7 +17,7 @@ class City extends Model
 
     protected $attributes = [
         'name' => 'Polis',
-        'wood' => 500,
+        'wood' => 2500,
         'wine' => 0,
         'marble' => 0,
         'glass' => 0,

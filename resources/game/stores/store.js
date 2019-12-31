@@ -14,10 +14,10 @@ const store = new Vuex.Store({
     },
     mutations:
     {
+      reloadIslandData(){},
       reloadUserResources(){},
       reloadResources(){},
       reloadPopulation(){},
-      reloadActionPoint(){},
       reloadCities(){},
       changeCityIsland(state,{city_island_id,island_type,capital}){
         state.city_island_id = city_island_id;

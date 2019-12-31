@@ -1,13 +1,14 @@
 <template>
     <div class="flex-1 d-flex box" :title="$t('resources.apoint')">
         <div class="action"></div>
-        <div>{{data.point}}/{{data.point_max}}</div>
+        <div>{{apoint}}/{{apoint_max}}</div>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
-import $store from 'Stores/store.js'
+import $store from 'Stores/store'
+import $resources from 'Stores/resources'
 
 export default {
     name:'ActionPoint',
@@ -20,26 +21,25 @@ export default {
         getActionPoint(){
             axios("city/getActionPoint/" + this.city_id)
             .then(res => {
-                this.data = res.data;
+                $resources.commit('setApoint',{apoint:res.data.point,apoint_max:res.data.point_max})
             })
         },
     },
     computed:{
         city_id(){
             return $store.state.city_id;
+        },
+        apoint(){
+            return $resources.state.apoint;
+        },
+        apoint_max(){
+            return $resources.state.apoint_max;
         }
     },
     watch:{
         city_id(newval){
             this.getActionPoint()
         }
-    },
-    mounted(){
-        $store.subscribe(action => {
-            if (action.type === 'reloadActionPoint') {
-                this.getActionPoint();
-            }
-        });
     }
 }
 </script>

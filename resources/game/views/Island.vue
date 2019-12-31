@@ -20,6 +20,7 @@ import axios from 'axios'
 
 import Cities from "Components/island/Cities.vue"
 import Resources from "Components/island/Resources.vue"
+import $store from 'Stores/store'
 
 export default {
   name: 'Isla',
@@ -36,19 +37,31 @@ export default {
       data:{}
     }
   },
+  methods:{
+      init(){
+        axios('island/'+this.$route.params.island)
+        .then(res =>{
+            this.data = res.data;
+        })
+        .catch(err => {
+            $notification.commit('show',{advisor:1,type:false,message:err});
+        });
+      }
+  },
   beforeMount(){
     if(this.$route.params.data!=undefined){
-      this.data = this.$route.params.data;
+        this.data = this.$route.params.data;
     }else{
-      axios('island/'+this.$route.params.island)
-      .then(res =>{
-        this.data = res.data;
-      })
-      .catch(err => {
-          $notification.commit('show',{advisor:1,type:false,message:err});
-      });
+        this.init();
     }
   },
+  mounted(){
+    $store.subscribe((action,state) => {
+        if (action.type === "reloadIslandData") {
+            this.init();
+        }
+    });
+  }
 };
 
 </script>

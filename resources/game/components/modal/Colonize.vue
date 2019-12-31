@@ -10,9 +10,9 @@
                 <div class="flex-2 d-flex align-items-center">
                     <div class="requisitos">
                         <div class="gtitle mb-2">Para fundar una colonia hace falta:</div>
-                        <div class="mt-2"><img :src="require('Img/icon/icon_citizen.png')"> {{population}}</div>
-                        <div class="mt-2"><img :src="require('Img/icon/icon_gold.png')"> {{gold}}</div>
-                        <div class="mt-2"><img :src="require('Img/icon/icon_wood.png')"> {{wood}}</div>
+                        <div class="mt-2"><img :src="require('Img/icon/icon_citizen.png')"> {{cost_population}}</div>
+                        <div class="mt-2"><img :src="require('Img/icon/icon_gold.png')"> {{cost_gold}}</div>
+                        <div class="mt-2"><img :src="require('Img/icon/icon_wood.png')"> {{cost_wood}}</div>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
             <div class="d-flex">
                 <div class="flex-1 d-flex justify-content-center">
                     <div><img class="ship" :src="require('Img/icon/ship_transport.png')"></div>
-                    <div class="mb-auto mt-auto">{{ships}}/{{ship_available}}</div>
+                    <div class="mb-auto mt-auto">{{getShips()}}/{{ship_available}}</div>
                 </div>
                 <div class="flex-1 d-flex align-items-center justify-content-center">
                     <div class="mr-2"><img :src="require('Img/icon/icon_journeytime.png')"></div>
@@ -58,16 +58,17 @@ export default {
     },
     data(){
         return {
-            wood:1250,
             gold:9000,
-            population:40,
-            ships:3
+            population:40
         }
     },
     methods:{
+        getShips(){
+            return Math.ceil(this.cost_wood/this.transport)
+        },
         tiempo_carga(){
             var speed = (this.load_speed_base + (this.load_speed * this.port_level))/60
-            return this.$sectotime(Math.ceil(this.wood/speed));
+            return this.$sectotime(Math.ceil(this.cost_wood/speed));
         },
         fundar(){
             axios.post("movement/colonize/" + this.city_id, {
@@ -77,6 +78,11 @@ export default {
             .then(res => {
                 if(res.data=='ok'){
                     this.close()
+                    $store.commit('reloadIslandData')
+                    $resources.commit('removeApoint')
+                    $resources.commit('colonize',{gold:this.cost_gold,ships:this.getShips()})
+                    $resources.commit('removeResources',{wood:this.cost_wood})
+                    $resources.commit('reducePopulation',{population:this.cost_population})
                     $notification.commit('show',{advisor:1,type:true});
                 }else{
                     $notification.commit('show',{advisor:1,type:false,message:res.data});
@@ -105,6 +111,18 @@ export default {
         },
         port_level(){
             return $building.getters.getBuildingLevel(16)
+        },
+        cost_gold(){
+            return $config.state.world.colonize.gold;
+        },
+        cost_wood(){
+            return $config.state.world.colonize.wood;
+        },
+        cost_population(){
+            return $config.state.world.colonize.population;
+        },
+        transport(){
+            return $config.state.world.transport;
         }
     }
 }

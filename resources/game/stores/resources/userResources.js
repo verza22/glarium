@@ -15,6 +15,10 @@ export default {
             state.trade_ship = trade_ship;
             state.trade_ship_available = trade_ship_available;
         },
+        colonize(state,{gold,ships}){
+            state.gold -= gold
+            state.trade_ship_available -= ships
+        },
         research(state,{research_point}){
             state.research_point -= research_point;
         },

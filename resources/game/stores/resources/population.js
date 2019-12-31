@@ -23,6 +23,9 @@ export default {
             state.population = parseInt(population);
             state.worker_mine = parseInt(worker_mine);
         },
+        reducePopulation(state,{population}){
+            state.population -= population
+        },
         setScientists(state,{population,scientists}){
             //Sumamos a los investigadores globales
             this.state.userResources.total_scientists += (scientists - state.scientists)

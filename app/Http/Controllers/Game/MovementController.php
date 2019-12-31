@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Game;
 
+use App\Helpers\BuildingHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\City;
@@ -172,9 +173,11 @@ class MovementController extends Controller
         $capital = UserCity::where('user_id',Auth::id())->where('capital',1)->firstOrFail();
 
         //Validamos que tenga un palacio
-        $cityBuilding = CityBuilding::where('city_id',$capital->city_id)->whereHas('building_level',function($query){
-            $query->where('building_id',17);
-        })->firstOrFail();
+        if(!BuildingHelper::buildingExist($capital->city,17)){
+            return 'No tienes un palacio';
+        }
+
+        $cityBuilding = BuildingHelper::building($capital->city,17);
 
         $palaceLevel = $cityBuilding->building_level->level;
 

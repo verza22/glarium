@@ -72,8 +72,8 @@ class BuildingController extends Controller
         }
         else
         {
-            $query2->where('building_id','!=',19);
-            $query->where('id','!=',19);
+            $query2->where('building_id','!=',17);
+            $query->where('id','!=',17);
         }
 
         //Quitamos los edificios que no se construyen en la isla

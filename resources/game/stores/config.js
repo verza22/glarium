@@ -23,6 +23,9 @@ const store = new Vuex.Store({
             reducerBuilding += state.user_research.includes(7) ? 0.04 : 0
             reducerBuilding += state.user_research.includes(10) ? 0.08 : 0
             return reducerBuilding
+        },
+        scientists_cost: state => {
+            return state.user_research.includes(17) ? 3: 6;
         }
     }
 })

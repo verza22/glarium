@@ -10,11 +10,11 @@
                 <div class="d-flex texto">
                     <div class="flex-1">
                         <div>{{$t('other.income')}}: </div>
-                        <div>{{population_available*3}} <img :src="require('Img/icon/icon_gold.png')"> {{$t('other.perHour')}}</div>
+                        <div>{{(population_available*3)-(value*scientist_cost)}} <img :src="require('Img/icon/icon_gold.png')"> {{$t('other.perHour')}}</div>
                     </div>
                     <div class="flex-1 text-right">
                         <div>{{$t('other.production')}}: </div>
-                        <div>{{value}} <img :src="require('Img/icon/icon_pi.png')"> {{$t('other.perHour')}}</div>
+                        <div>{{value*corruption}} <img :src="require('Img/icon/icon_pi.png')"> {{$t('other.perHour')}}</div>
                     </div>
                 </div>
                 <div class="d-flex my-3">
@@ -44,6 +44,7 @@ import axios from 'axios'
 import VueSlider from 'vue-slider-component'
 import $resources from 'Stores/resources'
 import $store from 'Stores/store'
+import $config from 'Stores/config'
 import $notification from 'Stores/notification'
 
 export default {
@@ -91,6 +92,12 @@ export default {
         },
     },
     computed:{
+        corruption(){
+            return 1 - $store.getters.getCorruption;
+        },
+        scientist_cost(){
+            return $config.getters.scientists_cost;
+        },
         population_available(){
             return this.population - this.value;
         },

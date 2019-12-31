@@ -133,4 +133,15 @@ class CityController extends Controller
         return 'ok';
     }
 
+    public function setName(Request $request,City $city)
+    {
+        $this->authorize('isMyCity',$city);
+
+        $request->validate(['name' => 'required|string|max:50']);
+        $city->name = $request->input('name');
+        $city->save();
+
+        return 'ok';
+    }
+
 }

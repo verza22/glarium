@@ -43,7 +43,8 @@ export default {
                         city_island_id:x.island_id,
                         island_type:x.type,
                         capital:x.capital,
-                        total_cities:this.data.length
+                        total_cities:this.data.length,
+                        city_name:x.name
                     });
                 }else{
                     x.selected = false;
@@ -65,8 +66,8 @@ export default {
         },
         changeCity(city){
             this.show = false;
-            this.$router.push({ name: 'City', params: { city:city.id}})
-            $store.commit('changeCity',{city_id:city.id,island_type:city.type});
+            //this.$router.push({ name: 'City', params: { city:city.id}})
+            $store.commit('changeCity',{city_id:city.id});
         }
     },
     computed:{

@@ -10,6 +10,7 @@ const store = new Vuex.Store({
       now: moment().format('YYYY-MM-DD HH:mm:ss'),
       city_id:null,
       city_island_id:null,
+      city_name:null,
       island_type:null,
       capital:null,
       total_cities:null
@@ -20,16 +21,25 @@ const store = new Vuex.Store({
       reloadUserResources(){},
       reloadPopulation(){},
       reloadCities(){},
-      changeCityIsland(state,{city_island_id,island_type,capital,total_cities}){
+      changeCityIsland(state,{city_island_id,island_type,capital,total_cities,city_name}){
         state.city_island_id = city_island_id;
         state.island_type = island_type;
         state.capital = capital;
-        state.total_cities = total_cities
+        state.total_cities = total_cities;
+        state.city_name = city_name;
       },
-      changeCity(state,{city_id,island_type=null}){
+      changeCity(state,{city_id}){
         localStorage.setItem('city_id', city_id)
         state.city_id = parseInt(city_id);
-        state.island_type = island_type;
+      },
+      setCityName(state,{name}){
+        state.city_name = name
+      }
+    },
+    actions:{
+      setCityName: (context,{name}) => {
+        context.commit('setCityName',{name:name})
+        context.commit('reloadCities')
       }
     },
     getters:{

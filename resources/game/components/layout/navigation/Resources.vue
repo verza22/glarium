@@ -186,11 +186,6 @@ export default {
         }
     },
     mounted(){
-        $store.subscribe(action => {
-            if (action.type === 'reloadResources') {
-                this.getResources();
-            }
-        });
         this.setProducirRecursos();
     }
 }

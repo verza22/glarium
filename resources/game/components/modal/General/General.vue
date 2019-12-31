@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <Movimientos :movements='movements' v-if="movements.length>0"></Movimientos>
-                <div v-else class="nomessage">{{$t('messages.noMessage')}}</div>
+                <div v-else class="nomessage">No hay movimientos</div>
             </div>
         </Ventana1>
     </div>

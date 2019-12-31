@@ -50,6 +50,7 @@ import $store from 'Stores/store'
 import $config from 'Stores/config'
 import $resources from 'Stores/resources'
 import $building from 'Stores/building'
+import $movement from 'Stores/movement'
 
 export default {
     props:['info','close'],
@@ -83,6 +84,7 @@ export default {
                     $resources.commit('colonize',{gold:this.cost_gold,ships:this.getShips()})
                     $resources.commit('removeResources',{wood:this.cost_wood})
                     $resources.commit('reducePopulation',{population:this.cost_population})
+                    $movement.dispatch('updateMovemenet')
                     $notification.commit('show',{advisor:1,type:true});
                 }else{
                     $notification.commit('show',{advisor:1,type:false,message:res.data});

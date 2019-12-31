@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="flex-1 m-auto">
-                        <div class="text-center btnGeneral" v-if='build.research' @click='construir(build.id)'>{{$t('building.action')}}</div>
+                        <div class="text-center btnGeneral" v-if='build.research' @click='construir(build)'>{{$t('building.action')}}</div>
                         <div v-else class="research">
                             <div>{{$t('building.research')}}</div>
                             <div>{{$t(`research[${build.research_id}].name`)}}</div>
@@ -45,6 +45,7 @@ import $notification from 'Stores/notification'
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import $store from 'Stores/store'
 import $building from 'Stores/building'
+import $resources from 'Stores/resources'
 
 export default {
     props:['info','close'],
@@ -52,15 +53,16 @@ export default {
         Ventana1
     },
     methods:{
-        construir(id){
+        construir(build){
             axios.put('building/'+this.city_id,{
                 position:this.info.position,
-                building:id
+                building:build.id
             })
             .then(res =>{
                 if(res.data=='ok'){
                     $building.dispatch('updateBuilding')
-                    $store.commit('reloadResources');
+                    $resources.commit('removeResources',{wood:build.wood,wine:build.wine,marble:build.marble,glass:build.glass,sulfur:build.sulfur
+                    })
                     this.close();
                     $notification.commit('show',{advisor:1,type:true})
                 }else{

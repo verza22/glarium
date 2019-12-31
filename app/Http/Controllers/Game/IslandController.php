@@ -37,7 +37,7 @@ class IslandController extends Controller
         $data['level_mine'] = $island->mine->level;
         $data['cities'] = $island->islandCities->map(function($insland_city) use($cities) {
             $data = $insland_city->only(['city_id','position']);
-            $data['level'] = BuildingHelper::building($insland_city->city,1)->building_level->level;
+            $data['level'] = $insland_city->city->constructed_at === null ? 0 : BuildingHelper::building($insland_city->city,1)->building_level->level;
             $data['constructed_at'] = $insland_city->city->constructed_at;
             $data['user'] = $insland_city->city->userCity->user->name;
             $data['user_id'] = $insland_city->city->userCity->user_id;
@@ -80,10 +80,9 @@ class IslandController extends Controller
 
         //Obtenemos la informacion detallada de las donaciones
         $data['donations'] = $donations->map(function($city_donation) use($workers) {
-            $building_level = BuildingHelper::building($city_donation->city,1)->building_level;
             $data['user'] = $city_donation->city->userCity->user->name;
             $data['city'] = $city_donation->city->name;
-            $data['level'] = $building_level->level;
+            $data['level'] = $city_donation->city->constructed_at === null ? 0 : BuildingHelper::building($city_donation->city,1)->building_level->level;
             $data['workers'] = $city_donation->city->population[$workers];
             $data['donated'] = $city_donation->donated;
             return array_values($data);

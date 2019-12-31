@@ -16,7 +16,6 @@ const store = new Vuex.Store({
     {
       reloadIslandData(){},
       reloadUserResources(){},
-      reloadResources(){},
       reloadPopulation(){},
       reloadCities(){},
       changeCityIsland(state,{city_island_id,island_type,capital}){

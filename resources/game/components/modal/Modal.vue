@@ -18,7 +18,7 @@
     import Investigacion from 'Components/modal/Investigacion/Investigacion.vue'
     import IslaCiudad from 'Components/modal/IslaCiudad/IslaCiudad.vue'
     import Mensajes from 'Components/modal/Mensajes/Mensajes.vue'
-    import Colonize from 'Components/modal/Colonize.vue'
+    import Colonize from 'Components/modal/IslaCiudad/Opciones/Colonize.vue'
     import General from 'Components/modal/General/General.vue'
     import $modal from 'Stores/modal.js'
 

@@ -1,8 +1,8 @@
 <template>
     <div class="mBorder">
-        <Ventana1 :close='close' v-if='type!=0' titulo="Escribir mensaje">
+        <Ventana1 :close='close' v-if='type!=0' :titulo="getTitle()">
             <Diplomacia :changeType='changeType' :data='info' v-if='type==1'></Diplomacia>
-            <!--<Transport :changeType='changeType' :data='info' v-if='type==2'></Transport>-->
+            <Transporte :changeType='changeType' :data='info' v-else-if='type==2'></Transporte>
         </Ventana1>
         <Ventana2 titulo="Info">
             <Info :data='info'></Info>
@@ -16,7 +16,8 @@ import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import Ventana2 from 'Components/modal/Ventanas/Ventana2.vue'
 import Info from 'Components/modal/IslaCiudad/Info.vue'
 import Acciones from 'Components/modal/IslaCiudad/Acciones.vue'
-import Diplomacia from 'Components/modal/IslaCiudad/Diplomacia.vue'
+import Diplomacia from 'Components/modal/IslaCiudad/Opciones/Diplomacia.vue'
+import Transporte from 'Components/modal/IslaCiudad/Opciones/Transporte.vue'
 import $city from 'Stores/city'
 
 export default {
@@ -27,7 +28,8 @@ export default {
         Ventana2,
         Info,
         Acciones,
-        Diplomacia
+        Diplomacia,
+        Transporte
     },
     data(){
         return {
@@ -37,6 +39,16 @@ export default {
     methods:{
         changeType(type){
             this.type = type
+        },
+        getTitle(){
+            switch(this.type){
+                case 1:
+                    return "Escribir mensaje";
+                break;
+                case 2:
+                    return "Transportar recursos";
+                break;
+            }
         }
     },
     computed:{

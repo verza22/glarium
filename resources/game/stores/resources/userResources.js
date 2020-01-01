@@ -29,6 +29,9 @@ export default {
         },
         addTradeShip(state,{ships}){
             state.trade_ship_available += ships;
+        },
+        useShip(state,{ships}){
+            state.trade_ship_available -= ships;
         }
     }
 }

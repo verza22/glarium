@@ -18,7 +18,7 @@ return [
         'capacity_base' => 2500 //Capacidad base
     ],
     'distance' => [
-        'same_island' => 5
+        'same_island' => 10
     ],
     'combat' => [
         'wall_bonus' => 0.01 //Bonus de la muralla por nivel 0.01 es 1%

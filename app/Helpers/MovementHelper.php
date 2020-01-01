@@ -37,7 +37,7 @@ class MovementHelper {
     public static function distanceTime(City $city_from,City $city_to)
     {
         //Verificamos si estan en la misma isla
-        if($city_from->islandCity->id === $city_to->islandCity->id)
+        if($city_from->islandCity->island_id === $city_to->islandCity->island_id)
         {
             return config('world.distance.same_island');
         }
@@ -46,7 +46,7 @@ class MovementHelper {
     public static function distanceTimeColonize(City $city_from,Island $island)
     {
         //Verificamos si estan en la misma isla
-        if($city_from->islandCity->id === $island->id)
+        if($city_from->islandCity->island_id === $island->id)
         {
             return config('world.distance.same_island');
         }
@@ -69,6 +69,8 @@ class MovementHelper {
         $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
         self::deliveredResourcesFrom($cities);
         self::deliveredResourcesReturn($cities);
+        self::deliveredResourcesTo($cities);
+        self::endUserColonize($cities);
     }
 
     public static function deliveredResourcesReturn($cities)
@@ -114,10 +116,10 @@ class MovementHelper {
         });
     }
 
-    public static function deliveredResourcesTo(City $city_to)
+    public static function deliveredResourcesTo($cities)
     {
         //Actualiza los recursos que llegan a una ciudad
-        $movements = Movement::where('city_to',$city_to->id)
+        $movements = Movement::whereIn('city_to',$cities)
                             ->where('movement_type_id',1)
                             ->where('delivered',0)
                             ->where('end_at','<',Carbon::now())->get();
@@ -140,7 +142,7 @@ class MovementHelper {
         });
     }
 
-    public static function endIslandColonize(Island $island)
+    /*public static function endIslandColonize(Island $island)
     {
         $cities = $island->islandCities->pluck('city_id');
         $movements = Movement::whereIn('city_to',$cities)
@@ -151,11 +153,10 @@ class MovementHelper {
         {
             $island->refresh();
         }
-    }
+    }*/
 
-    public static function endUserColonize()
+    public static function endUserColonize($cities)
     {
-        $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
         $movements = Movement::whereIn('city_from',$cities)
                         ->where('movement_type_id',4)
                         ->where('end_at','<',Carbon::now()->addSeconds(3))->get();

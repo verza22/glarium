@@ -39,6 +39,9 @@ export default {
     methods:{
         changeType(type){
             this.type = type
+            if(type==0){
+                this.close()
+            }
         },
         getTitle(){
             switch(this.type){

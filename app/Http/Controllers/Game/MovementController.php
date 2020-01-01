@@ -30,13 +30,12 @@ class MovementController extends Controller
         $this->middleware('auth');
     }
 
-    public function movementResource(Request $request,City $city)
+    public function transport(Request $request,City $city)
     {
         //Verificamos que la ciudad sea del jugador
         $this->authorize('isMyCity',$city);
 
         $request->validate([
-            'type' => 'required|integer|min:0',
             'city_to' => 'required|integer|min:0',
             'wood' => 'integer|min:0',
             'wine' => 'integer|min:0',
@@ -46,7 +45,7 @@ class MovementController extends Controller
         ]);
 
         //Retornamos movimientos
-        MovementHelper::returnMovementResources($city);
+        //MovementHelper::returnMovementResources($city);
 
         //Verificar puntos de accion
         $apoint = MovementHelper::getActionPoint($city);
@@ -54,9 +53,6 @@ class MovementController extends Controller
         {
             return 'Alcanzaste el maximo de puntos de accion de la ciudad';
         }
-
-        //Verificamos que exista el tipo
-        $type = MovementType::findOrFail($request->input('type'));
 
         //Verficiamos que exista la ciudad de destino
         $city_to = City::findOrFail($request->input('city_to'));
@@ -110,7 +106,15 @@ class MovementController extends Controller
 
         $start_at = Carbon::now()->addSeconds($loadedTime);
         $end_at = Carbon::now()->addSeconds($transportTime + $loadedTime);
-        $return_at = Carbon::now()->addSeconds(($transportTime*2) + $loadedTime);
+        if(UserCity::where('user_id',Auth::id())->pluck('city_id')->contains($city_to->id))
+        {
+            $return_at = $end_at;
+        }
+        else
+        {
+            $return_at = Carbon::now()->addSeconds(($transportTime*2) + $loadedTime);
+        }
+
 
         //Quitamos los recursos
         CityHelper::removeResources($city,$collect);
@@ -278,6 +282,7 @@ class MovementController extends Controller
         //MovementHelper::returnMovementResourcesAll();
         return Movement::where('user_id',Auth::id())->get()->map(function($movement){
             $data = $movement->only(['id','start_at','end_at','return_at','delivered','user_id','movement_type_id','trade_ship']);
+            $data['resources']= $movement->resources->only(['wood','wine','marble','glass','sulfur']);
             $data['city_to']['id'] = $movement->city_destine->id;
             $data['city_to']['name'] = $movement->city_destine->name;
             $data['city_to']['user'] = $movement->city_destine->userCity->user->name;
@@ -288,16 +293,11 @@ class MovementController extends Controller
         });
     }
 
-    public function endMovement(Movement $movement)
+    public function endMovement()
     {
         //Finaliza un movimiento
-        $this->authorize('myMovement',$movement);
-        switch($movement->movement_type_id)
-        {
-            case 4:
-                MovementHelper::endUserColonize();
-            break;
-        }
+
+        MovementHelper::returnMovementResourcesAll();
 
         return 'ok';
     }

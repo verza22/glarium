@@ -37,9 +37,16 @@ setInterval(function () {
         store.state.movements.forEach((movement,index)=>{
             var control = false;
             switch(movement.movement_type_id){
+                case 1:
+                    //Transporte
+                    //Sumamos los recursos
+                    if(moment.duration(moment(movement.return_at).diff(moment())).asSeconds()<=0){
+                        control = true
+                    }
+                break;
                 case 4:
                     //Colonizacion
-                    if(moment.duration(moment(movement.end_at).diff(moment())).asSeconds()<=1){
+                    if(moment.duration(moment(movement.end_at).diff(moment())).asSeconds()<=0){
                         control = true
                     }
                 break;
@@ -47,11 +54,22 @@ setInterval(function () {
             //Terminamos el movimiento
             if(control){
                 store.state.movements.splice(index,1)
-                axios.put('movement/'+movement.id).then(res =>{
-                    $store.commit('reloadIslandData')
-                    $city.commit('reloadCities')
-                    $resources.commit('addApoint')
+                axios.put('movement').then(res =>{
                     $resources.commit('addTradeShip',{ships:movement.trade_ship})
+                    if($city.state.city_id==movement.city_from.id){
+                        $resources.commit('addApoint')
+                    }
+                    switch(movement.movement_type_id){
+                        case 1:
+                            if($city.state.city_id==movement.city_to.id){
+                                $resources.commit('produceResources',movement.resources)
+                            }
+                        break;
+                        case 4:
+                            $city.commit('reloadCities')
+                            $store.commit('reloadIslandData')
+                        break;
+                    }
                 })
             }
         })

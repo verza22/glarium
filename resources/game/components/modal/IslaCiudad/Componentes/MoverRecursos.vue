@@ -3,9 +3,17 @@
         <div class="celda" v-for='i in resources' :key='i'>
             <div class="flex-4 celda mr-3">
                 <div class="mr-3"><img :src="require('Img/icon/'+geticon(i))"></div>
-                <div class="flex-1"><vue-slider :change='cambiar()' :disabled='getDisable(i)' :ref="'slider_'+(i)" :height='16' silent :max='getMax(i)' v-model="values[i]"></vue-slider></div>
+                <div class="flex-1"><vue-slider v-on:change='cambiar($event,i)' :disabled='getDisable(i)' :ref="'slider_'+(i)" :height='16' silent :max='getMax(i)' v-model="values[i]"></vue-slider></div>
             </div>
-            <div class="flex-2">2</div>
+            <div class="flex-2 d-flex">
+                <div class="flex-1">
+                    <div class="btnGeneral" title="Minimo" @click='minimo(i)'>-</div>
+                </div>
+                <div class="flex-1">
+                    <div class="btnGeneral" title="Maximo" @click='maximo(i)'>+</div>
+                </div>
+                <div class="flex-2 m-auto"><input size='6' type="text" :id="'input_'+i" v-on:keyup='cambiarI($event,i)' v-model='values2[i]' maxlength='9'></div>
+            </div>
         </div>
     </div>
 </template>
@@ -17,14 +25,14 @@ import $config from 'Stores/config'
 
 export default {
     name:'MoverRecursos',
-    props:['changeSize'],
+    props:['changeSize','values'],
     components:{
         VueSlider
     },
     data(){
         return {
             resources:[0,1,2,3,4],
-            values:[0,0,0,0,0],
+            values2:[0,0,0,0,0],
         }
     },
     methods:{
@@ -67,34 +75,80 @@ export default {
             }
         },
         getMax(i){
+            var value = parseInt(this.values[i]);
             switch(i){
                 case 0:
-                    return this.wood>(this.values[i]+this.free_space) ? (this.values[i]+this.free_space) : this.wood;
+                    if(this.max_size>this.wood)return this.wood;
                 break;
                 case 1:
-                    return this.wine>(this.values[i]+this.free_space) ? (this.values[i]+this.free_space) : this.wine;
+                    if(this.max_size>this.wine)return this.wine;
                 break;
                 case 2:
-                    return this.marble>(this.values[i]+this.free_space) ? (this.values[i]+this.free_space) : this.marble;
+                    if(this.max_size>this.marble)return this.marble;
                 break;
                 case 3:
-                    return this.glass>(this.values[i]+this.free_space) ? (this.values[i]+this.free_space) : this.glass;
+                    if(this.max_size>this.glass)return this.glass;
                 break;
                 case 4:
-                    return this.sulfur>(this.values[i]+this.free_space) ? (this.values[i]+this.free_space) : this.sulfur;
+                    if(this.max_size>this.sulfur)return this.sulfur;
                 break;
             }
+            if(this.free_space==0){
+                return value-(value-(this.max_size-this.otherSum(i)))
+            }else{
+                return value+this.free_space;
+            }
         },
-        cambiar(){
+        cambiar(e,i){
+            this.values2[i] = e
             this.changeSize(this.size)
+        },
+        otherSum(j){
+            var n = 0
+            for(var i=0;i<this.values.length;i++){
+                if(i!=j){
+                    n += parseInt(this.values[i])
+                }
+            }
+            return n
+        },
+        cambiarI(e,i){
+            e.stopPropagation()
+            var input = document.getElementById('input_'+i)
+            var n = parseInt(input.value)
+            n = isNaN(n) ? 0 :n
+            n = n<0 ? 0 : n
+            this.values2[i] = n
+            this.values[i] = n
+            this.$refs['slider_'+i][0].setValue(n)
+            input.value = n
+        },
+        minimo(i){
+            var n =  this.values[i] - 500;
+            n = n<0 ? 0 : n
+            this.values2[i] = n
+            this.values[i] = n
+            this.$refs['slider_'+i][0].setValue(n)
+        },
+        maximo(i){
+            var n =  this.values[i] + 500;
+            this.values2[i] = n
+            this.values[i] = n
+            this.$refs['slider_'+i][0].setValue(n)
         }
     },
     computed:{
         size(){
-            return this.values.reduce((a, b) => a + b, 0)
+            var suma = this.values.reduce((a, b) => parseInt(a) + parseInt(b), 0)
+            return suma>this.max_size ? this.max_size : suma
+        },
+        max_size(){
+            return (this.ship_available*this.transport);
         },
         free_space(){
-            return (this.ship_available*this.transport)-this.size;
+            var free = (this.ship_available*this.transport)-this.size;
+            free = free<0 ? 0 : free;
+            return free;
         },
         wood(){
             return $resources.state.wood;
@@ -117,6 +171,24 @@ export default {
         ship_available(){
             return $resources.state.userResources.trade_ship_available;
         },
+    },
+    watch:{
+        values(){
+            for(var i=0;i<this.values.length;i++){
+                var value = parseInt(this.values[i]);
+                if(isNaN(value)){
+                    this.values[i] = 0
+                    this.$refs['slider_'+i][0].setValue(0)
+                }else{
+                    var max = this.getMax(i);
+                    if(value>max&&max>=0){
+                        this.values[i] = max
+                        this.values2[i] = max
+                        this.$refs['slider_'+i][0].setValue(max)
+                    }
+                }
+            }
+        }
     }
 }
 </script>
@@ -126,5 +198,9 @@ export default {
         height: 35px;
         align-items: center;
         display: flex;
+    }
+    .btnGeneral{
+        display: inline-block;
+        padding: 6px 15px;
     }
 </style>

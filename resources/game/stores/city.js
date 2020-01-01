@@ -18,6 +18,7 @@ export default new Vuex.Store({
         },
         changeCity(state,{city}){
             state.city = city
+            localStorage.setItem('city_id', city.id)
         },
         setCities(state,{cities}){
             state.cities = cities

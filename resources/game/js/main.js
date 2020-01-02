@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Game from 'Js/Game.vue'
 import i18n  from 'Lang/index.js'
-import $config from 'Stores/config'
 
 import "bootstrap-css-only";
 import "Sass/main.scss"

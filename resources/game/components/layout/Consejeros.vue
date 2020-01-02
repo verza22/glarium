@@ -10,7 +10,7 @@
       <div class="advisor scientist" :title="$t('advisor.scientist.title')" @click='scientist'>
         <div class="titulo">{{$t('advisor.scientist.name')}}</div>
       </div>
-      <div class="advisor diplomat" :title="$t('advisor.diplomat.title')" @click='diplomat'>
+      <div class="advisor diplomat" :class="isActive(onDiplomat)" :title="$t('advisor.diplomat.title')" @click='diplomat'>
         <div class="titulo">{{$t('advisor.diplomat.name')}}</div>
       </div>
       <Notification></Notification>
@@ -30,7 +30,18 @@ export default {
     components:{
         Notification
     },
+    data(){
+        return {
+            onMayor:false,
+            onGeneral:false,
+            onScientist:false,
+            onDiplomat:false
+        }
+    },
     methods:{
+        isActive(advisor){
+            return advisor ? 'active' : ''
+        },
         general(){
             $modal.commit('openModal',{type:7,info:{}})
         },
@@ -38,16 +49,38 @@ export default {
             $modal.commit('openModal',{type:3,info:{}})
         },
         diplomat(){
+            this.onDiplomat = false;
             axios("user/getMessage").then(res => {
                 $modal.commit('openModal',{type:5,info:res.data})
             })
             .catch(err => {
-            $notification.commit('show',{advisor:1,type:false,message:err});
+                $notification.commit('show',{advisor:1,type:false,message:err});
             });
+        },
+        advisorsNotification(data){
+            switch(data){
+                case 'mayor':
+                    this.onMayor = true;
+                break;
+                case 'general':
+                    this.onGeneral = true;
+                break;
+                case 'scientist':
+                    this.onScientist = true;
+                break;
+                case 'diplomat':
+                    this.onDiplomat = true;
+                break;
+            }
         }
     },
     beforeMount(){
         $movement.dispatch('updateMovemenet')
+    },
+    mounted(){
+        this.$chUser.bind('advisors', (data) => {
+            this.advisorsNotification(data.data)
+        });
     }
 };
 </script>
@@ -75,6 +108,9 @@ export default {
 }
 .diplomat{
   background-image: url('~Img/advisor/diplomat.png');
+}
+.diplomat.active{
+  background-image: url('~Img/advisor/diplomat_active.png');
 }
 .advisor{
   position: relative;

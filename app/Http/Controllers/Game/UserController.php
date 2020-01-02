@@ -13,6 +13,7 @@ use App\Models\Message;
 use App\User;
 use App\Helpers\UserResourceHelper;
 use App\Helpers\CombatHelper;
+use App\Events\UserNotification;
 use Carbon\Carbon;
 use Auth;
 
@@ -88,6 +89,8 @@ class UserController extends Controller
         $message->user_to = $user->id;
         $message->message = $request->input('message');
         $message->save();
+
+        event(new UserNotification('advisors','diplomat',$user->id));
 
         return 'ok';
     }

@@ -8,7 +8,9 @@ use App\Models\UserResearch;
 use App\Models\ResearchBuilding;
 use App\Models\BuildingLevel;
 use App\Models\Research;
+use App\Models\Mayor;
 use App\Helpers\BuildingModifierHelper;
+use App\Events\UserNotification;
 use Carbon\Carbon;
 use Auth;
 
@@ -44,13 +46,21 @@ class BuildingHelper {
     {
         CityBuilding::where('city_id',$city->id)
         ->where('constructed_at','<',Carbon::now()->addSeconds(3))
-        ->get()->map(function($cityBuilding){
+        ->get()->map(function($cityBuilding) use ($city){
             //Mejoramos el edificio
             $after = $cityBuilding->building_level;
             $before = BuildingLevel::where('building_id',$after->building_id)->where('level',$after->level+1)->first();
             $cityBuilding->building_level_id = $before->id;
             $cityBuilding->constructed_at = NULL;
             $cityBuilding->save();
+
+            //Notificamos de la creacion del edificio
+            Mayor::create([
+                'city_id'=> $city->id,
+                'type' => 1,
+                'data' => json_encode(['building_id'=>$after->building_id,'level'=>$before->level])
+            ]);
+            event(new UserNotification('advisors','mayor',$city->userCity->user_id));
         });
     }
 

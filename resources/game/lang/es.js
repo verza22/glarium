@@ -357,5 +357,11 @@ export default {
     colonize:{
         question:'¿Deseas colonizar aquí?',
         title:'Colonizar'
-    }
+    },
+    mayor:[,
+        {
+            created:'¡Tu edificio <b>"{0}"</b> ha sido construido!',
+            upgrade:'¡Tu edificio <b>"{0}"</b> ha sido ampliado a nivel {1}!'
+        }
+    ]
 };

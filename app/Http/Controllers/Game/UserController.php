@@ -14,6 +14,7 @@ use App\User;
 use App\Helpers\UserResourceHelper;
 use App\Helpers\CombatHelper;
 use App\Events\UserNotification;
+use App\Models\Mayor;
 use Carbon\Carbon;
 use Auth;
 
@@ -130,5 +131,19 @@ class UserController extends Controller
         $delete = $request->input('type') ? 'deleted_at_from' : 'deleted_at_to';
         $messages = Message::where($type,Auth::id())->whereIn('id',$request->input('messages'))->update([$delete => Carbon::now()]);
         return 'ok';
+    }
+
+    public function getMayor()
+    {
+        $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
+        return Mayor::whereIn('city_id',$cities)->orderBy('id','desc')->get()->map(function ($mayor){
+            return [
+                'fecha' => Carbon::parse($mayor->created_at)->format('Y-m-d H:i'),
+                'city_id' => $mayor->city_id,
+                'city_name' => $mayor->city->name,
+                'type' => $mayor->type,
+                'data' => $mayor->data
+            ];
+        });
     }
 }

@@ -1,13 +1,13 @@
 <template>
   <div class="marcoSuperior">
     <div class="container">
-      <div class="advisor mayor" :title="$t('advisor.mayor.title')">
+      <div class="advisor mayor" :class="isActive(onMayor)" :title="$t('advisor.mayor.title')" @click='mayor'>
         <div class="titulo">{{$t('advisor.mayor.name')}}</div>
       </div>
-      <div class="advisor general" :title="$t('advisor.general.title')" @click='general'>
+      <div class="advisor general" :class="isActive(onGeneral)" :title="$t('advisor.general.title')" @click='general'>
         <div class="titulo">{{$t('advisor.general.name')}}</div>
       </div>
-      <div class="advisor scientist" :title="$t('advisor.scientist.title')" @click='scientist'>
+      <div class="advisor scientist" :class="isActive(onScientist)" :title="$t('advisor.scientist.title')" @click='scientist'>
         <div class="titulo">{{$t('advisor.scientist.name')}}</div>
       </div>
       <div class="advisor diplomat" :class="isActive(onDiplomat)" :title="$t('advisor.diplomat.title')" @click='diplomat'>
@@ -42,6 +42,15 @@ export default {
         isActive(advisor){
             return advisor ? 'active' : ''
         },
+        mayor(){
+            this.onMayor = false;
+            axios("user/getMayor").then(res => {
+                $modal.commit('openModal',{type:8,info:res.data})
+            })
+            .catch(err => {
+                $notification.commit('show',{advisor:1,type:false,message:err});
+            });
+        },
         general(){
             $modal.commit('openModal',{type:7,info:{}})
         },
@@ -54,7 +63,7 @@ export default {
                 $modal.commit('openModal',{type:5,info:res.data})
             })
             .catch(err => {
-                $notification.commit('show',{advisor:1,type:false,message:err});
+                $notification.commit('show',{advisor:4,type:false,message:err});
             });
         },
         advisorsNotification(data){
@@ -108,6 +117,15 @@ export default {
 }
 .diplomat{
   background-image: url('~Img/advisor/diplomat.png');
+}
+.mayor.active{
+  background-image: url('~Img/advisor/mayor_active.png');
+}
+.general.active{
+  background-image: url('~Img/advisor/general_active.png');
+}
+.scientist.active{
+  background-image: url('~Img/advisor/scientist_active.png');
 }
 .diplomat.active{
   background-image: url('~Img/advisor/diplomat_active.png');

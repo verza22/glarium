@@ -9,6 +9,7 @@ export default new Vuex.Store({
     state: {
         city_id:0,
         city:{},
+        island:{},
         cities:[]
     },
     mutations:{

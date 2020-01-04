@@ -51,3 +51,5 @@ Route::get('movement', 'Game\MovementController@getMovement');
 Route::put('movement', 'Game\MovementController@endMovement');
 Route::post('movement/colonize/{city}', 'Game\MovementController@colonize');
 Route::post('movement/transport/{city}', 'Game\MovementController@transport');
+
+Route::get('world/{x}/{y}', 'Game\WorldController@index');

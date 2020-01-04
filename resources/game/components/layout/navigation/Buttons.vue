@@ -1,6 +1,6 @@
 <template>
     <div class="flex-3 d-flex btn-game">
-        <div class="flex-1 btn-world" :title="$t('options.navigation.worldTitle')">
+        <div class="flex-1 btn-world" @click='toWorld()' :title="$t('options.navigation.worldTitle')">
             <div class="btn-game-text">{{$t('options.navigation.world')}}</div>
         </div>
         <div class="flex-1 btn-island" @click='toIsland()' :title="$t('options.navigation.islandTitle')">
@@ -21,6 +21,20 @@ import $notification from 'Stores/notification'
 export default {
     name:'Buttons',
     methods:{
+        toWorld(){
+            //Verificamos que no en el mapa mundo
+            if(this.$route.name=='World'){
+                return;
+            }
+            axios('world/'+this.city.x+'/'+this.city.y)
+            .then(res =>{
+                $modal.commit('changeRoute')
+                this.$router.push({ name: 'World', params: { x:this.city.x,y:this.city.y,data: res.data }})
+            })
+            .catch(err => {
+                $notification.commit('show',{advisor:1,type:false,message:err});
+            });
+        },
         toIsland(){
             //Verificamos que no este en la misma isla
             if(this.$route.name=='Island'){
@@ -54,6 +68,9 @@ export default {
         },
         island_id(){
             return $city.state.city.island_id;
+        },
+        city(){
+            return $city.state.city;
         }
     },
 }

@@ -26,6 +26,9 @@ export default new Vuex.Store({
         },
         setCityName(state,{name}){
           state.city.name = name
+        },
+        setIsland(state,{island}){
+          state.island = island
         }
     },
     actions:{

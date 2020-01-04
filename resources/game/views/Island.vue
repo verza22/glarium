@@ -21,6 +21,7 @@ import axios from 'axios'
 import Cities from "Components/island/Cities.vue"
 import Resources from "Components/island/Resources.vue"
 import $store from 'Stores/store'
+import $city from 'Stores/city'
 
 export default {
   name: 'Isla',
@@ -42,6 +43,7 @@ export default {
         axios('island/'+this.$route.params.island)
         .then(res =>{
             this.data = res.data;
+            $city.commit('setIsland',{island:this.data})
         })
         .catch(err => {
             $notification.commit('show',{advisor:1,type:false,message:err});
@@ -51,6 +53,7 @@ export default {
   beforeMount(){
     if(this.$route.params.data!=undefined){
         this.data = this.$route.params.data;
+        $city.commit('setIsland',{island:this.data})
     }else{
         this.init();
     }

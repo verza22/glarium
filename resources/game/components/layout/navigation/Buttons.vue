@@ -26,10 +26,10 @@ export default {
             if(this.$route.name=='World'){
                 return;
             }
-            axios('world/'+this.city.x+'/'+this.city.y)
+            axios('world/'+this.island.x+'/'+this.island.y)
             .then(res =>{
                 $modal.commit('changeRoute')
-                this.$router.push({ name: 'World', params: { x:this.city.x,y:this.city.y,data: res.data }})
+                this.$router.push({ name: 'World', params: { x:this.island.x,y:this.island.y,data: res.data }})
             })
             .catch(err => {
                 $notification.commit('show',{advisor:1,type:false,message:err});
@@ -69,8 +69,8 @@ export default {
         island_id(){
             return $city.state.city.island_id;
         },
-        city(){
-            return $city.state.city;
+        island(){
+            return $city.state.island;
         }
     },
 }

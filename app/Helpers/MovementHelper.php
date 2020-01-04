@@ -37,19 +37,19 @@ class MovementHelper {
     public static function distanceTime(City $city_from,City $city_to)
     {
         //Verificamos si estan en la misma isla
-        if($city_from->islandCity->island_id === $city_to->islandCity->island_id)
-        {
+        //if($city_from->islandCity->island_id === $city_to->islandCity->island_id)
+        //{
             return config('world.distance.same_island');
-        }
+       // }
     }
 
     public static function distanceTimeColonize(City $city_from,Island $island)
     {
         //Verificamos si estan en la misma isla
-        if($city_from->islandCity->island_id === $island->id)
-        {
+       // if($city_from->islandCity->island_id === $island->id)
+       // {
             return config('world.distance.same_island');
-        }
+       // }
     }
 
     public static function getActionPoint(City $city_from)

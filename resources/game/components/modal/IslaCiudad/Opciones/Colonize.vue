@@ -46,6 +46,9 @@ export default {
         }
     },
     methods:{
+        getShips(){
+            return Math.ceil(this.cost_wood/this.transport)
+        },
         fundar(){
             axios.post("movement/colonize/" + this.city_id, {
                 island: this.info.id,
@@ -82,6 +85,9 @@ export default {
         },
         cost_population(){
             return $config.state.world.colonize.population;
+        },
+        transport(){
+            return $config.state.world.transport;
         }
     }
 }

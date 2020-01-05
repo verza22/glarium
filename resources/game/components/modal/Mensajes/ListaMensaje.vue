@@ -12,8 +12,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for='(msg,index) in data' :key='index' @click='open(msg,$event)' :id="'identifier_'+msg.id">
-                    <td><input type="checkbox" :msg_id='msg.id' name="check"></td>
+                <tr v-for='(msg,index) in data' :key='index' @click='open(msg,$event)' :id="'identifier_'+msg.id" :class='noRead(msg)'>
+                    <td><input type="checkbox" :msg_index='index' :msg_id='msg.id' name="check"></td>
                     <td class="text-center"><div class="btn-action"></div></td>
                     <td>{{msg.user.name}}</td>
                     <td>{{$t('diplomacy.message')}}</td>
@@ -25,9 +25,16 @@
         <div>
             <div class="mb-2">
                 <div class="btn-picker" @click='checked(true)'>{{$t('messages.all')}}</div>
+                <div class="d-inline-block" v-if='type==0'>
+                    <div class="d-inline-block"> | </div>
+                    <div class="btn-picker" @click='checkedReaded(0)'>No leidos</div>
+                    <div class="d-inline-block"> | </div>
+                    <div class="btn-picker" @click='checkedReaded(1)'>Leidos</div>
+                </div>
                 <div class="d-inline-block"> | </div>
                 <div class="btn-picker" @click='checked(false)'>{{$t('messages.none')}}</div>
             </div>
+            <div class="btnGeneral" @click='readed' v-if='type==0'>Marcar como leido</div>
             <div class="btnGeneral" @click='borrar'>{{$t('other.remove')}}</div>
         </div>
     </div>
@@ -41,7 +48,15 @@ export default {
     name:'Enviados',
     props:['data','type','remove'],
     methods:{
+        noRead(msg){
+            return msg.readed==0 ? 'noRead' : ''
+        },
         open(msg,event){
+            //Si es mensajes recibidos actualizamos su estado a leido
+            if(this.type==0){
+                axios.put('user/readMessage/'+msg.id)
+                msg.readed=1
+            }
             if(event.toElement.type=='checkbox'){
                 return
             }
@@ -66,6 +81,45 @@ export default {
             document.getElementsByName('check').forEach(x =>{
                 x.checked = type;
             });
+        },
+        checkedReaded(type){
+            document.getElementsByName('check').forEach(x =>{
+                if(this.data[x.getAttribute('msg_index')].readed==type){
+                    x.checked = true;
+                }else{
+                    x.checked = false;
+                }
+            });
+        },
+        readed(){
+            var msg = [];
+            document.getElementsByName('check').forEach(x =>{
+                if(x.checked){
+                    msg.push(parseInt(x.getAttribute('msg_id')));
+                }
+            });
+            if(msg.length>0){
+                axios.put('user/readMessages',{
+                    messages:msg
+                })
+                .then(res =>{
+                    if(res.data=='ok'){
+                        document.getElementsByName('check').forEach(x =>{
+                            if(x.checked){
+                                //Ponemos como leidos todos los mensajes
+                                x.parentElement.parentElement.classList.remove('noRead')
+                                x.checked = false
+                            }
+                        });
+                        $notification.commit('show',{advisor:4,type:true});
+                    }else{
+                        $notification.commit('show',{advisor:4,type:false,message:res.data});
+                    }
+                })
+                .catch(err =>{
+                    $notification.commit('show',{advisor:4,type:false,message:err});
+                })
+            }
         },
         borrar(){
             var msg = [];
@@ -140,5 +194,15 @@ export default {
     }
     .btn-picker:hover{
         text-decoration: underline;
+    }
+    tr.noRead{
+        font-weight: bold;
+    }
+    td,th{
+        vertical-align: middle;
+    }
+    tr{
+        font-size: 0.75rem;
+        line-height: 0.75rem;
     }
 </style>

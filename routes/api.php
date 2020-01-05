@@ -38,6 +38,8 @@ Route::get('user/getMayor', 'Game\UserController@getMayor');
 Route::post('user/buyTradeShip', 'Game\UserController@buyTradeShip');
 Route::post('user/sendMessage/{user}', 'Game\UserController@sendMessage');
 Route::post('user/message', 'Game\UserController@deleteMessage');
+Route::put('user/readMessages', 'Game\UserController@readMessages');
+Route::put('user/readMessage/{message}', 'Game\UserController@readMessage');
 
 Route::post('island/donation/{island}', 'Game\IslandController@donation');
 Route::put('island/donation/{island}', 'Game\IslandController@setDonation');

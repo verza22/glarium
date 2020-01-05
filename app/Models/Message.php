@@ -18,7 +18,8 @@ class Message extends Model
     ];
 
     protected $attributes = [
-        'type' => 1
+        'type' => 1,
+        'readed' => 0
     ];
 
     public function from()

@@ -21,6 +21,7 @@ class CreateMessageTable extends Migration
             $table->unsignedBigInteger('user_from');
             $table->unsignedBigInteger('user_to');
             $table->integer('type');
+            $table->integer('readed');
             $table->text('message');
 
             $table->foreign('user_from')->references('id')->on('users');

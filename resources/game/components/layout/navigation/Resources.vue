@@ -156,7 +156,7 @@ export default {
             return $resources.state.sulfur;
         },
         island_type(){
-            return $city.state.city.island_type;
+            return $city.state.city.type;
         },
         worker_forest(){
             return $resources.state.population.worker_forest;

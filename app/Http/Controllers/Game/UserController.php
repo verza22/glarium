@@ -98,16 +98,21 @@ class UserController extends Controller
 
     public function getMessage()
     {
-        $data['received'] = Message::where('user_to',Auth::id())->whereNull('deleted_at_to')
+        //Obtenemos el total de mensajes leidos y no leidos
+        $data['totalNoReaded'] = Message::where('user_to',Auth::id())->whereNull('deleted_at_to')->where('readed',0)->count();
+        $data['totalReaded'] = Message::where('user_to',Auth::id())->whereNull('deleted_at_to')->where('readed',1)->count();
+        $data['received'] = Message::where('user_to',Auth::id())->whereNull('deleted_at_to')->orderBy('id','desc')
         ->get()->map(function($message){
             return [
                 'id' => $message->id,
                 'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
                 'user' => $message->from->only(['id','name']),
+                'readed' => $message->readed,
                 'message' => $message->message
             ];
         });
-        $data['sended'] = Message::where('user_from',Auth::id())->whereNull('deleted_at_from')
+        $data['totalSended'] = Message::where('user_from',Auth::id())->whereNull('deleted_at_from')->count();
+        $data['sended'] = Message::where('user_from',Auth::id())->whereNull('deleted_at_from')->orderBy('id','desc')
         ->get()->map(function($message){
             return [
                 'id' => $message->id,
@@ -129,7 +134,7 @@ class UserController extends Controller
 
         $type = $request->input('type') ? 'user_from' : 'user_to';
         $delete = $request->input('type') ? 'deleted_at_from' : 'deleted_at_to';
-        $messages = Message::where($type,Auth::id())->whereIn('id',$request->input('messages'))->update([$delete => Carbon::now()]);
+        Message::where($type,Auth::id())->whereIn('id',$request->input('messages'))->update([$delete => Carbon::now()]);
         return 'ok';
     }
 
@@ -145,5 +150,24 @@ class UserController extends Controller
                 'data' => $mayor->data
             ];
         });
+    }
+
+    public function readMessage(Message $message)
+    {
+        $this->authorize('isMyCity',$message->to);
+        $message->readed = 1;
+        $message->save();
+        return 'ok';
+    }
+
+    public function readMessages(Request $request)
+    {
+        $request->validate([
+            'messages' => 'required|array',
+            'messages.*' => 'integer'
+        ]);
+
+        Message::where('user_to',Auth::id())->whereIn('id',$request->input('messages'))->update(['readed' => 1]);
+        return 'ok';
     }
 }

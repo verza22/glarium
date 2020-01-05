@@ -17,7 +17,7 @@
                     <td class="text-center"><div class="btn-action"></div></td>
                     <td>{{msg.user.name}}</td>
                     <td>{{$t('diplomacy.message')}}</td>
-                    <td>{{msg.city.name}}</td>
+                    <td class="go" title="Ir a la ciudad" @click='goTo(msg)'>{{msg.city.name}} [{{msg.city.x}}:{{msg.city.y}}]</td>
                     <td>{{msg.date}}</td>
                 </tr>
             </tbody>
@@ -57,11 +57,27 @@
 import axios from 'axios'
 import $notification from 'Stores/notification'
 import $modal from 'Stores/modal'
+import $city from 'Stores/city'
 
 export default {
     name:'ListaMensajes',
     props:['data','type','remove','read','page','more','nextPage'],
     methods:{
+        goTo(msg){
+            axios('island/'+msg.city.island_id)
+            .then(res =>{
+                $modal.commit('changeRoute')
+                res.data.focusCity = msg.city.id
+                if(this.$route.name!='Island'){
+                    this.$router.push({ name: 'Island', params: { island:msg.city.island_id,data: res.data }})
+                }else{
+                    $city.commit('setIsland',{island:res.data})
+                }
+            })
+            .catch(err => {
+                $notification.commit('show',{advisor:1,type:false,message:err});
+            });
+        },
         noRead(msg){
             return msg.readed==0 ? 'noRead' : ''
         },
@@ -251,5 +267,12 @@ export default {
     tr{
         font-size: 0.75rem;
         line-height: 0.75rem;
+    }
+    .go:hover{
+        text-decoration: underline
+    }
+    .go{
+        cursor: pointer;
+        user-select: none;
     }
 </style>

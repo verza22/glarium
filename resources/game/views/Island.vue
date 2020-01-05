@@ -22,6 +22,7 @@ import Cities from "Components/island/Cities.vue"
 import Resources from "Components/island/Resources.vue"
 import $store from 'Stores/store'
 import $city from 'Stores/city'
+import $modal from 'Stores/modal'
 
 export default {
   name: 'Isla',
@@ -42,17 +43,32 @@ export default {
       init(){
         axios('island/'+this.$route.params.island)
         .then(res =>{
-            this.data = res.data;
-            $city.commit('setIsland',{island:this.data})
+            //this.data = res.data;
+            $city.commit('setIsland',{island:res.data})
         })
         .catch(err => {
             $notification.commit('show',{advisor:1,type:false,message:err});
         });
+      },
+      focusCity(city_id){
+        var city = this.data.cities.filter(x => {return x.city_id == city_id})[0]
+        $modal.commit('openModal',{
+            type:4,
+            info:{
+                city:city
+            }
+        })
+      },
+      setIsland(island){
+        this.data = island;
+        if(island.focusCity!=undefined){
+            this.focusCity(island.focusCity)
+        }
       }
   },
   beforeMount(){
     if(this.$route.params.data!=undefined){
-        this.data = this.$route.params.data;
+        this.setIsland(this.$route.params.data)
         $city.commit('setIsland',{island:this.data})
     }else{
         this.init();
@@ -62,6 +78,11 @@ export default {
     $store.subscribe((action,state) => {
         if (action.type === "reloadIslandData") {
             this.init();
+        }
+    });
+    $city.subscribe((action,state) => {
+        if (action.type === "setIsland") {
+            this.setIsland(state.island)
         }
     });
   }

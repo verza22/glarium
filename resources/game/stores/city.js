@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import $building from 'Stores/building'
+import $route from 'Js/router'
 
 Vue.use(Vuex)
 
@@ -10,7 +11,7 @@ export default new Vuex.Store({
         city_id:0,
         city:{},
         island:{},
-        cities:[]
+        cities:[],
     },
     mutations:{
         reloadCities(){},

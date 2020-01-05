@@ -137,12 +137,16 @@ class UserController extends Controller
             $received = Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->orderBy('id','desc')->paginate(10);
             $data['more'] = $received->hasMorePages();
             $data['received'] =  $received->map(function($message){
+                $data['city'] = $message->from->only(['id','name']);
+                $data['city']['island_id'] = $message->from->islandCity->island_id;
+                $data['city']['x'] = $message->from->islandCity->island->x;
+                $data['city']['y'] = $message->from->islandCity->island->y;
                 return [
                     'id' => $message->id,
                     'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
                     'user' => $message->from->userCity->user->only(['id','name']),
                     'readed' => $message->readed,
-                    'city' => $message->from->only(['id','name']),
+                    'city' => $data['city'],
                     'message' => $message->message
                 ];
             });
@@ -152,11 +156,15 @@ class UserController extends Controller
             $sended = Message::whereIn('city_from',$cities)->whereNull('deleted_at_from')->orderBy('id','desc')->paginate(10);
             $data['more'] = $sended->hasMorePages();
             $data['sended'] = $sended->map(function($message){
+                $data['city'] = $message->from->only(['id','name']);
+                $data['city']['island_id'] = $message->from->islandCity->island_id;
+                $data['city']['x'] = $message->from->islandCity->island->x;
+                $data['city']['y'] = $message->from->islandCity->island->y;
                 return [
                     'id' => $message->id,
                     'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
                     'user' => $message->to->userCity->user->only(['id','name']),
-                    'city' => $message->from->only(['id','name']),
+                    'city' => $data['city'],
                     'message' => $message->message
                 ];
             });

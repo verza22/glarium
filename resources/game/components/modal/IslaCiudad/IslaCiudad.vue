@@ -1,10 +1,10 @@
 <template>
     <div class="mBorder">
         <Ventana1 :close='close' v-if='type!=0' :titulo="getTitle()">
-            <Diplomacia :changeType='changeType' :data='info' v-if='type==1'></Diplomacia>
+            <Diplomacia :changeType='changeType' :data='info' v-if='type==1||type==3'></Diplomacia>
             <Transporte :changeType='changeType' :data='info' v-else-if='type==2'></Transporte>
         </Ventana1>
-        <Ventana2 titulo="Info">
+        <Ventana2 titulo="Info" v-if='type!=3'>
             <Info :data='info'></Info>
             <Acciones :data='info' :changeType='changeType' v-if='city_id!=info.city.city_id'></Acciones>
         </Ventana2>
@@ -60,7 +60,9 @@ export default {
         }
     },
     beforeMount(){
-        //debugger
+        if(this.info.type!=undefined){
+            this.type = this.info.type
+        }
     }
 }
 </script>

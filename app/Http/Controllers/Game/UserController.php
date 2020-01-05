@@ -142,7 +142,7 @@ class UserController extends Controller
                     'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
                     'user' => $message->from->userCity->user->only(['id','name']),
                     'readed' => $message->readed,
-                    'city_name' => $message->from->name,
+                    'city' => $message->from->only(['id','name']),
                     'message' => $message->message
                 ];
             });
@@ -156,7 +156,7 @@ class UserController extends Controller
                     'id' => $message->id,
                     'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
                     'user' => $message->to->userCity->user->only(['id','name']),
-                    'city_name' => $message->from->name,
+                    'city' => $message->from->only(['id','name']),
                     'message' => $message->message
                 ];
             });

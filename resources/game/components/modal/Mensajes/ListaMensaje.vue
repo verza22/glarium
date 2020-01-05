@@ -17,11 +17,15 @@
                     <td class="text-center"><div class="btn-action"></div></td>
                     <td>{{msg.user.name}}</td>
                     <td>{{$t('diplomacy.message')}}</td>
-                    <td>{{msg.city_name}}</td>
+                    <td>{{msg.city.name}}</td>
                     <td>{{msg.date}}</td>
                 </tr>
             </tbody>
         </table>
+        <div id="response" class="hidden mt-2">
+            <div class="btnGeneral" @click='responder($event)'>Responder</div>
+            <div class="btnGeneral" @click='borrar'>{{$t('other.remove')}}</div>
+        </div>
         <div>
             <div class="mb-2">
                 <div class="d-inline-block next" title="Ultimos 10 mensajes" @click='nextPage(false)' v-if='page>1'>
@@ -52,6 +56,7 @@
 <script>
 import axios from 'axios'
 import $notification from 'Stores/notification'
+import $modal from 'Stores/modal'
 
 export default {
     name:'ListaMensajes',
@@ -59,6 +64,33 @@ export default {
     methods:{
         noRead(msg){
             return msg.readed==0 ? 'noRead' : ''
+        },
+        responseButtons(msg,newCell){
+            //Responder mensajes
+            if(this.type==0){
+                //boton de responder
+                var response = document.getElementById('response').cloneNode(true);
+                response.classList.remove('hidden')
+                response.children[0].addEventListener('click', function() {
+                    var info = {
+                        type:3,
+                        city:{
+                            user:msg.user.name,
+                            city_id:msg.city.id
+                        }
+                    }
+                    $modal.commit('openModal',{
+                        type:4,
+                        info:info
+                    })
+                })
+                //boton de borrar
+                var self = this;
+                response.children[1].addEventListener('click', function() {
+                    self.borrarMsg([msg.id])
+                })
+                newCell.appendChild(response);
+            }
         },
         open(msg,event){
             //Si es mensajes recibidos actualizamos su estado a leido
@@ -82,6 +114,7 @@ export default {
                 var newText  = document.createTextNode(msg.message);
                 newCell.appendChild(newText);
                 rowRef.classList.add("active");
+                this.responseButtons(msg,newCell)
             }else{
                 rowRef_msg.remove()
                 rowRef.classList.remove("active");
@@ -140,30 +173,33 @@ export default {
                 }
             });
             if(msg.length>0){
-                axios.post('user/message',{
-                    messages:msg,
-                    type:this.type
-                })
-                .then(res =>{
-                    if(res.data=='ok'){
-                        document.getElementsByName('check').forEach(x =>{
-                            if(x.checked){
-                                var sub = document.getElementById('sub_identifier_'+x.getAttribute('msg_id'));
-                                if(sub!=null)
-                                sub.remove()
-                            }
-                        });
-                        this.remove(msg)
-                        this.checked(false)
-                        $notification.commit('show',{advisor:4,type:true});
-                    }else{
-                        $notification.commit('show',{advisor:4,type:false,message:res.data});
-                    }
-                })
-                .catch(err =>{
-                    $notification.commit('show',{advisor:4,type:false,message:err});
-                })
+                this.borrarMsg(msg)
             }
+        },
+        borrarMsg(msg){
+            axios.post('user/message',{
+                messages:msg,
+                type:this.type
+            })
+            .then(res =>{
+                if(res.data=='ok'){
+                    document.getElementsByName('check').forEach(x =>{
+                        if(x.checked){
+                            var sub = document.getElementById('sub_identifier_'+x.getAttribute('msg_id'));
+                            if(sub!=null)
+                            sub.remove()
+                        }
+                    });
+                    this.remove(msg)
+                    this.checked(false)
+                    $notification.commit('show',{advisor:4,type:true});
+                }else{
+                    $notification.commit('show',{advisor:4,type:false,message:res.data});
+                }
+            })
+            .catch(err =>{
+                $notification.commit('show',{advisor:4,type:false,message:err});
+            })
         }
     },
     watch:{

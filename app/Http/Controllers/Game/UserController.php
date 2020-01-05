@@ -15,6 +15,7 @@ use App\Helpers\UserResourceHelper;
 use App\Helpers\CombatHelper;
 use App\Events\UserNotification;
 use App\Models\Mayor;
+use App\Helpers\CityHelper;
 use Carbon\Carbon;
 use Auth;
 
@@ -85,6 +86,21 @@ class UserController extends Controller
             'message' => 'required|string|max:1500'
         ]);
 
+        //Obtenemos el total de mensajes enviados en los ultimos x segundos
+        $msgs = Message::where('user_from',Auth::id())
+                ->whereNull('deleted_at_from')
+                ->where('created_at','>',Carbon::now()->subSeconds(config('world.messages.time')))
+                ->get();
+
+        if($msgs->count()>config('world.messages.cant'))
+        {
+            $time_wait = config('world.messages.time') - Carbon::parse($msgs->first()->created_at)->diffInSeconds(Carbon::now());
+            $response = 'Está permitido mandar hasta '.config('world.messages.cant');
+            $response .= ' mensajes en '.config('world.messages.time').'s.';
+            $response .= ' Debes esperar '.$time_wait.'s, antes de poder enviar más mensajes.';
+            return $response;
+        }
+
         $message = new Message();
         $message->user_from = Auth::id();
         $message->user_to = $user->id;
@@ -99,26 +115,27 @@ class UserController extends Controller
     public function getMessage()
     {
         //Obtenemos el total de mensajes leidos y no leidos
-        $data['totalNoReaded'] = Message::where('user_to',Auth::id())->whereNull('deleted_at_to')->where('readed',0)->count();
-        $data['totalReaded'] = Message::where('user_to',Auth::id())->whereNull('deleted_at_to')->where('readed',1)->count();
-        $received = Message::where('user_to',Auth::id())->whereNull('deleted_at_to')->limit(11)->orderBy('id','desc')->get();
+        $cities = CityHelper::myCities();
+        $data['totalNoReaded'] = Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->where('readed',0)->count();
+        $data['totalReaded'] = Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->where('readed',1)->count();
+        $received = Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->limit(11)->orderBy('id','desc')->get();
         $data['moreNoReaded'] = $received->count()>10;
         $data['received'] =  $received->take(10)->map(function($message){
             return [
                 'id' => $message->id,
                 'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
-                'user' => $message->from->only(['id','name']),
+                'user' => $message->from->userCity->user->only(['id','name']),
                 'readed' => $message->readed,
                 'message' => $message->message
             ];
         });
-        $data['totalSended'] = Message::where('user_from',Auth::id())->whereNull('deleted_at_from')->count();
-        $data['sended'] = Message::where('user_from',Auth::id())->whereNull('deleted_at_from')->limit(11)->orderBy('id','desc')
+        $data['totalSended'] = Message::whereIn('city_from',$cities)->whereNull('deleted_at_from')->count();
+        $data['sended'] = Message::whereIn('city_from',$cities)->whereNull('deleted_at_from')->limit(11)->orderBy('id','desc')
         ->get()->map(function($message){
             return [
                 'id' => $message->id,
                 'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
-                'user' => $message->to->only(['id','name']),
+                'user' => $message->to->userCity->user->only(['id','name']),
                 'message' => $message->message
             ];
         });
@@ -127,7 +144,8 @@ class UserController extends Controller
 
     public function getMessageUnread()
     {
-        return Message::where('user_to',Auth::id())->whereNull('deleted_at_to')->where('readed',0)->count();
+        $cities = CityHelper::myCities();
+        return Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->where('readed',0)->count();
     }
 
     public function deleteMessage(Request $request)

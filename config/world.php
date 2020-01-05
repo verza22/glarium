@@ -27,5 +27,9 @@ return [
         'wood' => 1250,
         'gold' => 9000,
         'population' => 40
+    ],
+    'messages' => [
+        'cant' => 5,
+        'time' => 300
     ]
 ];

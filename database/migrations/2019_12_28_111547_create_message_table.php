@@ -18,14 +18,14 @@ class CreateMessageTable extends Migration
             $table->timestamps();
             $table->dateTime('deleted_at_from')->nullable();
             $table->dateTime('deleted_at_to')->nullable();
-            $table->unsignedBigInteger('user_from');
-            $table->unsignedBigInteger('user_to');
+            $table->unsignedBigInteger('city_from');
+            $table->unsignedBigInteger('city_to');
             $table->integer('type');
             $table->integer('readed');
             $table->text('message');
 
-            $table->foreign('user_from')->references('id')->on('users');
-            $table->foreign('user_to')->references('id')->on('users');
+            $table->foreign('city_from')->references('id')->on('city');
+            $table->foreign('city_to')->references('id')->on('city');
         });
     }
 

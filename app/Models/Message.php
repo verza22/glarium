@@ -9,8 +9,8 @@ class Message extends Model
     protected $table = 'message';
 
     protected $fillable = [
-        'user_from',
-        'user_to',
+        'city_from',
+        'city_to',
         'type',
         'message',
         'deleted_at_from',
@@ -24,11 +24,11 @@ class Message extends Model
 
     public function from()
     {
-        return $this->belongsTo('App\User','user_from');
+        return $this->belongsTo('App\Models\City','city_from');
     }
 
     public function to()
     {
-        return $this->belongsTo('App\User','user_to');
+        return $this->belongsTo('App\Models\City','city_to');
     }
 }

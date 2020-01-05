@@ -3,10 +3,12 @@
 namespace App\Helpers;
 use App\Models\City;
 use App\Models\CityPopulation;
+use App\Models\UserCity;
 use App\Helpers\BuildingModifierHelper;
 use App\Helpers\UnitHelper;
 use App\Helpers\MovementHelper;
 use Carbon\Carbon;
+use Auth;
 
 class CityHelper {
 
@@ -134,4 +136,9 @@ class CityHelper {
         $city->refresh();
     }
 
+    public static function myCities()
+    {
+        //Devuelve las ciudades del jugador con pluck id
+        return UserCity::where('user_id',Auth::id())->pluck('city_id');
+    }
 }

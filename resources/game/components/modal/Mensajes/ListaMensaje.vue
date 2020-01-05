@@ -17,7 +17,7 @@
                     <td class="text-center"><div class="btn-action"></div></td>
                     <td>{{msg.user.name}}</td>
                     <td>{{$t('diplomacy.message')}}</td>
-                    <td>Polis</td>
+                    <td>{{msg.city_name}}</td>
                     <td>{{msg.date}}</td>
                 </tr>
             </tbody>

@@ -20,6 +20,7 @@
 <script>
 import axios from 'axios'
 import $notification from 'Stores/notification'
+import $city from 'Stores/city'
 
 export default {
     name: 'Diplomacia',
@@ -37,7 +38,8 @@ export default {
                 this.error = true
                 return
             }
-            axios.post('user/sendMessage/'+this.data.city.user_id,{
+            axios.post('user/sendMessage/'+this.data.city.city_id,{
+                city_from:this.city_id,
                 message:this.message
             })
             .then(res =>{
@@ -57,6 +59,9 @@ export default {
     computed:{
         messageLength(){
             return this.maxLength - this.message.length;
+        },
+        city_id(){
+            return $city.state.city_id;
         }
     },
     watch:{

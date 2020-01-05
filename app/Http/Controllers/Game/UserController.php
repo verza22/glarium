@@ -10,6 +10,7 @@ use App\Models\Research;
 use App\Models\UserResearch;
 use App\Models\UserResource;
 use App\Models\Message;
+use App\Models\City;
 use App\User;
 use App\Helpers\UserResourceHelper;
 use App\Helpers\CombatHelper;
@@ -80,19 +81,24 @@ class UserController extends Controller
         return 'ok';
     }
 
-    public function sendMessage(Request $request,User $user)
+    public function sendMessage(Request $request,City $city)
     {
         $request->validate([
+            'city_from' => 'required|integer|min:1',
             'message' => 'required|string|max:1500'
         ]);
 
+        $city_from = City::whereId($request->input('city_from'))->firstOrFail();
+        $this->authorize('isMyCity',$city_from);
+
+        $cities = CityHelper::myCities();
         //Obtenemos el total de mensajes enviados en los ultimos x segundos
-        $msgs = Message::where('user_from',Auth::id())
+        $msgs = Message::whereIn('city_from',$cities)
                 ->whereNull('deleted_at_from')
                 ->where('created_at','>',Carbon::now()->subSeconds(config('world.messages.time')))
                 ->get();
 
-        if($msgs->count()>config('world.messages.cant'))
+        if($msgs->count()>=config('world.messages.cant'))
         {
             $time_wait = config('world.messages.time') - Carbon::parse($msgs->first()->created_at)->diffInSeconds(Carbon::now());
             $response = 'Está permitido mandar hasta '.config('world.messages.cant');
@@ -102,12 +108,12 @@ class UserController extends Controller
         }
 
         $message = new Message();
-        $message->user_from = Auth::id();
-        $message->user_to = $user->id;
+        $message->city_from = $city_from->id;
+        $message->city_to = $city->id;
         $message->message = $request->input('message');
         $message->save();
 
-        event(new UserNotification('advisors','diplomat',$user->id));
+        event(new UserNotification('advisors','diplomat',$city->userCity->user->id));
 
         return 'ok';
     }
@@ -126,6 +132,7 @@ class UserController extends Controller
                 'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
                 'user' => $message->from->userCity->user->only(['id','name']),
                 'readed' => $message->readed,
+                'city_name' => $message->to->name,
                 'message' => $message->message
             ];
         });
@@ -136,6 +143,7 @@ class UserController extends Controller
                 'id' => $message->id,
                 'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
                 'user' => $message->to->userCity->user->only(['id','name']),
+                'city_name' => $message->to->name,
                 'message' => $message->message
             ];
         });
@@ -191,7 +199,8 @@ class UserController extends Controller
             'messages.*' => 'integer'
         ]);
 
-        Message::where('user_to',Auth::id())->whereIn('id',$request->input('messages'))->update(['readed' => 1]);
+        $cities = CityHelper::myCities();
+        Message::whereIn('city_to',$cities)->whereIn('id',$request->input('messages'))->update(['readed' => 1]);
         return 'ok';
     }
 }

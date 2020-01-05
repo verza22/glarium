@@ -5,14 +5,14 @@
             <div class="d-flex">
                 <div class="selectContainer" :class="type==0 ? 'active' : ''" title="Mensajes Recibidos No leidos/Total" @click='change(0)'>
                     <div class="imagen"></div>
-                    <div class="texto">{{$t('messages.inbox')}} ({{this.info.totalNoReaded}}/{{this.info.totalReaded}})</div>
+                    <div class="texto">{{$t('messages.inbox')}} ({{this.data.totalNoReaded}}/{{this.data.totalReaded}})</div>
                 </div>
                 <div class="selectContainer" :class="type==1 ? 'active' : ''" title="Mensajes Enviados" @click='change(1)'>
                     <div class="imagen"></div>
                     <div class="texto">{{$t('messages.outbox')}} ({{this.info.totalSended}})</div>
                 </div>
             </div>
-            <ListaMensaje :remove='remove' :type='type' :data='messages' v-if="messages.length>0"></ListaMensaje>
+            <ListaMensaje :read='read' :remove='remove' :type='type' :data='messages' v-if="messages.length>0"></ListaMensaje>
             <div v-else class="nomessage">{{$t('messages.noMessage')}}</div>
         </div>
         </Ventana1>
@@ -37,6 +37,12 @@ export default {
         }
     },
     methods:{
+        read(n){
+            if(this.data.totalNoReaded>0){
+                this.data.totalNoReaded -= n
+                this.data.totalReaded += n
+            }
+        },
         change(type){
             this.type = type
         },
@@ -48,7 +54,7 @@ export default {
             if(this.type==0){
                 this.data.received = messages;
             }else{
-                this.data.sended = messages;
+                this.data.sended = this.data.totalNoReaded;
             }
         }
     },

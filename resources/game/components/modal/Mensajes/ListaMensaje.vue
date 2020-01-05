@@ -46,7 +46,7 @@ import $notification from 'Stores/notification'
 
 export default {
     name:'Enviados',
-    props:['data','type','remove'],
+    props:['data','type','remove','read'],
     methods:{
         noRead(msg){
             return msg.readed==0 ? 'noRead' : ''
@@ -56,6 +56,7 @@ export default {
             if(this.type==0){
                 axios.put('user/readMessage/'+msg.id)
                 msg.readed=1
+                this.read(1)
             }
             if(event.toElement.type=='checkbox'){
                 return
@@ -104,6 +105,7 @@ export default {
                 })
                 .then(res =>{
                     if(res.data=='ok'){
+                        this.read(msg.length)
                         document.getElementsByName('check').forEach(x =>{
                             if(x.checked){
                                 //Ponemos como leidos todos los mensajes

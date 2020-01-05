@@ -81,10 +81,24 @@ export default {
                     this.onDiplomat = true;
                 break;
             }
+        },
+        checkMsg(){
+            //Verifica si hay mensajes sin leer
+             axios('user/getMessage/unread')
+            .then(res =>{
+                if(res.data>0){
+                    //Hay mensajes sin leer
+                    this.onDiplomat = true;
+                }
+            })
+            .catch(err =>{
+                $notification.commit('show',{advisor:1,type:false,message:err});
+            })
         }
     },
     beforeMount(){
         $movement.dispatch('updateMovemenet')
+        this.checkMsg()
     },
     mounted(){
         this.$chUser.bind('advisors', (data) => {

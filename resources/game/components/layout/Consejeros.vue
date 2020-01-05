@@ -59,7 +59,10 @@ export default {
         },
         diplomat(){
             this.onDiplomat = false;
-            axios("user/getMessage").then(res => {
+            axios.post("user/getMessages",{
+                type:0,
+                page:1
+            }).then(res => {
                 $modal.commit('openModal',{type:5,info:res.data})
             })
             .catch(err => {

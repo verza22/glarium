@@ -33,9 +33,9 @@ Route::post('city/setName/{city}', 'Game\CityController@setName');
 
 Route::get('user/getUserResources', 'Game\UserController@getUserResources');
 Route::get('user/config', 'Game\UserController@config');
-Route::get('user/getMessage', 'Game\UserController@getMessage');
 Route::get('user/getMessage/unread', 'Game\UserController@getMessageUnread');
 Route::get('user/getMayor', 'Game\UserController@getMayor');
+Route::post('user/getMessages', 'Game\UserController@getMessages');
 Route::post('user/buyTradeShip', 'Game\UserController@buyTradeShip');
 Route::post('user/sendMessage/{city}', 'Game\UserController@sendMessage');
 Route::post('user/message', 'Game\UserController@deleteMessage');

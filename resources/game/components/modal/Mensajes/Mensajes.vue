@@ -9,10 +9,10 @@
                 </div>
                 <div class="selectContainer" :class="type==1 ? 'active' : ''" title="Mensajes Enviados" @click='change(1)'>
                     <div class="imagen"></div>
-                    <div class="texto">{{$t('messages.outbox')}} ({{this.info.totalSended}})</div>
+                    <div class="texto">{{$t('messages.outbox')}} ({{this.data.totalSended}})</div>
                 </div>
             </div>
-            <ListaMensaje :read='read' :remove='remove' :type='type' :data='messages' v-if="messages.length>0"></ListaMensaje>
+            <ListaMensaje :nextPage='nextPage' :more='data.more' :page='data.page' :read='read' :remove='remove' :type='type' :data='messages' v-if="messages.length>0"></ListaMensaje>
             <div v-else class="nomessage">{{$t('messages.noMessage')}}</div>
         </div>
         </Ventana1>
@@ -22,6 +22,8 @@
 <script>
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
 import ListaMensaje from 'Components/modal/Mensajes/ListaMensaje.vue'
+import axios from "axios";
+import $notification from 'Stores/notification'
 
 export default {
     name:'Mensajes',
@@ -37,6 +39,22 @@ export default {
         }
     },
     methods:{
+        nextPage(type){
+            var page = type ? this.data.page+1 : this.data.page-1
+            this.getMessages(page,this.type)
+        },
+        getMessages(page,type){
+            axios.post("user/getMessages",{
+                type:type,
+                page:page
+            }).then(res => {
+                this.data = res.data
+                this.type = type
+            })
+            .catch(err => {
+                $notification.commit('show',{advisor:4,type:false,message:err});
+            });
+        },
         read(n){
             if(this.data.totalNoReaded>0){
                 this.data.totalNoReaded -= n
@@ -44,18 +62,10 @@ export default {
             }
         },
         change(type){
-            this.type = type
+            this.getMessages(1,type)
         },
-        remove(list){
-            var messages = this.type==0 ? this.data.received : this.data.sended;
-            messages = messages.filter(element => {
-                return !list.includes(element.id);
-            });
-            if(this.type==0){
-                this.data.received = messages;
-            }else{
-                this.data.sended = this.data.totalNoReaded;
-            }
+        remove(){
+            this.getMessages(this.data.page,this.type)
         }
     },
     computed:{

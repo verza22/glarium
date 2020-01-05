@@ -118,35 +118,50 @@ class UserController extends Controller
         return 'ok';
     }
 
-    public function getMessage()
+    public function getMessages(Request $request)
     {
+        $request->validate([
+            'type' => 'required|integer|min:0|max:1',
+            'page' => 'required|integer|min:0|max:999'
+        ]);
+        $page = $request->input('page');
+        $type = $request->input('type');
         //Obtenemos el total de mensajes leidos y no leidos
         $cities = CityHelper::myCities();
+
         $data['totalNoReaded'] = Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->where('readed',0)->count();
         $data['totalReaded'] = Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->where('readed',1)->count();
-        $received = Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->limit(11)->orderBy('id','desc')->get();
-        $data['moreNoReaded'] = $received->count()>10;
-        $data['received'] =  $received->take(10)->map(function($message){
-            return [
-                'id' => $message->id,
-                'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
-                'user' => $message->from->userCity->user->only(['id','name']),
-                'readed' => $message->readed,
-                'city_name' => $message->to->name,
-                'message' => $message->message
-            ];
-        });
         $data['totalSended'] = Message::whereIn('city_from',$cities)->whereNull('deleted_at_from')->count();
-        $data['sended'] = Message::whereIn('city_from',$cities)->whereNull('deleted_at_from')->limit(11)->orderBy('id','desc')
-        ->get()->map(function($message){
-            return [
-                'id' => $message->id,
-                'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
-                'user' => $message->to->userCity->user->only(['id','name']),
-                'city_name' => $message->to->name,
-                'message' => $message->message
-            ];
-        });
+        if($type==0)
+        {
+            $received = Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->orderBy('id','desc')->paginate(10);
+            $data['more'] = $received->hasMorePages();
+            $data['received'] =  $received->map(function($message){
+                return [
+                    'id' => $message->id,
+                    'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
+                    'user' => $message->from->userCity->user->only(['id','name']),
+                    'readed' => $message->readed,
+                    'city_name' => $message->to->name,
+                    'message' => $message->message
+                ];
+            });
+        }
+        else
+        {
+            $sended = Message::whereIn('city_from',$cities)->whereNull('deleted_at_from')->orderBy('id','desc')->paginate(10);
+            $data['more'] = $sended->hasMorePages();
+            $data['sended'] = $sended->map(function($message){
+                return [
+                    'id' => $message->id,
+                    'date' => Carbon::parse($message->created_at)->format('Y-m-d H:i:s'),
+                    'user' => $message->to->userCity->user->only(['id','name']),
+                    'city_name' => $message->to->name,
+                    'message' => $message->message
+                ];
+            });
+        }
+        $data['page'] = $page;
         return $data;
     }
 
@@ -164,9 +179,10 @@ class UserController extends Controller
             'type' => 'required|boolean'
         ]);
 
-        $type = $request->input('type') ? 'user_from' : 'user_to';
+        $cities = CityHelper::myCities();
+        $type = $request->input('type') ? 'city_from' : 'city_to';
         $delete = $request->input('type') ? 'deleted_at_from' : 'deleted_at_to';
-        Message::where($type,Auth::id())->whereIn('id',$request->input('messages'))->update([$delete => Carbon::now()]);
+        Message::whereIn($type,$cities)->whereIn('id',$request->input('messages'))->update([$delete => Carbon::now()]);
         return 'ok';
     }
 

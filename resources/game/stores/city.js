@@ -36,6 +36,13 @@ export default new Vuex.Store({
         setCityName: (context,{name}) => {
           context.commit('setCityName',{name:name})
           context.commit('reloadCities')
+        },
+        setIsland: (context,{island}) => {
+            if($route.history.current.name=='Island'){
+                context.commit('setIsland',{island:island})
+            }else{
+                $route.push({ name: 'Island', params: { island:island.id,data: island }})
+            }
         }
     },
     getters:{

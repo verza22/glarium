@@ -26,10 +26,16 @@ export default {
             if(this.$route.name=='World'){
                 return;
             }
-            axios('world/'+this.island.x+'/'+this.island.y)
+            var x = this.island.x
+            var y = this.island.y
+            if(x==undefined||y==undefined){
+                x = this.city.x
+                y = this.city.y
+            }
+            axios('world/'+x+'/'+y)
             .then(res =>{
                 $modal.commit('changeRoute')
-                this.$router.push({ name: 'World', params: { x:this.island.x,y:this.island.y,data: res.data }})
+                this.$router.push({ name: 'World', params: { x:x,y:y,data: res.data }})
             })
             .catch(err => {
                 $notification.commit('show',{advisor:1,type:false,message:err});
@@ -45,11 +51,7 @@ export default {
             axios('island/'+this.island_id)
             .then(res =>{
                 $modal.commit('changeRoute')
-                if(this.$route.name=='Island'){
-                    $city.commit('setIsland',{island:res.data})
-                }else{
-                    this.$router.push({ name: 'Island', params: { island:this.island_id,data: res.data }})
-                }
+                $city.dispatch('setIsland',{island:res.data})
             })
             .catch(err => {
                 $notification.commit('show',{advisor:1,type:false,message:err});
@@ -69,6 +71,9 @@ export default {
     computed:{
         city_id(){
             return $city.state.city_id;
+        },
+        city(){
+            return $city.state.city;
         },
         island_id(){
             return $city.state.city.island_id;

@@ -68,11 +68,7 @@ export default {
             .then(res =>{
                 $modal.commit('changeRoute')
                 res.data.focusCity = msg.city.id
-                if(this.$route.name!='Island'){
-                    this.$router.push({ name: 'Island', params: { island:msg.city.island_id,data: res.data }})
-                }else{
-                    $city.commit('setIsland',{island:res.data})
-                }
+                $city.dispatch('setIsland',{island:res.data})
             })
             .catch(err => {
                 $notification.commit('show',{advisor:1,type:false,message:err});

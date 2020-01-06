@@ -5,8 +5,9 @@
         v-for="(object,index) in objects"
         :key='index'
         >
-            <div class="d-flex justify-content-center" :title='getCity(index).name' v-if='checkCity(index)' @click='openCityInfo(getCity(index))'>
-                <div class="city" :class='getCity(index).type ? "blue" : "red"' v-if='getCity(index).constructed_at != null'></div>
+            <div class="d-flex justify-content-center" :title='getCity(index).name' v-if='checkCity(index)' @click='openCityInfo(getCity(index),index)'>
+                <div class="city_hover" :class="[getActive(index),colorCity(index)]" ></div>
+                <div class="city" :class='colorCity(index)' v-if='getCity(index).constructed_at != null'></div>
                 <div class="city_constr" v-else></div>
                 <div class="valores">{{getCity(index).name}}</div>
             </div>
@@ -17,12 +18,14 @@
 
 <script>
 import $modal from 'Stores/modal'
+import $city from 'Stores/city'
 
 export default {
     name:'Ciudades',
     props:['data'],
     data(){
         return {
+            selectedIndex:-1,
             objects:[
                 {top:575,left:250},
                 {top:480,left:185},
@@ -35,7 +38,7 @@ export default {
                 {top:390,left:1185},
                 {top:640,left:1155},
                 {top:570,left:950},
-                {top:700,left:825},
+                {top:680,left:825},
                 {top:660,left:650},
                 {top:690,left:475},
                 {top:740,left:235},
@@ -44,6 +47,51 @@ export default {
         }
     },
     methods:{
+        colorCity(index){
+            var city = this.getCity(index)
+            return [city.type ? "blue" : "red", this.getLevel(city.level)];
+        },
+        getLevel(level){
+            switch(level){
+                case 1:
+                    return 'level_1';
+                break;
+                case 2:
+                case 3:
+                    return 'level_2';
+                break;
+                case 4:
+                case 5:
+                case 6:
+                    return 'level_4';
+                break;
+                case 7:
+                case 8:
+                case 9:
+                    return 'level_7';
+                break;
+                case 10:
+                case 11:
+                case 12:
+                    return 'level_10';
+                break;
+                case 13:
+                case 14:
+                case 15:
+                    return 'level_13';
+                break;
+                case 16:
+                case 17:
+                    return 'level_16';
+                break;
+                default:
+                    return 'level_18';
+                break;
+            }
+        },
+        getActive(index){
+            return index==this.selectedIndex ? 'active' : ''
+        },
         checkCity(index){
             var cities =  this.data.cities.filter(x =>{
                 return x.position == index
@@ -53,6 +101,11 @@ export default {
         getCity(index){
             return this.data.cities.filter(x =>{
                 return x.position == index
+            })[0];
+        },
+        getCityById(city_id){
+            return this.data.cities.filter(x =>{
+                return x.city_id == city_id
             })[0];
         },
         openColonize(index){
@@ -68,18 +121,35 @@ export default {
                 info:ojb
             })
         },
-        openCityInfo(city){
+        openCityInfo(city,index){
             if(city.constructed_at==null){
                 return
             }
+            this.selectedIndex = index
             $modal.commit('openModal',{
                 type:4,
                 info:{
                     city:city
                 }
             })
+        },
+        focusCity(city_id){
+            var city = this.getCityById(city_id)
+            debugger;
+            if(city!=undefined){
+                this.selectedIndex = city.position
+            }
         }
     },
+    mounted(){
+        $modal.subscribe((action,state) => {
+            if (action.type === "openModal") {
+                if(state.type==4){
+                    this.focusCity(state.info.city.city_id)
+                }
+            }
+        });
+    }
 }
 </script>
 
@@ -96,11 +166,45 @@ export default {
     .red{
         background-image: url('~Img/island/city_red.png');
     }
-    .city{
-        background-position: -3px 0px;
+    .city_hover.active{
+        z-index: 3;
+        background-position-y: -3px;
+    }
+    .blue.active{
+        background-image: url('~Img/island/city_blue_hover.png');
+    }
+    .red.active{
+        background-image: url('~Img/island/city_red_hover.png');
+    }
+    .city,.city_hover{
+        background-position: -3px;
         width: 70px;
         height: 70px;
-        margin: 0px 15px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    .level_2{
+        background-position: -76px;
+    }
+    .level_4{
+        background-position: -152px;
+    }
+    .level_7{
+        background-position: -228px;
+    }
+    .level_10{
+        background-position: -305px;
+    }
+    .level_13{
+        background-position: -380px;
+    }
+    .level_16{
+        background-position: -453px;
+    }
+    .level_18{
+        background-position: -530px;
     }
     .city_constr{
         background-image: url('~Img/island/city_constr.png');

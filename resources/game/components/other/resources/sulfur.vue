@@ -1,5 +1,5 @@
 <template>
-    <div class="d-inline-block" :title="$t('resources.sulfur')">
+    <div class="d-inline-block" :title="$t('resources.sulfur')" v-if="cant>0">
         <img :src="require('Img/icon/icon_sulfur.png')"> {{$money(cant)}}
     </div>
 </template>

@@ -17,7 +17,22 @@
                         <td><img :src="require('Img/icon/'+getIcon(item.type))"></td>
                         <td class="go" title="Ir a la ciudad" @click='goTo(item)'><b>{{item.city_name}}</b></td>
                         <td>{{item.fecha}}</td>
-                        <td v-html="getMessage(item)"></td>
+                        <td>
+                            <div v-if="item.type==1">
+                                <div v-if="item.data.level==1" v-html="$t('mayor['+[item.type]+'].created',[$t('buildings['+item.data.building_id+'].name')])"></div>
+                                <div v-else v-html="$t('mayor['+[item.type]+'].upgrade',[$t('buildings['+item.data.building_id+'].name'),item.data.level])"></div>
+                            </div>
+                            <div v-else-if="item.type==2">
+                                <div class="mb-2">Tu flota mercante de <b>{{item.city_name}}</b> ha llegado a <b>{{item.data.city_name}}</b> y ha traído los siguientes bienes:</div>
+                                <div>
+                                    <wood :cant='item.data.resources.wood'></wood>
+                                    <wine :cant='item.data.resources.wine'></wine>
+                                    <marble :cant='item.data.resources.marble'></marble>
+                                    <glass :cant='item.data.resources.glass'></glass>
+                                    <sulfur :cant='item.data.resources.sulfur'></sulfur>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -41,12 +56,22 @@ import $modal from 'Stores/modal'
 import $city from 'Stores/city'
 import axios from "axios";
 import $notification from 'Stores/notification'
+import wood from 'Components/other/resources/wood.vue'
+import wine from 'Components/other/resources/wine.vue'
+import marble from 'Components/other/resources/marble.vue'
+import glass from 'Components/other/resources/glass.vue'
+import sulfur from 'Components/other/resources/sulfur.vue'
 
 export default {
     name:'Mayor',
     props:['info','close'],
     components:{
         Ventana1,
+        wood,
+        wine,
+        marble,
+        glass,
+        sulfur
     },
     data(){
         return {
@@ -81,17 +106,8 @@ export default {
                 case 1:
                     return 'icon_production.png';
                 break;
-            }
-        },
-        getMessage(item){
-            var data = JSON.parse(item.data)
-            switch(item.type){
-                case 1:
-                    if(data.level==1){
-                        return this.$t('mayor['+[item.type]+'].created',[this.$t('buildings['+data.building_id+'].name')])
-                    }else{
-                        return this.$t('mayor['+[item.type]+'].upgrade',[this.$t('buildings['+data.building_id+'].name'),data.level])
-                    }
+                case 2:
+                    return 'icon_transport.png';
                 break;
             }
         }
@@ -107,9 +123,6 @@ export default {
     .box{
         font-size: 0.83rem;
         line-height: 0.83rem;
-    }
-    tbody td{
-        vertical-align: middle;
     }
     .go:hover{
         text-decoration: underline

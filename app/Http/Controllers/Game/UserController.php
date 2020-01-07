@@ -213,7 +213,7 @@ class UserController extends Controller
                 'city_name' => $mayor->city->name,
                 'type' => $mayor->type,
                 'readed' => $mayor->readed,
-                'data' => $mayor->data
+                'data' => json_decode($mayor->data)
             ];
         });
         //Actualizamos a leidos

@@ -8,6 +8,8 @@ use App\Models\UserResource;
 use App\Models\Island;
 use App\Helpers\OtherHelper;
 use App\Helpers\BuildingHelper;
+use App\Events\UserNotification;
+use App\Models\Mayor;
 use App\Models\UserCity;
 use App\User;
 use Auth;
@@ -100,6 +102,7 @@ class MovementHelper {
         $movements->map(function($movement){
             //Entregamos los recursos
             $city_to = $movement->city_destine;
+            $city_from = $movement->city_origin;
             $resources = $movement->resources;
 
             $city_to->wood += $resources->wood;
@@ -113,6 +116,18 @@ class MovementHelper {
             //Actualizamos el estado a entregado
             $movement->delivered = 1;
             $movement->save();
+
+            //Ingresamos notificacion al mayor
+            Mayor::create([
+                'city_id'=> $city_from->id,
+                'type' => 2,
+                'data' => json_encode([
+                    'resources'=>$resources,
+                    'city_to'=>$city_to->id,
+                    'city_name'=>$city_to->name
+                ])
+            ]);
+            event(new UserNotification('advisors','mayor',$movement->user_id));
         });
     }
 

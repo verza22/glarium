@@ -42,11 +42,14 @@ class BuildingHelper {
                             })->first();
     }
 
-    public static function updateConstructedTime(City $city)
+    public static function updateConstructedTime($cities,$type = 0)
     {
-        CityBuilding::where('city_id',$city->id)
+        if($type==0){
+            $cities = [$cities];
+        }
+        CityBuilding::whereIn('city_id',$cities)
         ->where('constructed_at','<',Carbon::now()->addSeconds(3))
-        ->get()->map(function($cityBuilding) use ($city){
+        ->get()->map(function($cityBuilding){
             //Mejoramos el edificio
             $after = $cityBuilding->building_level;
             $before = BuildingLevel::where('building_id',$after->building_id)->where('level',$after->level+1)->first();
@@ -56,11 +59,11 @@ class BuildingHelper {
 
             //Notificamos de la creacion del edificio
             Mayor::create([
-                'city_id'=> $city->id,
+                'city_id'=> $cityBuilding->city->id,
                 'type' => 1,
                 'data' => json_encode(['building_id'=>$after->building_id,'level'=>$before->level])
             ]);
-            event(new UserNotification('advisors','mayor',$city->userCity->user_id));
+            event(new UserNotification('advisors','mayor',$cityBuilding->city->userCity->user_id));
         });
     }
 

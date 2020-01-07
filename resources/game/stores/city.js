@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import $building from 'Stores/building'
 import $route from 'Js/router'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -41,12 +42,19 @@ export default new Vuex.Store({
           context.commit('setCityName',{name:name})
           context.commit('reloadCities')
         },
-        setIsland: (context,{island}) => {
-            if($route.history.current.name=='Island'){
-                context.commit('setIsland',{island:island})
-            }else{
-                $route.push({ name: 'Island', params: { island:island.id,data: island }})
-            }
+        focusCity: (context,{island_id,city_id}) => {
+            //Focusea una ciudad
+            axios('island/'+island_id)
+            .then(res =>{
+                var island = res.data
+                island.focusCity = city_id
+                if($route.history.current.params.island!=island_id){
+                    $route.push({ name: 'Island', params: { island:island_id,data: island }})
+                }
+                if($route.history.current.name=='Island'){
+                    context.commit('setIsland',{island:island})
+                }
+            })
         }
     },
     getters:{

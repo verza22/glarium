@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
   //  return $request->user();
 //});
 
-Route::get('building/{city}', 'Game\BuildingController@buildings');
+Route::get('buildings', 'Game\BuildingController@buildings');
 Route::post('building/nextLevel/{building}', 'Game\BuildingController@nextLevel');
 Route::post('building/{city}', 'Game\BuildingController@buildingsAvaible');
 Route::put('building/upgrade/{cityBuilding}', 'Game\BuildingController@upgrade');

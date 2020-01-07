@@ -51,7 +51,10 @@ export default {
             axios('island/'+this.island_id)
             .then(res =>{
                 $modal.commit('changeRoute')
-                $city.dispatch('setIsland',{island:res.data})
+                this.$router.push({ name: 'Island', params: { island:this.island_id,data: res.data }})
+                if(this.$route.name=='Island'){
+                    $city.commit('setIsland',{island:res.data})
+                }
             })
             .catch(err => {
                 $notification.commit('show',{advisor:1,type:false,message:err});

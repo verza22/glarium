@@ -24,16 +24,16 @@ class BuildingController extends Controller
         $this->middleware('auth');
     }
 
-    public function buildings(City $city)
+    public function buildings()
     {
-        //Obtiene y devuelve los edificios de una ciudad
-        $this->authorize('isMyCity',$city);
-        //Actualizamos los tiempos de construccion de los edificios
-        BuildingHelper::updateConstructedTime($city);
+        //Obtiene y devuelve los edificios del jugador
+        $cities = CityHelper::myCities();
+        BuildingHelper::updateConstructedTime($cities,1);
 
-        return $city->building->map(function($building){
+        return CityBuilding::whereIn('city_id',$cities)->get()->map(function($building){
             return [
                 'id' => $building->id,
+                'city_id' => $building->city_id,
                 'position' => $building->position,
                 'building_id' => $building->building_level->building_id,
                 'level' => $building->building_level->level,
@@ -170,7 +170,7 @@ class BuildingController extends Controller
             return 'No tienes la investigacion necesaria para construir este edificio';
         }
 
-        BuildingHelper::updateConstructedTime($city);
+        BuildingHelper::updateConstructedTime($city->id);
 
         if(BuildingHelper::isContructed($city))
         {
@@ -283,7 +283,7 @@ class BuildingController extends Controller
             return 'No existe ese nivel';
         }
 
-        BuildingHelper::updateConstructedTime($city);
+        BuildingHelper::updateConstructedTime($city->id);
 
         if(BuildingHelper::isContructed($city))
         {

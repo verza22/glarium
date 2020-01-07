@@ -64,15 +64,7 @@ export default {
     props:['data','type','remove','read','page','more','nextPage'],
     methods:{
         goTo(msg){
-            axios('island/'+msg.city.island_id)
-            .then(res =>{
-                $modal.commit('changeRoute')
-                res.data.focusCity = msg.city.id
-                $city.dispatch('setIsland',{island:res.data,focus:msg.city.id})
-            })
-            .catch(err => {
-                $notification.commit('show',{advisor:1,type:false,message:err});
-            });
+            $city.dispatch('focusCity',{island_id:msg.city.island_id,city_id:msg.city.id})
         },
         noRead(msg){
             return msg.readed==0 ? 'noRead' : ''

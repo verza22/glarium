@@ -19,6 +19,11 @@ class CityBuilding extends Model
         return $this->belongsTo('App\Models\BuildingLevel');
     }
 
+    public function city()
+    {
+        return $this->belongsTo('App\Models\City');
+    }
+
     public static function boot()
     {
         parent::boot();

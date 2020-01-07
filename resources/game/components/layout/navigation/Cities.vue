@@ -37,7 +37,8 @@ export default {
             })
         },
         checkSelected(){
-            this.data.forEach(x =>{
+            var aux = [...this.data]
+            aux.forEach(x =>{
                 if(x.id == this.city_id){
                     x.selected = true
                     $city.commit('changeCity',{city:x})
@@ -45,6 +46,7 @@ export default {
                     x.selected = false
                 }
             })
+            this.data = aux
         },
         getOther(){
             return this.data.filter(x =>{
@@ -62,6 +64,7 @@ export default {
         changeCity(city){
             this.show = false;
             $city.commit('setCityId',{city_id:city.id});
+            this.$router.push({ name: 'City', params: { city:city.id}})
         }
     },
     computed:{

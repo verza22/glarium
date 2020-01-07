@@ -64,13 +64,16 @@ export default {
     this.$nextTick(function () {
         if(this.data.focusCity){
             //Despues que se actualize la isla hacemos el focus
+            if(this.data.focusCity!=-1)
             $city.commit('setFocusCity',{focusCity:this.data.focusCity})
         }
     })
   },
   mounted(){
-    if(this.$route.params.data.focusCity!=undefined){
-        $city.commit('setFocusCity',{focusCity:this.$route.params.data.focusCity})
+    if(this.$route.params.data!=undefined){
+        if(this.$route.params.data.focusCity!=undefined){
+            $city.commit('setFocusCity',{focusCity:this.$route.params.data.focusCity})
+        }
     }
     $store.subscribe((action,state) => {
         if (action.type === "reloadIslandData") {

@@ -118,14 +118,14 @@ export default {
       return $city.state.city_id;
     },
     buildings(){
-      return $building.state.buildings
+      return $building.getters.getBuildings
     }
   },
   watch: {
     city_id() {
       $building.dispatch('updateBuilding')
     },
-  },
+  }
 };
 </script>
 

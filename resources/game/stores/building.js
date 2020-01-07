@@ -24,7 +24,7 @@ const store = new Vuex.Store({
     actions:{
         updateBuilding(context){
             return new Promise((resolve,reject) => {
-                axios("building/" + $city.state.city_id)
+                axios("buildings")
                 .then(res => {
                     context.commit('updateBuilding',{buildings:res.data})
                     resolve()
@@ -36,6 +36,9 @@ const store = new Vuex.Store({
         }
     },
     getters:{
+        getBuildings: state => {
+            return state.buildings.filter(building => { return building.city_id == $city.state.city_id })
+        },
         getBuildingLevel: state => building_id => {
             var building = state.buildings.filter(building => { return building.building_id == building_id })
             return building.length>0 ? building[0].level : 0;

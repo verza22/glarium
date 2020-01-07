@@ -14,7 +14,7 @@
                 <tbody>
                     <tr v-for='(item,index) in info' :key='index'>
                         <td><img :src="require('Img/icon/'+getIcon(item.type))"></td>
-                        <td>{{item.city_name}}</td>
+                        <td class="go" title="Ir a la ciudad" @click='goTo(item)'>{{item.city_name}}</td>
                         <td>{{item.fecha}}</td>
                         <td v-html="getMessage(item)"></td>
                     </tr>
@@ -27,6 +27,8 @@
 
 <script>
 import Ventana1 from 'Components/modal/Ventanas/Ventana1.vue'
+import $modal from 'Stores/modal'
+import $city from 'Stores/city'
 
 export default {
     name:'Mayor',
@@ -35,6 +37,16 @@ export default {
         Ventana1,
     },
     methods:{
+        goTo(item){
+            $modal.commit('changeRoute')
+            if(this.$route.name=='City'){
+                if(this.$route.params.city==item.city_id){
+                    return;
+                }
+            }
+            $city.commit('setCityId',{city_id:item.city_id})
+            this.$router.push({ name: 'City', params: { city:item.city_id}})
+        },
         getIcon(type){
             switch(type){
                 case 1:
@@ -66,5 +78,12 @@ export default {
     }
     tbody td{
         vertical-align: middle;
+    }
+    .go:hover{
+        text-decoration: underline
+    }
+    .go{
+        cursor: pointer;
+        user-select: none;
     }
 </style>

@@ -43,38 +43,35 @@ export default {
       init(){
         axios('island/'+this.$route.params.island)
         .then(res =>{
-            //this.data = res.data;
-            $city.commit('setIsland',{island:res.data})
+            this.data = res.data;
         })
         .catch(err => {
             $notification.commit('show',{advisor:1,type:false,message:err});
         });
       },
-      focusCity(city_id){
-        var city = this.data.cities.filter(x => {return x.city_id == city_id})[0]
-        $modal.commit('openModal',{
-            type:4,
-            info:{
-                city:city
-            }
-        })
-      },
       setIsland(island){
         this.data = island;
-        if(island.focusCity!=undefined){
-            this.focusCity(island.focusCity)
-        }
       }
   },
   beforeMount(){
     if(this.$route.params.data!=undefined){
         this.setIsland(this.$route.params.data)
-        $city.commit('setIsland',{island:this.data})
     }else{
         this.init();
     }
   },
+  updated: function () {
+    this.$nextTick(function () {
+        if(this.data.focusCity){
+            //Despues que se actualize la isla hacemos el focus
+            $city.commit('setFocusCity',{focusCity:this.data.focusCity})
+        }
+    })
+  },
   mounted(){
+    if(this.$route.params.data.focusCity!=undefined){
+        $city.commit('setFocusCity',{focusCity:this.$route.params.data.focusCity})
+    }
     $store.subscribe((action,state) => {
         if (action.type === "reloadIslandData") {
             this.init();

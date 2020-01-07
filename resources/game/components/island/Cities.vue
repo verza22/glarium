@@ -135,17 +135,22 @@ export default {
         },
         focusCity(city_id){
             var city = this.getCityById(city_id)
-            debugger;
             if(city!=undefined){
                 this.selectedIndex = city.position
+                $modal.commit('openModal',{
+                    type:4,
+                    info:{
+                        city:city
+                    }
+                })
             }
         }
     },
     mounted(){
-        $modal.subscribe((action,state) => {
-            if (action.type === "openModal") {
-                if(state.type==4){
-                    this.focusCity(state.info.city.city_id)
+        $city.subscribe((action,state) => {
+            if (action.type === "setFocusCity") {
+                if(state.focusCity!=-1){
+                    this.focusCity(state.focusCity)
                 }
             }
         });

@@ -12,6 +12,7 @@ export default new Vuex.Store({
         city:{},
         island:{},
         cities:[],
+        focusCity:-1
     },
     mutations:{
         reloadCities(){},
@@ -30,7 +31,10 @@ export default new Vuex.Store({
         },
         setIsland(state,{island}){
           state.island = island
-        }
+        },
+        setFocusCity(state,{focusCity}){
+          state.focusCity = focusCity
+        },
     },
     actions:{
         setCityName: (context,{name}) => {

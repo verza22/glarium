@@ -68,7 +68,7 @@ export default {
             .then(res =>{
                 $modal.commit('changeRoute')
                 res.data.focusCity = msg.city.id
-                $city.dispatch('setIsland',{island:res.data})
+                $city.dispatch('setIsland',{island:res.data,focus:msg.city.id})
             })
             .catch(err => {
                 $notification.commit('show',{advisor:1,type:false,message:err});

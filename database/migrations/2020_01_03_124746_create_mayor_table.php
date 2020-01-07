@@ -18,6 +18,7 @@ class CreateMayorTable extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('city_id');
             $table->integer('type');
+            $table->integer('readed');
             $table->json('data');
 
             $table->foreign('city_id')->references('id')->on('city');

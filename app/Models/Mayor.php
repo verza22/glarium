@@ -14,6 +14,10 @@ class Mayor extends Model
         'data'
     ];
 
+    protected $attributes = [
+        'readed' => 0
+    ];
+
     public function city()
     {
         return $this->belongsTo('App\Models\City');

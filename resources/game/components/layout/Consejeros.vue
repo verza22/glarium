@@ -44,7 +44,7 @@ export default {
         },
         mayor(){
             this.onMayor = false;
-            axios("user/getMayor").then(res => {
+            axios("user/getMayor?page=1").then(res => {
                 $modal.commit('openModal',{type:8,info:res.data})
             })
             .catch(err => {
@@ -87,11 +87,15 @@ export default {
         },
         checkMsg(){
             //Verifica si hay mensajes sin leer
-             axios('user/getMessage/unread')
+            axios('user/unread')
             .then(res =>{
-                if(res.data>0){
+                if(res.data.message>0){
                     //Hay mensajes sin leer
                     this.onDiplomat = true;
+                }
+                if(res.data.mayor>0){
+                    //Hay mensajes sin leer
+                    this.onMayor = true;
                 }
             })
             .catch(err =>{

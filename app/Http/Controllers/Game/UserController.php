@@ -173,12 +173,6 @@ class UserController extends Controller
         return $data;
     }
 
-    public function getMessageUnread()
-    {
-        $cities = CityHelper::myCities();
-        return Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->where('readed',0)->count();
-    }
-
     public function deleteMessage(Request $request)
     {
         $request->validate([
@@ -194,18 +188,39 @@ class UserController extends Controller
         return 'ok';
     }
 
-    public function getMayor()
+    public function unread()
     {
+        $cities = CityHelper::myCities();
+        $mayor = Mayor::whereIn('city_id',$cities)->where('readed',0)->count();
+        $message =  Message::whereIn('city_to',$cities)->whereNull('deleted_at_to')->where('readed',0)->count();
+        return ['mayor' => $mayor,'message' => $message];
+    }
+
+    public function getMayor(Request $request)
+    {
+        $request->validate([
+            'page' => 'required|integer|min:0|max:999'
+        ]);
+        $page = $request->input('page');
         $cities = UserCity::where('user_id',Auth::id())->pluck('city_id');
-        return Mayor::whereIn('city_id',$cities)->orderBy('id','desc')->get()->map(function ($mayor){
+
+        $data['total'] = Mayor::whereIn('city_id',$cities)->count();
+        $pagination = Mayor::whereIn('city_id',$cities)->orderBy('id','desc')->paginate(10);
+        $data['items'] = $pagination->map(function ($mayor){
             return [
                 'fecha' => Carbon::parse($mayor->created_at)->format('Y-m-d H:i'),
                 'city_id' => $mayor->city_id,
                 'city_name' => $mayor->city->name,
                 'type' => $mayor->type,
+                'readed' => $mayor->readed,
                 'data' => $mayor->data
             ];
         });
+        //Actualizamos a leidos
+        Mayor::whereIn('id',$pagination->pluck('id'))->update(['readed'=>1]);
+        $data['more'] = $pagination->hasMorePages();
+        $data['page'] = intval($page);
+        return $data;
     }
 
     public function readMessage(Message $message)

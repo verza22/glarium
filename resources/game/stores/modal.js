@@ -19,6 +19,10 @@ export default new Vuex.Store({
             state.info = info;
             state.type = type;
         },
+        clear(state){
+            state.info = {};
+            state.type = 0;
+        },
         changeRoute(){}
     },
     actions:{

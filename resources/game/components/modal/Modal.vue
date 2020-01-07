@@ -64,6 +64,7 @@
                 this.show = false;
                 this.info = {};
                 this.type = null;
+                $modal.commit('clear');
             },
         },
         mounted(){

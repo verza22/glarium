@@ -123,7 +123,7 @@ export default {
   },
   watch: {
     city_id() {
-      $building.dispatch('updateBuilding')
+      //$building.dispatch('updateBuilding')
     },
   }
 };

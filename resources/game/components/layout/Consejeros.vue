@@ -101,6 +101,9 @@ export default {
             .catch(err =>{
                 $notification.commit('show',{advisor:1,type:false,message:err});
             })
+        },
+        movement(data){
+            debugger
         }
     },
     beforeMount(){
@@ -110,6 +113,9 @@ export default {
     mounted(){
         this.$chUser.bind('advisors', (data) => {
             this.advisorsNotification(data.data)
+        });
+        this.$chUser.bind('movements', (data) => {
+            this.movement(data.data)
         });
     }
 };

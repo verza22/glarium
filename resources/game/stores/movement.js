@@ -11,7 +11,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        movements:[]
+        movements:[],
+        movementEnd:[],
+        movementReturn:[]
     },
     mutations:{
         updateMovemenet(state,{movements}){
@@ -21,41 +23,39 @@ const store = new Vuex.Store({
     actions:{
         updateMovemenet: context =>{
             axios('movement').then(res =>{
-                if(res.data.length>0){
-                    context.commit('updateMovemenet',{
-                        movements:res.data
-                    });
-                }
-            })
+                context.commit('updateMovemenet',{
+                    movements:res.data
+                });
+            });
         }
     }
 })
+
 
 //Intervalo que verifica y termina los movimientos
 setInterval(function () {
     if(store.state.movements.length>0){
         store.state.movements.forEach((movement,index)=>{
             var control = false;
-            switch(movement.movement_type_id){
-                case 1:
-                    //Transporte
-                    //Sumamos los recursos
-                    if(moment.duration(moment(movement.return_at).diff(moment())).asSeconds()<=0){
-                        control = true
-                    }
-                break;
-                case 4:
-                    //Colonizacion
-                    if(moment.duration(moment(movement.end_at).diff(moment())).asSeconds()<=0){
-                        control = true
-                    }
-                break;
+            if(moment.duration(moment(movement.end_at).diff(moment())).asSeconds()<=0 && !store.state.movementEnd.includes(movement.id)){
+                control = true
+            }
+            if(moment.duration(moment(movement.return_at).diff(moment())).asSeconds()<=0 && !store.state.movementReturn.includes(movement.id)){
+                control = true
             }
             //Terminamos el movimiento
             if(control){
-                store.state.movements.splice(index,1)
+                //actualizamos el movimiento
+                store.dispatch('updateMovemenet')
+                if(moment.duration(moment(movement.end_at).diff(moment())).asSeconds()<=0){
+                    store.state.movementEnd.push(movement.id)
+                }
+                if(moment.duration(moment(movement.return_at).diff(moment())).asSeconds()<=0){
+                    store.state.movementReturn.push(movement.id)
+                }
+                /*store.state.movements.splice(index,1)
                 axios.put('movement').then(res =>{
-                    $resources.commit('addTradeShip',{ships:movement.trade_ship})
+                    /*$resources.commit('addTradeShip',{ships:movement.trade_ship})
                     if($city.state.city_id==movement.city_from.id){
                         $resources.commit('addApoint')
                     }
@@ -70,7 +70,7 @@ setInterval(function () {
                             $store.commit('reloadIslandData')
                         break;
                     }
-                })
+                })*/
             }
         })
     }

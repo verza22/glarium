@@ -80,12 +80,16 @@ class MovementHelper {
         $movements = Movement::whereIn('city_from',$cities)
                             ->where('movement_type_id',1)
                             ->where('delivered',1)
-                            ->where('return_at','<',Carbon::now())->get();
+                            ->where('return_at','<',Carbon::now()->addSeconds(3))->get();
         $movements->map(function($movement){
             $userResource = UserResource::where('user_id',$movement->user_id)->firstOrFail();
             //Actualizamos sus mercantes
             $userResource->trade_ship_available += $movement->trade_ship;
             $userResource->save();
+
+            //Avisamos del estado
+            $movement->status = 1;
+            event(new UserNotification('movements',$movement,$movement->user_id));
 
             //Borramos el movimiento
             $movement->delete();
@@ -98,7 +102,7 @@ class MovementHelper {
         $movements = Movement::whereIn('city_from',$cities)
                             ->where('movement_type_id',1)
                             ->where('delivered',0)
-                            ->where('end_at','<',Carbon::now())->get();
+                            ->where('end_at','<',Carbon::now()->addSeconds(3))->get();
         $movements->map(function($movement){
             //Entregamos los recursos
             $city_to = $movement->city_destine;
@@ -128,6 +132,10 @@ class MovementHelper {
                 ])
             ]);
             event(new UserNotification('advisors','mayor',$movement->user_id));
+
+            //Avisamos del estado
+            $movement->status = 2;
+            event(new UserNotification('movements',$movement,$movement->user_id));
         });
     }
 
@@ -137,7 +145,7 @@ class MovementHelper {
         $movements = Movement::whereIn('city_to',$cities)
                             ->where('movement_type_id',1)
                             ->where('delivered',0)
-                            ->where('end_at','<',Carbon::now())->get();
+                            ->where('end_at','<',Carbon::now()->addSeconds(3))->get();
         $movements->map(function($movement){
             //Entregamos los recursos
             $city_to = $movement->city_destine;
@@ -154,6 +162,10 @@ class MovementHelper {
             //Actualizamos el estado a entregado
             $movement->delivered = 1;
             $movement->save();
+
+            //Avisamos del estado
+            $movement->status = 3;
+            event(new UserNotification('movements',$movement,$movement->user_id));
         });
     }
 

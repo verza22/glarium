@@ -279,7 +279,7 @@ class MovementController extends Controller
     public function getMovement()
     {
         //Devuelve los movimientos de colonizacion,recursos,ataques y defensas
-        //MovementHelper::returnMovementResourcesAll();
+        MovementHelper::returnMovementResourcesAll();
         return Movement::where('user_id',Auth::id())->get()->map(function($movement){
             $data = $movement->only(['id','start_at','end_at','return_at','delivered','user_id','movement_type_id','trade_ship']);
             if($movement->resources!=NULL)
@@ -292,15 +292,6 @@ class MovementController extends Controller
             $data['city_from']['user'] = $movement->city_origin->userCity->user->name;
             return $data;
         });
-    }
-
-    public function endMovement()
-    {
-        //Finaliza un movimiento
-
-        MovementHelper::returnMovementResourcesAll();
-
-        return 'ok';
     }
 
 }

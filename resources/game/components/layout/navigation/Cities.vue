@@ -64,7 +64,9 @@ export default {
         changeCity(city){
             this.show = false;
             $city.commit('setCityId',{city_id:city.id});
-            this.$router.push({ name: 'City', params: { city:city.id}})
+            if(this.$route.name=="City"){
+                this.$router.push({ name: 'City', params: { city:city.id}})
+            }
         }
     },
     computed:{

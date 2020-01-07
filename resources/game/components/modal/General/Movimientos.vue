@@ -53,7 +53,7 @@ export default {
     methods:{
         getHorario(movement){
             var tipo = this.checkHorarioTipo(movement)
-            var texto = '';
+            var texto = 'Retornando';
             var tiempo_aux = null;
             switch(tipo){
                 case 1:
@@ -89,7 +89,10 @@ export default {
             return moment(time) > moment()
         },
         calculateTime(time){
-            return this.$sectotime(moment.duration(moment(time).diff(moment(this.now))).asSeconds())
+            var aux = moment.duration(moment(time).diff(moment(this.now))).asSeconds()
+            aux = aux<0 ? 0 : aux
+            aux = isNaN(aux) ? 0 : aux
+            return this.$sectotime(aux)
         }
     },
     computed:{

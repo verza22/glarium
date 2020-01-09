@@ -30,8 +30,7 @@
                         <div>{{movement.city_from.name}}</div>
                         <div>({{movement.city_from.user}})</div>
                     </td>
-                    <td>
-                        <img :src="require('Img/icon/movement/arrow_right_green.png')">
+                    <td v-html="getArrow(movement)">
                     </td>
                     <td>
                         <div>{{movement.city_to.name}}</div>
@@ -89,6 +88,32 @@ export default {
             return `
                 <div>${this.calculateTime(tiempo_aux)}</div>
                 <div>(${texto})</div>
+            `;
+        },
+        getArrow(movement){
+            var tipo = this.checkHorarioTipo(movement)
+            var tipo_movimiento = '';
+            switch(movement.movement_type_id){
+                case 1:
+                    tipo_movimiento = 'Transporte '
+                break;
+            }
+            var texto = '(Retornando)';
+            var image = 'right';
+            switch(tipo){
+                case 1:
+                    texto = '(Cargando)'
+                break;
+                case 2:
+                    texto = '(En marcha)'
+                break;
+                case 3:
+                    texto = '(Retornando)'
+                    image = 'left'
+                break;
+            }
+            return `
+                <img title="${tipo_movimiento+' '+texto}" src="${require('Img/icon/movement/arrow_'+image+'_green.png')}">
             `;
         },
         checkHorarioTipo(movement){

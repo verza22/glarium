@@ -30,7 +30,7 @@
     left: 0;
     right: 0;
     touch-action: none;
-    margin-top: 120px; 
+    margin-top: 120px;
 }
 .mDiv2{
     width: 230px;
@@ -60,18 +60,6 @@
 .mFooter{
     background-image: url('~Img/icon/bg_maincontentbox_footer.png');
     height:4px;
-}
-.btn-close{
-    background-image: url('~Img/icon/close.png');
-    height: 19px;
-    width: 18px;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    cursor: pointer;
-}
-.btn-close:hover{
-    background-image: url('~Img/icon/close-hover.png');
 }
 .mBody::-webkit-scrollbar-track
 {

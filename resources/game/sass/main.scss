@@ -11,6 +11,18 @@
     height: 100%;
     width: 100%;
 }
+.btn-close{
+    background-image: url('~Img/icon/close.png');
+    height: 19px;
+    width: 18px;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
+}
+.btn-close:hover{
+    background-image: url('~Img/icon/close-hover.png');
+}
 .gtitle{
     font-weight: bold;
     font-size: 0.83rem;

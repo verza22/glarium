@@ -21,7 +21,10 @@
                     <td v-html='getHorario(movement)'></td>
                     <td>{{movement.trade_ship}} Barcos</td>
                     <td>
-                        <img class="bton" :src="require('Img/icon/movement/magnifySmall.png')"  title="Ver cargamento">
+                        <div class="position-relative">
+                            <img @click="viewDetail(movement)" class="bton" :src="require('Img/icon/movement/magnifySmall.png')"  title="Ver cargamento">
+                            <Recursos :close="closeDetail" :movement='movement' v-if="movement.detail"></Recursos>
+                        </div>
                     </td>
                     <td>
                         <div>{{movement.city_from.name}}</div>
@@ -46,11 +49,25 @@
 <script>
 import moment from 'moment'
 import $store from "Stores/store";
+import Recursos from 'Components/modal/General/Recursos.vue'
 
 export default {
     name: 'Movimientos',
     props:['movements'],
+    components:{
+        Recursos
+    },
     methods:{
+        closeDetail(movement){
+            movement.detail = false;
+        },
+        viewDetail(movement){
+            if(movement.detail){
+                movement.detail = false;
+            }else{
+                movement.detail = true;
+            }
+        },
         getHorario(movement){
             var tipo = this.checkHorarioTipo(movement)
             var texto = 'Retornando';

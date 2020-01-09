@@ -9,72 +9,72 @@
         </div>
         <div class="d-flex p-1">
             <div class="flex-1">
-                <wood :cant='safe'></wood>
+                <wood :visible='true' :cant='safe'></wood>
             </div>
             <div class="flex-1">
-                <wood :cant='woodSafe'></wood>
+                <wood :visible='true' :cant='woodSafe'></wood>
             </div>
             <div class="flex-1">
-                <wood :cant='wood'></wood>
+                <wood :visible='true' :cant='wood'></wood>
             </div>
             <div class="flex-1">
-                <wood :cant='max_capacity'></wood>
-            </div>
-        </div>
-        <div class="d-flex p-1">
-            <div class="flex-1">
-                <wine :cant='safe'></wine>
-            </div>
-            <div class="flex-1">
-                <wine :cant='wineSafe'></wine>
-            </div>
-            <div class="flex-1">
-                <wine :cant='wine'></wine>
-            </div>
-            <div class="flex-1">
-                <wine :cant='max_capacity'></wine>
+                <wood :visible='true' :cant='max_capacity'></wood>
             </div>
         </div>
         <div class="d-flex p-1">
             <div class="flex-1">
-                <marble :cant='safe'></marble>
+                <wine :visible='true' :cant='safe'></wine>
             </div>
             <div class="flex-1">
-                <marble :cant='marbleSafe'></marble>
+                <wine :visible='true' :cant='wineSafe'></wine>
             </div>
             <div class="flex-1">
-                <marble :cant='marble'></marble>
+                <wine :visible='true' :cant='wine'></wine>
             </div>
             <div class="flex-1">
-                <marble :cant='max_capacity'></marble>
-            </div>
-        </div>
-        <div class="d-flex p-1">
-            <div class="flex-1">
-                <glass :cant='safe'></glass>
-            </div>
-            <div class="flex-1">
-                <glass :cant='glassSafe'></glass>
-            </div>
-            <div class="flex-1">
-                <glass :cant='glass'></glass>
-            </div>
-            <div class="flex-1">
-                <glass :cant='max_capacity'></glass>
+                <wine :visible='true' :cant='max_capacity'></wine>
             </div>
         </div>
         <div class="d-flex p-1">
             <div class="flex-1">
-                <sulfur :cant='safe'></sulfur>
+                <marble :visible='true' :cant='safe'></marble>
             </div>
             <div class="flex-1">
-                <sulfur :cant='sulfurSafe'></sulfur>
+                <marble :visible='true' :cant='marbleSafe'></marble>
             </div>
             <div class="flex-1">
-                <sulfur :cant='sulfur'></sulfur>
+                <marble :visible='true' :cant='marble'></marble>
             </div>
             <div class="flex-1">
-                <sulfur :cant='max_capacity'></sulfur>
+                <marble :visible='true' :cant='max_capacity'></marble>
+            </div>
+        </div>
+        <div class="d-flex p-1">
+            <div class="flex-1">
+                <glass :visible='true' :cant='safe'></glass>
+            </div>
+            <div class="flex-1">
+                <glass :visible='true' :cant='glassSafe'></glass>
+            </div>
+            <div class="flex-1">
+                <glass :visible='true' :cant='glass'></glass>
+            </div>
+            <div class="flex-1">
+                <glass :visible='true' :cant='max_capacity'></glass>
+            </div>
+        </div>
+        <div class="d-flex p-1">
+            <div class="flex-1">
+                <sulfur :visible='true' :cant='safe'></sulfur>
+            </div>
+            <div class="flex-1">
+                <sulfur :visible='true' :cant='sulfurSafe'></sulfur>
+            </div>
+            <div class="flex-1">
+                <sulfur :visible='true' :cant='sulfur'></sulfur>
+            </div>
+            <div class="flex-1">
+                <sulfur :visible='true' :cant='max_capacity'></sulfur>
             </div>
         </div>
     </div>

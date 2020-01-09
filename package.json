@@ -35,6 +35,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "@panzoom/panzoom": "^4.0.0",
     "bootstrap-css-only": "^4.3.1"
   }
 }

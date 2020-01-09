@@ -1,11 +1,13 @@
 <template>
   <div>
-    <div class="cityContainer" v-dragscroll="true" v-autoscroll="'top center'">
-      <div class="forest">
-        <div class="city">
-            <Edificios></Edificios>
+    <div class="cityContainer" v-dragscroll="true" v-autoscroll="'center'">
+        <div id="zoom">
+            <div class="forest">
+                <div class="city">
+                    <Edificios></Edificios>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
   </div>
 </template>
@@ -17,6 +19,7 @@ import { autoscroll } from 'vue-autoscroll'
 import Edificios from "Components/city/Edificios.vue";
 
 
+
 export default {
   name: "City",
   directives: {
@@ -26,6 +29,11 @@ export default {
   components:{
     Edificios,
   },
+  mounted(){
+      this.$zoom()
+
+
+  }
 };
 </script>
 

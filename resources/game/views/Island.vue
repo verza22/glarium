@@ -1,12 +1,14 @@
 <template>
 <div>
   <div class="islandContainer" v-dragscroll="true" v-autoscroll="'center'">
-    <div class="ocean">
-      <div class="island">
-        <Cities :data='data' v-if="data.cities"></Cities>
-        <Resources :data='data'></Resources>
-      </div>
-    </div>
+       <div id="zoom">
+            <div class="ocean">
+                <div class="island">
+                    <Cities :data='data' v-if="data.cities"></Cities>
+                    <Resources :data='data'></Resources>
+                </div>
+            </div>
+        </div>
   </div>
 </div>
 </template>
@@ -70,6 +72,7 @@ export default {
     })
   },
   mounted(){
+    this.$zoom()
     if(this.$route.params.data!=undefined){
         if(this.$route.params.data.focusCity!=undefined){
             $city.commit('setFocusCity',{focusCity:this.$route.params.data.focusCity})

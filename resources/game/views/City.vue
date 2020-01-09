@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="cityContainer" v-dragscroll="true" v-autoscroll="'center'">
+    <div class="cityContainer" v-dragscroll="true" v-autoscroll="'top center'">
         <div id="zoom">
             <div class="forest">
                 <div class="city">

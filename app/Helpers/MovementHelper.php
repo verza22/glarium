@@ -88,8 +88,9 @@ class MovementHelper {
             $userResource->save();
 
             //Avisamos del estado
-            $movement->status = 1;
-            event(new UserNotification('movements',$movement,$movement->user_id));
+            $data = $movement->only(['trade_ship']);
+            $data['status'] = 1;
+            event(new UserNotification('movements',$data,$movement->user_id));
 
             //Borramos el movimiento
             $movement->delete();
@@ -121,7 +122,7 @@ class MovementHelper {
             $movement->delivered = 1;
             $movement->save();
 
-            //Ingresamos notificacion al mayor
+            //Ingresamos notificacion a la ciudad de origen
             Mayor::create([
                 'city_id'=> $city_from->id,
                 'type' => 2,
@@ -133,9 +134,23 @@ class MovementHelper {
             ]);
             event(new UserNotification('advisors','mayor',$movement->user_id));
 
+            //Ingresamos el estado de la ciudad de destino
+            Mayor::create([
+                'city_id'=> $city_to->id,
+                'type' => 3,
+                'data' => json_encode([
+                    'resources'=>$resources,
+                    'city_from'=>$city_from->id,
+                    'city_name'=>$city_from->name
+                ])
+            ]);
+            event(new UserNotification('advisors','mayor',$city_to->userCity->user_id));
+
             //Avisamos del estado
-            $movement->status = 2;
-            event(new UserNotification('movements',$movement,$movement->user_id));
+            $data['city_id'] = $city_to->id;
+            $data['resources'] = $resources->only(['wood','wine','marble','glass','sulfur','city_to']);
+            $data['status'] = 2;
+            event(new UserNotification('movements',$data,$city_to->userCity->user_id));
         });
     }
 

@@ -23,7 +23,17 @@
                                 <div v-else v-html="$t('mayor['+[item.type]+'].upgrade',[$t('buildings['+item.data.building_id+'].name'),item.data.level])"></div>
                             </div>
                             <div v-else-if="item.type==2">
-                                <div class="mb-2">Tu flota mercante de <b>{{item.city_name}}</b> ha llegado a <b>{{item.data.city_name}}</b> y ha traído los siguientes bienes:</div>
+                                <div class="mb-2">Tu flota mercante de <b>{{item.city_name}}</b> ha llegado a <b>{{item.data.city_name}}</b> y ha dejado los siguientes bienes:</div>
+                                <div>
+                                    <wood :cant='item.data.resources.wood'></wood>
+                                    <wine :cant='item.data.resources.wine'></wine>
+                                    <marble :cant='item.data.resources.marble'></marble>
+                                    <glass :cant='item.data.resources.glass'></glass>
+                                    <sulfur :cant='item.data.resources.sulfur'></sulfur>
+                                </div>
+                            </div>
+                            <div v-else-if="item.type==3">
+                                <div class="mb-2">Una flota mercante de <b>{{item.data.city_name}}</b> ha llegado a tu ciudad <b>{{item.city_name}}</b> y ha dejado los siguientes bienes:</div>
                                 <div>
                                     <wood :cant='item.data.resources.wood'></wood>
                                     <wine :cant='item.data.resources.wine'></wine>
@@ -107,6 +117,7 @@ export default {
                     return 'icon_production.png';
                 break;
                 case 2:
+                case 3:
                     return 'icon_transport.png';
                 break;
             }

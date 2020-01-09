@@ -13,6 +13,7 @@ use App\Models\UserResource;
 use App\Models\CityBuilding;
 use App\Models\UserCity;
 use App\Models\Island;
+use App\Events\UserNotification;
 use App\Helpers\UnitHelper;
 use App\Helpers\CityHelper;
 use App\Helpers\MovementHelper;
@@ -145,6 +146,9 @@ class MovementController extends Controller
         //Quitamos los barcos mercantes
         $userResource->trade_ship_available -= $usedShips;
         $userResource->save();
+
+        //Avisamos al general de destino
+        event(new UserNotification('advisors','general',$city_to->userCity->user_id));
 
         return 'ok';
     }
@@ -280,7 +284,16 @@ class MovementController extends Controller
     {
         //Devuelve los movimientos de colonizacion,recursos,ataques y defensas
         MovementHelper::returnMovementResourcesAll();
-        return Movement::where('user_id',Auth::id())->get()->map(function($movement){
+        $cities = CityHelper::myCities();
+        return Movement::where('user_id',Auth::id())
+        ->orWhereIn('city_to',$cities)->get()->map(function($movement) use ($cities){
+            if (in_array($movement->city_destine->id,$cities->toArray())) {
+                //Si la ciudad de destino es una de las ciudades del jugador verificamos
+                //que no mostramos cuando el movimiento renorne
+                if($movement->delivered===1){
+                    return false;
+                }
+            }
             $data = $movement->only(['id','start_at','end_at','return_at','delivered','user_id','movement_type_id','trade_ship']);
             if($movement->resources!=NULL)
             $data['resources']= $movement->resources->only(['wood','wine','marble','glass','sulfur']);
@@ -291,7 +304,9 @@ class MovementController extends Controller
             $data['city_from']['name'] = $movement->city_origin->name;
             $data['city_from']['user'] = $movement->city_origin->userCity->user->name;
             return $data;
-        });
+        })->filter(function ($value) {
+            return $value != false;
+        })->values()->all();
     }
 
 }

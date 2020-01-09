@@ -24,6 +24,8 @@ import $modal from "Stores/modal.js";
 import Notification from 'Components/layout/Notification.vue'
 import $notification from 'Stores/notification'
 import $movement from 'Stores/movement'
+import $resources from 'Stores/resources'
+import $city from 'Stores/city'
 
 export default {
     name: "Consejeros",
@@ -52,6 +54,7 @@ export default {
             });
         },
         general(){
+            this.onGeneral = false;
             $modal.commit('openModal',{type:7,info:{}})
         },
         scientist(){
@@ -103,7 +106,34 @@ export default {
             })
         },
         movement(data){
-            debugger
+            switch(data.status){
+                case 1:
+                    //Retorno de recursos
+                    $resources.commit('addApoint');
+                    $resources.commit('addTradeShip',{ships:data.trade_ship});
+                break;
+                case 2:
+                    //Aumento de recursos
+                    if(data.city_id==this.city_id){
+                        $resources.commit('produceResources',data.resources);
+                    }
+                break;
+            }
+        }
+    },
+    computed:{
+        city_id(){
+            return $city.state.city_id;
+        },
+        movement_length(){
+            return $movement.state.movements.length;
+        }
+    },
+    watch:{
+        movement_length(newval,olval){
+            if(newval>olval){
+                this.onGeneral = true;
+            }
         }
     },
     beforeMount(){

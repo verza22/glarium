@@ -32,6 +32,9 @@ export default {
         },
         useShip(state,{ships}){
             state.trade_ship_available -= ships;
+        },
+        addGold(state,{gold}){
+            state.gold += gold
         }
     }
 }

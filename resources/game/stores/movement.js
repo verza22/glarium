@@ -3,9 +3,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
-import $store from 'Stores/store'
-import $city from 'Stores/city'
-import $resources from 'Stores/resources'
 
 Vue.use(Vuex)
 
@@ -26,6 +23,28 @@ const store = new Vuex.Store({
                 context.commit('updateMovemenet',{
                     movements:res.data
                 });
+            });
+        }
+    },
+    getters:{
+        getType: state => (movement,checkHorario) =>{
+            switch(checkHorario(movement)){
+                case 1:
+                    return 'start_at';
+                break;
+                case 2:
+                    return 'end_at';
+                break;
+                case 3:
+                    return 'return_at';
+                break;
+            }
+        },
+        movements: (state,getters) => (checkHorario) =>{
+            return state.movements.sort(function(a, b){
+                var type_a = getters.getType(a,checkHorario)
+                var type_b = getters.getType(b,checkHorario)
+                return moment.utc(a[type_a]).diff(moment.utc(b[type_b]))
             });
         }
     }
@@ -53,24 +72,6 @@ setInterval(function () {
                 if(moment.duration(moment(movement.return_at).diff(moment())).asSeconds()<=0){
                     store.state.movementReturn.push(movement.id)
                 }
-                /*store.state.movements.splice(index,1)
-                axios.put('movement').then(res =>{
-                    /*$resources.commit('addTradeShip',{ships:movement.trade_ship})
-                    if($city.state.city_id==movement.city_from.id){
-                        $resources.commit('addApoint')
-                    }
-                    switch(movement.movement_type_id){
-                        case 1:
-                            if($city.state.city_id==movement.city_to.id){
-                                $resources.commit('produceResources',movement.resources)
-                            }
-                        break;
-                        case 4:
-                            $city.commit('reloadCities')
-                            $store.commit('reloadIslandData')
-                        break;
-                    }
-                })*/
             }
         })
     }

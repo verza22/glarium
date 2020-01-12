@@ -26,6 +26,7 @@ import $notification from 'Stores/notification'
 import $movement from 'Stores/movement'
 import $resources from 'Stores/resources'
 import $city from 'Stores/city'
+import $store from 'Stores/store'
 
 export default {
     name: "Consejeros",
@@ -116,6 +117,17 @@ export default {
                     //Aumento de recursos
                     if(data.city_id==this.city_id){
                         $resources.commit('produceResources',data.resources);
+                    }
+                break;
+                case 3:
+                    //Colonizar
+                    $city.commit('reloadCities')
+                    $resources.commit('addApoint');
+                    $resources.commit('addTradeShip',{ships:data.trade_ship});
+                    if(this.$route.name=='Island'){
+                        if(this.$route.params.island==data.island_id){
+                            $store.commit('reloadIslandData');
+                        }
                     }
                 break;
             }

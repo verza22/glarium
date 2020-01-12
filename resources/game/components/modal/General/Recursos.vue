@@ -12,23 +12,27 @@
                 </div>
                 <div class="dt_item" v-if="movement.resources.wood>0">
                     <div class="dt_resource"><img :src="require('Img/icon/icon_wood.png')"></div>
-                    <div>{{movement.resources.wood}}</div>
+                    <div>{{$money(movement.resources.wood)}}</div>
                 </div>
                 <div class="dt_item" v-if="movement.resources.wine>0">
                     <div class="dt_resource"><img :src="require('Img/icon/icon_wine.png')"></div>
-                    <div>{{movement.resources.wine}}</div>
+                    <div>{{$money(movement.resources.wine)}}</div>
                 </div>
                 <div class="dt_item" v-if="movement.resources.marble>0">
                     <div class="dt_resource"><img :src="require('Img/icon/icon_marble.png')"></div>
-                    <div>{{movement.resources.marble}}</div>
+                    <div>{{$money(movement.resources.marble)}}</div>
                 </div>
                 <div class="dt_item" v-if="movement.resources.glass>0">
                     <div class="dt_resource"><img :src="require('Img/icon/icon_glass.png')"></div>
-                    <div>{{movement.resources.glass}}</div>
+                    <div>{{$money(movement.resources.glass)}}</div>
                 </div>
                 <div class="dt_item" v-if="movement.resources.sulfur>0">
                     <div class="dt_resource"><img :src="require('Img/icon/icon_sulfur.png')"></div>
-                    <div>{{movement.resources.sulfur}}</div>
+                    <div>{{$money(movement.resources.sulfur)}}</div>
+                </div>
+                <div class="dt_item" v-if="movement.resources.gold>0">
+                    <div class="dt_resource"><img :src="require('Img/icon/icon_gold.png')"></div>
+                    <div>{{$money(movement.resources.gold)}}</div>
                 </div>
             </div>
         </div>
@@ -78,5 +82,6 @@ export default {
         display: flex;
         flex: 1;
         align-items: center;
+        justify-content: center;
     }
 </style>

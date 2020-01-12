@@ -37,7 +37,10 @@
                         <div>({{movement.city_to.user}})</div>
                     </td>
                     <td>
-                        <div title="Retirar"><img class="bton" :src="require('Img/icon/movement/btn_abort.png')"></div>
+                        <div class="position-relative">
+                            <div @click="openConfirm(movement)" title="Retirar"><img class="bton" :src="require('Img/icon/movement/btn_abort.png')"></div>
+                            <Confirmar :close='closeConfirm' :confirm='confirmRemove' :data='movement' v-if="movement.confirm"></Confirmar>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -46,17 +49,59 @@
 </template>
 
 <script>
+import axios from 'axios'
 import moment from 'moment'
 import $store from "Stores/store";
 import Recursos from 'Components/modal/General/Recursos.vue'
+import Confirmar from 'Components/other/Confirmar.vue'
+import $notification from 'Stores/notification'
+import $config from 'Stores/config'
+import $resources from 'Stores/resources'
+import $movement from 'Stores/movement'
 
 export default {
     name: 'Movimientos',
     props:['movements'],
     components:{
-        Recursos
+        Recursos,
+        Confirmar
     },
     methods:{
+        confirmRemove(movement){
+            movement.confirm = false;
+            axios.delete('movement/'+movement.id)
+            .then(res =>{
+                if(res.data=='ok1'||res.data=='ok2'){
+                    if(res.data=='ok1'){//Cuando estaba cargando
+                        switch(movement.movement_type_id){
+                            case 1:
+                                $resources.commit('produceResources',movement.resources);
+                            break;
+                            case 4:
+                                $resources.commit('produceResources',{wood:this.cost_wood});
+                                $resources.commit('increasePopulation',{increasePopulation:this.cost_population})
+                                $resources.commit('addGold',{gold:this.cost_gold});
+                            break;
+                        }
+                        $resources.commit('addApoint');
+                        $resources.commit('addTradeShip',{ships:movement.trade_ship});
+                    }
+                    $movement.dispatch('updateMovemenet')
+                    $notification.commit('show',{advisor:2,type:true});
+                }else{
+                    $notification.commit('show',{advisor:2,type:false,message:res.data});
+                }
+            })
+            .catch(err =>{
+                $notification.commit('show',{advisor:2,type:false,message:err});
+            })
+        },
+        openConfirm(movement){
+            movement.confirm = true;
+        },
+        closeConfirm(movement){
+            movement.confirm = false;
+        },
         closeDetail(movement){
             movement.detail = false;
         },
@@ -68,7 +113,7 @@ export default {
             }
         },
         getHorario(movement){
-            var tipo = this.checkHorarioTipo(movement)
+            var tipo = this.$checkHorarioTipo(movement)
             var texto = 'Retornando';
             var tiempo_aux = null;
             switch(tipo){
@@ -91,11 +136,14 @@ export default {
             `;
         },
         getArrow(movement){
-            var tipo = this.checkHorarioTipo(movement)
+            var tipo = this.$checkHorarioTipo(movement)
             var tipo_movimiento = '';
             switch(movement.movement_type_id){
                 case 1:
                     tipo_movimiento = 'Transporte '
+                break;
+                case 4:
+                    tipo_movimiento = 'Colonizando '
                 break;
             }
             var texto = '(Retornando)';
@@ -116,20 +164,6 @@ export default {
                 <img title="${tipo_movimiento+' '+texto}" src="${require('Img/icon/movement/arrow_'+image+'_green.png')}">
             `;
         },
-        checkHorarioTipo(movement){
-            if(this.checkMoment(movement.start_at)){
-                return 1;
-            }
-            if(this.checkMoment(movement.end_at)){
-                return 2;
-            }
-            if(this.checkMoment(movement.return_at)){
-                return 3;
-            }
-        },
-        checkMoment(time){
-            return moment(time) > moment()
-        },
         calculateTime(time){
             var aux = moment.duration(moment(time).diff(moment(this.now))).asSeconds()
             aux = aux<0 ? 0 : aux
@@ -140,6 +174,15 @@ export default {
     computed:{
         now(){
             return $store.state.now;
+        },
+        cost_gold(){
+            return $config.state.world.colonize.gold;
+        },
+        cost_wood(){
+            return $config.state.world.colonize.wood;
+        },
+        cost_population(){
+            return $config.state.world.colonize.population;
         },
     }
 }

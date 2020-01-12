@@ -22,6 +22,10 @@ class Movement extends Model
         'trade_ship'
     ];
 
+    protected $attributes = [
+        'cancelled' => 0
+    ];
+
     public function resources()
     {
         return $this->hasOne('App\Models\MovementResource');

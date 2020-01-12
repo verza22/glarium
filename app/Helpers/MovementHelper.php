@@ -9,6 +9,7 @@ use App\Models\Island;
 use App\Helpers\OtherHelper;
 use App\Helpers\BuildingHelper;
 use App\Events\UserNotification;
+use App\Helpers\CityHelper;
 use App\Models\Mayor;
 use App\Models\UserCity;
 use App\User;
@@ -110,13 +111,14 @@ class MovementHelper {
             $city_from = $movement->city_origin;
             $resources = $movement->resources;
 
-            $city_to->wood += $resources->wood;
+            /*$city_to->wood += $resources->wood;
             $city_to->wine += $resources->wine;
             $city_to->marble += $resources->marble;
             $city_to->glass += $resources->glass;
-            $city_to->sulfur += $resources->sulfur;
+            $city_to->sulfur += $resources->sulfur;*/
+            CityHelper::addResources($city_to,$resources);
 
-            $city_to->save();
+            //$city_to->save();
 
             //Actualizamos el estado a entregado
             $movement->delivered = 1;
@@ -166,13 +168,14 @@ class MovementHelper {
             $city_to = $movement->city_destine;
             $resources = $movement->resources;
 
-            $city_to->wood += $resources->wood;
+            /*$city_to->wood += $resources->wood;
             $city_to->wine += $resources->wine;
             $city_to->marble += $resources->marble;
             $city_to->glass += $resources->glass;
-            $city_to->sulfur += $resources->sulfur;
+            $city_to->sulfur += $resources->sulfur;*/
+            CityHelper::addResources($city_to,$resources);
 
-            $city_to->save();
+            //$city_to->save();
 
             //Actualizamos el estado a entregado
             $movement->delivered = 1;
@@ -218,7 +221,25 @@ class MovementHelper {
             $movement->city_destine->constructed_at = Carbon::now();
             $movement->city_destine->save();
 
+
+            //Ingresamos el estado de la ciudad de destino
+            Mayor::create([
+                'city_id'=> $movement->city_destine->id,
+                'type' => 4,
+                'data' => json_encode([
+                    'city_name'=>$movement->city_destine->name
+                ])
+            ]);
+            event(new UserNotification('advisors','mayor',$movement->user_id));
+
+            //Avisamos del estado
+            $data['island_id'] = $movement->city_destine->islandCity->island_id;
+            $data['trade_ship'] = $movement->trade_ship;
+            $data['status'] = 3;
+            event(new UserNotification('movements',$data,$movement->user_id));
+
             $movement->delete();
+
         });
     }
 }

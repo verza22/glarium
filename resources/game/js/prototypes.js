@@ -1,6 +1,7 @@
 
 import Vue from 'vue'
 import Panzoom from '@panzoom/panzoom'
+import moment from 'moment'
 /*
 String.prototype.capitalize = function (){
     return this.charAt(0).toUpperCase()+this.slice(1);
@@ -40,6 +41,21 @@ Vue.prototype.$zoom = function (){
         }
     })
     elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel)
+}
+
+Vue.prototype.$checkHorarioTipo = function (movement){
+    if(checkMoment(movement.start_at)){
+        return 1;
+    }
+    if(checkMoment(movement.end_at)){
+        return 2;
+    }
+    if(checkMoment(movement.return_at)){
+        return 3;
+    }
+}
+function checkMoment(time){
+    return moment(time) > moment()
 }
 
 Number.prototype.money = function(n, x) {

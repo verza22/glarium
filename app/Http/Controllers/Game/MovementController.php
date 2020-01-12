@@ -295,8 +295,14 @@ class MovementController extends Controller
                 }
             }
             $data = $movement->only(['id','start_at','end_at','return_at','delivered','user_id','movement_type_id','trade_ship']);
-            if($movement->resources!=NULL)
-            $data['resources']= $movement->resources->only(['wood','wine','marble','glass','sulfur']);
+            if($movement->resources!=NULL){
+                $data['resources']= $movement->resources->only(['wood','wine','marble','glass','sulfur']);
+            }
+            //Añadimos recursos de colonizacion
+            if($movement->movement_type_id==4){
+                $data['resources']['wood'] = config('world.colonize.wood');
+                $data['resources']['gold'] = config('world.colonize.gold');
+            }
             $data['city_to']['id'] = $movement->city_destine->id;
             $data['city_to']['name'] = $movement->city_destine->name;
             $data['city_to']['user'] = $movement->city_destine->userCity->user->name;
@@ -307,6 +313,55 @@ class MovementController extends Controller
         })->filter(function ($value) {
             return $value != false;
         })->values()->all();
+    }
+
+    public function remove(Movement $movement)
+    {
+        if($movement->user_id!=Auth::id())
+        {
+            return 'No puedes retornar movimientos que no te pertenecen';
+        }
+
+        if(Carbon::parse($movement->start_at)>Carbon::now())
+        {
+            //Cancelar un movimiento que se esta cargando
+            $userResource = UserResource::where('user_id',$movement->user_id)->firstOrFail();
+            $userResource->trade_ship_available += $movement->trade_ship;
+            switch($movement->movement_type_id){
+                case 1:
+                    CityHelper::addResources($movement->city_origin,$movement->resources);
+                break;
+                case 4:
+                    $city_from = $movement->city_origin;
+                    $collect = UnitHelper::newCollect();
+                    $collect->wood = config('world.colonize.wood');
+                    CityHelper::addResources($city_from,$collect);
+                    $userResource->gold += config('world.colonize.gold');
+                    $city_from->population->population += config('world.colonize.population');
+                    $city_from->population->save();
+                    $movement->city_destine->delete();
+                break;
+            }
+            $userResource->save();
+            $movement->delete();
+            return 'ok1';
+        }
+
+        if(Carbon::parse($movement->end_at)<Carbon::now())
+        {
+            return 'El movimiento ya no se puede cancelar';
+        }
+
+        if($movement->cancelled==1)
+        {
+            return 'El movimiento ya estaba cancelado';
+        }
+
+        $seconds = Carbon::now()->diffInSeconds(Carbon::parse($movement->start_at));
+
+        return $seconds;
+
+
     }
 
 }

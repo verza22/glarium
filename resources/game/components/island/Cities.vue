@@ -49,9 +49,11 @@ export default {
     methods:{
         colorCity(index){
             var city = this.getCity(index)
+            if(city.level==0)return
             return [city.type ? "blue" : "red", this.getLevel(city.level)];
         },
         getLevel(level){
+            if(level==0)return
             switch(level){
                 case 1:
                     return 'level_1';

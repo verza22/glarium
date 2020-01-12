@@ -38,7 +38,7 @@ export default {
     },
     computed:{
         movements(){
-            return $movement.state.movements;
+            return $movement.getters.movements(this.$checkHorarioTipo);
         }
     }
 }

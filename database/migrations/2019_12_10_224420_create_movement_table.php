@@ -22,6 +22,7 @@ class CreateMovementTable extends Migration
             $table->dateTime('return_at')->nullable();
 
             $table->boolean('delivered');
+            $table->boolean('cancelled');
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('city_from');

@@ -8,7 +8,7 @@
                     <tr>
                         <th></th>
                         <th>Lugar</th>
-                        <th>Fecha</th>
+                        <th style="width: 115px">Fecha</th>
                         <th>Asunto</th>
                     </tr>
                 </thead>
@@ -41,6 +41,9 @@
                                     <glass :cant='item.data.resources.glass'></glass>
                                     <sulfur :cant='item.data.resources.sulfur'></sulfur>
                                 </div>
+                            </div>
+                            <div v-else-if="item.type==4">
+                                <div>Tu ciudad <b>{{item.data.city_name}}</b> ha sido fundada.</div>
                             </div>
                         </td>
                     </tr>
@@ -118,6 +121,7 @@ export default {
                 break;
                 case 2:
                 case 3:
+                case 4:
                     return 'icon_transport.png';
                 break;
             }

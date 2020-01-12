@@ -12,6 +12,16 @@ use Auth;
 
 class CityHelper {
 
+    public static function addResources(City $city,$resources)
+    {
+        $city->wood += $resources->wood;
+        $city->wine += $resources->wine;
+        $city->marble += $resources->marble;
+        $city->glass += $resources->glass;
+        $city->sulfur += $resources->sulfur;
+        $city->save();
+    }
+
     public static function compareResources(City $city,$resources)
     {
         CityHelper::updateResources($city);

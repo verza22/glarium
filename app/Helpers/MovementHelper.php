@@ -88,9 +88,21 @@ class MovementHelper {
             $userResource->trade_ship_available += $movement->trade_ship;
             $userResource->save();
 
+            //Si fue cancelada sumamos los recursos
+            if($movement->cancelled==1)
+            {
+                CityHelper::addResources($movement->city_origin,$movement->resources);
+                $data = $movement->only(['trade_ship']);
+                $data['city_id'] = $movement->city_origin->id;
+                $data['resources'] = $movement->resources->only(['wood','wine','marble','glass','sulfur']);
+                $data['status'] = 4;
+            }
+            else
+            {
+                $data = $movement->only(['trade_ship']);
+                $data['status'] = 1;
+            }
             //Avisamos del estado
-            $data = $movement->only(['trade_ship']);
-            $data['status'] = 1;
             event(new UserNotification('movements',$data,$movement->user_id));
 
             //Borramos el movimiento
@@ -111,14 +123,7 @@ class MovementHelper {
             $city_from = $movement->city_origin;
             $resources = $movement->resources;
 
-            /*$city_to->wood += $resources->wood;
-            $city_to->wine += $resources->wine;
-            $city_to->marble += $resources->marble;
-            $city_to->glass += $resources->glass;
-            $city_to->sulfur += $resources->sulfur;*/
             CityHelper::addResources($city_to,$resources);
-
-            //$city_to->save();
 
             //Actualizamos el estado a entregado
             $movement->delivered = 1;
@@ -168,14 +173,7 @@ class MovementHelper {
             $city_to = $movement->city_destine;
             $resources = $movement->resources;
 
-            /*$city_to->wood += $resources->wood;
-            $city_to->wine += $resources->wine;
-            $city_to->marble += $resources->marble;
-            $city_to->glass += $resources->glass;
-            $city_to->sulfur += $resources->sulfur;*/
             CityHelper::addResources($city_to,$resources);
-
-            //$city_to->save();
 
             //Actualizamos el estado a entregado
             $movement->delivered = 1;
@@ -186,19 +184,6 @@ class MovementHelper {
             event(new UserNotification('movements',$movement,$movement->user_id));
         });
     }
-
-    /*public static function endIslandColonize(Island $island)
-    {
-        $cities = $island->islandCities->pluck('city_id');
-        $movements = Movement::whereIn('city_to',$cities)
-                        ->where('movement_type_id',4)
-                        ->where('end_at','<',Carbon::now())->get();
-        self::endColonize($movements);
-        if($movements->count()>0)
-        {
-            $island->refresh();
-        }
-    }*/
 
     public static function endUserColonize($cities)
     {

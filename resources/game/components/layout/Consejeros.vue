@@ -130,6 +130,14 @@ export default {
                         }
                     }
                 break;
+                case 4:
+                    //Retorno de recursos
+                    $resources.commit('addApoint');
+                    $resources.commit('addTradeShip',{ships:data.trade_ship});
+                    if(data.city_id==this.city_id){
+                        $resources.commit('produceResources',data.resources);
+                    }
+                break;
             }
         }
     },

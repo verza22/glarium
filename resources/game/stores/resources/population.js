@@ -25,6 +25,7 @@ export default {
         },
         reducePopulation(state,{population}){
             state.population -= population
+            state.population_now -= population
         },
         setScientists(state,{population,scientists}){
             //Sumamos a los investigadores globales

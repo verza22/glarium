@@ -81,6 +81,9 @@ export default {
                                 $resources.commit('produceResources',{wood:this.cost_wood});
                                 $resources.commit('increasePopulation',{increasePopulation:this.cost_population})
                                 $resources.commit('addGold',{gold:this.cost_gold});
+                                if(this.$route.name=='Island'){
+                                    $store.commit('reloadIslandData');
+                                }
                             break;
                         }
                         $resources.commit('addApoint');

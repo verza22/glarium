@@ -322,9 +322,9 @@ class MovementController extends Controller
             return 'No puedes retornar movimientos que no te pertenecen';
         }
 
+        //Cancelar un movimiento que se esta cargando
         if(Carbon::parse($movement->start_at)>Carbon::now())
         {
-            //Cancelar un movimiento que se esta cargando
             $userResource = UserResource::where('user_id',$movement->user_id)->firstOrFail();
             $userResource->trade_ship_available += $movement->trade_ship;
             switch($movement->movement_type_id){
@@ -358,10 +358,13 @@ class MovementController extends Controller
         }
 
         $seconds = Carbon::now()->diffInSeconds(Carbon::parse($movement->start_at));
+        $movement->end_at = Carbon::now();
+        $movement->return_at = Carbon::now()->addSeconds($seconds);
+        $movement->cancelled = 1;
+        $movement->delivered = 1;
+        $movement->save();
 
-        return $seconds;
-
-
+        return 'ok2';
     }
 
 }

@@ -189,23 +189,57 @@ class MovementHelper {
     {
         $movements = Movement::whereIn('city_from',$cities)
                         ->where('movement_type_id',4)
+                        ->where('cancelled',0)
                         ->where('end_at','<',Carbon::now()->addSeconds(3))->get();
         self::endColonize($movements);
+        $movements_cancelled = Movement::whereIn('city_from',$cities)
+                        ->where('movement_type_id',4)
+                        ->where('cancelled',1)
+                        ->where('return_at','<',Carbon::now()->addSeconds(3))->get();
+        self::cancelledColonize($movements_cancelled);
+    }
+
+    private static function cancelledColonize($movements)
+    {
+        $movements->map(function($movement){
+            //Damos los 3 mercantes y el oro
+            $userResource = UserResource::where('user_id',$movement->user_id)->firstOrFail();
+            $userResource->trade_ship_available += $movement->trade_ship;
+            $userResource->gold += config('world.colonize.gold');
+            $userResource->save();
+
+            //devolvemos lo recursos
+            $city_from = $movement->city_origin;
+            $collect = UnitHelper::newCollect();
+            $collect->wood = config('world.colonize.wood');
+            CityHelper::addResources($city_from,$collect);
+
+            //devolvemos poblacion
+            $city_from->population->population += config('world.colonize.population');
+            $city_from->population->save();
+
+            //Avisamos del estado
+            $data['island_id'] = $movement->city_destine->islandCity->island_id;
+            $data['city_from'] = $movement->city_from;
+            $data['trade_ship'] = $movement->trade_ship;
+            $data['status'] = 5;
+            event(new UserNotification('movements',$data,$movement->user_id));
+
+            //borramos el movimiento
+            $movement->delete();
+        });
     }
 
     private static function endColonize($movements)
     {
         $movements->map(function($movement){
-            //Quitamos y borramos el movimiento
-            $user = User::find($movement->user_id);
             //Damos los 3 mercantes
-            $userResource = UserResource::where('user_id',$user->id)->first();
+            $userResource = UserResource::where('user_id',$movement->user_id)->first();
             $userResource->trade_ship_available += $movement->trade_ship;
             $userResource->save();
 
             $movement->city_destine->constructed_at = Carbon::now();
             $movement->city_destine->save();
-
 
             //Ingresamos el estado de la ciudad de destino
             Mayor::create([

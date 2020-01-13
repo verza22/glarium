@@ -27,6 +27,7 @@ import $movement from 'Stores/movement'
 import $resources from 'Stores/resources'
 import $city from 'Stores/city'
 import $store from 'Stores/store'
+import $config from 'Stores/config'
 
 export default {
     name: "Consejeros",
@@ -138,12 +139,35 @@ export default {
                         $resources.commit('produceResources',data.resources);
                     }
                 break;
+                case 5:
+                    //Retorno de colonizacion
+                    $resources.commit('addApoint');
+                    $resources.commit('addTradeShip',{ships:data.trade_ship});
+                    if(this.city_id==data.city_from){
+                        $resources.commit('produceResources',{wood:this.cost_wood});
+                        $resources.commit('increasePopulation',{increasePopulation:this.cost_population})
+                    }
+                    if(this.$route.name=='Island'){
+                        if(this.$route.params.island==data.island_id){
+                            $store.commit('reloadIslandData');
+                        }
+                    }
+                break;
             }
         }
     },
     computed:{
         city_id(){
             return $city.state.city_id;
+        },
+        cost_gold(){
+            return $config.state.world.colonize.gold;
+        },
+        cost_wood(){
+            return $config.state.world.colonize.wood;
+        },
+        cost_population(){
+            return $config.state.world.colonize.population;
         },
         movement_length(){
             return $movement.state.movements.length;

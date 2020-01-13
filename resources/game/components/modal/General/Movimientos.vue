@@ -58,6 +58,7 @@ import $notification from 'Stores/notification'
 import $config from 'Stores/config'
 import $resources from 'Stores/resources'
 import $movement from 'Stores/movement'
+import $city from 'Stores/city'
 
 export default {
     name: 'Movimientos',
@@ -78,8 +79,10 @@ export default {
                                 $resources.commit('produceResources',movement.resources);
                             break;
                             case 4:
-                                $resources.commit('produceResources',{wood:this.cost_wood});
-                                $resources.commit('increasePopulation',{increasePopulation:this.cost_population})
+                                if(this.city_id==movement.city_from){
+                                    $resources.commit('produceResources',{wood:this.cost_wood});
+                                    $resources.commit('increasePopulation',{increasePopulation:this.cost_population})
+                                }
                                 $resources.commit('addGold',{gold:this.cost_gold});
                                 if(this.$route.name=='Island'){
                                     $store.commit('reloadIslandData');
@@ -187,6 +190,9 @@ export default {
         cost_population(){
             return $config.state.world.colonize.population;
         },
+        city_id(){
+            return $city.state.city_id;
+        }
     }
 }
 </script>

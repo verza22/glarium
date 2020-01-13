@@ -287,9 +287,9 @@ class MovementController extends Controller
         $cities = CityHelper::myCities();
         return Movement::where('user_id',Auth::id())
         ->orWhereIn('city_to',$cities)->get()->map(function($movement) use ($cities){
-            if (in_array($movement->city_destine->id,$cities->toArray())) {
+            if (in_array($movement->city_destine->id,$cities->toArray())&&$movement->movement_type_id!=4) {
                 //Si la ciudad de destino es una de las ciudades del jugador verificamos
-                //que no mostramos cuando el movimiento renorne
+                //que no mostramos cuando el movimiento retorne
                 if($movement->delivered===1){
                     return false;
                 }

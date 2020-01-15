@@ -5,6 +5,7 @@
             <Intendencia v-if='building_id==1' :data='info'></Intendencia>
             <Academia v-else-if='building_id==2' :data='info'></Academia>
             <Deposito v-else-if='building_id==3' :data='info'></Deposito>
+            <Cuartel v-else-if='building_id==4' :data='info'></Cuartel>
             <Taberna v-else-if='building_id==5' :data='info'></Taberna>
             <Reductores v-else-if='building_id>=6&&building_id<=10' :data='info'></Reductores>
             <Productores v-else-if='building_id>=11&&building_id<=15' :data='info'></Productores>
@@ -27,6 +28,7 @@ import Reductores from 'Components/modal/Edificios/Reductores.vue'
 import Productores from 'Components/modal/Edificios/Productores.vue'
 import Puerto from 'Components/modal/Edificios/Puerto.vue'
 import Taberna from 'Components/modal/Edificios/Taberna.vue'
+import Cuartel from 'Components/modal/Edificios/Cuartel/Cuartel.vue'
 
 export default {
     name: 'Edificios',
@@ -41,7 +43,8 @@ export default {
         Reductores,
         Productores,
         Puerto,
-        Taberna
+        Taberna,
+        Cuartel
     },
     data(){
         return {

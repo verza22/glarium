@@ -363,5 +363,31 @@ export default {
             created:'¡Tu edificio <b>"{0}"</b> ha sido construido!',
             upgrade:'¡Tu edificio <b>"{0}"</b> ha sido ampliado a nivel {1}!'
         }
+    ],
+    units:[,
+        {
+            name:'Lancero',
+            text:'Los lanceros son reclutas de la población rural que se lanzan a la batalla equipados con una armadura ligera y una simple lanza. No suelen tener ninguna posibilidad contra la mayoría de los soldados profesionales.'
+        },
+        {
+            name:'Hondero',
+            text:'Las hondas son armas ligeras y baratas. No infligen mucho daño en los oponenter bien armados, pero al menos su munición está facilmente disponible.'
+        },
+        {
+            name:'Arquero',
+            text:'El arco es un instrumento de caza muy difundido, así que no cuesta mucho esfuerzo reclutarlos de entre los ciudadanos. Con una formación militar, los simples ciudadanos se convertirán en una tropa formidable de combate a distancia.'
+        },
+        {
+            name:'Hoplita',
+            text:'Los Hoplitas son pesados hombres armados con lanzas que provienen de la clase media de la ciudad. Forman el corazón de cada ejército griego. En la conocida como formación \" en Falange\", avanzan como una pared imparable de lanzas y escudos.'
+        },
+        {
+            name:'Espadachín',
+            text:'Los espadachines apenas están acorazados y luchan sin escudo para conservar su movilidad. De este modo, ellos pueden rodear las inmóviles formaciones de Hoplitas y atacar desde los flancos.'
+        },
+        {
+            name:'Gigante a vapor',
+            text:'Esta máquina poderosa se mueve como un humano en el campo de batalla, pero tiene una fuerza de golpe sobrehumana. Piedras, flechas y espadas rebotan contra esta máquina. ¡Ay de aquél que se atreva a oponersela!'
+        }
     ]
 };

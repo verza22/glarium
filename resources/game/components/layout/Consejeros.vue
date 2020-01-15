@@ -143,6 +143,7 @@ export default {
                     //Retorno de colonizacion
                     $resources.commit('addApoint');
                     $resources.commit('addTradeShip',{ships:data.trade_ship});
+                    $resources.commit('addGold',{gold:this.cost_gold});
                     if(this.city_id==data.city_from){
                         $resources.commit('produceResources',{wood:this.cost_wood});
                         $resources.commit('increasePopulation',{increasePopulation:this.cost_population})

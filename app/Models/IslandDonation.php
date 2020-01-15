@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class IslandDonation extends Model
 {
@@ -22,5 +23,14 @@ class IslandDonation extends Model
     public function city()
     {
         return $this->belongsTo('App\Models\City');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('city', function (Builder $builder) {
+            $builder->has('city');
+        });
     }
 }

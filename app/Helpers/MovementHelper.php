@@ -226,6 +226,7 @@ class MovementHelper {
             event(new UserNotification('movements',$data,$movement->user_id));
 
             //borramos el movimiento
+            $movement->city_destine->delete();
             $movement->delete();
         });
     }

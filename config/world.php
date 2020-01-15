@@ -2,8 +2,8 @@
 
 return [
     'transport' => 500,//Capacidad de transporte de barcos mercantes
-    'load_speed' => 500,//Carga por nivel de puerto
-    'load_speed_base' => 500,//Carga base del puerto
+    'load_speed' => 5000,//Carga por nivel de puerto
+    'load_speed_base' => 5000,//Carga base del puerto
     'load_attack_return' => 5,//Tiempo que demora en cargar los recursos de un saqueo
     'load_defend_return' => 5,//Tiempo que demora en cargar las tropas al regresar de una defensa
     'bonus' => [ //Modificadores en la velocidad de recursos etc

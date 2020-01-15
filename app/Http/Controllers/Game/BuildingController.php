@@ -13,7 +13,7 @@ use App\Models\UserResearch;
 use App\Models\ResearchBuilding;
 use App\Helpers\BuildingHelper;
 use App\Helpers\CityHelper;
-
+use App\Models\Unit;
 use Carbon\Carbon;
 use Auth;
 
@@ -265,6 +265,10 @@ class BuildingController extends Controller
         if($nextLevel===NULL){
             $nextLevel = BuildingLevel::where('building_id',$building->id)->where('level',$request->input('level'))->first();
             $nextLevel['maximum'] = true;
+        }
+        if($building->id==4)
+        {
+            $nextLevel['units'] = Unit::select(['id','population','wood','wine','glass','sulfur','time','barrack_level','gold'])->get();
         }
         return $nextLevel;
     }

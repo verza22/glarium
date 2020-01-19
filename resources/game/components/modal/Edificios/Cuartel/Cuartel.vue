@@ -10,6 +10,7 @@
                     <div class="gtitle">{{$t(`units[${unit.id}].name`)}}</div>
                     <div class="texto">{{$t(`units[${unit.id}].text`)}}</div>
                     <hr class="hred">
+                    <div class="d-flex"></div>
                 </div>
                 <div class="flex-2">3</div>
             </div>

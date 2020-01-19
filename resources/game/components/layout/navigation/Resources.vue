@@ -174,7 +174,8 @@ export default {
             return $building.getters.getBuildingLevel(3);
         },
         bonus_resources(){
-            return $config.state.world.bonus.resources;
+            var bonus = $config.state.world.bonus.resources;
+            return bonus==undefined ? 0 : bonus;
         },
         maxCapacity(){
             return ($config.state.world.warehouse.capacity * this.depositLevel) + $config.state.world.warehouse.capacity_base;

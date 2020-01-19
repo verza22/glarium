@@ -236,7 +236,7 @@ export default {
   position: relative;
   float: left;
   left: 0;
-  top: 0;
+  top: -1px;
   width: 90px;
   height: 108px;
   cursor: pointer;

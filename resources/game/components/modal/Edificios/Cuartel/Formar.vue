@@ -36,17 +36,25 @@ export default {
     },
     methods:{
         maxTrainer(unit){
-            unit.trainer = this.population-(this.$sum(this.units, 'trainer')-unit.trainer);
+            unit.trainer = Math.floor((this.population-(this.sum()-(unit.trainer*unit.population)))/unit.population);
         },
         validateTrainer(unit){
             if(unit.trainer<0){
                 unit.trainer = 0;
                 return;
             }
-            if(this.$sum(this.units,'trainer')>this.population){
-                unit.trainer = this.population-(this.$sum(this.units, 'trainer')-unit.trainer);
+            if(this.sum()>this.population){
+                unit.trainer = Math.floor((this.population-(this.sum()-(unit.trainer*unit.population)))/unit.population);
                 return;
             }
+        },
+        sum(){
+            var total = 0
+            for ( var i = 0, _len = this.units.length; i < _len; i++ ) {
+                total += parseInt(this.units[i]['trainer']*this.units[i]['population'])
+            }
+            console.log(total)
+            return total
         }
     },
     computed:{

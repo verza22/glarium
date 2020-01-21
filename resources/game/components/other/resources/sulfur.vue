@@ -1,6 +1,6 @@
 <template>
     <div class="d-inline-block" :title="$t('resources.sulfur')" v-if="cant>0||visible||disabled">
-        <img :src="require('Img/icon/icon_sulfur.png')" :class="disabled ? 'opacity-5' : ''"> {{$money(cant)}}
+        <img :src="require('Img/icon/icon_sulfur.png')" :class="disabled&&cant==0 ? 'opacity-5' : ''"> {{$money(cant)}}
     </div>
 </template>
 

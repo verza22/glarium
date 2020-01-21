@@ -1,6 +1,6 @@
 <template>
     <div class="box">
-        <Entrenar/>
+        <Entrenar :units='data.units'/>
         <Formar :units='data.units'/>
     </div>
 </template>

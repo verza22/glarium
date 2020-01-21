@@ -1,6 +1,6 @@
 <template>
-    <div class="d-inline-block" :title="$t('resources.glass')" v-if="cant>0||visible">
-        <img :src="require('Img/icon/icon_glass.png')"> {{$money(cant)}}
+    <div class="d-inline-block" :title="$t('resources.glass')" v-if="cant>0||visible||disabled">
+        <img :src="require('Img/icon/icon_glass.png')" :class="disabled ? 'opacity-5' : ''"> {{$money(cant)}}
     </div>
 </template>
 
@@ -10,6 +10,10 @@ export default {
     props:{
         cant:Number,
         visible:{
+            type:Boolean,
+            default:false
+        },
+        disabled:{
             type:Boolean,
             default:false
         }

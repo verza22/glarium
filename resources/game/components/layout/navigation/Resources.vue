@@ -174,11 +174,12 @@ export default {
             return $building.getters.getBuildingLevel(3);
         },
         bonus_resources(){
-            var bonus = $config.state.world.bonus.resources;
-            return bonus==undefined ? 0 : bonus;
+            var bonus = $config.state.world.bonus;
+            return bonus==undefined ? 0 : bonus.resources;
         },
         maxCapacity(){
-            return ($config.state.world.warehouse.capacity * this.depositLevel) + $config.state.world.warehouse.capacity_base;
+            var warehouse = $config.state.world.warehouse;
+            return warehouse==undefined ? 0 : (warehouse.capacity * this.depositLevel) + warehouse.capacity_base;
         },
         tavernConsume(){
             return (($resources.getters.tavernConsume*(1-($building.getters.getBuildingLevel(9)*0.01)))/3600);

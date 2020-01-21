@@ -268,7 +268,7 @@ class BuildingController extends Controller
         }
         if($building->id==4)
         {
-            $nextLevel['units'] = Unit::select(['id','population','wood','wine','glass','sulfur','time','barrack_level','gold'])->get();
+            $nextLevel['units'] = Unit::selectRaw('id,population,wood,wine,glass,sulfur,time,barrack_level,gold,0 as trainer')->get();
         }
         return $nextLevel;
     }

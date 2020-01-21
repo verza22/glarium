@@ -13,7 +13,7 @@ const store = new Vuex.Store({
       reloadIslandData(){},
       reloadUserResources(){},
       reloadPopulation(){},
-    },
+    }
 })
 
 setInterval(function () {

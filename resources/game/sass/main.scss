@@ -84,7 +84,15 @@ a:hover{
     border-color: #ddad6b;
     background-color: #dcad5d;
 }
-
+.pointer{
+    cursor: pointer;
+}
+.link:hover{
+    text-decoration: underline;
+}
+.opacity-5{
+    opacity: 0.5;
+}
 .btnGeneral{
     background: #eccf8e;
     cursor:pointer;

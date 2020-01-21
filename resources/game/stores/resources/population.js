@@ -82,7 +82,8 @@ export default {
             }
         },
         tavernConsume: state => {
-            return state.wine * $config.state.world.bonus.tavern_consume;
+            var bonus = $config.state.world.bonus;
+            return bonus==undefined ? 0 : state.wine * bonus.tavern_consume;
         }
     }
 }

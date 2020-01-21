@@ -25,6 +25,14 @@ function pad(num) {
     return ("0"+num).slice(-2);
 }
 
+Vue.prototype.$sum = function (obj,prop){
+    var total = 0
+    for ( var i = 0, _len = obj.length; i < _len; i++ ) {
+        total += parseInt(obj[i][prop])
+    }
+    return total
+}
+
 Vue.prototype.$zoom = function (){
     const elem = document.getElementById('zoom')
     var panzoom = Panzoom(elem, {

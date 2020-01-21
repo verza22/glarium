@@ -1,7 +1,15 @@
 <template>
     <div>
         <div class="gtitle text-center mb-3">Unidades programadas para entrenar</div>
-        <div class="text-danger text-center">No se han seleccionado unidades</div>
+        <div class="text-danger text-center" v-if="unitTotal.population<1">No se han seleccionado unidades</div>
+        <div v-else  class="d-flex">
+            <div v-for="(unit,i) in units" :key="i">
+                <div v-if="unit.trainer>0">
+                    <div><div class="unit mx-1" :class="'unit_'+unit.id"></div></div>
+                    <div class="text-center">{{unit.trainer}}</div>
+                </div>
+            </div>
+        </div>
         <hr class="hred">
         <div class="d-flex">
             <Recursos class="flex-1" :disabled='true' :unit='unitTotal'/>
@@ -67,3 +75,29 @@ export default {
     },
 }
 </script>
+
+<style lang="scss" scoped>
+    .unit{
+        background-image: url('~Img/unit/units_mini.png');
+        width: 36px;
+        height: 35px;
+    }
+    .unit_1{
+        background-position: -180px -36px;
+    }
+    .unit_2{
+        background-position: 1px -36px;
+    }
+    .unit_3{
+        background-position: -107px -36px;
+    }
+    .unit_4{
+        background-position: -72px -36px;
+    }
+    .unit_5{
+        background-position: -35px -36px;
+    }
+    .unit_6{
+        background-position: -143px -36px;
+    }
+</style>

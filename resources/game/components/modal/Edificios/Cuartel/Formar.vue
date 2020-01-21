@@ -36,30 +36,70 @@ export default {
     },
     methods:{
         maxTrainer(unit){
-            unit.trainer = Math.floor((this.population-(this.sum()-(unit.trainer*unit.population)))/unit.population);
+            var trainer_aux = 0;
+            trainer_aux = Math.floor((this.population-(this.sum('population')-(unit.trainer*unit.population)))/unit.population);
+
+            var trainer_wood   = unit.wood   == 0 ? -1 : Math.floor((this.wood-(this.sum('wood')-(unit.trainer*unit.wood)))/unit.wood)
+            var trainer_wine   = unit.wine   == 0 ? -1 : Math.floor((this.wine-(this.sum('wine')-(unit.trainer*unit.wine)))/unit.wine)
+            var trainer_glass  = unit.glass  == 0 ? -1 : Math.floor((this.glass-(this.sum('glass')-(unit.trainer*unit.glass)))/unit.glass)
+            var trainer_sulfur = unit.sulfur == 0 ? -1 : Math.floor((this.sulfur-(this.sum('sulfur')-(unit.trainer*unit.sulfur)))/unit.sulfur)
+
+            trainer_aux = trainer_wood<trainer_aux&&trainer_wood>-1 ? trainer_wood : trainer_aux
+            trainer_aux = trainer_wine<trainer_aux&&trainer_wine>-1 ? trainer_wine : trainer_aux
+            trainer_aux = trainer_glass<trainer_aux&&trainer_glass>-1 ? trainer_glass : trainer_aux
+            trainer_aux = trainer_sulfur<trainer_aux&&trainer_sulfur>-1 ? trainer_sulfur : trainer_aux
+
+            unit.trainer = trainer_aux
         },
         validateTrainer(unit){
             if(unit.trainer<0){
                 unit.trainer = 0;
                 return;
             }
-            if(this.sum()>this.population){
-                unit.trainer = Math.floor((this.population-(this.sum()-(unit.trainer*unit.population)))/unit.population);
+            if(this.sum('population')>this.population){
+                unit.trainer = Math.floor((this.population-(this.sum('population')-(unit.trainer*unit.population)))/unit.population);
+                return;
+            }
+            if(this.sum('wood')>this.wood){
+                unit.trainer = Math.floor((this.wood-(this.sum('wood')-(unit.trainer*unit.wood)))/unit.wood);
+                return;
+            }
+            if(this.sum('wine')>this.wine){
+                unit.trainer = Math.floor((this.wine-(this.sum('wine')-(unit.trainer*unit.wine)))/unit.wine);
+                return;
+            }
+            if(this.sum('glass')>this.glass){
+                unit.trainer = Math.floor((this.glass-(this.sum('glass')-(unit.trainer*unit.glass)))/unit.glass);
+                return;
+            }
+            if(this.sum('sulfur')>this.sulfur){
+                unit.trainer = Math.floor((this.sulfur-(this.sum('sulfur')-(unit.trainer*unit.sulfur)))/unit.sulfur);
                 return;
             }
         },
-        sum(){
+        sum(prop){
             var total = 0
             for ( var i = 0, _len = this.units.length; i < _len; i++ ) {
-                total += parseInt(this.units[i]['trainer']*this.units[i]['population'])
+                total += parseInt(this.units[i]['trainer']*this.units[i][prop])
             }
-            console.log(total)
             return total
         }
     },
     computed:{
         population(){
             return $resources.state.population.population;
+        },
+        wood(){
+            return $resources.state.wood;
+        },
+        wine(){
+            return $resources.state.wine;
+        },
+        glass(){
+            return $resources.state.glass;
+        },
+        sulfur(){
+            return $resources.state.sulfur;
         },
     }
 }

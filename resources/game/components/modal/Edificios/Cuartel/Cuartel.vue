@@ -1,7 +1,7 @@
 <template>
     <div class="box">
         <Entrenar :units='data.units'/>
-        <Formar :units='data.units'/>
+        <Formar :level='data.level-1' :units='data.units'/>
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="gtitle text-center mb-3">Formar unidades</div>
+        <div class="gtitle text-center mt-4 mb-3">Formar unidades</div>
         <div v-for="(unit,index) in units" :key="index">
             <div class="d-flex celda">
                 <div class="flex-1">
@@ -15,9 +15,12 @@
                     <hr class="hred">
                     <Recursos :unit='unit'/>
                 </div>
-                <div class="flex-2 m-auto text-center">
+                <div class="flex-2 m-auto text-center" v-if="level>=unit.barrack_level">
                     <input type="number" value="0" @change='validateTrainer(unit)' class="caja" v-model="unit.trainer"/>
                     <div class="d-inline-block pointer link" @click="maxTrainer(unit)">max</div>
+                </div>
+                <div class="flex-2 m-auto text-center" v-else>
+                    <div>Necesario nivel de construcción {{unit.barrack_level}}</div>
                 </div>
             </div>
         </div>
@@ -27,10 +30,11 @@
 <script>
 import Recursos from 'Components/modal/Edificios/Cuartel/recursos.vue'
 import $resources from 'Stores/resources'
+import $config from 'Stores/config'
 
 export default {
     name:'Formar',
-    props:['units'],
+    props:['units','level'],
     components:{
         Recursos
     },
@@ -105,6 +109,9 @@ export default {
         sulfur(){
             return $resources.state.sulfur;
         },
+        user_research(){
+            return $config.state.user_research;
+        }
     }
 }
 </script>

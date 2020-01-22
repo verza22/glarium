@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="gtitle text-center mb-3">Unidades programadas para entrenar</div>
-        <div class="text-danger text-center" v-if="unitTotal.population<1">No se han seleccionado unidades</div>
+        <div class="text-danger nounit" v-if="unitTotal.population<1">No se han seleccionado unidades</div>
         <div v-else  class="d-flex">
             <div v-for="(unit,i) in units" :key="i">
                 <div v-if="unit.trainer>0">
@@ -11,15 +11,21 @@
             </div>
         </div>
         <hr class="hred">
-        <div class="d-flex">
+        <div class="d-flex align-items-center">
             <Recursos class="flex-1" :disabled='true' :unit='unitTotal'/>
-            <div>asd</div>
+            <div>
+                <div class="btnGeneral py-2 px-3" @click="entrenar()" :class="unitTotal.population<1 ? 'opacity-5' : ''">Entrenar</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
 import Recursos from 'Components/modal/Edificios/Cuartel/recursos.vue'
+import $city from 'Stores/city'
+import $notification from 'Stores/notification'
+import $resources from 'Stores/resources'
 
 export default {
     name:'Entrenar',
@@ -41,6 +47,37 @@ export default {
         }
     },
     methods:{
+        entrenar(){
+            if(this.unitTotal.population==0){
+                return
+            }
+            var unidades = this.units.filter(unit =>{return unit.trainer>0})
+            var units = unidades.map(unit =>{return unit.id})
+            var cants = unidades.map(unit =>{return parseInt(unit.trainer)})
+            axios.post('unit/'+this.city_id,{
+                units:units,
+                cants:cants
+            })
+            .then(res =>{
+                if(res.data!='ok'){
+                    $notification.commit('show',{advisor:2,type:false,message:res.data});
+                }else{
+                    $notification.commit('show',{advisor:2,type:true});
+                    $resources.commit('reducePopulation',{population:this.unitTotal.population})
+                    $resources.commit('removeResources',{
+                        wood:this.unitTotal.wood,
+                        wine:this.unitTotal.wine,
+                        glass:this.unitTotal.glass,
+                        sulfur:this.unitTotal.sulfur
+                    });
+                    this.clear();
+                    this.clearUnits();
+                }
+            })
+            .catch(err =>{
+                $notification.commit('show',{advisor:2,type:false,message:err});
+            })
+        },
         changeTrainer(){
             this.clear();
             this.units.forEach(unit => {
@@ -63,7 +100,17 @@ export default {
                 gold:0,
                 time:0
             }
+        },
+        clearUnits(){
+            this.units.forEach(unit=>{
+                unit.trainer=0;
+            })
         }
+    },
+    computed:{
+        city_id(){
+            return $city.state.city_id;
+        },
     },
     watch: {
         units: {
@@ -99,5 +146,11 @@ export default {
     }
     .unit_6{
         background-position: -143px -36px;
+    }
+    .nounit{
+        height: 54px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

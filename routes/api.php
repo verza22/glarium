@@ -59,4 +59,4 @@ Route::delete('movement/{movement}', 'Game\MovementController@remove');
 Route::get('world/{x}/{y}', 'Game\WorldController@index');
 
 Route::post('unit/{city}','Game\UnitController@create');
-Route::get('unit/{city}','Game\UnitController@show');
+Route::get('unit','Game\UnitController@index');

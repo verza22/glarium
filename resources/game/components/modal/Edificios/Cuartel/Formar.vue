@@ -6,7 +6,7 @@
                 <div class="flex-1">
                     <div class="position-relative d-flex justify-content-center">
                         <img :src="require(`Img/unit/${unit.id}.png`)">
-                        <div class="valores mt-2">0</div>
+                        <div class="valores mt-2">{{getUnitCant(unit.id)}}</div>
                     </div>
                 </div>
                 <div class="flex-5 box2">
@@ -31,6 +31,8 @@
 import Recursos from 'Components/modal/Edificios/Cuartel/recursos.vue'
 import $resources from 'Stores/resources'
 import $config from 'Stores/config'
+import $city from 'Stores/city'
+import $unit from 'Stores/unit'
 
 export default {
     name:'Formar',
@@ -39,6 +41,10 @@ export default {
         Recursos
     },
     methods:{
+        getUnitCant(unit_id){
+            var units = this.regimentUnits.filter(unit => unit.unit_id==unit_id)
+            return units.length>0 ? units[0].cant : 0
+        },
         maxTrainer(unit){
             var trainer_aux = 0;
             trainer_aux = Math.floor((this.population-(this.sum('population')-(unit.trainer*unit.population)))/unit.population);
@@ -94,6 +100,12 @@ export default {
         }
     },
     computed:{
+        city_id(){
+            return $city.state.city_id;
+        },
+        regimentUnits(){
+            return $unit.getters.getUnits(this.city_id);
+        },
         population(){
             return $resources.state.population.population;
         },

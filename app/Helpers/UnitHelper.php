@@ -9,9 +9,10 @@ use App\Models\Regiment;
 use App\Models\RegimentUnit;
 use App\Models\ResearchUnit;
 use App\Models\UserResearch;
+use App\Models\RegimentTail;
 use Carbon\Carbon;
 use Auth;
- 
+
 class UnitHelper {
 
     public static function newCollect()
@@ -37,17 +38,37 @@ class UnitHelper {
         $collect->population += $unit->population * $cant;
         $collect->time       += $unit->time       * $cant;
     }
-    
+
+    public static function allConstructTails()
+    {
+        $regiments = Regiment::where('user_id',Auth::id())->pluck('id');
+        $tails = RegimentTail::whereIn('regiment_id',$regiments)->where('constructed_at','<',Carbon::now())->get();
+        $tails->map(function($tail){
+            self::endTail($tail);
+        });
+    }
+
     public static function checkConstructedTime(Regiment $regiment)
     {
         $tails = $regiment->tails->where('constructed_at','<',Carbon::now());
 
-        $tails->map(function($tail) use($regiment){
-            $regimentUnit = RegimentUnit::where('regiment_id',$regiment->id)->where('unit_id',$tail->unit_id)->first();
+        $tails->map(function($tail){
+            self::endTail($tail);
+        });
+
+        if($tails->count() > 0)
+        {
+            $regiment->refresh();
+        }
+    }
+
+    private static function endTail(RegimentTail $tail)
+    {
+        $regimentUnit = RegimentUnit::where('regiment_id',$tail->regiment_id)->where('unit_id',$tail->unit_id)->first();
             if($regimentUnit===NULL)
             {
                 RegimentUnit::create([
-                    'regiment_id' => $regiment->id,
+                    'regiment_id' => $tail->regiment_id,
                     'unit_id'     => $tail->unit_id,
                     'cant'        => $tail->cant
                 ]);
@@ -58,12 +79,6 @@ class UnitHelper {
                 $regimentUnit->save();
             }
             $tail->delete();
-        });
-
-        if($tails->count() > 0)
-        {
-            $regiment->refresh();
-        }
     }
 
     public static function checkBarrackLevel(City $city,Unit $unit)
@@ -113,5 +128,5 @@ class UnitHelper {
             });
         });
     }
-    
+
 }

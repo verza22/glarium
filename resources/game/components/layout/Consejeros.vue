@@ -28,6 +28,7 @@ import $resources from 'Stores/resources'
 import $city from 'Stores/city'
 import $store from 'Stores/store'
 import $config from 'Stores/config'
+import $unit from 'Stores/unit'
 
 export default {
     name: "Consejeros",
@@ -183,6 +184,7 @@ export default {
     },
     beforeMount(){
         $movement.dispatch('updateMovemenet')
+        $unit.dispatch('updateUnit')
         this.checkMsg()
     },
     mounted(){

@@ -13,6 +13,7 @@
         </Ventana1>
         <Ventana2 titulo="Ampliar">
             <Ampliar :info='info'></Ampliar>
+            <ColaUnidades v-if='building_id==4'></ColaUnidades>
         </Ventana2>
     </div>
 </template>
@@ -29,6 +30,7 @@ import Productores from 'Components/modal/Edificios/Productores.vue'
 import Puerto from 'Components/modal/Edificios/Puerto.vue'
 import Taberna from 'Components/modal/Edificios/Taberna.vue'
 import Cuartel from 'Components/modal/Edificios/Cuartel/Cuartel.vue'
+import ColaUnidades from 'Components/modal/Edificios/Cuartel/ColaUnidades.vue'
 
 export default {
     name: 'Edificios',
@@ -44,7 +46,8 @@ export default {
         Productores,
         Puerto,
         Taberna,
-        Cuartel
+        Cuartel,
+        ColaUnidades
     },
     data(){
         return {

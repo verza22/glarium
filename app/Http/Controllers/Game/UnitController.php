@@ -49,7 +49,7 @@ class UnitController extends Controller
         $max_tail = $max_tail===NULL ? 0 : $max_tail+1;
 
         //Validamos que no pueda mandar a construir mas de 4 colas
-        if($max_tail>4)
+        if($max_tail>2)
         {
             return 'Alcanzaste el maximo numero de colas permitidas';
         }
@@ -136,29 +136,15 @@ class UnitController extends Controller
 
     }
 
-    public function show(City $city)
+    public function index()
     {
-        $this->authorize('isMyCity',$city);
-
-        $regiment = Regiment::where('user_id',Auth::id())->where('city_id',$city->id)->first();
-
-        if($regiment===NULL)
-        {
-            return 'No hay tropas que mostrar';
-        }
-
         //Verificamos que no haya colas culminadas
-        UnitHelper::checkConstructedTime($regiment);
+        UnitHelper::allConstructTails();
 
-        $units = $regiment->units->map(function($regimentUnit){
-            $data['id']    = $regimentUnit->unit->id;
-            $data['cant']  = $regimentUnit->cant;
-            $data['name']  = $regimentUnit->unit->name;
-            $data['image'] = $regimentUnit->unit->image;
-            $data['text']  = $regimentUnit->unit->text;
-            return $data;
-        });
-
-        return $units;
+        return Regiment::where('user_id',Auth::id())
+        ->with('units:regiment_id,cant,unit_id')
+        ->with('tails:regiment_id,cant,unit_id,tail,constructed_at')
+        ->select('id','city_id')
+        ->get();
     }
 }

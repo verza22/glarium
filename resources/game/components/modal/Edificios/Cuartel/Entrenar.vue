@@ -26,6 +26,7 @@ import Recursos from 'Components/modal/Edificios/Cuartel/recursos.vue'
 import $city from 'Stores/city'
 import $notification from 'Stores/notification'
 import $resources from 'Stores/resources'
+import $unit from 'Stores/unit'
 
 export default {
     name:'Entrenar',
@@ -70,6 +71,7 @@ export default {
                         glass:this.unitTotal.glass,
                         sulfur:this.unitTotal.sulfur
                     });
+                    $unit.dispatch('updateUnit')
                     this.clear();
                     this.clearUnits();
                 }
@@ -124,29 +126,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .unit{
-        background-image: url('~Img/unit/units_mini.png');
-        width: 36px;
-        height: 35px;
-    }
-    .unit_1{
-        background-position: -180px -36px;
-    }
-    .unit_2{
-        background-position: 1px -36px;
-    }
-    .unit_3{
-        background-position: -107px -36px;
-    }
-    .unit_4{
-        background-position: -72px -36px;
-    }
-    .unit_5{
-        background-position: -35px -36px;
-    }
-    .unit_6{
-        background-position: -143px -36px;
-    }
+    @import '~Sass/units';
     .nounit{
         height: 54px;
         display: flex;

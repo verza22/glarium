@@ -10,6 +10,7 @@ use App\Models\RegimentUnit;
 use App\Models\ResearchUnit;
 use App\Models\UserResearch;
 use App\Models\RegimentTail;
+use App\Models\Mayor;
 use App\Events\UserNotification;
 use Carbon\Carbon;
 use Auth;
@@ -45,7 +46,10 @@ class UnitHelper {
         $regiments = Regiment::where('user_id',Auth::id())->pluck('id');
         $tails = RegimentTail::whereIn('regiment_id',$regiments)->where('constructed_at','<',Carbon::now())->get();
 
-        self::notifyTails($tails);
+        if($tails->count() > 0)
+        {
+            self::notifyTails($tails);
+        }
 
         $tails->map(function($tail){
             self::endTail($tail);
@@ -56,7 +60,10 @@ class UnitHelper {
     {
         $tails = $regiment->tails->where('constructed_at','<',Carbon::now());
 
-        self::notifyTails($tails);
+        if($tails->count() > 0)
+        {
+            self::notifyTails($tails);
+        }
 
         $tails->map(function($tail){
             self::endTail($tail);
@@ -71,12 +78,38 @@ class UnitHelper {
     private static function notifyTails($tails)
     {
         //Notificación al usuario de que se crearon unidades
-        /*Mayor::create([
-            'city_id'=> $cityBuilding->city->id,
-            'type' => 1,
-            'data' => json_encode(['building_id'=>$after->building_id,'level'=>$before->level])
-        ]);
-        event(new UserNotification('advisors','mayor',$cityBuilding->city->userCity->user_id));*/
+        $data = array();
+        $aux = array();
+        //Agrupa las colas por ciudad
+        foreach($tails as $tail)
+        {
+            $city_id = $tail->regiment->city_id;
+            if(in_array($city_id,$aux))
+            {
+                $index = array_search($city_id,$aux);
+            }
+            else
+            {
+                $index = count($aux);
+                array_push($aux,$city_id);
+                $data[$index]['units'] = [];
+            }
+            $data[$index]['city_id'] = $city_id;
+            $tail_aux['unit_id']     = $tail->unit_id;
+            $tail_aux['cant']        = $tail->cant;
+            array_push($data[$index]['units'],$tail_aux);
+        }
+        //insertamos registros de las colas terminadas
+        foreach($data as $value)
+        {
+            Mayor::create([
+                'city_id'=> $value['city_id'],
+                'type' => 5,
+                'data' => json_encode($value['units'])
+            ]);
+        }
+        //Notificamos al usuario
+        event(new UserNotification('advisors','mayor',Auth::id()));
     }
 
     private static function endTail(RegimentTail $tail)

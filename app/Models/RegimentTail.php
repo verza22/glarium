@@ -18,4 +18,9 @@ class RegimentTail extends Model
         'cant',
         'tail'
     ];
+
+    public function regiment()
+    {
+        return $this->belongsTo('App\Models\Regiment');
+    }
 }

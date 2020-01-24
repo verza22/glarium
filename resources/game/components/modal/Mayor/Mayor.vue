@@ -45,6 +45,15 @@
                             <div v-else-if="item.type==4">
                                 <div>Tu ciudad <b>{{item.data.city_name}}</b> ha sido fundada.</div>
                             </div>
+                            <div v-else-if="item.type==5">
+                                <div class="mb-2">En el Cuartel se ha completado la producción de unidades:</div>
+                                <div class="d-flex">
+                                    <div v-for="(unit,index) in item.data" :key="index">
+                                        <div><div class="unit mx-1" :class="'unit_'+unit.unit_id"></div></div>
+                                        <div class="text-center cant">{{unit.cant}}</div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -124,6 +133,9 @@ export default {
                 case 4:
                     return 'icon_transport.png';
                 break;
+                case 5:
+                    return 'icon_military.png';
+                break;
             }
         }
     },
@@ -135,6 +147,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "~Sass/modal";
+@import '~Sass/units';
+
+    .cant{
+        font-size: 0.7rem
+    }
     .box{
         font-size: 0.83rem;
         line-height: 0.83rem;

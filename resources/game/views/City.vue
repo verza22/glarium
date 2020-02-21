@@ -2,10 +2,8 @@
   <div>
     <div class="cityContainer" v-dragscroll="true" v-autoscroll="'top center'">
         <div id="zoom">
-            <div class="forest">
-                <div class="city">
-                    <Edificios></Edificios>
-                </div>
+            <div class="city">
+                <Edificios></Edificios>
             </div>
         </div>
     </div>
@@ -45,15 +43,8 @@ export default {
   position: absolute;
   overflow: hidden;
 }
-.forest{
-  width:3600px;
-  height:1794px;
-  background: url("~Img/ciudad/forest.jpg");
-}
 .city{
-  position:relative;
-  left: 830px;
-  width:1920px;
+  width:2460px;
   height:1794px;
   background: url("~Img/ciudad/city.jpg");
 }

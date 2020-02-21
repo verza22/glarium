@@ -22,7 +22,7 @@
 
 <script>
 import axios from "axios";
-import Recursos from 'Components/modal/Edificios/Cuartel/recursos.vue'
+import Recursos from 'Components/modal/Edificios/Cuartel/Recursos.vue'
 import $city from 'Stores/city'
 import $notification from 'Stores/notification'
 import $resources from 'Stores/resources'

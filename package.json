@@ -11,6 +11,7 @@
     "babel-loader": "^8.0.5",
     "cross-env": "^5.1",
     "css-loader": "^3.4.0",
+    "file-loader": "^5.1.0",
     "interactjs": "^1.7.3",
     "lodash": "^4.17.13",
     "moment": "^2.24.0",

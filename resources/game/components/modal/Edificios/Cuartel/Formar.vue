@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import Recursos from 'Components/modal/Edificios/Cuartel/recursos.vue'
+import Recursos from 'Components/modal/Edificios/Cuartel/Recursos.vue'
 import $resources from 'Stores/resources'
 import $config from 'Stores/config'
 import $city from 'Stores/city'

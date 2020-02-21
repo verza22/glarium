@@ -48,7 +48,7 @@ class UnitHelper {
 
         if($tails->count() > 0)
         {
-            self::notifyTails($tails);
+            self::notifyTails($tails,Auth::id());
         }
 
         $tails->map(function($tail){
@@ -62,7 +62,7 @@ class UnitHelper {
 
         if($tails->count() > 0)
         {
-            self::notifyTails($tails);
+            self::notifyTails($tails,$regiment->user_id);
         }
 
         $tails->map(function($tail){
@@ -75,7 +75,7 @@ class UnitHelper {
         }
     }
 
-    private static function notifyTails($tails)
+    private static function notifyTails($tails,$user_id)
     {
         //Notificación al usuario de que se crearon unidades
         $data = array();
@@ -109,7 +109,7 @@ class UnitHelper {
             ]);
         }
         //Notificamos al usuario
-        event(new UserNotification('advisors','mayor',Auth::id()));
+        event(new UserNotification('advisors','mayor',$user_id));
     }
 
     private static function endTail(RegimentTail $tail)

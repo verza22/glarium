@@ -18,13 +18,13 @@
             </div>
             <div class="box-acciones" v-if='!data.city.type'>
                 <div class="btn-accion" :title="$t('actions.defend')">
-                    <div class="btn-image btn-defend inactive"></div>
+                    <div class="btn-image btn-defend" :class="exists_units ? '' : 'inactive'"></div>
                     <div class="mt-1">{{$t('actions.defend')}}</div>
                 </div>
             </div>
             <div class="box-acciones" v-if='!data.city.type'>
                 <div class="btn-accion" :title="$t('actions.attack')">
-                    <div class="btn-image btn-attack inactive"></div>
+                    <div class="btn-image btn-attack" :class="exists_units ? '' : 'inactive'"></div>
                     <div class="mt-1">{{$t('actions.attack')}}</div>
                 </div>
             </div>
@@ -33,9 +33,20 @@
 </template>
 
 <script>
+import $city from 'Stores/city'
+import $unit from 'Stores/unit'
+
 export default {
     name:'Acciones',
-    props:['changeType','data']
+    props:['changeType','data'],
+    computed:{
+        city_id(){
+            return $city.state.city_id
+        },
+        exists_units(){
+            return $unit.getters.getUnits(this.city_id).length > 0
+        }
+    }
 }
 </script>
 

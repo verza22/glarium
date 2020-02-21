@@ -41,21 +41,21 @@ export default {
       constructed_at: null,
       constructed_building: null,
       objects: [
-        { top: 396, left: 830 },
-        { top: 350, left: 480 },
-        { top: 472, left: 485 },
-        { top: 400, left: 612 },
-        { top: 520, left: 622 },
-        { top: 540, left: 800 },
-        { top: 505, left: 975 },
-        { top: 370, left: 1010 },
-        { top: 290, left: 930 },
-        { top: 560, left: 1100 },
-        { top: 475, left: 1180 },
-        { top: 540, left: 1290 },
-        { top: 660, left: 490 },
-        { top: 230, left: 440 },
-        { top: 685, left: 665 }
+        { top: 370, left: 1100 },
+        { top: 350, left: 740 },
+        { top: 258, left: 908 },
+        { top: 250, left: 1285 },
+        { top: 490, left: 1210 },
+        { top: 545, left: 845 },
+        { top: 430, left: 1395 },
+        { top: 200, left: 1660 },
+        { top: 160, left: 1490 },
+        { top: 575, left: 1350 },
+        { top: 330, left: 1700 },
+        { top: 535, left: 1660 },
+        { top: 575, left: 1080 },
+        { top: 230, left: 700 },
+        { top: 685, left: 900 }
       ]
     };
   },
@@ -142,19 +142,29 @@ export default {
   height: 125px;
   width: 140px;
 }
-
+.building_1{
+    width: 190px;
+    height: 150px;
+}
 .building_16{
   height: 143px;
   width: 211px;
 }
+.building_17{
+    background-position-x: center;
+    height: 149px!important;
+    width: 169px!important;
+    position: relative;
+    top: -25px;
+    left: -7px;
+}
 .building_19{
-  height: 100px;
-  width: 163px;
-  background-repeat: no-repeat!important;
-  position: relative;
-  top: 10px;
-  right: 37px;
-  background-size: contain!important;
+    height: 102px;
+    width: 161px;
+    background-repeat: no-repeat !important;
+    position: relative;
+    top: 6px;
+    right: 9px;
 }
 .construct {
   background: url("~Img/ciudad/construct.png") no-repeat !important;

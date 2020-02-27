@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import $notification from 'Stores/notification'
 import InformeTransporte from 'Components/modal/IslaCiudad/Componentes/InformeTransporte.vue'
 import $city from 'Stores/city'
 import $unit from 'Stores/unit'
@@ -59,34 +61,31 @@ export default {
             this.size = units.reduce((a,b) => a+b)
         },
         enviar(){
-            /*axios.post("movement/transport/" + this.city_from.id, {
-                city_to: this.data.city.city_id,
-                wood:this.values[0],
-                wine:this.values[1],
-                marble:this.values[2],
-                glass:this.values[3],
-                sulfur:this.values[4]
+            var unidades = this.units.filter(unit =>{return unit.cant_aux>0})
+            var units = unidades.map(unit =>{return unit.unit_id})
+            var cants = unidades.map(unit =>{return parseInt(unit.cant_aux)})
+            axios.post("attack/" + this.data.city.city_id, {
+                city_from: this.city_from,
+                units:units,
+                cants:cants,
+                trade_ship:this.ships
             })
             .then(res => {
                 if(res.data=='ok'){
                     this.changeType(0)
-                    $resources.commit('removeApoint')
-                    $resources.commit('removeResources',{wood:this.values[0],wine:this.values[1],marble:this.values[2],glass:this.values[3],sulfur:this.values[4]})
-                    $resources.commit('useShip',{ships:this.ships})
-                    $movement.dispatch('updateMovemenet')
-                    $notification.commit('show',{advisor:1,type:true});
+                    $notification.commit('show',{advisor:2,type:true});
                 }else{
-                    $notification.commit('show',{advisor:1,type:false,message:res.data});
+                    $notification.commit('show',{advisor:2,type:false,message:res.data});
                 }
             })
             .catch(err => {
-                $notification.commit('show',{advisor:1,type:false,message:err});
-            });*/
+                $notification.commit('show',{advisor:2,type:false,message:err});
+            });
         }
     },
     computed:{
         city_from(){
-            return $city.state.city;
+            return $city.state.city_id;
         },
         units_aux(){
             var units = $unit.getters.getUnits(this.city_from);

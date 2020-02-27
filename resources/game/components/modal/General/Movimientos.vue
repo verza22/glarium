@@ -148,6 +148,12 @@ export default {
                 case 1:
                     tipo_movimiento = 'Transporte '
                 break;
+                case 2:
+                    tipo_movimiento = 'Ataque '
+                break;
+                case 3:
+                    tipo_movimiento = 'Defensa '
+                break;
                 case 4:
                     tipo_movimiento = 'Colonizando '
                 break;

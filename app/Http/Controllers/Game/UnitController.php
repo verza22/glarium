@@ -141,10 +141,17 @@ class UnitController extends Controller
         //Verificamos que no haya colas culminadas
         UnitHelper::allConstructTails();
 
-        return Regiment::where('user_id',Auth::id())
-        ->with('units:regiment_id,cant,unit_id')
-        ->with('tails:regiment_id,cant,unit_id,tail,constructed_at')
-        ->select('id','city_id')
-        ->get();
+        $regiments = Regiment::where('user_id',Auth::id())->get();
+        return $regiments->map(function($regiment){
+            $data['id']      = $regiment->id;
+            $data['city_id'] = $regiment->city_id;
+            $data['tails']   = $regiment->tails;
+            $data['units']   = $regiment->units->map(function($regiment_unit){
+                $data         = $regiment_unit->only(['cant','unit_id']);
+                $data['size'] = $regiment_unit->unit->size;
+                return $data;
+            });
+            return $data;
+        });
     }
 }

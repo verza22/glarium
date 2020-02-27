@@ -18,13 +18,13 @@
             </div>
             <div class="box-acciones" v-if='!data.city.type'>
                 <div class="btn-accion" :title="$t('actions.defend')">
-                    <div class="btn-image btn-defend" :class="exists_units ? '' : 'inactive'"></div>
+                    <div class="btn-image btn-defend" :class="exists_units ? '' : 'inactive'" @click='changeType(4)'></div>
                     <div class="mt-1">{{$t('actions.defend')}}</div>
                 </div>
             </div>
             <div class="box-acciones" v-if='!data.city.type'>
                 <div class="btn-accion" :title="$t('actions.attack')">
-                    <div class="btn-image btn-attack" :class="exists_units ? '' : 'inactive'"></div>
+                    <div class="btn-image btn-attack" :class="exists_units ? '' : 'inactive'" @click='changeType(5)'></div>
                     <div class="mt-1">{{$t('actions.attack')}}</div>
                 </div>
             </div>

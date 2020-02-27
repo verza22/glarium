@@ -3,6 +3,8 @@
         <Ventana1 :close='close' v-if='type!=0' :titulo="getTitle()">
             <Diplomacia :changeType='changeType' :data='info' v-if='type==1||type==3'></Diplomacia>
             <Transporte :changeType='changeType' :data='info' v-else-if='type==2'></Transporte>
+            <Defensa :changeType='changeType' :data='info' v-else-if='type==4'></Defensa>
+            <Ataque :changeType='changeType' :data='info' v-else-if='type==5'></Ataque>
         </Ventana1>
         <Ventana2 titulo="Info" v-if='type!=3'>
             <Info :data='info'></Info>
@@ -18,6 +20,8 @@ import Info from 'Components/modal/IslaCiudad/Info.vue'
 import Acciones from 'Components/modal/IslaCiudad/Acciones.vue'
 import Diplomacia from 'Components/modal/IslaCiudad/Opciones/Diplomacia.vue'
 import Transporte from 'Components/modal/IslaCiudad/Opciones/Transporte.vue'
+import Defensa from 'Components/modal/IslaCiudad/Opciones/Defensa.vue'
+import Ataque from 'Components/modal/IslaCiudad/Opciones/Ataque.vue'
 import $city from 'Stores/city'
 
 export default {
@@ -29,7 +33,9 @@ export default {
         Info,
         Acciones,
         Diplomacia,
-        Transporte
+        Transporte,
+        Defensa,
+        Ataque
     },
     data(){
         return {
@@ -50,6 +56,9 @@ export default {
                 break;
                 case 2:
                     return "Transportar recursos";
+                break;
+                case 5:
+                    return "Saquear";
                 break;
             }
         }

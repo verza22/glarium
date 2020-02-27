@@ -4,7 +4,10 @@
         <div class="d-flex">
             <div class="flex-1 d-flex justify-content-center">
                 <div><img class="ship" :src="require('Img/icon/ship_transport.png')"></div>
-                <div class="mb-auto mt-auto">{{getShips()}}/{{ship_available}}</div>
+                <div class="my-auto">{{getShips()}}/{{ship_available}}</div>
+                <div v-if="isChangeShip" class="my-auto px-3">
+                    <input class="ships" type="number" @change="changeShipAux()" v-model="ship">
+                </div>
             </div>
             <div class="flex-1 d-flex align-items-center justify-content-center">
                 <div class="mr-2"><img :src="require('Img/icon/icon_journeytime.png')"></div>
@@ -31,15 +34,46 @@ import $building from 'Stores/building'
 
 export default {
     name:'InformeTransporte',
-    props:['objetivo','size','call','btnTitle'],
+    props:{
+        objetivo:String,
+        size:Number,
+        call:Function,
+        changeShip:Function,
+        btnTitle:String,
+        isChangeShip:{
+            type:Boolean,
+            default:false
+        }
+    },
+    data(){
+        return {
+            ship:0
+        }
+    },
     methods:{
+        changeShipAux(){
+            var ship_minimun = Math.ceil(this.size/this.transport)
+
+            if(this.ship<ship_minimun)
+                this.ship = ship_minimun
+
+            if(this.ship>this.ship_available)
+                this.ship = this.ship_available
+
+            this.changeShip(this.ship)
+        },
         getShips(){
-            return Math.ceil(this.size/this.transport)
+            return this.isChangeShip ? this.ship : Math.ceil(this.size/this.transport)
         },
         tiempo_carga(){
             var speed = (this.load_speed_base + (this.load_speed * this.port_level))/60
             return this.$sectotime(Math.ceil(this.size/speed));
         },
+    },
+    watch:{
+        size(){
+            this.changeShipAux()
+        }
     },
     computed:{
         ship_available(){
@@ -71,5 +105,8 @@ export default {
     .btnGeneral{
         display: inline-block;
         padding: 10px 20px;
+    }
+    .ships{
+        width:60px
     }
 </style>

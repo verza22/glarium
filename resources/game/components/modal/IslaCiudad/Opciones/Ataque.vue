@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <InformeTransporte btnTitle='¡Transportar bienes!' :call='enviar' :objetivo='data.city.name' :size='size'></InformeTransporte>
+        <InformeTransporte :isChangeShip="true" :changeShip="changeShip" btnTitle='¡Saquear!' :call='enviar' :objetivo='data.city.name' :size='size'></InformeTransporte>
     </div>
 </template>
 
@@ -34,10 +34,14 @@ export default {
     data(){
         return {
             size:0,
-            units:0
+            units:0,
+            ships:0
         }
     },
     methods:{
+        changeShip(ships){
+            this.ships = ships
+        },
         validateCant(unit){
             if(unit.cant_aux<0){
                 unit.cant_aux = 0;

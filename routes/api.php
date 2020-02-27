@@ -60,3 +60,6 @@ Route::get('world/{x}/{y}', 'Game\WorldController@index');
 
 Route::post('unit/{city}','Game\UnitController@create');
 Route::get('unit','Game\UnitController@index');
+
+Route::post('attack/{city}','Game\CombatController@attack');
+Route::post('defend/{city}','Game\CombatController@defend');

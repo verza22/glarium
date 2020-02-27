@@ -329,7 +329,7 @@ export default {
         diplomacy:'Diplomacia',
         transport:'Transportar bienes',
         defend:'¡Defender ciudad!',
-        attack:'¡Atacar ciudad!',
+        attack:'¡Saquear!',
         info:{
             name:'Nombre',
             player:'Jugador',

@@ -54,6 +54,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <div v-else-if="item.type==6">
+                                <div class="mb-2">Un ejercito de <b>{{item.city_name}}</b> ha llegado a tu ciudad <b>{{item.data.city_name}}</b> y ha saqueado los siguientes bienes:</div>
+                                <div>
+                                    <wood :cant='item.data.resources.wood'></wood>
+                                    <wine :cant='item.data.resources.wine'></wine>
+                                    <marble :cant='item.data.resources.marble'></marble>
+                                    <glass :cant='item.data.resources.glass'></glass>
+                                    <sulfur :cant='item.data.resources.sulfur'></sulfur>
+                                </div>
+                            </div>
+                            <div v-else-if="item.type==7">
+                                <div class="mb-2">Tu ejercito que atacó <b>{{item.data.city_name}}</b> ha llegado a tu ciudad <b>{{item.city_name}}</b> y ha dejado los siguientes bienes:</div>
+                                <div>
+                                    <wood :cant='item.data.resources.wood'></wood>
+                                    <wine :cant='item.data.resources.wine'></wine>
+                                    <marble :cant='item.data.resources.marble'></marble>
+                                    <glass :cant='item.data.resources.glass'></glass>
+                                    <sulfur :cant='item.data.resources.sulfur'></sulfur>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -134,6 +154,8 @@ export default {
                     return 'icon_transport.png';
                 break;
                 case 5:
+                case 6:
+                case 7:
                     return 'icon_military.png';
                 break;
             }

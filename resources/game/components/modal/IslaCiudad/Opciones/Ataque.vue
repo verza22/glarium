@@ -26,6 +26,7 @@ import $notification from 'Stores/notification'
 import InformeTransporte from 'Components/modal/IslaCiudad/Componentes/InformeTransporte.vue'
 import $city from 'Stores/city'
 import $unit from 'Stores/unit'
+import $movement from 'Stores/movement'
 
 export default {
     name: 'Ataque',
@@ -73,6 +74,7 @@ export default {
             .then(res => {
                 if(res.data=='ok'){
                     this.changeType(0)
+                    $movement.dispatch('updateMovemenet')
                     $notification.commit('show',{advisor:2,type:true});
                 }else{
                     $notification.commit('show',{advisor:2,type:false,message:res.data});

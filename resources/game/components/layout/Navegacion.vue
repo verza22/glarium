@@ -44,7 +44,7 @@
         font-size: 0.83rem;
         z-index: 2;
         width: 600px;
-        padding: 25px 40px 10px 10px;
+        padding: 18px 40px 20px 10px;
         border-radius: 5px;
         position: absolute;
         background-repeat: no-repeat;

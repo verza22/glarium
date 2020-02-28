@@ -24,30 +24,6 @@ class CombatController extends Controller
         $this->middleware('auth');
     }
 
-   /* public function checkAttack()
-    {
-        //Obtenemos los movimientos del jugador que sean ataques
-        Movement::where('user_id',Auth::id())
-        ->where('movement_type_id',2)
-        ->where('end_at','<',Carbon::now())
-        ->where('delivered',0)->get()
-        ->map(function($movement){
-            CombatHelper::endAttack($movement);
-        });
-
-        //Verificamos movimientos que ya terminaron
-        Movement::where('user_id',Auth::id())
-        ->where('movement_type_id',2)
-        ->where('return_at','<',Carbon::now())
-        ->where('delivered',1)->get()
-        ->map(function($movement){
-            CombatHelper::returnAttack($movement);
-        });
-
-
-        return 'ok';
-    }*/
-
     private function combat_movement(Request $request,City $city,$type)
     {
         $this->authorize('isNotMyCity',$city);

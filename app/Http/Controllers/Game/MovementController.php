@@ -298,6 +298,12 @@ class MovementController extends Controller
             if($movement->resources!=NULL){
                 $data['resources']= $movement->resources->only(['wood','wine','marble','glass','sulfur']);
             }
+            //Añadimos unidades
+            if($movement->movement_type_id==2||$movement->movement_type_id==3){
+                $data['resources']['units'] = $movement->movement_regiment->regiment->units->map(function($regiment_unit){
+                    return $regiment_unit->only(['unit_id','cant']);
+                });
+            }
             //Añadimos recursos de colonizacion
             if($movement->movement_type_id==4){
                 $data['resources']['wood'] = config('world.colonize.wood');

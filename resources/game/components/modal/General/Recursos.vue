@@ -7,7 +7,7 @@
             </div>
             <div class="d-flex">
                 <div class="dt_item px-0">
-                    <div class="mb-1"><img class="ship" :src="require('Img/icon/ship_transport.png')"></div>
+                    <div class="mb-1 my-1"><img class="ship" :src="require('Img/icon/ship_transport.png')"></div>
                     <div>{{movement.trade_ship}}</div>
                 </div>
                 <div class="dt_item" v-if="movement.resources.wood>0">
@@ -34,6 +34,12 @@
                     <div class="dt_resource"><img :src="require('Img/icon/icon_gold.png')"></div>
                     <div>{{$money(movement.resources.gold)}}</div>
                 </div>
+                <div v-for="(unit,i) in movement.resources.units" :key="i">
+                    <div class="dt_item" v-if="unit.cant>0">
+                        <div class="unit my-1" :class="'unit_'+unit.unit_id"></div>
+                        <div>{{unit.cant}}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -47,6 +53,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    @import '~Sass/units';
     .dt_container{
         position: absolute;
         left: 35px;

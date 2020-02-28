@@ -7,6 +7,7 @@ use App\Models\CombatReport;
 use App\Models\CombatReportDetail;
 use App\Models\Regiment;
 use App\Models\Movement;
+use App\Models\Mayor;
 use App\Models\City;
 use App\Models\CityBuilding;
 use App\Models\MovementResource;
@@ -15,6 +16,7 @@ use App\Helpers\CityHelper;
 use App\Helpers\WarehouseHelper;
 use App\Helpers\UnitHelper;
 use App\Helpers\MovementHelper;
+use App\Events\UserNotification;
 use Carbon\Carbon;
 
 class CombatHelper {
@@ -95,9 +97,9 @@ class CombatHelper {
                     {
                         //Gana el defensor
                         $datadefense['power'] -= $dataAttack['power'];
-                        
+
                         $defensaCant = ceil($datadefense['power']/$datadefense['unit']['value']);//Sobrevivientes al ataque
-                        
+
                         RegimentUnit::whereId($dataAttack['unit']['id'])->delete();//Se muere el atacante
                         RegimentUnit::whereId($datadefense['unit']['id'])->update(['cant' => $defensaCant]);
 
@@ -178,15 +180,15 @@ class CombatHelper {
         })->first();
 
         $level = $cityBuilding!=NULL ? $cityBuilding->building_level->level : 0;
-        
+
         //Aplicamos bonus de muralla
         $defenseBonus = ( 1 + ( $level * config('world.combat.wall_bonus') ) );
-        
+
         self::ronda($regimentAttack,$regimentDefense,$combatReport,$round,$defenseBonus);
 
         return $combatReport->result;
     }
-    
+
     public static function getResourceSteal(City $city,$size)
     {
         //Devuelve una collecion de recursos a saquear
@@ -229,7 +231,7 @@ class CombatHelper {
     }
 
     public static function endAttack(Movement $movement)
-    { 
+    {
         //Actualizamos la cola de unidades de la ciudad destino
         Regiment::where('city_id',$movement->city_destine->id)->notTravel()->get()
         ->map(function($regiment){
@@ -246,6 +248,11 @@ class CombatHelper {
         $city_to = $movement->city_to;
         //Hacemos el combate
         $combatResult = CombatHelper::checkAttack($movement->movement_regiment,$city_to);
+
+        //notificamos al atacante y defensor
+        $user_destine = $movement->city_destine->userCity->user;
+        event(new UserNotification('advisors','general',$user_destine->id));
+        event(new UserNotification('advisors','general',$movement->user_id));
 
         //Verificamos quien gano el combate
         if($combatResult==1)
@@ -277,6 +284,19 @@ class CombatHelper {
             ]);
 
             $movement->save();
+
+            //Notificamos el saqueo al dueño de la ciudad
+            Mayor::create([
+                'city_id'=> $movement->city_destine->id,
+                'type' => 6,
+                'data' => json_encode([
+                    'resources'=>$movement->resources->only(['wood','wine','marble','glass','sulfur']),
+                    'city_from'=>$movement->city_origin->id,
+                    'city_name'=>$movement->city_origin->name
+                ])
+            ]);
+
+            event(new UserNotification('advisors','mayor',$user_destine->id));
 
             self::clearDefenses($movement->city_destine);
         }
@@ -356,6 +376,19 @@ class CombatHelper {
         //Devolvemos el mercante
         $movement->user->resources->trade_ship_available += $movement->trade_ship;
         $movement->user->resources->save();
+
+        //Notificamos al atacante de que sus recursos llegaron
+        Mayor::create([
+            'city_id'=> $movement->city_origin->id,
+            'type' => 7,
+            'data' => json_encode([
+                'resources'=>$movement->resources->only(['wood','wine','marble','glass','sulfur']),
+                'city_from'=>$movement->city_destine->id,
+                'city_name'=>$movement->city_destine->name
+            ])
+        ]);
+
+        event(new UserNotification('advisors','mayor',$movement->user_id));
 
         //Terminamos el movimiento
         $movement->delete();

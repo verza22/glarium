@@ -8,6 +8,7 @@ use App\Models\UserResource;
 use App\Models\Island;
 use App\Helpers\OtherHelper;
 use App\Helpers\BuildingHelper;
+use App\Helpers\CombatHelper;
 use App\Events\UserNotification;
 use App\Helpers\CityHelper;
 use App\Models\Mayor;
@@ -74,6 +75,32 @@ class MovementHelper {
         self::deliveredResourcesReturn($cities);
         self::deliveredResourcesTo($cities);
         self::endUserColonize($cities);
+        self::endAttack();
+        self::returnAttack();
+    }
+
+    private static function endAttack()
+    {
+        //Obtenemos los movimientos del jugador que sean ataques
+        Movement::where('user_id',Auth::id())
+        ->where('movement_type_id',2)
+        ->where('end_at','<',Carbon::now())
+        ->where('delivered',0)->get()
+        ->map(function($movement){
+            CombatHelper::endAttack($movement);
+        });
+    }
+
+    private static function returnAttack()
+    {
+        //Verificamos movimientos que ya terminaron
+        Movement::where('user_id',Auth::id())
+        ->where('movement_type_id',2)
+        ->where('return_at','<',Carbon::now())
+        ->where('delivered',1)->get()
+        ->map(function($movement){
+            CombatHelper::returnAttack($movement);
+        });
     }
 
     public static function deliveredResourcesReturn($cities)

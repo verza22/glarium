@@ -13,6 +13,7 @@ use App\Models\UserResource;
 use App\Helpers\CombatHelper;
 use App\Helpers\MovementHelper;
 use App\Helpers\UserResourceHelper;
+use App\Helpers\CityHelper;
 
 use Carbon\Carbon;
 use Auth;
@@ -193,5 +194,11 @@ class CombatController extends Controller
     public function defend(Request $request,City $city)
     {
         return $this->combat_movement($request,$city,3);
+    }
+
+    public function index()
+    {
+        $cities = CityHelper::myCities();
+        return Movement::withTrashed()->whereIn('movement_type_id',[2,3])->where('user_id',Auth::id())->orWhereIn('city_to',$cities)->count();
     }
 }

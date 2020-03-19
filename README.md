@@ -48,3 +48,6 @@ Decido liberar el proyecto por si alguien estaria interesado en trabajar en el p
 <br>
 Porque trabajar en un juego de forma solitaria es totalmente agotador, me gustaria encontrar a otras personas que le guste este tipo de juegos y que desee colaborar en el.</p>
 <p>Capturas:</p>
+<p align="center"><img src="https://i.ibb.co/c20gwHg/2.png" style="margin:auto"></p>
+<p align="center"><img src="https://i.ibb.co/HdVHY7s/3.png" style="margin:auto"></p>
+

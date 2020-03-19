@@ -23,6 +23,7 @@ Decido liberar el proyecto por si alguien estaria interesado en trabajar en el p
 <p>Funcionalidades</p>
 <ul>
     <li>Creación de cuentas / login</li>
+    <li>Generación aleatorio de +4200 islas</li>
     <li>Vista de ciudad, isla y mundo</li>
     <li>Construcción de edificios</li>
     <li>Sistema de investigación</li>

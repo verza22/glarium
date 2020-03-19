@@ -20,5 +20,21 @@ Decido liberar el proyecto por si alguien estaria interesado en trabajar en el p
 </ul>
 <p>Funcionalidades</p>
 <ul>
-    <li></li>
+    <li>Creación de cuentas / login</li>
+    <li>Vista de ciudad, isla y mundo</li>
+    <li>Construcción de edificios</li>
+    <li>Sistema de investigación</li>
+    <li>Compra de barcos mercantes</li>
+    <li>Creación de tropas</li>
+    <li>Transportar recursos a otras ciudades</li>
+    <li>Colonización</li>
+    <li>Saquear otras ciudades</li>
+    <li>Sistema de mensajeria</li>
+    <li>Notificaciones de la ciudad</li>
+    <li>Notificaciones en tiempo real de eventos</li>
+    <li>Taberna y generación de ciudadanos</li>
+    <li>Academia y generación de Puntos de investigación</li>
+    <li>Ampliación de la isla</li>
+    <li>Producción de recursos en la isla</li>
+    <li>17 edificios funcionando con caracteristicas diferentes</li>
 </ul>

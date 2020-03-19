@@ -1,6 +1,8 @@
 <p align="center"><img src="https://i.ibb.co/NVpwNQZ/1.png" style="margin:auto"></p>
 <p align="justify">Glarium, es un proyecto que nació como un clon del mmorts Ikariam, estuve trabajando en el un par de meses donde se realizo toda la base de datos, backend y se estaba trabajando en el frontend.
 Decido liberar el proyecto por si alguien estaria interesado en trabajar en el proyecto y hacer un juego con las mismas y mejores funcionalidades que cuenta ikariam</p>
+<p>Demo:</p>
+<a href="https://glarium.com" target="_blank">Glarium</a>
 <p>Requisitos:</p>
 <ul>
     <li>Ubuntu 18.04 Server</li>

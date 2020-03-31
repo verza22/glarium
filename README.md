@@ -7,7 +7,11 @@ Decido liberar el proyecto por si alguien estaria interesado en trabajar en el p
 </p>
 <p>Patreon:
     <br><a href="https://www.patreon.com/glarium" target="_blank">Patreon oficial</a>
-    <p>¿Quieres apoyar el juego? Puedes hacerlo convirtiendote en un patrón</p>
+    <p>¿Quieres apoyar el juego? Puedes hacerlo convirtiendote en un patrón.</p>
+</p>
+<p>Foro:
+    <br><a href="https://forum.glarium.com" target="_blank">Foro oficial</a>
+    <p>Aquí encontrarás toda la información relevante al desarrollo del juego.</p>
 </p>
 <p>Requisitos:</p>
 <ul>

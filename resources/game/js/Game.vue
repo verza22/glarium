@@ -2,6 +2,7 @@
     <div>
         <Modal></Modal>
         <MenuSuperior></MenuSuperior>
+        <Chat></Chat>
         <router-view></router-view>
     </div>
 </template>
@@ -14,6 +15,7 @@ import $notification from 'Stores/notification'
 import $resources from 'Stores/resources'
 import $building from 'Stores/building'
 import Modal from "Components/modal/Modal.vue";
+import Chat from "Components/chat/Chat.vue";
 import $city from 'Stores/city'
 
 export default {
@@ -21,7 +23,8 @@ export default {
     router,
     components:{
         MenuSuperior,
-        Modal
+        Modal,
+        Chat
     },
     mounted(){
         if(localStorage.city_id==undefined){

@@ -3,7 +3,7 @@
     <div class="opciones gtitle">
       <div class="opcion">{{$t('options.header.highscore')}}</div>
       <div class="opcion">{{$t('options.header.options')}}</div>
-      <div class="opcion">{{$t('options.header.board')}}</div>
+      <div class="opcion"><a href="https://forum.glarium.com" target="_blank">{{$t('options.header.board')}}</a></div>
       <div class="opcion" @click='logout'>{{$t('options.header.logout')}}</div>
       <div class="opcion">v1.0.0</div>
       <div class="fecha">

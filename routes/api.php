@@ -64,3 +64,5 @@ Route::get('unit','Game\UnitController@index');
 Route::post('attack/{city}','Game\CombatController@attack');
 Route::post('defend/{city}','Game\CombatController@defend');
 Route::get('getWarReport','Game\CombatController@index');
+
+Route::post('chat/send','Game\ChatController@send');

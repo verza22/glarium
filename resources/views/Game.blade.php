@@ -19,6 +19,6 @@
     <div id="app">
         <Game></Game>
     </div>
-    <script src='/dist/main.js'></script>
+    <script src='/dist/main.js?v=1.0.0'></script>
 </body>
 </html>

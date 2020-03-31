@@ -5,7 +5,10 @@ Decido liberar el proyecto por si alguien estaria interesado en trabajar en el p
     <br><a href="https://glarium.com" target="_blank">Glarium Login</a>
     <br><a href="https://glarium.com/register" target="_blank">Glarium Registro</a>
 </p>
-
+<p>Patreon:
+    <br><a href="https://www.patreon.com/glarium" target="_blank">Patreon oficial</a>
+    <p>¿Quieres apoyar el juego? Puedes hacerlo convirtiendote en un patrón</p>
+</p>
 <p>Requisitos:</p>
 <ul>
     <li>Ubuntu 18.04 Server</li>

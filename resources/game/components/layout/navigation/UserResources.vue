@@ -1,8 +1,8 @@
 <template>
     <div class="flex-1 box">
-        <div class="btn-premium" :title="$t('options.userResources.patreonTitle')">
+        <a href="https://www.patreon.com/glarium" target="_blank"><div class="btn-premium" :title="$t('options.userResources.patreonTitle')">
             <div class="premium">{{$t('options.userResources.patreon')}}</div>
-        </div>
+        </div></a>
         <div class="btn-ships" :title="$t('options.userResources.ships')">
             <div class="ships">{{trade_ship_available}}/{{trade_ship}}</div>
         </div>

@@ -101,7 +101,7 @@ export default {
         text-align: center;
     }
     .btn-world{
-        background-image: url('~Img/icon/btn_world.jpg');
+        background-image: url('~Img/icon/btn_world.png');
         background-repeat: no-repeat;
         position: relative;
         cursor: pointer;
@@ -119,8 +119,8 @@ export default {
         background-repeat: no-repeat;
         position: relative;
         cursor: pointer;
-        bottom: 4px;
-        height: 58px;
+        bottom: 2px;
+        height: 56px;
     }
     .btn-city:hover,.btn-island:hover,.btn-world:hover{
         background-position-y: center;

@@ -3,7 +3,7 @@
         <div class="ctitle">
             <div class="ctitle2">Chat</div>
         </div>
-        <div class="cbody p-2">
+        <div class="cbody p-2" v-chat-scroll>
             <div v-for="(item,index) in messages" :key="index" class="d-flex">
                 <div class="mr-2">
                     <div>{{item.name}}:</div>
@@ -42,12 +42,6 @@ export default {
         },
         addMessage(data){
             this.messages.push({name:data.name,message:data.message,time:data.time})
-        }
-    },
-    updated(){
-        var elem = this.$el.querySelector(".cbody")
-        if(elem.clientHeight!=null){
-            elem.scrollTop = elem.clientHeight;
         }
     },
     mounted(){

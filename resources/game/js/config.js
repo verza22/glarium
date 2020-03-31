@@ -1,6 +1,10 @@
 import axios from 'axios';
 import moment from 'moment-timezone'
 import Vue from 'vue'
+import VueChatScroll from 'vue-chat-scroll'
+
+Vue.use(VueChatScroll)
+
 
 var pusher = new Pusher('b11b790e5dea909e2b7f', {
     cluster: 'us2',

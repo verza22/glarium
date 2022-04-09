@@ -14,7 +14,7 @@
     "file-loader": "^5.1.0",
     "interactjs": "^1.7.3",
     "lodash": "^4.17.13",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.27",
     "node-sass": "^4.13.0",
     "sass": "^1.15.2",

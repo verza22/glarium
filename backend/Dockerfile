@@ -14,12 +14,10 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Generate prisma migrations and client
-RUN npx prisma migrate deploy --schema=src/dataAccess/prisma/schema.prisma
-RUN npx prisma generate --schema=src/dataAccess/prisma/schema.prisma
-
 # Compile TypeScript to JavaScript
 RUN npm run build
 
 # Default command to run the backend server
-CMD ["node", "dist/index.js"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3306:3306" # MySQL local
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+    ports:
+      - "3001:3001"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  db_data:

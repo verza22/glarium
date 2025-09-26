@@ -1,0 +1,22 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "webpack serve --mode development --open --port 3000",
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2",
+    "@types/react": "19.1.13",
+    "@types/react-dom": "19.1.9",
+    "ts-loader": "9.5.4",
+    "webpack": "5.101.3",
+    "webpack-cli": "5.1.4",
+    "webpack-dev-server": "4.15.2",
+    "html-webpack-plugin": "5.6.4"
+  }
+}

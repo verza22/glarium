@@ -16,6 +16,9 @@ services:
       - db
     ports:
       - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
 
   frontend:
     build: ./frontend

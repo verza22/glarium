@@ -13,4 +13,4 @@ npx prisma generate --schema=src/dataAccess/prisma/schema.prisma
 npx ts-node src/dataAccess/prisma/seed.ts
 
 # Exec backend
-exec node dist/index.js
+exec npx nodemon src/index.ts 

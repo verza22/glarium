@@ -11,8 +11,5 @@ RUN npm install -g npm@10.8.2
 COPY package*.json ./
 RUN npm install
 
-# Copy source code
-#COPY . .
-
 # Start development server
 CMD ["npm", "start"]

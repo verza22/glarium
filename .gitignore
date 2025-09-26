@@ -22,3 +22,6 @@ docker-compose.override.yml
 **/tmp
 **/logs
 **/build
+
+#backend
+backend/src/dataAccess/prisma/generated/

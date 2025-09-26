@@ -1,0 +1,445 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "generated/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id                 BigInt    @id @default(autoincrement())
+  name               String
+  email              String    @unique
+  emailVerifiedAt    DateTime?
+  password           String
+  rememberToken      String?  
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  resources          UserResource[]
+  regiments          Regiment[]
+  userResearch UserResearch[]
+  movements Movement[]
+}
+
+model PasswordReset {
+  id        BigInt   @id @default(autoincrement())
+  email     String
+  token     String
+  createdAt DateTime?
+}
+
+model FailedJob {
+  id        BigInt   @id @default(autoincrement())
+  connection String
+  queue      String
+  payload    String
+  exception  String
+  failedAt   DateTime @default(now())
+}
+
+model City {
+  id            BigInt    @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  constructedAt DateTime?
+  name          String
+  wood          Float
+  wine          Float
+  marble        Float
+  glass         Float
+  sulfur        Float
+  apoint        Int
+  cityBuildings CityBuilding[]
+  islandCities  IslandCity[] 
+  populations   CityPopulation[]
+  regiments Regiment[]
+  movementsFrom Movement[] @relation("CityFrom")
+  movementsTo   Movement[] @relation("CityTo")
+  donations        IslandDonation[] 
+  messagesFrom  Message[] @relation("MessagesFrom")
+  messagesTo    Message[] @relation("MessagesTo")
+  mayors Mayor[]
+}
+
+model UserCity {
+  id      BigInt  @id @default(autoincrement())
+  userId  BigInt
+  cityId  BigInt
+  capital Boolean
+}
+
+model Building {
+  id    BigInt @id @default(autoincrement())
+  name  String
+  image String
+  text  String @db.Text
+  levels BuildingLevel[]
+  researchBuildings ResearchBuilding[]
+}
+
+model BuildingLevel {
+  id         BigInt  @id @default(autoincrement())
+  buildingId BigInt
+  level      Int
+  wood       Int
+  wine       Int
+  marble     Int
+  glass      Int
+  sulfur     Int
+  time       Int
+  cityBuildings CityBuilding[]
+
+  building   Building @relation(fields: [buildingId], references: [id])
+}
+
+model CityBuilding {
+  id              BigInt     @id @default(autoincrement())
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  deletedAt       DateTime?
+  constructedAt   DateTime?
+  buildingLevelId BigInt
+  cityId          BigInt
+  position        Int
+
+  buildingLevel   BuildingLevel @relation(fields: [buildingLevelId], references: [id])
+  city            City          @relation(fields: [cityId], references: [id])
+}
+
+model Forest {
+  id      BigInt @id @default(autoincrement())
+  level   Int
+  workers Int
+  wood    Int
+  time    Int
+  islands Island[]
+}
+
+model Mine {
+  id      BigInt @id @default(autoincrement())
+  level   Int
+  workers Int
+  wood    Int
+  time    Int
+  islands Island[]
+}
+
+model IslandSector {
+  id   BigInt @id @default(autoincrement())
+  name String
+  islands Island[]
+}
+
+model Island {
+  id                   BigInt       @id @default(autoincrement())
+  islandSectorId       BigInt
+  x                    Int
+  y                    Int
+  name                 String
+  type                 Int
+  forestId             BigInt
+  mineId               BigInt
+  donatedForest        Int
+  donatedMine          Int
+  forestConstructedAt  DateTime?
+  mineConstructedAt    DateTime?
+  islandCities         IslandCity[] 
+  donations        IslandDonation[] 
+
+  islandSector         IslandSector @relation(fields: [islandSectorId], references: [id])
+  forest               Forest       @relation(fields: [forestId], references: [id])
+  mine                 Mine         @relation(fields: [mineId], references: [id])
+}
+
+model IslandCity {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? // para soft deletes
+  position  Int
+  islandId  BigInt
+  cityId    BigInt
+
+  island    Island @relation(fields: [islandId], references: [id])
+  city      City   @relation(fields: [cityId], references: [id])
+}
+
+model CityPopulation {
+  id BigInt @id @default(autoincrement())
+  cityId BigInt
+  populationMax Int
+  population Float
+  workerForest Int
+  workerMine Int
+  wineMax Int
+  wine Int
+  scientistsMax Int
+  scientists Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  city City @relation(fields: [cityId], references: [id])
+}
+
+model UserResource {
+  id BigInt @id @default(autoincrement())
+  userId BigInt
+  gold Decimal @db.Decimal(20, 4)
+  researchPoint Decimal @db.Decimal(20, 4)
+  tradeShip Int
+  tradeShipAvailable Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Unit {
+  id             BigInt  @id @default(autoincrement())
+  name           String  @db.VarChar(25)
+  image          String
+  text           String  @db.Text
+  population     Int
+  size           Int
+  wood           Int
+  wine           Int
+  glass          Int
+  sulfur         Int
+  time           Int
+  barrackLevel   Int
+  gold           Int
+  attack         Int
+  attackType     Int
+  defenseBlunt   Int
+  defenseSharp   Int
+  defenseDistance Int
+  regimentsUnits RegimentUnit[]
+  regimentTails  RegimentTail[]
+  researchUnits ResearchUnit[]
+  attackDetails      CombatReportDetail[]   @relation("AttackUnit")   // details where the unit attacked
+  defenseDetails     CombatReportDetail[]   @relation("DefenseUnit")
+}
+
+model Regiment {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  userId BigInt
+  cityId BigInt
+  travel Int
+  regimentsUnits RegimentUnit[]
+  regimentTails  RegimentTail[]
+  movementRegiments MovementRegiment[]
+
+  user User @relation(fields: [userId], references: [id])
+  city City @relation(fields: [cityId], references: [id])
+}
+
+model RegimentUnit {
+  id         BigInt   @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  deletedAt  DateTime?
+  regimentId BigInt
+  unitId     BigInt
+  cant       Int
+
+  regiment Regiment @relation(fields: [regimentId], references: [id])
+  unit     Unit     @relation(fields: [unitId], references: [id])
+}
+
+model RegimentTail {
+  id           BigInt    @id @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  constructedAt DateTime?
+  regimentId   BigInt
+  unitId       BigInt
+  cant         Int
+  tail         Int
+
+  regiment Regiment @relation(fields: [regimentId], references: [id])
+  unit     Unit     @relation(fields: [unitId], references: [id])
+}
+
+model ResearchCategory {
+  id   BigInt  @id @default(autoincrement())
+  name String
+  research  Research[]
+}
+
+model Research {
+  id                  BigInt           @id @default(autoincrement())
+  researchCategoryId  BigInt
+  level               Int
+  cost                Int
+  name                String
+  text                String           @db.Text
+  userResearch UserResearch[]
+  researchUnits ResearchUnit[]
+  researchBuildings ResearchBuilding[]
+
+  researchCategory    ResearchCategory @relation(fields: [researchCategoryId], references: [id])
+}
+
+model UserResearch {
+  id         BigInt    @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  userId     BigInt
+  researchId BigInt
+
+  user       User      @relation(fields: [userId], references: [id])
+  research   Research  @relation(fields: [researchId], references: [id])
+}
+
+model ResearchUnit {
+  id         BigInt    @id @default(autoincrement())
+  unitId     BigInt
+  researchId BigInt
+
+  unit       Unit      @relation(fields: [unitId], references: [id])
+  research   Research  @relation(fields: [researchId], references: [id])
+}
+
+model ResearchBuilding {
+  id         BigInt    @id @default(autoincrement())
+  buildingId BigInt
+  researchId BigInt
+
+  building   Building  @relation(fields: [buildingId], references: [id])
+  research   Research  @relation(fields: [researchId], references: [id])
+}
+
+model MovementType {
+  id   BigInt  @id @default(autoincrement())
+  name String
+  movements Movement[]
+}
+
+model Movement {
+  id               BigInt      @id @default(autoincrement())
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  deletedAt        DateTime?   // soft delete
+  startAt          DateTime?
+  endAt            DateTime?
+  returnAt         DateTime?
+  delivered        Boolean
+  cancelled        Boolean
+  userId           BigInt
+  cityFromId       BigInt
+  cityToId         BigInt
+  movementTypeId   BigInt
+  tradeShip        Int
+  resources        MovementResource[]
+  movementRegiments MovementRegiment[]
+
+  user             User        @relation(fields: [userId], references: [id])
+  cityFrom         City        @relation("CityFrom", fields: [cityFromId], references: [id])
+  cityTo           City        @relation("CityTo", fields: [cityToId], references: [id])
+  movementType     MovementType @relation(fields: [movementTypeId], references: [id])
+}
+
+model MovementResource {
+  id          BigInt    @id @default(autoincrement())
+  movementId  BigInt
+  wood        Int
+  wine        Int
+  marble      Int
+  glass       Int
+  sulfur      Int
+
+  movement    Movement @relation(fields: [movementId], references: [id])
+}
+
+model MovementRegiment {
+  id           BigInt     @id @default(autoincrement())
+  movementId   BigInt
+  regimentId   BigInt
+  size         Int
+  combatReports CombatReport[]
+
+  movement     Movement   @relation(fields: [movementId], references: [id])
+  regiment     Regiment   @relation(fields: [regimentId], references: [id])
+}
+
+model CombatReport {
+  id                 BigInt          @id @default(autoincrement())
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  movementRegimentId BigInt
+  result             Int             // 0 = undefined/error, 1 = attacker win, 2 = defender win
+  combatReportDetails CombatReportDetail[] 
+
+  movementRegiment   MovementRegiment @relation(fields: [movementRegimentId], references: [id])
+}
+
+model CombatReportDetail {
+  id                 BigInt        @id @default(autoincrement())
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  combatReportId     BigInt
+  round              Int
+  typeAttack         Int
+  result             Int
+  attackUnitId       BigInt
+  attackBeforeCant   Int
+  attackAfterCant    Int
+  defenseUnitId      BigInt
+  defenseBeforeCant  Int
+  defenseAfterCant   Int
+
+  combatReport       CombatReport  @relation(fields: [combatReportId], references: [id])
+  attackUnit         Unit          @relation("AttackUnit", fields: [attackUnitId], references: [id])
+  defenseUnit        Unit          @relation("DefenseUnit", fields: [defenseUnitId], references: [id])
+}
+
+model IslandDonation {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  islandId  BigInt
+  cityId    BigInt
+  type      Int
+  donated   Int
+
+  island    Island @relation(fields: [islandId], references: [id])
+  city      City   @relation(fields: [cityId], references: [id])
+}
+
+model Message {
+  id            BigInt   @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  deletedAtFrom DateTime?
+  deletedAtTo   DateTime?
+  cityFromId    BigInt
+  cityToId      BigInt
+  type          Int
+  readed        Int
+  message       String
+
+  cityFrom      City @relation("MessagesFrom", fields: [cityFromId], references: [id])
+  cityTo        City @relation("MessagesTo", fields: [cityToId], references: [id])
+}
+
+model Mayor {
+  id        BigInt   @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cityId    BigInt
+  type      Int
+  readed    Int
+  data      Json
+
+  city      City @relation(fields: [cityId], references: [id])
+}

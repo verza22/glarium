@@ -1,0 +1,11 @@
+//first open a cmd and cd to backend
+cd backend
+
+//create new migration
+npx prisma migrate dev --schema=src/dataAccess/prisma/schema.prisma --name new-migration
+
+//generate client
+npx prisma generate --schema=src/dataAccess/prisma/schema.prisma
+
+//generate inserts
+npx ts-node src/dataAccess/prisma/seed.ts

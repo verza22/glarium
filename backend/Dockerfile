@@ -14,6 +14,10 @@ RUN npm install
 # Copy source code
 COPY . .
 
+# Generate prisma migrations and client
+RUN npx prisma migrate deploy --schema=src/dataAccess/prisma/schema.prisma
+RUN npx prisma generate --schema=src/dataAccess/prisma/schema.prisma
+
 # Compile TypeScript to JavaScript
 RUN npm run build
 

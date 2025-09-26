@@ -9,6 +9,8 @@
   "dependencies": {
     "@faker-js/faker": "9.9.0",
     "@prisma/client": "6.16.2",
+    "date-fns": "4.1.0",
+    "dayjs": "1.11.18",
     "express": "5.1.0"
   },
   "devDependencies": {

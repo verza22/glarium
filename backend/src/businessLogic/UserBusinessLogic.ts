@@ -4,12 +4,9 @@ import { UserResource } from "@shared/types/models";
 import { sumProperty } from "@shared/utils/utils";
 
 class UserBusinessLogic {
-    async updateResources()
+    async updateResources(authId: number)
     {
-        const authId = 1;
-
         const userResource:UserResource = await prisma.userResource.findFirstOrThrow({ where: { userId: authId } });
-
 
         const updatedAt = new Date(userResource.updatedAt);
         const now = new Date();

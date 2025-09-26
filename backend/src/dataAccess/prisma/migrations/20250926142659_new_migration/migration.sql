@@ -185,8 +185,8 @@ CREATE TABLE `CityPopulation` (
 CREATE TABLE `UserResource` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
-    `gold` DECIMAL(20, 4) NOT NULL,
-    `researchPoint` DECIMAL(20, 4) NOT NULL,
+    `gold` DOUBLE NOT NULL,
+    `researchPoint` DOUBLE NOT NULL,
     `tradeShip` INTEGER NOT NULL,
     `tradeShipAvailable` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -431,6 +431,12 @@ CREATE TABLE `Mayor` (
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `UserCity` ADD CONSTRAINT `UserCity_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `UserCity` ADD CONSTRAINT `UserCity_cityId_fkey` FOREIGN KEY (`cityId`) REFERENCES `City`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `BuildingLevel` ADD CONSTRAINT `BuildingLevel_buildingId_fkey` FOREIGN KEY (`buildingId`) REFERENCES `Building`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

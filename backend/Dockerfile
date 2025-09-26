@@ -14,9 +14,6 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Compile TypeScript to JavaScript
-RUN npm run build
-
 # Default command to run the backend server
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

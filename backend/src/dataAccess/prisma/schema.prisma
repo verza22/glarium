@@ -23,6 +23,7 @@ model User {
   regiments          Regiment[]
   userResearch UserResearch[]
   movements Movement[]
+  cities    UserCity[]
 }
 
 model PasswordReset {
@@ -64,6 +65,7 @@ model City {
   messagesFrom  Message[] @relation("MessagesFrom")
   messagesTo    Message[] @relation("MessagesTo")
   mayors Mayor[]
+  userCities UserCity[]
 }
 
 model UserCity {
@@ -71,6 +73,9 @@ model UserCity {
   userId  Int
   cityId  Int
   capital Boolean
+
+  user User @relation(fields: [userId], references: [id])
+  city City @relation(fields: [cityId], references: [id])
 }
 
 model Building {
@@ -189,8 +194,8 @@ model CityPopulation {
 model UserResource {
   id Int @id @default(autoincrement())
   userId Int
-  gold Decimal @db.Decimal(20, 4)
-  researchPoint Decimal @db.Decimal(20, 4)
+  gold Float
+  researchPoint Float
   tradeShip Int
   tradeShipAvailable Int
   createdAt DateTime @default(now())

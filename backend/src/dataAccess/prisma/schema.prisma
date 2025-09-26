@@ -11,7 +11,7 @@ datasource db {
 
 
 model User {
-  id                 BigInt    @id @default(autoincrement())
+  id                 Int    @id @default(autoincrement())
   name               String
   email              String    @unique
   emailVerifiedAt    DateTime?
@@ -26,14 +26,14 @@ model User {
 }
 
 model PasswordReset {
-  id        BigInt   @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   email     String
   token     String
   createdAt DateTime?
 }
 
 model FailedJob {
-  id        BigInt   @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   connection String
   queue      String
   payload    String
@@ -42,7 +42,7 @@ model FailedJob {
 }
 
 model City {
-  id            BigInt    @id @default(autoincrement())
+  id            Int    @id @default(autoincrement())
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
@@ -67,14 +67,14 @@ model City {
 }
 
 model UserCity {
-  id      BigInt  @id @default(autoincrement())
-  userId  BigInt
-  cityId  BigInt
+  id      Int  @id @default(autoincrement())
+  userId  Int
+  cityId  Int
   capital Boolean
 }
 
 model Building {
-  id    BigInt @id @default(autoincrement())
+  id    Int @id @default(autoincrement())
   name  String
   image String
   text  String @db.Text
@@ -83,8 +83,8 @@ model Building {
 }
 
 model BuildingLevel {
-  id         BigInt  @id @default(autoincrement())
-  buildingId BigInt
+  id         Int  @id @default(autoincrement())
+  buildingId Int
   level      Int
   wood       Int
   wine       Int
@@ -98,13 +98,13 @@ model BuildingLevel {
 }
 
 model CityBuilding {
-  id              BigInt     @id @default(autoincrement())
+  id              Int     @id @default(autoincrement())
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
   deletedAt       DateTime?
   constructedAt   DateTime?
-  buildingLevelId BigInt
-  cityId          BigInt
+  buildingLevelId Int
+  cityId          Int
   position        Int
 
   buildingLevel   BuildingLevel @relation(fields: [buildingLevelId], references: [id])
@@ -112,7 +112,7 @@ model CityBuilding {
 }
 
 model Forest {
-  id      BigInt @id @default(autoincrement())
+  id      Int @id @default(autoincrement())
   level   Int
   workers Int
   wood    Int
@@ -121,7 +121,7 @@ model Forest {
 }
 
 model Mine {
-  id      BigInt @id @default(autoincrement())
+  id      Int @id @default(autoincrement())
   level   Int
   workers Int
   wood    Int
@@ -130,20 +130,20 @@ model Mine {
 }
 
 model IslandSector {
-  id   BigInt @id @default(autoincrement())
+  id   Int @id @default(autoincrement())
   name String
   islands Island[]
 }
 
 model Island {
-  id                   BigInt       @id @default(autoincrement())
-  islandSectorId       BigInt
+  id                   Int       @id @default(autoincrement())
+  islandSectorId       Int
   x                    Int
   y                    Int
   name                 String
   type                 Int
-  forestId             BigInt
-  mineId               BigInt
+  forestId             Int
+  mineId               Int
   donatedForest        Int
   donatedMine          Int
   forestConstructedAt  DateTime?
@@ -157,21 +157,21 @@ model Island {
 }
 
 model IslandCity {
-  id        BigInt   @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime? // para soft deletes
   position  Int
-  islandId  BigInt
-  cityId    BigInt
+  islandId  Int
+  cityId    Int
 
   island    Island @relation(fields: [islandId], references: [id])
   city      City   @relation(fields: [cityId], references: [id])
 }
 
 model CityPopulation {
-  id BigInt @id @default(autoincrement())
-  cityId BigInt
+  id Int @id @default(autoincrement())
+  cityId Int
   populationMax Int
   population Float
   workerForest Int
@@ -187,8 +187,8 @@ model CityPopulation {
 }
 
 model UserResource {
-  id BigInt @id @default(autoincrement())
-  userId BigInt
+  id Int @id @default(autoincrement())
+  userId Int
   gold Decimal @db.Decimal(20, 4)
   researchPoint Decimal @db.Decimal(20, 4)
   tradeShip Int
@@ -200,7 +200,7 @@ model UserResource {
 }
 
 model Unit {
-  id             BigInt  @id @default(autoincrement())
+  id             Int  @id @default(autoincrement())
   name           String  @db.VarChar(25)
   image          String
   text           String  @db.Text
@@ -226,12 +226,12 @@ model Unit {
 }
 
 model Regiment {
-  id        BigInt   @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
-  userId BigInt
-  cityId BigInt
+  userId Int
+  cityId Int
   travel Int
   regimentsUnits RegimentUnit[]
   regimentTails  RegimentTail[]
@@ -242,12 +242,12 @@ model Regiment {
 }
 
 model RegimentUnit {
-  id         BigInt   @id @default(autoincrement())
+  id         Int   @id @default(autoincrement())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   deletedAt  DateTime?
-  regimentId BigInt
-  unitId     BigInt
+  regimentId Int
+  unitId     Int
   cant       Int
 
   regiment Regiment @relation(fields: [regimentId], references: [id])
@@ -255,13 +255,13 @@ model RegimentUnit {
 }
 
 model RegimentTail {
-  id           BigInt    @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
   constructedAt DateTime?
-  regimentId   BigInt
-  unitId       BigInt
+  regimentId   Int
+  unitId       Int
   cant         Int
   tail         Int
 
@@ -270,14 +270,14 @@ model RegimentTail {
 }
 
 model ResearchCategory {
-  id   BigInt  @id @default(autoincrement())
+  id   Int  @id @default(autoincrement())
   name String
   research  Research[]
 }
 
 model Research {
-  id                  BigInt           @id @default(autoincrement())
-  researchCategoryId  BigInt
+  id                  Int           @id @default(autoincrement())
+  researchCategoryId  Int
   level               Int
   cost                Int
   name                String
@@ -290,42 +290,42 @@ model Research {
 }
 
 model UserResearch {
-  id         BigInt    @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  userId     BigInt
-  researchId BigInt
+  userId     Int
+  researchId Int
 
   user       User      @relation(fields: [userId], references: [id])
   research   Research  @relation(fields: [researchId], references: [id])
 }
 
 model ResearchUnit {
-  id         BigInt    @id @default(autoincrement())
-  unitId     BigInt
-  researchId BigInt
+  id         Int    @id @default(autoincrement())
+  unitId     Int
+  researchId Int
 
   unit       Unit      @relation(fields: [unitId], references: [id])
   research   Research  @relation(fields: [researchId], references: [id])
 }
 
 model ResearchBuilding {
-  id         BigInt    @id @default(autoincrement())
-  buildingId BigInt
-  researchId BigInt
+  id         Int    @id @default(autoincrement())
+  buildingId Int
+  researchId Int
 
   building   Building  @relation(fields: [buildingId], references: [id])
   research   Research  @relation(fields: [researchId], references: [id])
 }
 
 model MovementType {
-  id   BigInt  @id @default(autoincrement())
+  id   Int  @id @default(autoincrement())
   name String
   movements Movement[]
 }
 
 model Movement {
-  id               BigInt      @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   deletedAt        DateTime?   // soft delete
@@ -334,10 +334,10 @@ model Movement {
   returnAt         DateTime?
   delivered        Boolean
   cancelled        Boolean
-  userId           BigInt
-  cityFromId       BigInt
-  cityToId         BigInt
-  movementTypeId   BigInt
+  userId           Int
+  cityFromId       Int
+  cityToId         Int
+  movementTypeId   Int
   tradeShip        Int
   resources        MovementResource[]
   movementRegiments MovementRegiment[]
@@ -349,8 +349,8 @@ model Movement {
 }
 
 model MovementResource {
-  id          BigInt    @id @default(autoincrement())
-  movementId  BigInt
+  id          Int    @id @default(autoincrement())
+  movementId  Int
   wood        Int
   wine        Int
   marble      Int
@@ -361,9 +361,9 @@ model MovementResource {
 }
 
 model MovementRegiment {
-  id           BigInt     @id @default(autoincrement())
-  movementId   BigInt
-  regimentId   BigInt
+  id           Int     @id @default(autoincrement())
+  movementId   Int
+  regimentId   Int
   size         Int
   combatReports CombatReport[]
 
@@ -372,10 +372,10 @@ model MovementRegiment {
 }
 
 model CombatReport {
-  id                 BigInt          @id @default(autoincrement())
+  id                 Int          @id @default(autoincrement())
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
-  movementRegimentId BigInt
+  movementRegimentId Int
   result             Int             // 0 = undefined/error, 1 = attacker win, 2 = defender win
   combatReportDetails CombatReportDetail[] 
 
@@ -383,18 +383,18 @@ model CombatReport {
 }
 
 model CombatReportDetail {
-  id                 BigInt        @id @default(autoincrement())
+  id                 Int        @id @default(autoincrement())
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 
-  combatReportId     BigInt
+  combatReportId     Int
   round              Int
   typeAttack         Int
   result             Int
-  attackUnitId       BigInt
+  attackUnitId       Int
   attackBeforeCant   Int
   attackAfterCant    Int
-  defenseUnitId      BigInt
+  defenseUnitId      Int
   defenseBeforeCant  Int
   defenseAfterCant   Int
 
@@ -404,11 +404,11 @@ model CombatReportDetail {
 }
 
 model IslandDonation {
-  id        BigInt   @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  islandId  BigInt
-  cityId    BigInt
+  islandId  Int
+  cityId    Int
   type      Int
   donated   Int
 
@@ -417,13 +417,13 @@ model IslandDonation {
 }
 
 model Message {
-  id            BigInt   @id @default(autoincrement())
+  id            Int   @id @default(autoincrement())
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   deletedAtFrom DateTime?
   deletedAtTo   DateTime?
-  cityFromId    BigInt
-  cityToId      BigInt
+  cityFromId    Int
+  cityToId      Int
   type          Int
   readed        Int
   message       String
@@ -433,10 +433,10 @@ model Message {
 }
 
 model Mayor {
-  id        BigInt   @id @default(autoincrement())
+  id        Int   @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  cityId    BigInt
+  cityId    Int
   type      Int
   readed    Int
   data      Json

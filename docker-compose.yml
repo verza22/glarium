@@ -18,6 +18,7 @@ services:
       - "3001:3001"
     volumes:
       - ./backend:/app
+      - ./shared:/shared
       - /app/node_modules
 
   frontend:
@@ -28,6 +29,7 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
+      - ./shared:/shared
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true

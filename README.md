@@ -4,7 +4,7 @@
 
 Glarium is a project that originally started as a clone of the MMORTS **Ikariam**. I worked on it for a couple of months, building the database, backend, and starting the frontend.
 
-Currently, I am working on a **migration to a new technology stack** to make the project modern, easier to maintain, and simple for other developers to run.
+⚠️ **Currently, I am working on a migration to a new technology stack to make the project modern, easier to maintain, and simple for other developers to run.**
 
 ---
 

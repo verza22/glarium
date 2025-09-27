@@ -1,11 +1,14 @@
 import prisma from "./../dataAccess/prisma/prisma";
 import { world } from "src/config";
 import { BuildingModifierBL } from "./BuildingModifierBL";
+import { Resources } from "@shared/types/others";
+import { PopulationBL } from "./PopulationBL";
+import { UnitBL } from "./UnitBL";
 
 export class CityBL {
 
   // Add resources to a city
-  public static async addResources(cityId: number, resources: any) {
+  public static async addResources(cityId: number, resources: Resources) {
     await prisma.city.update({
       where: { id: cityId },
       data: {
@@ -64,7 +67,7 @@ export class CityBL {
     const diffTime = (now.getTime() - updatedAt.getTime()) / 1000 / 3600;
 
     // Initialize resources collection
-    const collect = newCollect();
+    const collect = UnitBL.newCollect();
     collect.wood = city.population?.workerForest ? diffTime * city.population.workerForest : 0;
 
     // Assign based on island special resource
@@ -79,8 +82,8 @@ export class CityBL {
     await BuildingModifierBL.improvedResources(city.id, collect);
 
     // Apply corruption if city is not capital
-    if (!city.userCities.find(uc=> uc.capital === true)) {
-      const corruption = 1 - getCorruption(city);
+    if (!city.userCities.find(uc => uc.capital === true)) {
+      const corruption = 1 - await PopulationBL.getCorruption(city.userCities[0].userId, city.id);
       if (corruption !== 1) {
         collect.wood *= corruption;
         collect.wine *= corruption;
@@ -132,16 +135,18 @@ export class CityBL {
     constructedAt: Date | null = null
   ) {
     // Create new city
-    const city = await prisma.city.create({ data: { 
-      name: 'Polis',
-      wood: 0,
-      wine: 0,
-      marble: 0,
-      glass: 0,
-      sulfur: 0,
-      apoint: 2,
-      constructedAt 
-    }});
+    const city = await prisma.city.create({
+      data: {
+        name: 'Polis',
+        wood: 0,
+        wine: 0,
+        marble: 0,
+        glass: 0,
+        sulfur: 0,
+        apoint: 2,
+        constructedAt
+      }
+    });
 
     // Link city to user
     await prisma.userCity.create({
@@ -171,7 +176,7 @@ export class CityBL {
 
     // Create city population
     await prisma.cityPopulation.create({
-      data: { 
+      data: {
         cityId: city.id,
         populationMax: 100,
         population: 40,

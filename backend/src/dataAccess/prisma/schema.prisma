@@ -193,7 +193,7 @@ model CityPopulation {
 
 model UserResource {
   id Int @id @default(autoincrement())
-  userId Int
+  userId Int @unique
   gold Float
   researchPoint Float
   tradeShip Int
@@ -344,7 +344,7 @@ model Movement {
   cityToId         Int
   movementTypeId   Int
   tradeShip        Int
-  resources        MovementResource[]
+  resources        MovementResource?
   movementRegiments MovementRegiment[]
 
   user             User        @relation(fields: [userId], references: [id])
@@ -355,7 +355,7 @@ model Movement {
 
 model MovementResource {
   id          Int    @id @default(autoincrement())
-  movementId  Int
+  movementId  Int    @unique
   wood        Int
   wine        Int
   marble      Int

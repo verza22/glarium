@@ -6,10 +6,10 @@ export class BuildingBL {
     // Check if there is at least one constructed building in the city
     static async isConstructed(city: City): Promise<boolean> {
         const exists = await prisma.cityBuilding.findFirst({
-        where: {
-            cityId: city.id,
-            constructedAt: { not: null },
-        },
+            where: {
+                cityId: city.id,
+                constructedAt: { not: null },
+            },
         });
         return !!exists;
     }
@@ -17,10 +17,10 @@ export class BuildingBL {
     // Check if a building exists in the given position for the city
     static async positionExist(city: City, position: number): Promise<boolean> {
         const exists = await prisma.cityBuilding.findFirst({
-        where: {
-            cityId: city.id,
-            position: position,
-        },
+            where: {
+                cityId: city.id,
+                position: position,
+            },
         });
         return !!exists;
     }
@@ -28,14 +28,14 @@ export class BuildingBL {
     // Check if a city has a building of a specific type (building_id)
     static async buildingExist(city: City, buildingId: number): Promise<boolean> {
         const exists = await prisma.cityBuilding.findFirst({
-        where: {
-            cityId: city.id,
-            buildingLevel: {
-                is: {
-                  buildingId: buildingId,
+            where: {
+                cityId: city.id,
+                buildingLevel: {
+                    is: {
+                        buildingId: buildingId,
+                    },
                 },
             },
-        },
         });
         return !!exists;
     }
@@ -43,17 +43,17 @@ export class BuildingBL {
     // Get the building object for a specific building type (building_id) in the city
     static async building(city: City, buildingId: number) {
         const building = await prisma.cityBuilding.findFirst({
-        where: {
-            cityId: city.id,
-            buildingLevel: {
-                is: {
-                  buildingId: buildingId,
+            where: {
+                cityId: city.id,
+                buildingLevel: {
+                    is: {
+                        buildingId: buildingId,
+                    },
                 },
-        },
-        },
-        include: {
-            buildingLevel: true, // Include building levels if you need details
-        },
+            },
+            include: {
+                buildingLevel: true, // Include building levels if you need details
+            },
         });
         return building;
     }
@@ -68,69 +68,69 @@ export class BuildingBL {
         const cityIds = Array.isArray(cities) ? cities : [cities];
 
         const cityBuildings = await prisma.cityBuilding.findMany({
-        where: {
-            cityId: { in: cityIds },
-            constructedAt: { lt: addSeconds(new Date(), 3) },
-        },
-        include: {
-            buildingLevel: true,
-            city: { include: { userCities: true } },
-        },
+            where: {
+                cityId: { in: cityIds },
+                constructedAt: { lt: addSeconds(new Date(), 3) },
+            },
+            include: {
+                buildingLevel: true,
+                city: { include: { userCities: true } },
+            },
         });
 
         for (const cityBuilding of cityBuildings) {
-        // Current level
-        const after = cityBuilding.buildingLevel;
+            // Current level
+            const after = cityBuilding.buildingLevel;
 
-        // Next level (building_id + 1 level)
-        const before = await prisma.buildingLevel.findFirst({
-            where: {
-            buildingId: after.buildingId,
-            level: after.level + 1,
-            },
-        });
+            // Next level (building_id + 1 level)
+            const before = await prisma.buildingLevel.findFirst({
+                where: {
+                    buildingId: after.buildingId,
+                    level: after.level + 1,
+                },
+            });
 
-        if (!before) continue;
+            if (!before) continue;
 
-        // Upgrade building
-        await prisma.cityBuilding.update({
-            where: { id: cityBuilding.id },
-            data: {
-            buildingLevelId: before.id,
-            constructedAt: null,
-            },
-        });
+            // Upgrade building
+            await prisma.cityBuilding.update({
+                where: { id: cityBuilding.id },
+                data: {
+                    buildingLevelId: before.id,
+                    constructedAt: null,
+                },
+            });
 
-        // Create notification (Mayor equivalent)
-        await prisma.mayor.create({
-            data: {
-            cityId: cityBuilding.city.id,
-            type: 1,
-            readed: 0,
-            data: JSON.stringify({
-                building_id: after.buildingId,
-                level: before.level,
-            }),
-            },
-        });
+            // Create notification (Mayor equivalent)
+            await prisma.mayor.create({
+                data: {
+                    cityId: cityBuilding.city.id,
+                    type: 1,
+                    readed: 0,
+                    data: JSON.stringify({
+                        building_id: after.buildingId,
+                        level: before.level,
+                    }),
+                },
+            });
 
-        // TODO: event(new UserNotification(...)) -> emit socket or push notification
+            // TODO: event(new UserNotification(...)) -> emit socket or push notification
         }
     }
 
     // Check if a building requires research
     static async checkResearch(authId: number, buildingId: number): Promise<boolean> {
         const researchBuilding = await prisma.researchBuilding.findFirst({
-        where: { buildingId },
+            where: { buildingId },
         });
 
         if (researchBuilding) {
-        const userId = authId;
-        const exists = await prisma.userResearch.findFirst({
-            where: { userId, researchId: researchBuilding.researchId },
-        });
+            const userId = authId;
+            const exists = await prisma.userResearch.findFirst({
+                where: { userId, researchId: researchBuilding.researchId },
+            });
 
-        if (!exists) return false;
+            if (!exists) return false;
         }
 
         return true;
@@ -151,35 +151,35 @@ export class BuildingBL {
         const researchNames = ['Pulley', 'Geometry', 'Spirit Level'];
 
         const researches = await prisma.research.findMany({
-        where: { name: { in: researchNames } },
-        select: { id: true, name: true },
+            where: { name: { in: researchNames } },
+            select: { id: true, name: true },
         });
 
         const userResearchs = await prisma.userResearch.findMany({
-        where: {
-            userId: authId,
-            researchId: { in: researches.map(r => r.id) },
-        },
-        include: { research: true },
+            where: {
+                userId: authId,
+                researchId: { in: researches.map(r => r.id) },
+            },
+            include: { research: true },
         });
 
         if (userResearchs.length > 0) {
-        const totalDiscount = userResearchs
-            .map(ur => {
-            switch (ur.research.name) {
-                case 'Pulley':
-                return 0.02;
-                case 'Geometry':
-                return 0.04;
-                case 'Spirit Level':
-                return 0.08;
-                default:
-                return 0;
-            }
-            })
-            .reduce((acc, val) => acc + val, 0 as number);
+            const totalDiscount = userResearchs
+                .map(ur => {
+                    switch (ur.research.name) {
+                        case 'Pulley':
+                            return 0.02;
+                        case 'Geometry':
+                            return 0.04;
+                        case 'Spirit Level':
+                            return 0.08;
+                        default:
+                            return 0;
+                    }
+                })
+                .reduce((acc, val) => acc + val, 0 as number);
 
-        return totalDiscount;
+            return totalDiscount;
         }
 
         return 0;

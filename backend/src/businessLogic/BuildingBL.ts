@@ -1,4 +1,4 @@
-import prisma from "./../dataAccess/prisma/prisma";
+import prisma from "../dataAccess/prisma/prisma";
 import { City } from "@shared/types/models";
 import { addSeconds } from 'date-fns';
 

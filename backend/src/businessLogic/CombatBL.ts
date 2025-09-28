@@ -1,12 +1,12 @@
-import prisma from "./../dataAccess/prisma/prisma";
+import prisma from "../dataAccess/prisma/prisma";
 import { Prisma } from "src/dataAccess/prisma/generated/client";
-import { CityBL } from './CityBL';
-import { UnitBL } from './UnitBL';
-import { WareHouseBL } from './WareHouseBL';
-import { MovementBL } from "./MovementBL";
+import { CityBL } from './cityBL';
+import { UnitBL } from './unitBL';
+import { WareHouseBL } from './wareHouseBL';
+import { MovementBL } from "./movementBL";
 import dayjs from 'dayjs';
 import { world } from "src/config";
-import { UserResourceBL } from "./UserResourceBL";
+import { UserResourceBL } from "./userResourceBL";
 import { addSeconds } from "date-fns";
 
 type UnitBest = Prisma.RegimentUnitGetPayload<{ include: { unit: true } }> & { value: number, power: number };

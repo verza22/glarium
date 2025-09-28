@@ -1,6 +1,6 @@
-import prisma from "./../dataAccess/prisma/prisma";
+import prisma from "../dataAccess/prisma/prisma";
 import { Prisma } from "src/dataAccess/prisma/generated/client";
-import { UserResourceBL } from "./UserResourceBL";
+import { UserResourceBL } from "./userResourceBL";
 import { world } from "../config";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
@@ -46,9 +46,9 @@ export class PopulationBL {
     /**
      * Remove population from a city and update resources.
      */
-    public static async removePopulation(city: City, collect: { population: number }): Promise<void> {
+    public static async removePopulation(cityId: number, collect: { population: number }): Promise<void> {
         const cityPopulation = await prisma.cityPopulation.findFirst({
-            where: { cityId: city.id },
+            where: { cityId: cityId },
             include: { city: { include: { userCities: true } } }
         });
         if (!cityPopulation) return;
@@ -64,7 +64,7 @@ export class PopulationBL {
     /**
      * Update satisfaction and available citizens for a city.
      */
-    public static async satisfaction(authId: number, cityPopulation: CityPopulation, updatedResources = true): Promise<void> {
+    public static async satisfaction(authId: number, cityPopulation: Prisma.CityPopulationGetPayload<{}>, updatedResources = true): Promise<void> {
         const now = dayjs();
         const updatedAt = dayjs(cityPopulation.updatedAt);
         const seconds = now.diff(updatedAt, "second");

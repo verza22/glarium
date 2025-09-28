@@ -1,4 +1,4 @@
-import prisma from "./../dataAccess/prisma/prisma";
+import prisma from "../dataAccess/prisma/prisma";
 import { Prisma } from "src/dataAccess/prisma/generated/client";
 import { Unit } from "@shared/types/models";
 import { Collect } from "@shared/types/others";

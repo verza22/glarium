@@ -1,5 +1,5 @@
-import prisma from "./../dataAccess/prisma/prisma";
-import { CityBL } from "./CityBL";
+import prisma from "../dataAccess/prisma/prisma";
+import { CityBL } from "./cityBL";
 import dayjs from 'dayjs';
 
 export class UserBL {

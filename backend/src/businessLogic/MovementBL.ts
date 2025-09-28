@@ -1,12 +1,12 @@
-import prisma from "./../dataAccess/prisma/prisma";
+import prisma from "../dataAccess/prisma/prisma";
 import { Prisma } from "src/dataAccess/prisma/generated/client";
 import { City, Island, Movement, UserResource, UserCity } from "@shared/types/models";
-import { CombatBL } from "./CombatBL";
-import { CityBL } from "./CityBL";
+import { CombatBL } from "./combatBL";
+import { CityBL } from "./cityBL";
 // import { UserNotification } from "../events/UserNotification";
 import { world } from "src/config";
 import { Resources } from "@shared/types/others";
-import { UnitBL } from "./UnitBL";
+import { UnitBL } from "./unitBL";
 
 export class MovementBL {
     public static async loadedSpeed(cityId: number, size: number): Promise<number> {
@@ -32,10 +32,10 @@ export class MovementBL {
         return world.distance.same_island;
     }
 
-    public static async getActionPoint(cityFrom: City, userId: number): Promise<number> {
+    public static async getActionPoint(cityFromId: number, userId: number): Promise<number> {
         // Count active movements from a city by user
         return await prisma.movement.count({
-            where: { cityFromId: cityFrom.id, userId: userId },
+            where: { cityFromId: cityFromId, userId: userId },
         });
     }
 

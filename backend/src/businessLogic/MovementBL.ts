@@ -27,7 +27,7 @@ export class MovementBL {
         return world.distance.same_island;
     }
 
-    public static distanceTimeColonize(cityFrom: City, island: Island): number {
+    public static distanceTimeColonize(cityFrom: number, islandTo: number): number {
         // TODO: validate if they are on the same island
         return world.distance.same_island;
     }
@@ -39,9 +39,9 @@ export class MovementBL {
         });
     }
 
-    public static async returnMovementResources(cityFrom: City): Promise<void> {
+    public static async returnMovementResources(cityFromId: number): Promise<void> {
         // Return resources for a single city
-        const cities = [cityFrom.id];
+        const cities = [cityFromId];
         await this.deliveredResourcesFrom(cities);
         await this.deliveredResourcesReturn(cities);
     }

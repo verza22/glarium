@@ -26,10 +26,10 @@ export class BuildingBL {
     }
 
     // Check if a city has a building of a specific type (building_id)
-    static async buildingExist(city: City, buildingId: number): Promise<boolean> {
+    static async buildingExist(cityId: number, buildingId: number): Promise<boolean> {
         const exists = await prisma.cityBuilding.findFirst({
             where: {
-                cityId: city.id,
+                cityId: cityId,
                 buildingLevel: {
                     is: {
                         buildingId: buildingId,
@@ -41,10 +41,10 @@ export class BuildingBL {
     }
 
     // Get the building object for a specific building type (building_id) in the city
-    static async building(city: City, buildingId: number) {
+    static async building(cityId: number, buildingId: number) {
         const building = await prisma.cityBuilding.findFirst({
             where: {
-                cityId: city.id,
+                cityId: cityId,
                 buildingLevel: {
                     is: {
                         buildingId: buildingId,

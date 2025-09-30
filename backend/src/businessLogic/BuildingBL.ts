@@ -4,10 +4,10 @@ import { addSeconds } from 'date-fns';
 
 export class BuildingBL {
     // Check if there is at least one constructed building in the city
-    static async isConstructed(city: City): Promise<boolean> {
+    static async isConstructed(cityId: number): Promise<boolean> {
         const exists = await prisma.cityBuilding.findFirst({
             where: {
-                cityId: city.id,
+                cityId: cityId,
                 constructedAt: { not: null },
             },
         });
@@ -15,10 +15,10 @@ export class BuildingBL {
     }
 
     // Check if a building exists in the given position for the city
-    static async positionExist(city: City, position: number): Promise<boolean> {
+    static async positionExist(cityId: number, position: number): Promise<boolean> {
         const exists = await prisma.cityBuilding.findFirst({
             where: {
-                cityId: city.id,
+                cityId: cityId,
                 position: position,
             },
         });

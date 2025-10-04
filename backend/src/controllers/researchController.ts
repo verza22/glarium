@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { UserResourceBL } from 'src/businessLogic/userResourceBL';
+import { UserResourceBL } from './../businessLogic/userResourceBL';
 
 export class ResearchController {
 

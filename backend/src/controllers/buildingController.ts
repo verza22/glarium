@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { CityBL } from 'src/businessLogic/cityBL';
-import { BuildingBL } from 'src/businessLogic/buildingBL';
+import { CityBL } from './../businessLogic/cityBL';
+import { BuildingBL } from './../businessLogic/buildingBL';
 import dayjs from 'dayjs';
 
 export class WorldController {

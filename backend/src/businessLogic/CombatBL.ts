@@ -1,11 +1,11 @@
 import prisma from "../dataAccess/prisma/prisma";
-import { Prisma } from "src/dataAccess/prisma/generated/client";
+import { Prisma } from "./../dataAccess/prisma/generated/client";
 import { CityBL } from './cityBL';
 import { UnitBL } from './unitBL';
 import { WareHouseBL } from './wareHouseBL';
 import { MovementBL } from "./movementBL";
 import dayjs from 'dayjs';
-import { world } from "src/config";
+import { world } from "../config";
 import { UserResourceBL } from "./userResourceBL";
 import { addSeconds } from "date-fns";
 

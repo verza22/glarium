@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { MovementBL } from 'src/businessLogic/movementBL';
-import { world } from 'src/config';
-import { UserResourceBL } from 'src/businessLogic/userResourceBL';
+import { MovementBL } from './../businessLogic/movementBL';
+import { world } from './../config';
+import { UserResourceBL } from './../businessLogic/userResourceBL';
 
 export class CombatController {
 

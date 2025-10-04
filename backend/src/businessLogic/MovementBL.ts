@@ -1,10 +1,10 @@
 import prisma from "../dataAccess/prisma/prisma";
-import { Prisma } from "src/dataAccess/prisma/generated/client";
+import { Prisma } from "./../dataAccess/prisma/generated/client";
 import { City, Island, Movement, UserResource, UserCity } from "@shared/types/models";
 import { CombatBL } from "./combatBL";
 import { CityBL } from "./cityBL";
 // import { UserNotification } from "../events/UserNotification";
-import { world } from "src/config";
+import { world } from "../config";
 import { Resources } from "@shared/types/others";
 import { UnitBL } from "./unitBL";
 

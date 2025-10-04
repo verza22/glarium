@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { UnitBL } from 'src/businessLogic/unitBL';
-import { PopulationBL } from 'src/businessLogic/populationBL';
-import { BuildingModifierBL } from 'src/businessLogic/buildingModifierBL';
-import { CityBL } from 'src/businessLogic/cityBL';
+import { UnitBL } from './../businessLogic/unitBL';
+import { PopulationBL } from './../businessLogic/populationBL';
+import { BuildingModifierBL } from './../businessLogic/buildingModifierBL';
+import { CityBL } from './../businessLogic/cityBL';
 
 export class UnitController {
 

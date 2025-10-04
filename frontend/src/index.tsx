@@ -1,7 +1,11 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
+import "./assets/css/index.css"
 
-const App = () => <h1>test from React</h1>;
+import { City } from "./views/City";
+
+const App = () => <>
+    <City/>
+</>;
 
 const root = createRoot(document.getElementById("root")!);
 root.render(<App />);

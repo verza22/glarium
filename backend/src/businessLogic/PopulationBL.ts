@@ -1,5 +1,5 @@
 import prisma from "../dataAccess/prisma/prisma";
-import { Prisma } from "src/dataAccess/prisma/generated/client";
+import { Prisma } from "./../dataAccess/prisma/generated/client";
 import { UserResourceBL } from "./userResourceBL";
 import { world } from "../config";
 import dayjs from "dayjs";

@@ -3,8 +3,8 @@ import { world } from '../config/world';
 import prisma from '../dataAccess/prisma/prisma'
 import { RequestUserConfig } from '@shared/types/requests';
 import { ResponseUserConfig } from '@shared/types/responses';
-import { UserResourceBL } from 'src/businessLogic/userResourceBL';
-import { CityBL } from 'src/businessLogic/cityBL';
+import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { CityBL } from './../businessLogic/cityBL';
 
 export class UserController {
 

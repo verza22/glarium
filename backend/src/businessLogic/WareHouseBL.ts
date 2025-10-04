@@ -1,4 +1,4 @@
-import { world } from "src/config";
+import { world } from "../config";
 import prisma from "../dataAccess/prisma/prisma";
 
 export class WareHouseBL {

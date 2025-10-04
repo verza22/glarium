@@ -1,5 +1,5 @@
 import prisma from "../dataAccess/prisma/prisma";
-import { world } from "src/config";
+import { world } from "../config";
 import { BuildingModifierBL } from "./buildingModifierBL";
 import { Resources } from "@shared/types/others";
 import { PopulationBL } from "./populationBL";

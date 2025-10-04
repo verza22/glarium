@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import { world } from '../config/world';
 import prisma from '../dataAccess/prisma/prisma'
-import { MovementBL } from 'src/businessLogic/movementBL';
-import { UnitBL } from 'src/businessLogic/unitBL';
-import { CityBL } from 'src/businessLogic/cityBL';
+import { MovementBL } from './../businessLogic/movementBL';
+import { UnitBL } from './../businessLogic/unitBL';
+import { CityBL } from './../businessLogic/cityBL';
 import dayjs from "dayjs";
-import { BuildingBL } from 'src/businessLogic/buildingBL';
-import { UserResourceBL } from 'src/businessLogic/userResourceBL';
-import { PopulationBL } from 'src/businessLogic/populationBL';
-import { UserBL } from 'src/businessLogic/userBL';
+import { BuildingBL } from './../businessLogic/buildingBL';
+import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { PopulationBL } from './../businessLogic/populationBL';
+import { UserBL } from './../businessLogic/userBL';
 
 export class MovementController {
     static async transport(req: Request, res: Response) {

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { BuildingBL } from 'src/businessLogic/buildingBL';
-import { IslandBL } from 'src/businessLogic/islandBL';
-import { PopulationBL } from 'src/businessLogic/populationBL';
-import { CityBL } from 'src/businessLogic/cityBL';
-import { UserResourceBL } from 'src/businessLogic/userResourceBL';
-import { UnitBL } from 'src/businessLogic/unitBL';
+import { BuildingBL } from './../businessLogic/buildingBL';
+import { IslandBL } from './../businessLogic/islandBL';
+import { PopulationBL } from './../businessLogic/populationBL';
+import { CityBL } from './../businessLogic/cityBL';
+import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { UnitBL } from './../businessLogic/unitBL';
 import { addSeconds } from 'date-fns';
 
 export class IslandController {

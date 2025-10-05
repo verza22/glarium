@@ -2,7 +2,7 @@ import DragToScroll from "../components/DragToScroll"
 import Building from "../features/city/Building"
 import CityImg from "./../assets/img/city/city.jpg"
 
-export const City = () => {
+const City = () => {
     return <div>
         <div className="cityContainer" v-dragscroll="true" v-autoscroll="'top center'">
             <DragToScroll className="scroll-container">
@@ -15,3 +15,5 @@ export const City = () => {
         </div>
     </div>
 }
+
+export default City;

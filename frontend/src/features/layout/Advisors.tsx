@@ -43,8 +43,6 @@ const Advisors: React.FC = () => {
         >
           <div className="absolute bottom-0 w-full text-center text-[11px] px-1">Diplomat</div>
         </div>
-
-        <div className="absolute top-0 right-0 w-6 h-6 bg-red-500"></div>
       </div>
     </div>
   );

@@ -1,18 +1,29 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 interface DragToScrollProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  centerVertical?: boolean;
 }
 
-const DragToScroll: React.FC<DragToScrollProps> = ({ children, className, style }) => {
+const DragToScroll: React.FC<DragToScrollProps> = ({ children, className, style, centerVertical = false }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
+
+  // --- Center the scroll when mounted ---
+  useEffect(() => {
+    if (ref.current) {
+      const el = ref.current;
+      el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+      if(centerVertical)
+        el.scrollTop = (el.scrollHeight - el.clientHeight) / 2;
+    }
+  }, []);
 
   // --- Mouse events ---
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {

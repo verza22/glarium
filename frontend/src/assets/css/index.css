@@ -4,19 +4,4 @@ body {
 
 .scroll-container::-webkit-scrollbar {
     display: none;
-  }
-  
-.cityContainer {
-    cursor: all-scroll;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    overflow: hidden;
 }
-
-.city {
-    width: 2460px;
-    height: 1794px;
-}
-
-

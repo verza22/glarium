@@ -2,13 +2,16 @@ import React from "react";
 import navSelected from "../../../assets/img/icon/navigation-selected.jpg";
 import navOther from "../../../assets/img/icon/navigation-other.jpg";
 import navFooter from "../../../assets/img/icon/navigation-footer.jpg";
+import { useTranslation } from "react-i18next";
 
 const Cities: React.FC = () => {
+    const { t } = useTranslation();
+    
     return (
         <div className="relative select-none flex-1">
             <div
                 className="h-[23px] cursor-pointer bg-cover"
-                title="Show cities"
+                title={t("navigation.showCities")}
                 style={{ backgroundImage: `url(${navSelected})` }}
             >
                 <div className="relative top-[2px] left-[6px] text-[11px]">[12:34] Example City</div>

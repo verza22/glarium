@@ -1,0 +1,30 @@
+{
+    "mayor": "Mayor",
+    "general": "General",
+    "scientist": "Scientist",
+    "diplomat": "Diplomat",
+    "layout": {
+        "highscore": "Highscore",
+        "options": "Options",
+        "board": "Board",
+        "logout": "Logout"
+    },
+    "navigation": {
+        "world": "World",
+        "island": "Island",
+        "city": "City",
+        "actionPoint": "Action Points",
+        "showCities": "Show cities",
+        "population": "Population",
+        "patreon": "Patreon"
+    },
+    "resources": {
+        "wood": "Wood",
+        "wine": "Wine",
+        "marble": "Marble",
+        "glass": "Glass",
+        "sulfur": "Sulfur",
+        "ships": "Ships",
+        "gold": "Gold"
+    }
+}

@@ -41,7 +41,6 @@ const Building: React.FC = () => {
         >
           <img
             src={Ground}
-            alt="terreno"
             style={{ width: '100%', height: '100%' }}
           />
         </div>

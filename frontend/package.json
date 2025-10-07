@@ -6,8 +6,10 @@
     "build": "webpack --mode production"
   },
   "dependencies": {
+    "i18next": "25.5.3",
     "react": "19.1.1",
     "react-dom": "19.1.1",
+    "react-i18next": "16.0.0",
     "react-router-dom": "6.30.1"
   },
   "devDependencies": {

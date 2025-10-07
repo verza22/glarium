@@ -10,7 +10,8 @@
     "outDir": "dist",
     "paths": {
       "@shared/*": ["../shared/*"]
-    }
+    },
+    "resolveJsonModule": true
   },
   "include": ["src", "../shared"]
 }

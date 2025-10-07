@@ -5,3 +5,16 @@ body {
 .scroll-container::-webkit-scrollbar {
     display: none;
 }
+
+.custom-scroll::-webkit-scrollbar {
+    width: 20px;
+    background-color: #f5f5f5;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+    background-image: url('../img/icon/scroll_bg.png');
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-image: url('../img/icon/scroll_mid.png');
+}

@@ -4,36 +4,39 @@ import wineIcon from "../../../assets/img/icon/icon_wine.png";
 import marbleIcon from "../../../assets/img/icon/icon_marble.png";
 import glassIcon from "../../../assets/img/icon/icon_glass.png";
 import sulfurIcon from "../../../assets/img/icon/icon_sulfur.png";
+import { useTranslation } from "react-i18next";
 
 const Resources: React.FC = () => {
-  return (
-    <div className="flex-1 flex select-none pl-[5px]">
-      <div className="flex-1 flex items-center" title="Wood">
-        <img className="mr-1" src={woodIcon} alt="Wood" />
-        <span>1000</span>
-      </div>
+    const { t } = useTranslation();
 
-      <div className="flex-1 flex items-center" title="Wine">
-        <img className="mr-1" src={wineIcon} alt="Wine" />
-        <span>500</span>
-      </div>
+    return (
+        <div className="flex-1 flex select-none pl-[5px]">
+            <div className="flex-1 flex items-center" title={t("resources.wood")}>
+                <img className="mr-1" src={woodIcon} />
+                <span>1000</span>
+            </div>
 
-      <div className="flex-1 flex items-center" title="Marble">
-        <img className="mr-1" src={marbleIcon} alt="Marble" />
-        <span>200</span>
-      </div>
+            <div className="flex-1 flex items-center" title={t("resources.wine")}>
+                <img className="mr-1" src={wineIcon} />
+                <span>500</span>
+            </div>
 
-      <div className="flex-1 flex items-center" title="Glass">
-        <img className="mr-1" src={glassIcon} alt="Glass" />
-        <span>150</span>
-      </div>
+            <div className="flex-1 flex items-center" title={t("resources.marble")}>
+                <img className="mr-1" src={marbleIcon} />
+                <span>200</span>
+            </div>
 
-      <div className="flex-1 flex items-center" title="Sulfur">
-        <img className="mr-1" src={sulfurIcon} alt="Sulfur" />
-        <span>75</span>
-      </div>
-    </div>
-  );
+            <div className="flex-1 flex items-center" title={t("resources.glass")}>
+                <img className="mr-1" src={glassIcon} />
+                <span>150</span>
+            </div>
+
+            <div className="flex-1 flex items-center" title={t("resources.sulfur")}>
+                <img className="mr-1" src={sulfurIcon} />
+                <span>75</span>
+            </div>
+        </div>
+    );
 };
 
 export default Resources;

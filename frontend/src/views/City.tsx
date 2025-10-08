@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import DragToScroll from "../components/DragToScroll";
-import Modal from "../components/Modal";
+import Modal from "../features/modal/Modal";
 import Building from "../features/city/Building";
 import Layout from "../features/layout/Layout";
 import CityImg from "./../assets/img/city/city.jpg";

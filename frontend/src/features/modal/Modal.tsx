@@ -1,8 +1,8 @@
 import React from "react";
 
-import headerImg from "./../assets/img/icon/modal_header.jpg";
-import footerImg from "./../assets/img/icon/bg_maincontentbox_footer.png";
-import closeIcon from "./../assets/img/icon/close.png";
+import headerImg from "./../../assets/img/icon/modal_header.jpg";
+import footerImg from "./../../assets/img/icon/bg_maincontentbox_footer.png";
+import closeIcon from "./../../assets/img/icon/close.png";
 
 interface ModalProps {
     title: string;
@@ -16,14 +16,14 @@ const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => {
 
     const handleClose = () => {
         setVisible(false);
-        if(onClose){
+        if (onClose) {
             onClose();
         }
     }
 
-    if(!visible)
+    if (!visible)
         return null;
-    
+
     return (
         <div
             className="fixed left-0 top-0 fixed z-[100] w-[720px] left-0 right-0 mx-auto mt-[120px] touch-none rounded-2xl shadow-lg overflow-hidden bg-[#f5f5dc]"

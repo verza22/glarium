@@ -26,5 +26,93 @@
         "sulfur": "Sulfur",
         "ships": "Ships",
         "gold": "Gold"
+    },
+    "text": {
+        "message": "Are you sure?",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "shipment": "Shipment"
+    },
+    "modal": {
+        "general": {
+            "militia": "Militia",
+            "receivedMessages": "Received Messages",
+            "sentReports": "Sent Reports",
+            "movements": "Movements ({{count}})",
+            "warReports": "War Reports ({{count}})",
+            "tabReceivedTitle": "Received Messages",
+            "tabSentTitle": "Sent Messages",
+            "noMovements": "No movements",
+            "altMovements": "Movements icon",
+            "altReports": "Reports icon",
+            "mission": "Mission",
+            "schedule": "Schedule",
+            "origin": "Origin",
+            "destination": "Destination",
+            "action": "Action",
+            "viewCargo": "View Cargo",
+            "withdraw": "Withdraw",
+            "movementType": {
+                "transport": "Transport",
+                "attack": "Attack",
+                "defense": "Defense",
+                "colonize": "Colonize"
+            }
+        },
+        "research": {
+            "researchCategories": {
+                "1": "Seafaring",
+                "2": "Economy",
+                "3": "Knowledge",
+                "4": "Military"
+            },
+            "scientistAlt": "Scientist icon",
+            "piAlt": "PI icon",
+            "researchTimeAlt": "Research time icon",
+            "scientists": "Scientists",
+            "pi": "PI",
+            "perHour": "Per hour",
+            "cost": "Cost",
+            "previousLevelRequired": "Previous level required",
+            "finished": "Finished",
+            "researchButton": "Research",
+            "notEnoughPoints": "Not enough points",
+            "research": {
+                "0": {
+                    "name": "Research 0",
+                    "text": "Description for Research 0"
+                },
+                "1": {
+                    "name": "Research 1",
+                    "text": "Description for Research 1"
+                },
+                "2": {
+                    "name": "Research 2",
+                    "text": "Description for Research 2"
+                }
+            },
+            "windowLeftTitle": "Scientific Advisor",
+            "windowRightTitle": "Research Area"
+        },
+        "donations": {
+            "level": "Level",
+            "required_next_level": "Required for next level:",
+            "existing": "Existing:",
+            "donate": "Donate",
+            "enter_amount": "Enter amount",
+            "max": "Max",
+            "confirm": "Confirm",
+            "under_construction": "Under construction",
+            "forestTitle": "Forest",
+            "vinesTitle": "Vines",
+            "quarryTitle": "Quarry",
+            "crystalTitle": "Crystal",
+            "sulfurTitle": "Sulfur",
+            "workers": "Workers",
+            "islandCities": "Island Cities",
+            "income": "Income",
+            "production": "Production",
+            "perHour": "per hour"
+        }
     }
 }

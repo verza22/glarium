@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import WindowLeft from "./../window/WindowLeft";
 import WindowRight from "./../window/WindowRight";
 import Categories from "./Categories";
@@ -9,10 +11,9 @@ interface ResearchModalProps {
 }
 
 const ResearchModal: React.FC<ResearchModalProps> = ({ close }) => {
-  // Local state
+  const { t } = useTranslation();
   const [category, setCategory] = useState<number>(1);
 
-  // Mocked data (UI only)
   const dummyResearch = {
     category: 1,
     researchs: [
@@ -30,20 +31,17 @@ const ResearchModal: React.FC<ResearchModalProps> = ({ close }) => {
     },
   };
 
-  // Handle category change
   const changeCategory = (newCategory: number) => {
     setCategory(newCategory);
   };
 
   return (
     <div className="flex justify-center items-start space-x-4 p-4">
-      {/* First draggable window */}
-      <WindowLeft titulo="Consejero científico" close={close}>
-        <Research {...dummyResearch}  />
+      <WindowLeft titulo={t("modal.research.windowLeftTitle")} close={close}>
+        <Research {...dummyResearch} />
       </WindowLeft>
 
-      {/* Second draggable window */}
-      <WindowRight titulo="Área de investigación">
+      <WindowRight titulo={t("modal.research.windowRightTitle")}>
         <Categories changeCategory={changeCategory} />
       </WindowRight>
     </div>

@@ -21,7 +21,7 @@ const GeneralModal: React.FC<GeneralModalProps> = ({ close, movements }) => {
 
   return (
     <div className="mBorder">
-      <WindowLeft close={close} titulo={t("modal.general.militia")}>
+      <WindowLeft close={close} title={t("modal.general.militia")}>
         <div className="box text-[0.83rem] leading-[0.83rem]">
           <div className="flex mb-2">
             <div

@@ -6,11 +6,11 @@ import footerImg from "../../../assets/img/icon/bg_maincontentbox_footer.png";
 import borderImg from "../../../assets/img/icon/bg_maincontentbox_left.png";
 
 interface WindowRightProps {
-    titulo: string;
+    title: string;
     children?: React.ReactNode;
 }
 
-const WindowRight: React.FC<WindowRightProps> = ({ titulo, children }) => {
+const WindowRight: React.FC<WindowRightProps> = ({ title, children }) => {
     return (
         <div
             className="fixed bg-[beige] z-[100] w-[230px] rounded-lg shadow-lg touch-none left-[-950px] mx-auto mt-[120px]"
@@ -28,7 +28,7 @@ const WindowRight: React.FC<WindowRightProps> = ({ titulo, children }) => {
                 }}
             >
                 <div className="text-[12px] leading-none font-bold font-sans text-center">
-                    {titulo}
+                    {title}
                 </div>
             </div>
 

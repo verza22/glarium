@@ -5,12 +5,12 @@ import footerImg from "../../../assets/img/icon/bg_maincontentbox_footer.png";
 import borderImg from "../../../assets/img/icon/bg_maincontentbox_left.png";
 
 interface WindowLeftProps {
-    titulo: string;
+    title: string;
     close: () => void;
     children?: React.ReactNode;
 }
 
-const WindowLeft: React.FC<WindowLeftProps> = ({ titulo, close, children }) => {
+const WindowLeft: React.FC<WindowLeftProps> = ({ title, close, children }) => {
     return (
         <div
             className="fixed z-[100] bg-[beige] w-[720px] mx-auto left-0 right-0 mt-[120px] rounded-lg shadow-lg touch-none"
@@ -27,7 +27,7 @@ const WindowLeft: React.FC<WindowLeftProps> = ({ titulo, close, children }) => {
                 }}
             >
                 <div className="text-[12px] leading-none font-bold font-sans text-center flex-1">
-                    {titulo}
+                    {title}
                 </div>
                 <button
                     onClick={close}

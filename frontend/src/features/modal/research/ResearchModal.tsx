@@ -37,11 +37,11 @@ const ResearchModal: React.FC<ResearchModalProps> = ({ close }) => {
 
   return (
     <div className="flex justify-center items-start space-x-4 p-4">
-      <WindowLeft titulo={t("modal.research.windowLeftTitle")} close={close}>
+      <WindowLeft title={t("modal.research.windowLeftTitle")} close={close}>
         <Research {...dummyResearch} />
       </WindowLeft>
 
-      <WindowRight titulo={t("modal.research.windowRightTitle")}>
+      <WindowRight title={t("modal.research.windowRightTitle")}>
         <Categories changeCategory={changeCategory} />
       </WindowRight>
     </div>

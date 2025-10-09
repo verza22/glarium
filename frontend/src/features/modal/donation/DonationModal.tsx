@@ -1,6 +1,6 @@
 import React from "react";
-import WindowLeft from "./../window/WindowLeft";
-import WindowRight from "./../window/WindowRight";
+import WindowLeft from "../window/WindowLeft";
+import WindowRight from "../window/WindowRight";
 import IslandResources, { IslandData } from "./IslandResources";
 import IslandDonation from "./IslandDonation";
 import { useTranslation } from "react-i18next";
@@ -36,11 +36,11 @@ const Donaciones: React.FC<DonacionesProps> = ({ infop, close }) => {
 
     return (
         <div className="flex flex-col space-y-4">
-            <WindowLeft close={close} titulo={getTitle()}>
+            <WindowLeft close={close} title={getTitle()}>
                 <IslandResources data={info} />
             </WindowLeft>
 
-            <WindowRight titulo={getTitle()}>
+            <WindowRight title={getTitle()}>
                 <IslandDonation data={{
                     type: 1,
                     island_type: 2,

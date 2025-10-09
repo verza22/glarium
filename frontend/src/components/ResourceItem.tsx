@@ -10,7 +10,7 @@ import iconTimec from '../assets/img/icon/icon_timec.png';
 import iconWine from '../assets/img/icon/icon_wine.png';
 import iconWood from '../assets/img/icon/icon_wood.png';
 
-type ResourceType = 
+export type ResourceType = 
   | 'glass'
   | 'gold'
   | 'marble'

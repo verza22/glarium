@@ -35,6 +35,72 @@
         "confirm": "Confirm",
         "shipment": "Shipment"
     },
+    "buildings": {
+        "1": {
+            "name": "Intendencia",
+            "text": "Manage your city's administration."
+        },
+        "2": {
+            "name": "Academia",
+            "text": "Train scientists to increase productivity."
+        },
+        "3": {
+            "name": "Deposito",
+            "text": "Store your resources safely."
+        },
+        "4": {
+            "name": "Cuartel",
+            "text": "Train your army units here."
+        },
+        "5": {
+            "name": "Taberna",
+            "text": "Serve wine to your citizens to increase happiness."
+        },
+        "6": {
+            "name": "Reductor1",
+            "text": "Reduce building costs."
+        },
+        "7": {
+            "name": "Reductor2",
+            "text": "Reduce building costs."
+        },
+        "8": {
+            "name": "Reductor3",
+            "text": "Reduce building costs."
+        },
+        "9": {
+            "name": "Reductor4",
+            "text": "Reduce building costs."
+        },
+        "10": {
+            "name": "Reductor5",
+            "text": "Reduce building costs."
+        },
+        "11": {
+            "name": "Productor1",
+            "text": "Increase wood production."
+        },
+        "12": {
+            "name": "Productor2",
+            "text": "Increase mine production."
+        },
+        "13": {
+            "name": "Productor3",
+            "text": "Increase mine production."
+        },
+        "14": {
+            "name": "Productor4",
+            "text": "Increase mine production."
+        },
+        "15": {
+            "name": "Productor5",
+            "text": "Increase mine production."
+        },
+        "16": {
+            "name": "Puerto",
+            "text": "Manage ships and trade at your port."
+        }
+    },
     "modal": {
         "general": {
             "militia": "Militia",
@@ -179,6 +245,85 @@
             "transportResources": "Transport Resources",
             "attack": "Attack",
             "info": "Info"
+        },
+        "building": {
+            "list_title": "Construction list",
+            "building": "Under construction",
+            "title": "Units scheduled for training",
+            "no_units": "No units have been selected",
+            "button": "Train",
+            "trainFormation": "Train units",
+            "max": "max",
+            "required_level": "Required barracks level {{level}}",
+            "notice_title": "Notice",
+            "no_issue": "Nothing to report! Congratulations, everything in the city is in order!",
+            "corruption_title": "Corruption is rampant in this city.",
+            "corruption_text": "Productivity and satisfaction in this city are clearly declining! Expand your Governor's Residence or Palace to reduce corruption.",
+            "living_space": "Living space: {{current}}/{{max}}",
+            "action_points": "Action points: {{current}}/{{max}}",
+            "growth": "Growth: {{amount}} per hour",
+            "total_gold": "Total gold: {{amount}}",
+            "corruption": "Corruption: {{amount}}%",
+            "happy": "Happy",
+            "change_city_name": "Change city name",
+            "previous_name": "Previous city name:",
+            "new_name": "New city name:",
+            "accept_name": "Accept name",
+            "satisfaction_title": "Satisfaction Level",
+            "satisfaction_description": "Satisfaction in your city is influenced by various factors. This chart can help identify problems and opportunities.",
+            "bonuses": "Bonuses",
+            "basic_bonus": "Basic bonus",
+            "wine": "Wine",
+            "no_tavern": "There is no Tavern in this city yet!",
+            "maintenance": "Maintenance",
+            "population": "Population",
+            "satisfaction_level": "Satisfaction Level:",
+            "capital": "Capital",
+            "colony": "Colony",
+            "workers": "Workers",
+            "confirm": "Confirm",
+            "income": "Income",
+            "production": "Production",
+            "perHour": "per hour",
+            "upgrade": "Upgrade",
+            "demolition": "Demolition",
+            "level": "Level",
+            "upgradeText": "Upgrade building to level {{level}}",
+            "warehouse": {
+                "title": "Warehouse",
+                "safe": "Protected",
+                "notSafe": "Unprotected",
+                "total": "Total",
+                "capacity": "Capacity"
+            },
+            "buildingProducer": {
+                "title": "{{building}} Production",
+                "productionBase": "Base Production",
+                "total": "Total"
+            },
+            "port": {
+                "speedTitle": "Port Loading Speed",
+                "speedText": "This is the speed at which your port can load goods.",
+                "speedMin": "per min",
+                "tradeShipBuyTitle": "Buy Trade Ship",
+                "tradeShipBuyText": "You can purchase trade ships to expand your trading capabilities.",
+                "tradeShipBuyBtn": "Buy Trade Ship",
+                "tradeShipBuyMissing1": "Not enough gold to buy a trade ship.",
+                "tradeShipBuyMissing2": "You need {{goldMissing}} more gold."
+            },
+            "buildingReducer": {
+                "building": "Building: {{building_id}}",
+                "unit": "Unit: {{building_id}}",
+                "costBase": "Base Cost",
+                "research": "Research"
+            },
+            "tavern": {
+                "title": "Serve Wine",
+                "description": "You can determine how much wine will be served to your population. The more wine you offer, the happier your citizens will be. Warning: Each time you distribute more wine, the tavern keeper will need an extra ration!",
+                "citizensSatisfied": "Satisfied Citizens",
+                "noWine": "No wine",
+                "winePerHour": "wine per hour"
+            }
         }
     }
 }

@@ -325,5 +325,24 @@
                 "winePerHour": "wine per hour"
             }
         }
+    },
+    "login": {
+        "title": "Login",
+        "emailPlaceholder": "Email",
+        "passwordPlaceholder": "Password",
+        "submit": "Submit",
+        "noAccount": "Don't have an account?",
+        "createAccount": "Create one"
+    },
+    "register": {
+        "title": "Register",
+        "namePlaceholder": "Name",
+        "emailPlaceholder": "Email",
+        "passwordPlaceholder": "Password",
+        "passwordConfirmPlaceholder": "Password Confirmation",
+        "submit": "Submit",
+        "errorPlaceholder": "Error message placeholder",
+        "alreadyAccount": "Already have an account?",
+        "login": "Login"
     }
 }

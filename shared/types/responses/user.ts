@@ -6,3 +6,8 @@ export interface ResponseUserConfig {
     research: Research[],
     user_research: number[]
 }
+
+export interface ResponseAuth {
+    message: string,
+    token: string
+}

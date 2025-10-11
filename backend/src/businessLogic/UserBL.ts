@@ -1,11 +1,47 @@
-import prisma from "../dataAccess/prisma/prisma";
-import { CityBL } from "./cityBL";
 import dayjs from 'dayjs';
+import jwt from "jsonwebtoken";
+
+import { RequestUserLogin, RequestUserRegister } from '@shared/types/requests';
+import prisma from "../dataAccess/prisma/prisma";
+import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/jwtConfig";
+import { CityBL } from "./cityBL";
+
+
+interface GenerateToken {
+    userId: number,
+    email: string,
+    cityId: number
+}
 
 export class UserBL {
 
-    // Initialize a new player with resources and first city
-    static async newPlayer(userId: number) {
+    static async login({ email, password }: RequestUserLogin) {
+        const user = await prisma.user.findFirst({ where: { email, password } });
+        if(!user)
+            throw new Error("User doesn't exists");
+
+        const city = await prisma.userCity.findFirst({ where: { userId: user.id, capital: true } })
+        if(!city)
+            throw new Error("City doesn't exists");
+        
+        return { userId: user.id, cityId: city.id };
+    }
+
+    static async register({ name, email, password }: RequestUserRegister) {
+
+        const userValidation = await prisma.user.findFirst({ where: { email } });
+        if(userValidation)
+            throw new Error("User exists");
+
+        //create new account
+        const { id: userId } = await prisma.user.create({
+            data: {
+                name,
+                email,
+                password
+            }
+        });
+
         // Create user resources
         await prisma.userResource.create({
             data: {
@@ -24,9 +60,10 @@ export class UserBL {
             having: { cityId: { _count: { lt: 10 } } },
         });
 
-        if (!islandsWithCounts[0]) throw new Error('No available island');
-
-        const islandId = islandsWithCounts[0].islandId;
+        let islandId = 1;
+        if (islandsWithCounts.length > 0){
+            islandId = islandsWithCounts[0].islandId;
+        }
 
         // Find the first empty position (0-15) in the island
         const positionsTaken = (await prisma.islandCity.findMany({ where: { islandId: islandId } })).map(x => x.position);
@@ -38,6 +75,17 @@ export class UserBL {
             }
         }
 
-        return CityBL.createCity(userId, islandId, position, true, dayjs().toDate());
+        const cityId = await CityBL.createCity(userId, islandId, position, true, dayjs().toDate());
+
+        return {
+            userId,
+            cityId
+        }
+    }
+
+    static generateToken({ userId, email, cityId }: GenerateToken) {
+        return jwt.sign({ id: userId, email: email, cityId }, JWT_SECRET, {
+            expiresIn: JWT_EXPIRES_IN
+        });
     }
 }

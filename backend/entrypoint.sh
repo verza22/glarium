@@ -20,4 +20,4 @@ done
 echo "/shared is mounted."
 
 # Exec backend
-exec npx nodemon src/index.ts 
+exec npx nodemon src/index.ts

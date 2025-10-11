@@ -2,9 +2,14 @@ import express, { Request, Response } from "express";
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import { errorHandler } from "./middleware/errorHandler";
+const cors = require("cors");
 
 const app = express();
 const PORT = 3001;
+
+app.use(cors({
+    origin: "http://localhost:3000"
+}));
 
 app.get("/api/hello", (req: Request, res: Response) => {
   res.json({ message: "Test from express :)! " });

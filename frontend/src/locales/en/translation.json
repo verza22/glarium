@@ -344,5 +344,11 @@
         "errorPlaceholder": "Error message placeholder",
         "alreadyAccount": "Already have an account?",
         "login": "Login"
+    },
+    "validation": {
+        "required": "This field is required",
+        "max": "Maximum {{max}} characters",
+        "invalidEmail": "Invalid email address",
+        "passwordsNotMatch": "Passwords do not match"
     }
 }

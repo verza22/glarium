@@ -1,28 +1,20 @@
 import React from "react";
 
-import UserResources from "../components/navigation/UserResources";
-import Cities from "../components/navigation/Cities";
-import ActionPoint from "../components/navigation/ActionPoint";
-import Population from "../components/navigation/Population";
-import Buttons from "../components/navigation/Buttons";
-import Resources from "../components/navigation/Resources";
+import UserResources from "./navigationLayout/UserResources";
+import Cities from "./navigationLayout/Cities";
+import ActionPoint from "./navigationLayout/ActionPoint";
+import Population from "./navigationLayout/Population";
+import Buttons from "./navigationLayout/Buttons";
+import Resources from "./navigationLayout/Resources";
 
 import navBackground from "../assets/img/icon/navegacion_fondo.png";
+import { INavigationLayout } from "../hooks/useNavigationLayout";
 
-import { useUserStore } from "../store/userStore";
-import { useNavigate } from "react-router-dom";
+interface NavigationLayoutProps {
+    navigationLayout: INavigationLayout
+}
 
-const Navigation: React.FC = () => {
-
-    const navigate = useNavigate();
-    const { cityId, islandId } = useUserStore();
-
-    const onNavigation = () => ({
-        city: ()=> navigate("/city/"+cityId),
-        island: ()=> navigate("/island/"+islandId),
-        world: ()=> navigate("/world")
-    });
-
+const NavigationLayout: React.FC<NavigationLayoutProps> = ({navigationLayout}) => {
     return (
         <div
             className="absolute z-20 w-[600px] rounded-md text-[0.83rem] p-[18px_40px_20px_10px] flex"
@@ -38,7 +30,7 @@ const Navigation: React.FC = () => {
                             <Population />
                         </div>
                     </div>
-                    <Buttons onNavigation={onNavigation()}/>
+                    <Buttons navigationLayout={navigationLayout}/>
                 </div>
                 <Resources />
             </div>
@@ -46,4 +38,4 @@ const Navigation: React.FC = () => {
     );
 };
 
-export default Navigation;
+export default NavigationLayout;

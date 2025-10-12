@@ -1,13 +1,16 @@
 import React from "react";
-import Navigation from "./Navigation";
+import NavigationLayout from "../components/NavigationLayout";
 import Advisors from "./../components/Advisors";
 import headerBg from "../assets/img/icon/header_bg.jpg";
 import { useTranslation } from "react-i18next";
 import packageJson from "../../package.json";
 import { useUserStore } from "../store/userStore";
+import { useNavigationLayout } from "../hooks/useNavigationLayout";
 
 const Layout: React.FC = () => {
     const { t } = useTranslation();
+    const navigationLayout = useNavigationLayout();
+
     const { clearUser } = useUserStore();
 
     return (
@@ -36,7 +39,7 @@ const Layout: React.FC = () => {
             </div>
 
             <div className="relative-bottom-6">
-                <Navigation />
+                <NavigationLayout navigationLayout={navigationLayout}/>
                 <Advisors />
             </div>
         </div>

@@ -4,9 +4,12 @@ import Modal from "../features/modal/Modal";
 import Building from "../features/city/Building";
 import Layout from "../features/layout/Layout";
 import CityImg from "./../assets/img/city/city.jpg";
+import { useParams } from "react-router-dom";
 
 const City = () => {
     const { t, i18n } = useTranslation();
+    const { cityId } = useParams<{ cityId: string }>();
+    console.log("cityID: "+cityId)
 
     return (
         <>

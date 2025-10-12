@@ -13,13 +13,16 @@ export class AuthController {
             { name: "password", type: "string", required: true }
         ]);
 
-        const { userId, cityId } = await UserBL.login({ email, password });
+        const { userId, cityId, islandId } = await UserBL.login({ email, password });
 
-        const token = UserBL.generateToken({ userId, email, cityId });
+        const token = UserBL.generateToken({ userId, email });
 
         const response: ResponseAuth = {
             message: "Login success",
-            token: `Bearer ${token}`
+            token: `Bearer ${token}`,
+            userId,
+            cityId,
+            islandId
         };
         res.json(response);
     }
@@ -31,14 +34,17 @@ export class AuthController {
             { name: "password", type: "string", required: true }
         ]);
 
-        const { userId, cityId } = await UserBL.register({ name, email, password });
+        const { userId, cityId, islandId } = await UserBL.register({ name, email, password });
 
         if (userId > 0 && cityId > 0) {
-            const token = UserBL.generateToken({ userId, email, cityId });
+            const token = UserBL.generateToken({ userId, email });
 
             const response: ResponseAuth = {
                 message: "Register success",
-                token: `Bearer ${token}`
+                token: `Bearer ${token}`,
+                userId,
+                cityId,
+                islandId
             };
             res.json(response);
         } else {

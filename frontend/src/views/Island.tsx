@@ -4,10 +4,15 @@ import DragToScroll from "../components/DragToScroll";
 import OceanImg from "../assets/img/island/ocean.jpg";
 import IslandImg from "../assets/img/island/0.jpg";
 import Layout from "../features/layout/Layout";
+import { useParams } from "react-router-dom";
 // import Cities from "../components/island/Cities";
 // import Resources from "../components/island/Resources";
 
 const IslandUI: React.FC = () => {
+
+    const { islandId } = useParams<{ islandId: string }>();
+    console.log("islandId: "+islandId)
+    
     return <>
         <Layout />
         <div className="cursor-grab h-full w-full absolute overflow-hidden">

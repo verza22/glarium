@@ -9,8 +9,7 @@ import { CityBL } from "./cityBL";
 
 interface GenerateToken {
     userId: number,
-    email: string,
-    cityId: number
+    email: string
 }
 
 export class UserBL {
@@ -20,11 +19,15 @@ export class UserBL {
         if(!user)
             throw new Error("User doesn't exists");
 
-        const city = await prisma.userCity.findFirst({ where: { userId: user.id, capital: true } })
-        if(!city)
+        const userCity = await prisma.userCity.findFirst({ where: { userId: user.id, capital: true }, include: { city: { include: { islandCity: true } } } })
+        if(!userCity)
             throw new Error("City doesn't exists");
+
+        let islandId = userCity.city.islandCity?.islandId;
+        if(!islandId)
+            throw new Error("Island doesn't exists");
         
-        return { userId: user.id, cityId: city.id };
+        return { userId: user.id, cityId: userCity.cityId, islandId };
     }
 
     static async register({ name, email, password }: RequestUserRegister) {
@@ -79,12 +82,13 @@ export class UserBL {
 
         return {
             userId,
-            cityId
+            cityId,
+            islandId
         }
     }
 
-    static generateToken({ userId, email, cityId }: GenerateToken) {
-        return jwt.sign({ id: userId, email: email, cityId }, JWT_SECRET, {
+    static generateToken({ userId, email }: GenerateToken) {
+        return jwt.sign({ id: userId, email: email }, JWT_SECRET, {
             expiresIn: JWT_EXPIRES_IN
         });
     }

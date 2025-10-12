@@ -9,5 +9,8 @@ export interface ResponseUserConfig {
 
 export interface ResponseAuth {
     message: string,
-    token: string
+    token: string,
+    userId: number,
+    cityId: number,
+    islandId: number
 }

@@ -5,10 +5,12 @@ import btnWorldImg from "../../../assets/img/icon/btn_world.png";
 import btnIslandImg from "../../../assets/img/icon/btn_island.jpg";
 import btnCityImg from "../../../assets/img/icon/btn_city.png";
 import { useTranslation } from "react-i18next";
+import { useUserStore } from "../../../store/userStore";
 
 const Buttons: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { cityId, islandId } = useUserStore();
 
     return (
         <div className="flex-1 flex space-x-1 text-[11px] select-none">
@@ -22,7 +24,7 @@ const Buttons: React.FC = () => {
             </div>
 
             <div
-                onClick={() => navigate("/island")}
+                onClick={() => navigate("/island/"+islandId)}
                 className="flex-1 relative cursor-pointer h-[53px] bg-no-repeat bg-cover"
                 title={t("navigation.island")}
                 style={{ backgroundImage: `url(${btnIslandImg})` }}
@@ -31,7 +33,7 @@ const Buttons: React.FC = () => {
             </div>
 
             <div
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/city/"+cityId)}
                 className="flex-1 relative cursor-pointer h-[56px] bg-no-repeat bg-cover"
                 title={t("navigation.city")}
                 style={{ backgroundImage: `url(${btnCityImg})` }}

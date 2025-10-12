@@ -4,10 +4,12 @@ import Advisors from "./Advisors";
 import headerBg from "../../assets/img/icon/header_bg.jpg";
 import { useTranslation } from "react-i18next";
 import packageJson from "../../../package.json";
+import { useUserStore } from "../../store/userStore";
 
 const Layout: React.FC = () => {
-
     const { t } = useTranslation();
+    const { clearUser } = useUserStore();
+
     return (
         <div className="fixed top-0 left-0 w-full z-20">
             <div
@@ -26,7 +28,7 @@ const Layout: React.FC = () => {
                         {t("layout.board")}
                     </a>
                 </div>
-                <div className="px-6 py-1 cursor-pointer hover:underline">{t("layout.logout")}</div>
+                <div className="px-6 py-1 cursor-pointer hover:underline" onClick={clearUser}>{t("layout.logout")}</div>
                 <div className="px-6 py-1">v{packageJson.version}</div>
                 <div className="px-6 py-1 cursor-default relative">
                     <span className="absolute">05/10/2025</span>

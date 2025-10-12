@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "f9889fac-d414-425f-ac4c-00808065a135",
+		"name": "glarium",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6535200",
+		"_collection_link": "https://dark-star-739161.postman.co/workspace/Team-Workspace~facded56-104b-4fe1-80e2-b854d0d64cfe/collection/6535200-f9889fac-d414-425f-ac4c-00808065a135?action=share&source=collection_link&creator=6535200"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Luis Zurita\",\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ROUTE}}api/auth/register",
+					"host": [
+						"{{API_ROUTE}}api"
+					],
+					"path": [
+						"auth",
+						"register"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "asd",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_ROUTE}}api/auth/login",
+					"host": [
+						"{{API_ROUTE}}api"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Config",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "{{API_ROUTE}}api/user/config",
+					"host": [
+						"{{API_ROUTE}}api"
+					],
+					"path": [
+						"user",
+						"config"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

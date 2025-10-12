@@ -4,11 +4,25 @@ import { CityBL } from './../businessLogic/cityBL';
 import { PopulationBL } from './../businessLogic/populationBL';
 import { MovementBL } from './../businessLogic/movementBL';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { RequestCityGetInfo } from '@shared/types/requests';
+import { validateFields } from '../utils/validateFields';
 
 export class CityController {
 
-    public async getCities(req: Request, res: Response) {
-        const userId = Number(req.params.userId);
+    public async getInfo(req: Request, res: Response){
+        const { cityId } : RequestCityGetInfo = validateFields(req, [
+            { name: "cityId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
+        res.json({
+            cities: await this.getCities(userId),
+            population: await this.getPopulation(userId, cityId),
+            actionPoints: await this.getActionPoint(userId, cityId),
+            resources: await this.getResources(userId, cityId)
+        });
+    }
+
+    private async getCities(userId: number) {
 
         const userCities = await prisma.userCity.findMany({
             where: { userId, city: { constructedAt: { not: null } } },
@@ -33,24 +47,22 @@ export class CityController {
             type: uc.city.islandCity?.island.type
         }));
 
-        return res.json(data);
+        return data;
     }
 
-    public async getPopulation(req: Request, res: Response) {
-        const cityId = Number(req.params.cityId);
-        const userId = Number(req.params.userId);
+    private async getPopulation(userId: number, cityId:number) {
 
         // Check ownership
         const city = await prisma.city.findUnique({ where: { id: cityId }, include: { population: true, userCities: true } });
         if (!city || city.userCities[0].userId !== userId) {
-            return res.status(403).json({ error: "Unauthorized" });
+            throw new Error("Unauthorized");
         }
 
         await CityBL.updateResources(city.id);
         if (city.population) {
             await PopulationBL.satisfaction(userId, city.population, false);
 
-            return res.json({
+            return {
                 population_max: city.population.populationMax,
                 population: city.population.population,
                 worker_forest: city.population.workerForest,
@@ -59,38 +71,34 @@ export class CityController {
                 scientists: city.population.scientists,
                 wine: city.population.wine,
                 wine_max: city.population.wineMax
-            });
+            };
         } else {
-            return res.status(400).json({ error: "City population error" });
+            throw new Error("City population error");
         }
     }
 
-    public async getActionPoint(req: Request, res: Response) {
-        const cityId = Number(req.params.cityId);
-        const userId = Number(req.params.userId);
+    private async getActionPoint(userId: number, cityId:number) {
 
         const city = await prisma.city.findUnique({ where: { id: cityId } });
-        if (!city) return res.status(404).json({ error: "City not found" });
+        if (!city) throw new Error("City not found" );
 
         const pointUsed = await MovementBL.getActionPoint(city.id, userId);
-        return res.json({ point_max: city.apoint, point: city.apoint - pointUsed });
+        return { point_max: city.apoint, point: city.apoint - pointUsed };
     }
 
-    public async getResources(req: Request, res: Response) {
-        const cityId = Number(req.params.cityId);
-        const userId = Number(req.params.userId);
+    private async getResources(userId: number, cityId:number) {
 
         const city = await prisma.city.findUnique({ where: { id: cityId }, include: { userCities: true } });
-        if (!city || city.userCities[0].userId !== userId) return res.status(403).json({ error: "Unauthorized" });
+        if (!city || city.userCities[0].userId !== userId) throw new Error("Unauthorized");
 
         await CityBL.updateResources(city.id);
-        return res.json({
+        return {
             wood: city.wood,
             wine: city.wine,
             marble: city.marble,
             glass: city.glass,
             sulfur: city.sulfur
-        });
+        };
     }
 
     public async setScientists(req: Request, res: Response) {

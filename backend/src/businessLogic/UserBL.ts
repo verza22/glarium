@@ -88,7 +88,7 @@ export class UserBL {
     }
 
     static generateToken({ userId, email }: GenerateToken) {
-        return jwt.sign({ id: userId, email: email }, JWT_SECRET, {
+        return jwt.sign({ userId: userId, email: email }, JWT_SECRET, {
             expiresIn: JWT_EXPIRES_IN
         });
     }

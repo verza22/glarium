@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
+import cityRoutes from './routes/cityRoutes';
 import { errorHandler } from "./middleware/errorHandler";
 const cors = require("cors");
 
@@ -18,8 +19,9 @@ app.get("/api/hello", (req: Request, res: Response) => {
 app.use(express.json());
 
 //routes
-app.use('/user', userRoutes);
-app.use('/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/city', cityRoutes);
 
 app.use(errorHandler);
 

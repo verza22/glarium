@@ -22,17 +22,15 @@ const Register: React.FC = () => {
             password: shapassword
         })
         .then((res) => {
-            if (res) {
-                const response = res.data;
-                setUser({
-                    userId: response.userId,
-                    cityId: response.cityId,
-                    islandId: response.islandId,
-                    bearerToken: response.token,
-                    email: email
-                });
-                navigate("/city/" + response.cityId);
-            }
+            const response = res.data;
+            setUser({
+                userId: response.userId,
+                cityId: response.cityId,
+                islandId: response.islandId,
+                bearerToken: response.token,
+                email: email
+            });
+            navigate("/city/" + response.cityId);
         })
     };
 

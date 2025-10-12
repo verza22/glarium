@@ -14,30 +14,9 @@ const RoutesApp = () => <>
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<h1>404, Page not found</h1>} />
 
-            <Route
-                path="/city/:cityId"
-                element={
-                    <ProtectedRoute>
-                        <City />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/island/:islandId"
-                element={
-                    <ProtectedRoute>
-                        <Island />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/world"
-                element={
-                    <ProtectedRoute>
-                        <World />
-                    </ProtectedRoute>
-                }
-            />
+            <Route path="/city/:cityId" element={<ProtectedRoute><City /></ProtectedRoute>} />
+            <Route path="/island/:islandId" element={<ProtectedRoute><Island /></ProtectedRoute>} />
+            <Route path="/world" element={<ProtectedRoute><World /></ProtectedRoute>} />
         </Routes>
     </BrowserRouter>
 </>;

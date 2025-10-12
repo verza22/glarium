@@ -8,100 +8,152 @@
 	},
 	"item": [
 		{
-			"name": "Register",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Luis Zurita\",\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Luis Zurita\",\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/auth/register",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"auth",
+								"register"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "asd",
+									"disabled": true
+								}
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{API_ROUTE}}api/auth/register",
-					"host": [
-						"{{API_ROUTE}}api"
-					],
-					"path": [
-						"auth",
-						"register"
-					],
-					"query": [
-						{
-							"key": "email",
-							"value": "asd",
-							"disabled": true
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/auth/login",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
 						}
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "City",
+			"item": [
+				{
+					"name": "CityGetInfo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cityId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/city/getInfo",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"city",
+								"getInfo"
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "{{API_ROUTE}}api/auth/login",
-					"host": [
-						"{{API_ROUTE}}api"
-					],
-					"path": [
-						"auth",
-						"login"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Config",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{BEARER_TOKEN}}",
-							"type": "string"
+			"name": "User",
+			"item": [
+				{
+					"name": "Config",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/user/config",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"user",
+								"config"
+							]
 						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}"
-				},
-				"url": {
-					"raw": "{{API_ROUTE}}api/user/config",
-					"host": [
-						"{{API_ROUTE}}api"
-					],
-					"path": [
-						"user",
-						"config"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }

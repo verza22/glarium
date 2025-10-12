@@ -1,7 +1,7 @@
 import React from "react";
-import shipsImg from "../../../assets/img/icon/ships.jpg";
-import goldImg from "../../../assets/img/icon/gold.jpg";
-import premiumImg from "../../../assets/img/icon/premium.png";
+import shipsImg from "../../assets/img/icon/ships.jpg";
+import goldImg from "../../assets/img/icon/gold.jpg";
+import premiumImg from "../../assets/img/icon/premium.png";
 import { useTranslation } from "react-i18next";
 
 const UserResources: React.FC = () => {

@@ -1,9 +1,9 @@
 import React from "react";
-import woodIcon from "../../../assets/img/icon/icon_wood.png";
-import wineIcon from "../../../assets/img/icon/icon_wine.png";
-import marbleIcon from "../../../assets/img/icon/icon_marble.png";
-import glassIcon from "../../../assets/img/icon/icon_glass.png";
-import sulfurIcon from "../../../assets/img/icon/icon_sulfur.png";
+import woodIcon from "../../assets/img/icon/icon_wood.png";
+import wineIcon from "../../assets/img/icon/icon_wine.png";
+import marbleIcon from "../../assets/img/icon/icon_marble.png";
+import glassIcon from "../../assets/img/icon/icon_glass.png";
+import sulfurIcon from "../../assets/img/icon/icon_sulfur.png";
 import { useTranslation } from "react-i18next";
 
 const Resources: React.FC = () => {

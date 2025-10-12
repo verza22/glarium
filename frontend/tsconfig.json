@@ -11,7 +11,8 @@
     "paths": {
       "@shared/*": ["../shared/*"]
     },
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": ["src", "../shared"]
 }

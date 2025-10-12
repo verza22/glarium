@@ -1,10 +1,10 @@
 import React from "react";
 import Navigation from "./Navigation";
-import Advisors from "./Advisors";
-import headerBg from "../../assets/img/icon/header_bg.jpg";
+import Advisors from "./../components/Advisors";
+import headerBg from "../assets/img/icon/header_bg.jpg";
 import { useTranslation } from "react-i18next";
-import packageJson from "../../../package.json";
-import { useUserStore } from "../../store/userStore";
+import packageJson from "../../package.json";
+import { useUserStore } from "../store/userStore";
 
 const Layout: React.FC = () => {
     const { t } = useTranslation();

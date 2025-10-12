@@ -1,9 +1,9 @@
 import React from "react";
-import containerImg from "../../assets/img/advisor/container.png";
-import mayorImg from "../../assets/img/advisor/mayor.png";
-import generalImg from "../../assets/img/advisor/general.png";
-import scientistImg from "../../assets/img/advisor/scientist.png";
-import diplomatImg from "../../assets/img/advisor/diplomat.png";
+import containerImg from "../assets/img/advisor/container.png";
+import mayorImg from "../assets/img/advisor/mayor.png";
+import generalImg from "../assets/img/advisor/general.png";
+import scientistImg from "../assets/img/advisor/scientist.png";
+import diplomatImg from "../assets/img/advisor/diplomat.png";
 import { useTranslation } from "react-i18next";
 
 const Advisors: React.FC = () => {

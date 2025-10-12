@@ -1,7 +1,7 @@
 import React from "react";
-import DragToScroll from "../components/DragToScroll";
+import DragToScroll from "../containers/DragToScroll";
 import OceanImg from "../assets/img/world/ocean.png";
-import Layout from "../features/layout/Layout";
+import Layout from "../containers/Layout";
 
 const WorldUI: React.FC = () => {
     return <>

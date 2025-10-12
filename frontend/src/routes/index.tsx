@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Login from "./../views/Login";
-import Register from "./../views/Register";
-import City from "./../views/City";
-import Island from "./../views/Island";
-import World from "./../views/World";
+import Login from "./../screens/Login";
+import Register from "./../screens/Register";
+import City from "./../screens/City";
+import Island from "./../screens/Island";
+import World from "./../screens/World";
 import ProtectedRoute from "./ProtectedRoute";
 
 const RoutesApp = () => <>

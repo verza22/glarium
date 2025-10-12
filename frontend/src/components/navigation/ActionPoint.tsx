@@ -1,5 +1,5 @@
 import React from "react";
-import actionImg from "../../../assets/img/icon/action_point.png";
+import actionImg from "../../assets/img/icon/action_point.png";
 import { useTranslation } from "react-i18next";
 
 const ActionPoint: React.FC = () => {

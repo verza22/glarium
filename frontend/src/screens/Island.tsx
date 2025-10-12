@@ -1,9 +1,9 @@
 import React from "react";
-import DragToScroll from "../components/DragToScroll";
+import DragToScroll from "../containers/DragToScroll";
 
 import OceanImg from "../assets/img/island/ocean.jpg";
 import IslandImg from "../assets/img/island/0.jpg";
-import Layout from "../features/layout/Layout";
+import Layout from "../containers/Layout";
 import { useParams } from "react-router-dom";
 // import Cities from "../components/island/Cities";
 // import Resources from "../components/island/Resources";

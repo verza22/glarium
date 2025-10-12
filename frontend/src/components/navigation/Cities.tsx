@@ -1,7 +1,7 @@
 import React from "react";
-import navSelected from "../../../assets/img/icon/navigation-selected.jpg";
-import navOther from "../../../assets/img/icon/navigation-other.jpg";
-import navFooter from "../../../assets/img/icon/navigation-footer.jpg";
+import navSelected from "../../assets/img/icon/navigation-selected.jpg";
+import navOther from "../../assets/img/icon/navigation-other.jpg";
+import navFooter from "../../assets/img/icon/navigation-footer.jpg";
 import { useTranslation } from "react-i18next";
 
 const Cities: React.FC = () => {

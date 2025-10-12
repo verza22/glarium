@@ -1,5 +1,5 @@
 import React from "react";
-import populationIcon from "../../../assets/img/icon/population.png";
+import populationIcon from "../../assets/img/icon/population.png";
 import { useTranslation } from "react-i18next";
 
 const Population: React.FC = () => {

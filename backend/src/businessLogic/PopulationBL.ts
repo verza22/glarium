@@ -211,4 +211,9 @@ export class PopulationBL {
             }
         }
     }
+
+    public static getAvailablePopulation(cityPopulation: Prisma.CityPopulationGetPayload<{}>): number {
+        const { population, workerForest, workerMine, scientists  } = cityPopulation;
+        return Math.floor(population - (workerForest + workerMine + scientists));
+    }
 }

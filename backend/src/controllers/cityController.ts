@@ -6,24 +6,29 @@ import { MovementBL } from './../businessLogic/movementBL';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
 import { RequestCityGetInfo } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
+import { CityFlat, CityPopulation } from '@shared/types/models';
+import { ResponseCityGetInfo } from '@shared/types/responses';
 
 export class CityController {
 
-    public async getInfo(req: Request, res: Response){
-        const { cityId } : RequestCityGetInfo = validateFields(req, [
+    public async getInfo(req: Request, res: Response) {
+        const { cityId }: RequestCityGetInfo = validateFields(req, [
             { name: "cityId", type: "number", required: true }
         ]);
         const userId = req.authUser.userId;
-        res.json({
+
+        const response: ResponseCityGetInfo = {
             cities: await this.getCities(userId),
             population: await this.getPopulation(userId, cityId),
             actionPoints: await this.getActionPoint(userId, cityId),
-            resources: await this.getResources(userId, cityId)
-        });
+            resources: await this.getResources(userId, cityId),
+            userResources: await this.getUserResources(userId)
+        };
+
+        res.json(response);
     }
 
-    private async getCities(userId: number) {
-
+    private async getCities(userId: number): Promise<CityFlat[]> {
         const userCities = await prisma.userCity.findMany({
             where: { userId, city: { constructedAt: { not: null } } },
             include: {
@@ -37,21 +42,25 @@ export class CityController {
             }
         });
 
-        const data = userCities.map(uc => ({
-            id: uc.cityId,
-            name: uc.city.name,
-            capital: uc.capital,
-            island_id: uc.city.islandCity?.island.id,
-            x: uc.city.islandCity?.island.x,
-            y: uc.city.islandCity?.island.y,
-            type: uc.city.islandCity?.island.type
-        }));
+        const data: CityFlat[] = userCities.map(uc => {
+            if(!uc.city.islandCity)
+                throw new Error("Invalid islandCity");
+
+            return {
+                id: uc.cityId,
+                name: uc.city.name,
+                capital: uc.capital,
+                island_id: uc.city.islandCity?.island.id,
+                x: uc.city.islandCity?.island.x,
+                y: uc.city.islandCity?.island.y,
+                type: uc.city.islandCity?.island.type
+            }
+        });
 
         return data;
     }
 
-    private async getPopulation(userId: number, cityId:number) {
-
+    private async getPopulation(userId: number, cityId: number) {
         // Check ownership
         const city = await prisma.city.findUnique({ where: { id: cityId }, include: { population: true, userCities: true } });
         if (!city || city.userCities[0].userId !== userId) {
@@ -63,31 +72,27 @@ export class CityController {
             await PopulationBL.satisfaction(userId, city.population, false);
 
             return {
-                population_max: city.population.populationMax,
-                population: city.population.population,
-                worker_forest: city.population.workerForest,
-                worker_mine: city.population.workerMine,
-                scientists_max: city.population.scientistsMax,
-                scientists: city.population.scientists,
-                wine: city.population.wine,
-                wine_max: city.population.wineMax
+                population: Math.floor(city.population.population),
+                populationAvailable: PopulationBL.getAvailablePopulation(city.population)
             };
         } else {
             throw new Error("City population error");
         }
     }
 
-    private async getActionPoint(userId: number, cityId:number) {
-
+    private async getActionPoint(userId: number, cityId: number) {
         const city = await prisma.city.findUnique({ where: { id: cityId } });
-        if (!city) throw new Error("City not found" );
+        if (!city) throw new Error("City not found");
 
         const pointUsed = await MovementBL.getActionPoint(city.id, userId);
-        return { point_max: city.apoint, point: city.apoint - pointUsed };
+        return { pointMax: city.apoint, point: city.apoint - pointUsed };
     }
 
-    private async getResources(userId: number, cityId:number) {
+    private async getUserResources(userId: number) {
+        return prisma.userResource.findFirstOrThrow({ where: { userId }, select: { gold: true, tradeShip: true, tradeShipAvailable: true } });
+    }
 
+    private async getResources(userId: number, cityId: number) {
         const city = await prisma.city.findUnique({ where: { id: cityId }, include: { userCities: true } });
         if (!city || city.userCities[0].userId !== userId) throw new Error("Unauthorized");
 

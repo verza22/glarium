@@ -2,7 +2,12 @@ import React from "react";
 import populationIcon from "../../assets/img/icon/population.png";
 import { useTranslation } from "react-i18next";
 
-const Population: React.FC = () => {
+interface PopulationProps {
+    population: number,
+    populationAvailable: number
+}
+
+const Population: React.FC<PopulationProps> = ({population, populationAvailable}) => {
     const { t } = useTranslation();
     
     return (
@@ -11,7 +16,7 @@ const Population: React.FC = () => {
                 className="w-[35px] h-[23px] mr-[5px] bg-cover"
                 style={{ backgroundImage: `url(${populationIcon})` }}
             ></div>
-            <div>1000 (500)</div>
+            <div>{population} ({populationAvailable})</div>
         </div>
     );
 };

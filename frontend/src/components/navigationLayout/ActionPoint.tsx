@@ -2,7 +2,12 @@ import React from "react";
 import actionImg from "../../assets/img/icon/action_point.png";
 import { useTranslation } from "react-i18next";
 
-const ActionPoint: React.FC = () => {
+interface ActionPointProps {
+    pointMax: number, 
+    point: number
+}
+
+const ActionPoint: React.FC<ActionPointProps> = ({point, pointMax}) => {
     const { t } = useTranslation();
     
     return (
@@ -11,7 +16,7 @@ const ActionPoint: React.FC = () => {
                 className="w-[25px] h-[25px] mr-2"
                 style={{ backgroundImage: `url(${actionImg})`, backgroundSize: "cover" }}
             ></div>
-            <div>0/0</div>
+            <div>{point}/{pointMax}</div>
         </div>
     );
 };

@@ -3,8 +3,13 @@ import navSelected from "../../assets/img/icon/navigation-selected.jpg";
 import navOther from "../../assets/img/icon/navigation-other.jpg";
 import navFooter from "../../assets/img/icon/navigation-footer.jpg";
 import { useTranslation } from "react-i18next";
+import { CityFlat } from "@shared/types/models";
 
-const Cities: React.FC = () => {
+interface CitiesProps {
+    cities: CityFlat[]
+}
+
+const Cities: React.FC<CitiesProps> = ({cities}) => {
     const { t } = useTranslation();
     
     return (
@@ -14,7 +19,11 @@ const Cities: React.FC = () => {
                 title={t("navigation.showCities")}
                 style={{ backgroundImage: `url(${navSelected})` }}
             >
-                <div className="relative top-[2px] left-[6px] text-[11px]">[12:34] Example City</div>
+                {
+                    cities.map(city=>
+                        <div className="relative top-[2px] left-[6px] text-[11px]">[{city.x}:{city.y}] {city.name}</div>
+                    )
+                }
             </div>
 
             {/* <div className="absolute w-full">

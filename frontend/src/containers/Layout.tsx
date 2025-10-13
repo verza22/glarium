@@ -6,12 +6,13 @@ import { useTranslation } from "react-i18next";
 import packageJson from "../../package.json";
 import { useUserStore } from "../store/userStore";
 import { useNavigationLayout } from "../hooks/useNavigationLayout";
+import { useCityGetInfo } from "../hooks/useCityGetInfo";
 
 const Layout: React.FC = () => {
     const { t } = useTranslation();
     const navigationLayout = useNavigationLayout();
-
-    const { clearUser } = useUserStore();
+    const { clearUser, cityId } = useUserStore();
+    const { data } = useCityGetInfo(cityId);
 
     return (
         <div className="fixed top-0 left-0 w-full z-20">
@@ -39,7 +40,9 @@ const Layout: React.FC = () => {
             </div>
 
             <div className="relative-bottom-6">
-                <NavigationLayout navigationLayout={navigationLayout}/>
+                {
+                    data && <NavigationLayout navigationLayout={navigationLayout} data={data}/>
+                }
                 <Advisors />
             </div>
         </div>

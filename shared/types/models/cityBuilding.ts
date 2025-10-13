@@ -8,4 +8,15 @@ export interface CityBuilding {
     buildingLevelId: number;
     cityId: number;
     position: number;
-  }
+}
+
+
+export interface CityFlat {
+    id: number;
+    name: string;
+    capital: boolean;
+    island_id: number;
+    x: number;
+    y: number;
+    type: number;
+}

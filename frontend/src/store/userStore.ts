@@ -2,11 +2,11 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type UserState = {
-    userId: number | null;
-    cityId: number | null;
-    islandId: number | null;
-    bearerToken: string | null;
-    email: string | null;
+    userId: number
+    cityId: number
+    islandId: number
+    bearerToken: string
+    email: string
     setUser: (data: Partial<UserState>) => void;
     clearUser: () => void;
 };
@@ -14,21 +14,21 @@ type UserState = {
 export const useUserStore = create<UserState>()(
     persist(
         (set) => ({
-            userId: null,
-            cityId: null,
-            islandId: null,
-            bearerToken: null,
-            email: null,
+            userId: 0,
+            cityId: 0,
+            islandId: 0,
+            bearerToken: "",
+            email: "",
 
             setUser: (data) => set((state) => ({ ...state, ...data })),
 
             clearUser: () =>
                 set({
-                    userId: null,
-                    cityId: null,
-                    islandId: null,
-                    bearerToken: null,
-                    email: null,
+                    userId: 0,
+                    cityId: 0,
+                    islandId: 0,
+                    bearerToken: "",
+                    email: ""
                 }),
         }),
         {

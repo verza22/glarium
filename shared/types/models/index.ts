@@ -33,3 +33,4 @@ export * from './combatReportDetail';
 export * from './islandDonation';
 export * from './message';
 export * from './mayor';
+export * from './resources';

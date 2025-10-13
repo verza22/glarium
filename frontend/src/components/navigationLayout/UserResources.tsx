@@ -4,7 +4,13 @@ import goldImg from "../../assets/img/icon/gold.jpg";
 import premiumImg from "../../assets/img/icon/premium.png";
 import { useTranslation } from "react-i18next";
 
-const UserResources: React.FC = () => {
+interface UserResourcesProps {
+    gold: number,
+    ships: number,
+    shipsAvailable: number
+}
+
+const UserResources: React.FC<UserResourcesProps> = ({gold, ships, shipsAvailable}) => {
     const { t } = useTranslation();
 
     return (
@@ -24,7 +30,7 @@ const UserResources: React.FC = () => {
                 title={t("resources.ships")}
                 style={{ backgroundImage: `url(${shipsImg})`, backgroundPositionY: "0" }}
             >
-                <div>5/10</div>
+                <div>{shipsAvailable}/{ships}</div>
             </div>
 
             <div
@@ -32,7 +38,7 @@ const UserResources: React.FC = () => {
                 title={t("resources.gold")}
                 style={{ backgroundImage: `url(${goldImg})`, backgroundPositionY: "0" }}
             >
-                <div>1500</div>
+                <div>{gold}</div>
             </div>
         </div>
     );

@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     const userId = useUserStore((state) => state.userId);
 
-    if (userId) {
+    if (userId > 0) {
         return children;
     } else {
         return <Navigate to="/" replace />;

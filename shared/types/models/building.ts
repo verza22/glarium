@@ -4,4 +4,4 @@ export interface Building {
     name: string;
     image: string;
     text: string;
-  }
+}

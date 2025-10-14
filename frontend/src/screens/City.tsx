@@ -7,12 +7,14 @@ import Layout from "../containers/Layout";
 import CityImg from "./../assets/img/city/city.jpg";
 import { useParams } from "react-router-dom";
 import axios from "./../utils/axios";
+import { useGetBuildings } from "../hooks/useBuildings";
 
 const City = () => {
     const { t, i18n } = useTranslation();
     const { cityId } = useParams<{ cityId: string }>();
+    const { data } = useGetBuildings(Number(cityId));
 
-    const [buildingList] = useState<BuildingPosition[]>([
+    const [groundList] = useState<BuildingPosition[]>([
         { top: 370, left: 1100 },
         { top: 350, left: 740 },
         { top: 258, left: 908 },
@@ -51,7 +53,10 @@ const City = () => {
                             backgroundImage: `url(${CityImg})`,
                         }}
                     >
-                        <Building buildingList={buildingList} />
+                        {
+                            data &&
+                            <Building groundList={groundList} buildingList={data} />
+                        }
                     </div>
                 </DragToScroll>
                 <Modal title="testing">

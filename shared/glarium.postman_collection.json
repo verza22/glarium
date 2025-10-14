@@ -154,6 +154,48 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Building",
+			"item": [
+				{
+					"name": "Buildings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cityId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/building/buildings",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"building",
+								"buildings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

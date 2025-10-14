@@ -3,46 +3,50 @@ import prisma from '../dataAccess/prisma/prisma'
 import { CityBL } from './../businessLogic/cityBL';
 import { BuildingBL } from './../businessLogic/buildingBL';
 import dayjs from 'dayjs';
+import { ResponseBuildings } from '@shared/types/responses';
+import { RequestBuildings } from '@shared/types/requests';
+import { validateFields } from '../utils/validateFields';
 
-export class WorldController {
+export class BuildingController {
 
-    public static async buildings(req: Request, res: Response): Promise<void> {
-        try {
-            // Get the player's cities
-            const userId = Number(req.params.userId);
-            const cities = await CityBL.myCities(userId);
+    public async buildings(req: Request, res: Response): Promise<void> {
+        const { cityId }: RequestBuildings = validateFields(req, [
+            { name: "cityId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-            // Update construction time for the buildings of the cities
-            await BuildingBL.updateConstructedTime(cities, 1);
+        //check permissions
+        const userCities = await prisma.userCity.findMany({where: { userId, cityId: cityId }});
+        if(userCities.length === 0)
+            throw new Error("User doesn't have permission for see this city");
 
-            // Get city buildings that belong to the player's cities
-            const buildings = await prisma.cityBuilding.findMany({
-                where: {
-                    cityId: { in: cities.map((c: any) => c.id) },
-                },
-                include: {
-                    buildingLevel: true, // relation with building_level
-                },
-            });
+        // Update construction time for the buildings of the cities
+        await BuildingBL.updateConstructedTime(cityId, 1);
 
-            // Map the buildings to return the required structure
-            const result = buildings.map((building) => ({
-                id: building.id,
-                city_id: building.cityId,
-                position: building.position,
-                building_id: building.buildingLevel.buildingId,
-                level: building.buildingLevel.level,
-                constructed_at: building.constructedAt,
-            }));
+        // Get city buildings that belong to the player's cities
+        const buildings = await prisma.cityBuilding.findMany({
+            where: {
+                cityId: userId,
+            },
+            include: {
+                buildingLevel: true, // relation with building_level
+            },
+        });
 
-            res.json(result);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Internal server error" });
-        }
+        // Map the buildings to return the required structure
+        const result: ResponseBuildings[] = buildings.map((building) => ({
+            id: building.id,
+            cityId: building.cityId,
+            position: building.position,
+            buildingId: building.buildingLevel.buildingId,
+            level: building.buildingLevel.level,
+            constructedAt: building.constructedAt ? building.constructedAt : new Date()
+        }));
+
+        res.json(result);
     }
 
-    public static async buildingsAvailable(req: Request, res: Response): Promise<void> {
+    public async buildingsAvailable(req: Request, res: Response): Promise<void> {
         try {
             // Validate position param
             const position = parseInt(req.body.position, 10);
@@ -193,7 +197,7 @@ export class WorldController {
         }
     }
 
-    public static async create(req: Request, res: Response): Promise<void> {
+    public async create(req: Request, res: Response): Promise<void> {
         try {
             const cityId = parseInt(req.params.cityId, 10);
             const userId = Number(req.params.userId);
@@ -352,7 +356,7 @@ export class WorldController {
         }
     }
 
-    public static async nextLevel(req: Request, res: Response): Promise<void> {
+    public async nextLevel(req: Request, res: Response): Promise<void> {
         try {
             const buildingId = parseInt(req.params.buildingId, 10);
             const { level } = req.body;
@@ -411,7 +415,7 @@ export class WorldController {
         }
     }
 
-    public static async upgrade(req: Request, res: Response): Promise<void> {
+    public async upgrade(req: Request, res: Response): Promise<void> {
         try {
             const cityBuildingId = parseInt(req.params.cityBuildingId, 10);
             const userId = Number(req.params.userId);

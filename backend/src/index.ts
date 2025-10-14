@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import cityRoutes from './routes/cityRoutes';
+import buildingRoutes from './routes/buildingRoutes';
 import { errorHandler } from "./middleware/errorHandler";
 const cors = require("cors");
 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/city', cityRoutes);
+app.use('/api/building', buildingRoutes);
 
 app.use(errorHandler);
 

@@ -3,14 +3,14 @@ import prisma from '../dataAccess/prisma/prisma'
 import { CityBL } from './../businessLogic/cityBL';
 import { BuildingBL } from './../businessLogic/buildingBL';
 import dayjs from 'dayjs';
-import { ResponseBuildings } from '@shared/types/responses';
-import { RequestBuildings } from '@shared/types/requests';
+import { ResponseBuildingGetInfo } from '@shared/types/responses';
+import { RequestBuildingGetInfo } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
 
 export class BuildingController {
 
-    public async buildings(req: Request, res: Response): Promise<void> {
-        const { cityId }: RequestBuildings = validateFields(req, [
+    public async getInfo(req: Request, res: Response): Promise<void> {
+        const { cityId }: RequestBuildingGetInfo = validateFields(req, [
             { name: "cityId", type: "number", required: true }
         ]);
         const userId = req.authUser.userId;
@@ -34,7 +34,7 @@ export class BuildingController {
         });
 
         // Map the buildings to return the required structure
-        const result: ResponseBuildings[] = buildings.map((building) => ({
+        const result: ResponseBuildingGetInfo[] = buildings.map((building) => ({
             id: building.id,
             cityId: building.cityId,
             position: building.position,

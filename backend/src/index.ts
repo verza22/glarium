@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import cityRoutes from './routes/cityRoutes';
+import islandRoutes from './routes/islandRoutes';
 import buildingRoutes from './routes/buildingRoutes';
 import { errorHandler } from "./middleware/errorHandler";
 const cors = require("cors");
@@ -24,6 +25,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/city', cityRoutes);
 app.use('/api/building', buildingRoutes);
+app.use('/api/island', islandRoutes);
 
 app.use(errorHandler);
 

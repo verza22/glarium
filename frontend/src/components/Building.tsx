@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Ground from "./../assets/img/city/ground.png"
 
 
-import { ResponseBuildings } from '@shared/types/responses';
+import { ResponseBuildingGetInfo } from '@shared/types/responses';
 import BuildingImage from './BuildingImage';
 
 export interface BuildingPosition {
@@ -12,7 +12,7 @@ export interface BuildingPosition {
 
 interface BuildingProps {
     groundList: BuildingPosition[],
-    buildingList: ResponseBuildings[]
+    buildingList: ResponseBuildingGetInfo[]
 }
 
 const Building: React.FC<BuildingProps> = ({ groundList, buildingList }) => {

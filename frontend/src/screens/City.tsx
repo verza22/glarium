@@ -5,11 +5,11 @@ import Building, { BuildingPosition } from "../components/Building";
 import Layout from "../containers/Layout";
 import CityImg from "./../assets/img/city/city.jpg";
 import { useParams } from "react-router-dom";
-import { useGetBuildings } from "../hooks/useBuildings";
+import { useBuildingGetInfo } from "../hooks/useBuildingGetInfo";
 
 const City = () => {
     const { cityId } = useParams<{ cityId: string }>();
-    const { data } = useGetBuildings(Number(cityId));
+    const { data } = useBuildingGetInfo(Number(cityId));
 
     const [groundList] = useState<BuildingPosition[]>([
         { top: 370, left: 1100 },

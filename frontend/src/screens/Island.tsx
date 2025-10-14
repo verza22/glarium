@@ -5,14 +5,15 @@ import OceanImg from "../assets/img/island/ocean.jpg";
 import IslandImg from "../assets/img/island/0.jpg";
 import Layout from "../containers/Layout";
 import { useParams } from "react-router-dom";
-// import Cities from "../components/island/Cities";
-// import Resources from "../components/island/Resources";
+import { useIslandGetInfo } from "../hooks/useIslandGetInfo";
+import IslandCities from "../components/IslandCities";
+import IslandResources from "../components/IslandResources";
 
 const IslandUI: React.FC = () => {
 
     const { islandId } = useParams<{ islandId: string }>();
-    console.log("islandId: "+islandId)
-    
+    const { data } = useIslandGetInfo(Number(islandId));
+
     return <>
         <Layout />
         <div className="cursor-grab h-full w-full absolute overflow-hidden">
@@ -25,8 +26,23 @@ const IslandUI: React.FC = () => {
                         className="absolute top-[430px] left-[500px] w-[1386px] h-[924px] bg-cover bg-no-repeat z-10"
                         style={{ backgroundImage: `url(${IslandImg})` }}
                     >
-                        {/* <Cities />
-            <Resources /> */}
+                        {
+                            data && <>
+                                <IslandCities 
+                                    id={data.id}
+                                    name={data.name}
+                                    x={data.x}
+                                    y={data.y}
+                                    cities={data.cities}
+                                />
+                                <IslandResources
+                                    type={data.type}
+                                    islandId={data.id}
+                                    levelForest={data.levelForest}
+                                    levelMine={data.levelMine}
+                                />
+                            </>
+                        }
                     </div>
                 </div>
             </DragToScroll>

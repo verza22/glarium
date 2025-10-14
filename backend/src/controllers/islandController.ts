@@ -7,82 +7,86 @@ import { CityBL } from './../businessLogic/cityBL';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
 import { UnitBL } from './../businessLogic/unitBL';
 import { addSeconds } from 'date-fns';
+import { validateFields } from '../utils/validateFields';
+import { RequestIslandGetInfo } from '@shared/types/requests';
+import { ResponseIslandGetInfo } from '@shared/types/responses';
 
 export class IslandController {
-    static async show(req: Request, res: Response) {
-        try {
-            const islandId = parseInt(req.params.id, 10);
-            const userId = Number(req.params.userId);
+    public async getInfo(req: Request, res: Response) {
+        const { islandId }: RequestIslandGetInfo = validateFields(req, [
+            { name: "islandId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-            // Get island with related forest, mine, and cities
-            const island = await prisma.island.findUnique({
-                where: { id: islandId },
-                include: {
-                    forest: true,
-                    mine: true,
-                    islandCity: {
-                        include: {
-                            city: {
-                                include: {
-                                    userCities: {
-                                        include: { user: true },
-                                    },
+        // Get island with related forest, mine, and cities
+        const island = await prisma.island.findUnique({
+            where: { id: islandId },
+            include: {
+                forest: true,
+                mine: true,
+                islandCity: {
+                    include: {
+                        city: {
+                            include: {
+                                userCities: {
+                                    include: { user: true },
                                 },
+                                cityBuildings: {
+                                    include: { buildingLevel: true }
+                                }
                             },
                         },
                     },
                 },
-            });
+            },
+        });
 
-            if (!island) {
-                return res.status(404).json({ error: "Island not found" });
-            }
-
-            // Get user cities for this user
-            const userCities = await prisma.userCity.findMany({
-                where: { userId: userId },
-                select: { cityId: true },
-            });
-            const userCityIds = userCities.map((uc) => uc.cityId);
-
-            // Build island data
-            const data: any = {
-                id: island.id,
-                x: island.x,
-                y: island.y,
-                name: island.name,
-                type: island.type,
-                level_forest: island.forest?.level ?? 0,
-                level_mine: island.mine?.level ?? 0,
-                cities: island.islandCity.map(async (islandCity) => {
-                    const city = islandCity.city;
-                    const cityData: any = {
-                        city_id: islandCity.cityId,
-                        position: islandCity.position,
-                        // If city not constructed, level = 0
-                        level:
-                            city.constructedAt === null
-                                ? 0
-                                : (await BuildingBL.building(city.id, 1))?.buildingLevel.level,
-                        constructed_at: city.constructedAt,
-                        user: city.userCities[0]?.user?.name ?? null,
-                        user_id: city.userCities[0]?.userId ?? null,
-                        name: city.name,
-                        // true if the city belongs to current user
-                        type: userCityIds.includes(city.id),
-                    };
-                    return cityData;
-                }),
-            };
-
-            return res.json(data);
-        } catch (error) {
-            console.error("Error showing island:", error);
-            return res.status(500).json({ error: "Internal server error" });
+        if (!island) {
+            return res.status(404).json({ error: "Island not found" });
         }
+
+        // Get user cities for this user
+        const userCities = await prisma.userCity.findMany({
+            where: { userId: userId },
+            select: { cityId: true },
+        });
+        const userCityIds = userCities.map((uc) => uc.cityId);
+
+        // Build island data
+        const data: ResponseIslandGetInfo = {
+            id: island.id,
+            x: island.x,
+            y: island.y,
+            name: island.name,
+            type: island.type,
+            levelForest: island.forest?.level ?? 0,
+            levelMine: island.mine?.level ?? 0,
+            cities: island.islandCity.map((islandCity) => {
+                const city = islandCity.city;
+                let level = 1;
+                const townHallIndex = islandCity.city.cityBuildings.findIndex(b=> b.buildingLevel.buildingId === 1);
+                if(townHallIndex >= 0)
+                    level = islandCity.city.cityBuildings[townHallIndex].buildingLevel.level;
+
+                return {
+                    cityId: islandCity.cityId,
+                    position: islandCity.position,
+                    // If city not constructed, level = 0
+                    level:level,
+                    constructedAt: city.constructedAt ? city.constructedAt : new Date(),
+                    user: city.userCities[0]?.user?.name ?? null,
+                    userId: city.userCities[0]?.userId ?? null,
+                    name: city.name,
+                    // true if the city belongs to current user
+                    type: userCityIds.includes(city.id),
+                };
+            }),
+        };
+
+        return res.json(data);
     }
 
-    static async donation(req: Request, res: Response) {
+    public async donation(req: Request, res: Response) {
         try {
             const islandId = parseInt(req.params.id, 10);
             const { type } = req.body; // expected boolean (0 = mine, 1 = forest)
@@ -179,7 +183,7 @@ export class IslandController {
         }
     }
 
-    static async setWorker(req: Request, res: Response) {
+    public async setWorker(req: Request, res: Response) {
         try {
             const cityId = parseInt(req.params.id, 10);
             const userId = Number(req.params.userId);
@@ -271,7 +275,7 @@ export class IslandController {
     }
 
     // Main entrypoint for donation
-    static async setDonation(req: Request, res: Response) {
+    public async setDonation(req: Request, res: Response) {
         try {
             const islandId = parseInt(req.params.id, 10);
             const userId = Number(req.params.userId);
@@ -310,9 +314,9 @@ export class IslandController {
 
             // Dispatch based on type
             if (type) {
-                return IslandController.donatedForest(res, islandId, city, wood);
+                return this.donatedForest(res, islandId, city, wood);
             } else {
-                return IslandController.donatedMine(res, islandId, city, wood);
+                return this.donatedMine(res, islandId, city, wood);
             }
         } catch (error) {
             console.error("Error in setDonation:", error);
@@ -321,7 +325,7 @@ export class IslandController {
     }
 
     // Donate to the forest
-    private static async donatedForest(res: Response, islandId: number, cityId: number, wood: number) {
+    private async donatedForest(res: Response, islandId: number, cityId: number, wood: number) {
         // Clear expired construction
         await prisma.island.updateMany({
             where: { id: islandId, forestConstructedAt: { lt: new Date() } },
@@ -419,7 +423,7 @@ export class IslandController {
     }
 
     // Donate to the mine
-    private static async donatedMine(res: Response, islandId: number, cityId: number, wood: number) {
+    private async donatedMine(res: Response, islandId: number, cityId: number, wood: number) {
         // Clear expired construction
         await prisma.island.updateMany({
             where: { id: islandId, mineConstructedAt: { lt: new Date() } },

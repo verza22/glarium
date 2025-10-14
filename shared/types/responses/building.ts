@@ -1,4 +1,4 @@
-export interface ResponseBuildings {
+export interface ResponseBuildingGetInfo {
     id: number;
     cityId: number;
     position: number;

@@ -1,3 +1,3 @@
-export interface RequestBuildings {
+export interface RequestBuildingGetInfo {
     cityId: number
 }

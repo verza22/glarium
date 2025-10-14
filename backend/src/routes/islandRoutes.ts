@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { BuildingController } from '../controllers/buildingController';
+import { IslandController } from '../controllers/islandController';
 import { authenticate } from "./../middleware/authMiddleware";
 
 const router = Router();
-const controller = new BuildingController();
+const controller = new IslandController();
 
 router.post('/getInfo', authenticate, controller.getInfo.bind(controller));
 

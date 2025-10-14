@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import DragToScroll from "../containers/DragToScroll";
 import Modal from "../containers/modal/Modal";
 import Building, { BuildingPosition } from "../components/Building";
 import Layout from "../containers/Layout";
 import CityImg from "./../assets/img/city/city.jpg";
 import { useParams } from "react-router-dom";
-import axios from "./../utils/axios";
 import { useGetBuildings } from "../hooks/useBuildings";
 
 const City = () => {
-    const { t, i18n } = useTranslation();
     const { cityId } = useParams<{ cityId: string }>();
     const { data } = useGetBuildings(Number(cityId));
 
@@ -31,16 +28,6 @@ const City = () => {
         { top: 230, left: 700 },
         { top: 685, left: 900 },
     ]);
-    console.log("cityID: " + cityId)
-
-    useEffect(() => {
-        axios.post("city/getInfo", {
-            cityId: Number(cityId)
-        })
-            .then(res => {
-                console.log(res.data)
-            })
-    }, []);
 
     return (
         <>

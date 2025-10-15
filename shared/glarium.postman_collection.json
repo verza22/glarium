@@ -77,7 +77,7 @@
 			"name": "City",
 			"item": [
 				{
-					"name": "CityGetInfo",
+					"name": "GetInfo",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -159,7 +159,7 @@
 			"name": "Building",
 			"item": [
 				{
-					"name": "Buildings",
+					"name": "GetInfo",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -183,13 +183,97 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_ROUTE}}api/building/buildings",
+							"raw": "{{API_ROUTE}}api/building/getInfo",
 							"host": [
 								"{{API_ROUTE}}api"
 							],
 							"path": [
 								"building",
-								"buildings"
+								"getInfo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Island",
+			"item": [
+				{
+					"name": "GetInfo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"islandId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/island/getInfo",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"island",
+								"getInfo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "World",
+			"item": [
+				{
+					"name": "GetIslands",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"x\": 0,\n  \"y\": 41\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/world/getIslands",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"world",
+								"getIslands"
 							]
 						}
 					},

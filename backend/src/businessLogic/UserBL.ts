@@ -19,15 +19,17 @@ export class UserBL {
         if(!user)
             throw new Error("User doesn't exists");
 
-        const userCity = await prisma.userCity.findFirst({ where: { userId: user.id, capital: true }, include: { city: { include: { islandCity: true } } } })
+        const userCity = await prisma.userCity.findFirst({ where: { userId: user.id, capital: true }, include: { city: { include: { islandCity: { include: { island: true } } } } } })
         if(!userCity)
             throw new Error("City doesn't exists");
 
-        let islandId = userCity.city.islandCity?.islandId;
-        if(!islandId)
+        const island = userCity.city.islandCity?.island;
+        if(!island)
             throw new Error("Island doesn't exists");
         
-        return { userId: user.id, cityId: userCity.cityId, islandId };
+        const { x, y, id } = island;
+        
+        return { userId: user.id, cityId: userCity.cityId, islandId: id, x, y };
     }
 
     static async register({ name, email, password }: RequestUserRegister) {
@@ -79,11 +81,16 @@ export class UserBL {
         }
 
         const cityId = await CityBL.createCity(userId, islandId, position, true, dayjs().toDate());
+        const island = await prisma.island.findFirstOrThrow({ where: { id: islandId } });
+
+        const { x, y } = island;
 
         return {
             userId,
             cityId,
-            islandId
+            islandId,
+            x,
+            y
         }
     }
 

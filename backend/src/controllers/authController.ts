@@ -8,12 +8,12 @@ import { RequestUserLogin, RequestUserRegister } from "@shared/types/requests";
 export class AuthController {
 
     public async login(req: Request, res: Response) {
-        const { email, password } : RequestUserLogin = validateFields(req, [
+        const { email, password }: RequestUserLogin = validateFields(req, [
             { name: "email", type: "string", required: true },
             { name: "password", type: "string", required: true }
         ]);
 
-        const { userId, cityId, islandId } = await UserBL.login({ email, password });
+        const { userId, cityId, islandId, x, y } = await UserBL.login({ email, password });
 
         const token = UserBL.generateToken({ userId, email });
 
@@ -22,7 +22,9 @@ export class AuthController {
             token: `Bearer ${token}`,
             userId,
             cityId,
-            islandId
+            islandId,
+            islandX: x,
+            islandY: y
         };
         res.json(response);
     }
@@ -34,7 +36,7 @@ export class AuthController {
             { name: "password", type: "string", required: true }
         ]);
 
-        const { userId, cityId, islandId } = await UserBL.register({ name, email, password });
+        const { userId, cityId, islandId, x, y } = await UserBL.register({ name, email, password });
 
         if (userId > 0 && cityId > 0) {
             const token = UserBL.generateToken({ userId, email });
@@ -44,7 +46,9 @@ export class AuthController {
                 token: `Bearer ${token}`,
                 userId,
                 cityId,
-                islandId
+                islandId,
+                islandX: x,
+                islandY: y
             };
             res.json(response);
         } else {

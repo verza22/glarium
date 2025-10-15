@@ -3,34 +3,16 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "../utils/axios";
-import { ResponseAuth } from "@shared/types/responses";
-import { useUserStore } from "../store/userStore";
+import { useLogin } from "../hooks/useLogin";
 const sha1 = require("js-sha1");
 
 const Login: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { setUser } = useUserStore();
+    const { mutate: login, isPending, isError, error } = useLogin();
 
-    const login = ({ email, password }: { email: string; password: string }) => {
-        const shapassword = sha1(password);
-
-        axios.post<ResponseAuth>("/auth/login", {
-            email,
-            password: shapassword
-        })
-        .then((res) => {
-            const response = res.data;
-            setUser({
-                userId: response.userId,
-                cityId: response.cityId,
-                islandId: response.islandId,
-                bearerToken: response.token,
-                email: email
-            });
-            navigate("/city/" + response.cityId);
-        })
+    const handleLogin = ({ email, password }: { email: string; password: string }) => {
+        login({ email, password: sha1(password) }, { onSuccess: (response) => { navigate("/city/" + response.cityId) } });
     };
 
     const validationSchema = Yup.object({
@@ -52,7 +34,7 @@ const Login: React.FC = () => {
                     initialValues={{ email: "", password: "" }}
                     validationSchema={validationSchema}
                     onSubmit={(values, { setSubmitting }) => {
-                        login(values);
+                        handleLogin(values);
                         setSubmitting(false);
                     }}
                 >

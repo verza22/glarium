@@ -3,35 +3,16 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "../utils/axios";
-import { ResponseAuth } from "@shared/types/responses";
-import { useUserStore } from "../store/userStore";
+import { useRegister } from "../hooks/useRegister";
 const sha1 = require("js-sha1");
 
 const Register: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { setUser } = useUserStore();
+    const { mutate: register, isPending, isError, error } = useRegister();
 
-    const handleRegister = ({ name, email, password }: { name: string; email: string; password: string; }) => {
-        const shapassword = sha1(password);
-
-        axios.post<ResponseAuth>("/auth/register", {
-            name,
-            email,
-            password: shapassword
-        })
-        .then((res) => {
-            const response = res.data;
-            setUser({
-                userId: response.userId,
-                cityId: response.cityId,
-                islandId: response.islandId,
-                bearerToken: response.token,
-                email: email
-            });
-            navigate("/city/" + response.cityId);
-        })
+    const handleRegister = ({ name, email, password }: { name:string, email: string; password: string }) => {
+        register({ name, email, password: sha1(password) }, { onSuccess: (response) => { navigate("/city/" + response.cityId) } });
     };
 
     const validationSchema = Yup.object({

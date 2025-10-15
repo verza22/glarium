@@ -1,15 +1,16 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
+import { validateFields } from '../utils/validateFields';
+import { RequestWorldGetIslands } from '@shared/types/requests';
+import { ResponseWorldGetIslands } from '@shared/types/responses';
 
 export class WorldController {
 
-    public async index(req: Request, res: Response) {
-        const x = Number(req.query.x);
-        const y = Number(req.query.y);
-
-        if (isNaN(x) || isNaN(y)) {
-            return res.status(400).json({ error: "Invalid coordinates" });
-        }
+    public async getIslands(req: Request, res: Response) {
+        const { x, y }: RequestWorldGetIslands = validateFields(req, [
+            { name: "x", type: "number", required: true },
+            { name: "y", type: "number", required: true }
+        ]);
 
         const n = 10;
 
@@ -29,7 +30,7 @@ export class WorldController {
             }
         });
 
-        const result = islands.map(i => ({
+        const result: ResponseWorldGetIslands[] = islands.map(i => ({
             id: i.id,
             name: i.name,
             x: i.x,

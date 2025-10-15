@@ -12,5 +12,7 @@ export interface ResponseAuth {
     token: string,
     userId: number,
     cityId: number,
-    islandId: number
+    islandId: number,
+    islandX: number,
+    islandY: number
 }

@@ -61,7 +61,7 @@ const IslandResources: React.FC<IslandResourcesProps> = ({
   ];
 
   const currentMine =
-    mineImages[type - 1] || { normal: resource1, active: resource1Active };
+    mineImages[type] || { normal: resource1, active: resource1Active };
 
   return (
     <div>

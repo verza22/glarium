@@ -1,14 +1,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type UserState = {
-    userId: number
-    cityId: number
-    islandId: number
-    bearerToken: string
-    email: string
-    setUser: (data: Partial<UserState>) => void;
-    clearUser: () => void;
+interface UserState {
+    userId: number,
+    cityId: number,
+    islandId: number,
+    islandX: number,
+    islandY: number,
+    bearerToken: string,
+    email: string,
+    setUser: (data: Partial<UserState>) => void,
+    clearUser: () => void
 };
 
 export const useUserStore = create<UserState>()(
@@ -17,6 +19,8 @@ export const useUserStore = create<UserState>()(
             userId: 0,
             cityId: 0,
             islandId: 0,
+            islandX: 0,
+            islandY: 0,
             bearerToken: "",
             email: "",
 
@@ -27,6 +31,8 @@ export const useUserStore = create<UserState>()(
                     userId: 0,
                     cityId: 0,
                     islandId: 0,
+                    islandX: 0,
+                    islandY: 0,
                     bearerToken: "",
                     email: ""
                 }),

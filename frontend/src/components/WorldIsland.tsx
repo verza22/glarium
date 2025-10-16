@@ -55,20 +55,6 @@ export const WorldIslands: React.FC<IslandsProps> = ({
     // Handle island click
     const select = async (island: ResponseWorldGetIslands) => {
         navigate(`/island/${island.id}`);
-        // if (xActive === island.x && yActive === island.y) {
-        //   try {
-        //     const res = await axios.get(`/island/${island.id}`);
-        //     // Example: modal or global state logic could go here
-        //     navigate(`/island/${island.id}`, { state: { data: res.data } });
-        //   } catch (err) {
-        //     console.error("Error fetching island:", err);
-        //     // Example: trigger a notification system here
-        //   }
-        // } else {
-        //   setXActive(island.x);
-        //   setYActive(island.y);
-        //   navigate(`/world/${island.x}/${island.y}`);
-        // }
     };
 
     return (

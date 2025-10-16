@@ -13,7 +13,7 @@ interface WindowLeftProps {
 const WindowLeft: React.FC<WindowLeftProps> = ({ title, close, children }) => {
     return (
         <div
-            className="fixed z-[100] bg-[beige] w-[720px] mx-auto left-0 right-0 mt-[120px] rounded-lg shadow-lg touch-none"
+            className="fixed top-0 z-[100] bg-[beige] w-[720px] mx-auto left-0 right-0 mt-[120px] rounded-lg shadow-lg touch-none"
             style={{
                 borderStyle: "solid",
                 borderWidth: "0px 3px",

@@ -10,7 +10,7 @@ import IconGlass from '../../assets/img/icon/icon_glass.png'
 import IconSulfur from '../../assets/img/icon/icon_sulfur.png'
 import IconTime from '../../assets/img/icon/icon_time.png'
 
-type Building = {
+interface Building {
     id: number
     research: boolean
     research_id?: number
@@ -22,18 +22,28 @@ type Building = {
     time?: number
 }
 
-type Info = {
+export interface BuildingListInfo {
     position: number
     data: Building[]
 }
 
-type Props = {
-    info: Info
+export interface BuildingsListModalRef {
+    setInfo: (info: BuildingListInfo) => void;
+}
+
+interface ModalProps {
+    ref: React.Ref<BuildingsListModalRef>
     close: () => void
 }
 
-export default function BuildingsModal({ info, close }: Props) {
-    const { t } = useTranslation()
+
+export default function BuildingsModal({ close, ref }: ModalProps) {
+    const { t } = useTranslation();
+    const [info, setInfo] = React.useState<BuildingListInfo | null>(null);
+
+    React.useImperativeHandle(ref, () => ({
+        setInfo: (info: BuildingListInfo) => setInfo(info)
+    }), [])
 
     return (
         <div className="border rounded p-4">
@@ -41,7 +51,7 @@ export default function BuildingsModal({ info, close }: Props) {
                 <div className="text-sm text-justify mb-3">{t('building.text')}</div>
 
                 <div>
-                    {info.data.map((build, index) => (
+                    {info && info.data.map((build, index) => (
                         <div
                             key={index}
                             className="flex mb-3 pb-3 border-b last:border-b-0 items-center"

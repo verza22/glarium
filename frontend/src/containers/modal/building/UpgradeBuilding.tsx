@@ -1,14 +1,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import BtnUpgrade from '../../../assets/icon/btn_upgrade.jpg'
-import BtnDowngrade from '../../../assets/icon/btn_downgrade.jpg'
-import WoodIcon from '../../../assets/icon/icon_wood.png'
-import WineIcon from '../../../assets/icon/icon_wine.png'
-import MarbleIcon from '../../../assets/icon/icon_marble.png'
-import GlassIcon from '../../../assets/icon/icon_glass.png'
-import SulfurIcon from '../../../assets/icon/icon_sulfur.png'
-import TimeIcon from '../../../assets/icon/icon_time.png'
+import BtnUpgrade from '../../../assets/img/icon/btn_upgrade.jpg'
+import BtnDowngrade from '../../../assets/img/icon/btn_downgrade.jpg'
+import WoodIcon from '../../../assets/img/icon/icon_wood.png'
+import WineIcon from '../../../assets/img/icon/icon_wine.png'
+import MarbleIcon from '../../../assets/img/icon/icon_marble.png'
+import GlassIcon from '../../../assets/img/icon/icon_glass.png'
+import SulfurIcon from '../../../assets/img/icon/icon_sulfur.png'
+import TimeIcon from '../../../assets/img/icon/icon_time.png'
 
 type Props = {
   info: {

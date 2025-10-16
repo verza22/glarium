@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import lightGreenImg from '../../../assets/icon/lightgreen.png'
-import brownImg from '../../../assets/icon/bar_brown.png'
+import lightGreenImg from '../../../assets/img/icon/lightgreen.png'
+// import brownImg from '../../../assets/img/icon/'
 
 type Props = {
   data: {
@@ -57,7 +57,7 @@ export default function BuildingProducer({ data }: Props) {
           <div className="flex-1 flex items-center">{item.value.toFixed(2)}</div>
           <div className="flex-4 h-5 border border-[#c99868] relative bg-gray-200">
             <img src={lightGreenImg} alt="" className="absolute top-0 left-0 h-full w-[100%]" style={{ width: `${item.width}%` }} />
-            <img src={brownImg} alt="" className="absolute top-0 left-0 h-full w-full opacity-50" />
+            {/* <img src={brownImg} alt="" className="absolute top-0 left-0 h-full w-full opacity-50" /> */}
           </div>
         </div>
       ))}

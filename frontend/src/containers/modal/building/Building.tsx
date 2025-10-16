@@ -14,34 +14,41 @@ import Tavern from './Tavern'
 import Barracks from './barracks/Barracks'
 import UnitQueue from './barracks/UnitQueue'
 
-type BuildingInfo = {
-    building_id: number
-    level?: number
+export interface BuildingInfo {
+    buildingId: number
+    level: number
 }
 
-type Props = {
-    info: BuildingInfo
+export interface BuildingsModalRef {
+    setInfo: (info: BuildingInfo) => void;
+}
+
+interface Props {
+    ref: React.Ref<BuildingsModalRef>,
     close: () => void
 }
 
-export default function Buildings({ info, close }: Props) {
-    const { t } = useTranslation()
-    const [buildingId, setBuildingId] = useState(info.building_id)
+export default function Buildings({ ref, close }: Props) {
+    const { t } = useTranslation();
+    const [info, setInfo] = React.useState<BuildingInfo | null>(null);
 
-    useEffect(() => {
-        setBuildingId(info.building_id)
-    }, [info])
+    React.useImperativeHandle(ref, () => ({
+        setInfo: (info: BuildingInfo) => setInfo(info)
+    }), []);
+
+    if(info===null)
+        return null;
 
     return (
         <div className="border p-2 rounded">
-            <WindowLeft close={close} title={t(`buildings.${buildingId}.name`)}>
+            <WindowLeft close={close} title={t(`buildings.${info.buildingId}.name`)}>
                 <div className="text-justify font-normal mb-3">
-                    {t(`buildings.${buildingId}.text`)}
+                    {t(`buildings.${info.buildingId}.text`)}
                 </div>
 
-                {buildingId === 1 && <TownHall cityName="test" isCapital />}
-                {buildingId === 2 && <Academy />}
-                {buildingId === 3 && <Warehouse data={{
+                {info.buildingId === 1 && <TownHall cityName="test" isCapital />}
+                {info.buildingId === 2 && <Academy />}
+                {info.buildingId === 3 && <Warehouse data={{
                     level: 0,
                     maximum: false,
                     resources: {
@@ -55,7 +62,7 @@ export default function Buildings({ info, close }: Props) {
                         wood: 0
                     }
                 }} />}
-                {buildingId === 4 && <Barracks data={{
+                {info.buildingId === 4 && <Barracks data={{
                     level: 0,
                     units: [],
                     resources: {
@@ -68,13 +75,13 @@ export default function Buildings({ info, close }: Props) {
                         time: 0
                     }
                 }}  />}
-                {buildingId === 5 && <Tavern level={0} tavernWine={0} bonusTavern={0} bonusTavernConsume={0} />}
-                {buildingId >= 6 && buildingId <= 10 && <Reducers buildingName={''} level={0} />}
-                {buildingId >= 11 && buildingId <= 15 && <BuildingProducer data={{
+                {info.buildingId === 5 && <Tavern level={0} tavernWine={0} bonusTavern={0} bonusTavernConsume={0} />}
+                {info.buildingId >= 6 && info.buildingId <= 10 && <Reducers buildingName={''} level={0} />}
+                {info.buildingId >= 11 && info.buildingId <= 15 && <BuildingProducer data={{
                     buildingId: 0,
                     level: 0
                 }} />}
-                {buildingId === 16 && <Port speed={0} tradeShip={0} goldCost={0} gold={0} goldMissing={0} />}
+                {info.buildingId === 16 && <Port speed={0} tradeShip={0} goldCost={0} gold={0} goldMissing={0} />}
 
             </WindowLeft>
 
@@ -89,7 +96,7 @@ export default function Buildings({ info, close }: Props) {
                     sulfur: 0,
                     time: 0
                 }}  />
-                {buildingId === 4 && <UnitQueue />}
+                {info.buildingId === 4 && <UnitQueue />}
             </WindowRight>
         </div>
     )

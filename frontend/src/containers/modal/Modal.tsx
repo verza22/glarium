@@ -1,61 +1,87 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import headerImg from "./../../assets/img/icon/modal_header.jpg";
-import footerImg from "./../../assets/img/icon/bg_maincontentbox_footer.png";
-import closeIcon from "./../../assets/img/icon/close.png";
+import BuildingList, { BuildingsListModalRef, BuildingListInfo } from "./BuildingsModal";
+import Building, { BuildingsModalRef, BuildingInfo } from "./building/Building";
+import Donation, { DonationRef, DonationInfo } from "./donation/DonationModal";
+import Research from "./research/ResearchModal";
+import IslandCity from "./islandCity/IslandCityModal";
+import Messages, { MessagesRef, MessagesInfo } from "./message/MessageModal";
+import Colonize, { ColonizeRef, ColonizeInfo } from "./islandCity/Options/Colonize";
+import General, { GeneralModalRef, GeneralModalInfo } from "./general/GeneralModal";
+import Mayor from "./Mayor";
+import { ModalType } from "../../../../shared/types/others";
 
-interface ModalProps {
-    title: string;
-    onClose?: () => void;
-    children?: React.ReactNode;
+export interface ModalRef {
+    open: (type: ModalType) => void,
+    modal: {
+        buildingList: (info: BuildingListInfo) => void
+    }
 }
 
-const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => {
+interface ModalProps {
+    ref: React.Ref<ModalRef>
+}
 
-    const [visible, setVisible] = React.useState(false);
+const Modal: React.FC<ModalProps> = ({ref}) => {
+    const refBuildingList = React.useRef<BuildingsListModalRef>(null);
+    const refBuilding = React.useRef<BuildingsModalRef>(null);
+    const refDonation = React.useRef<DonationRef>(null);
+    const refMessages = React.useRef<MessagesRef>(null);
+    const refColonize = React.useRef<ColonizeRef>(null);
+    const refGeneral = React.useRef<GeneralModalRef>(null);
 
-    const handleClose = () => {
+    const [ visible, setVisible ] = React.useState(false);
+    const [ type, setType ] = React.useState<ModalType>(0);
+
+    React.useImperativeHandle(ref, () => ({
+        open: (type: ModalType) => {
+            setType(type);
+            setVisible(true);
+        },
+        modal: {
+            buildingList: (info: BuildingListInfo) => refBuildingList.current?.setInfo(info),
+            building: (info: BuildingInfo) => refBuilding.current?.setInfo(info),
+            donation: (info: DonationInfo) => refDonation.current?.setInfo(info),
+            messages: (info: MessagesInfo) => refMessages.current?.setInfo(info),
+            colonize: (info: ColonizeInfo) => refColonize.current?.setInfo(info),
+            general: (info: GeneralModalInfo) => refGeneral.current?.setInfo(info),
+        }
+    }),[]);
+
+    const close = () => {
         setVisible(false);
-        if (onClose) {
-            onClose();
+    }
+
+    const modalContent = () => {
+        switch (type) {
+            case ModalType.BuildingList:
+                return <BuildingList close={close} ref={refBuildingList} />;
+            case ModalType.Building:
+                return <Building close={close} ref={refBuilding} />;
+              case ModalType.Donation:
+                return <Donation close={close} ref={refDonation} />;
+              case ModalType.Research:
+                return <Research close={close} />;
+            //   case ModalType.IslandCity:
+            //     return <IslandCity close={close} info={info} />;
+              case ModalType.Messages:
+                return <Messages close={close} ref={refMessages} />;
+              case ModalType.Colonize:
+                return <Colonize close={close} ref={refColonize} />;
+              case ModalType.General:
+                return <General close={close} ref={refGeneral} />;
+            //   case ModalType.Mayor:
+            //     return <Mayor close={close} info={info} />;
+            default:
+                return null;
         }
     }
 
-    if (!visible)
+    if(visible){
+        return modalContent();
+    }else{
         return null;
-
-    return (
-        <div
-            className="fixed left-0 top-0 fixed z-[100] w-[720px] left-0 right-0 mx-auto mt-[120px] touch-none rounded-2xl shadow-lg overflow-hidden bg-[#f5f5dc]"
-        >
-            <div
-                className="cursor-grab h-[26px] w-full flex justify-center items-center relativeselect-none"
-                style={{
-                    backgroundImage: `url(${headerImg})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "auto",
-                }}
-            >
-                <div className="text-sm font-semibold text-gray-800">{title}</div>
-                <button
-                    onClick={handleClose}
-                    className="absolute right-2 top-[3px] w-[18px] h-[18px] bg-no-repeat bg-center hover:opacity-80 active:scale-95 transition"
-                    style={{ backgroundImage: `url(${closeIcon})` }}
-                ></button>
-            </div>
-
-            <div
-                className="overflow-y-auto border-x-[3px] border-solid border-transparenth-[calc(100%-26px)] max-h-[75vh] custom-scroll"
-            >
-                {children}
-            </div>
-
-            <div
-                className="h-[4px]"
-                style={{ backgroundImage: `url(${footerImg})` }}
-            ></div>
-        </div>
-    );
+    }
 };
 
 export default Modal;

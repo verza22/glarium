@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import DragToScroll from "../containers/DragToScroll";
-import Modal from "../containers/modal/Modal";
+import Modal, { ModalRef } from "../containers/modal/Modal";
 import Building, { BuildingPosition } from "../components/Building";
 import Layout from "../containers/Layout";
 import CityImg from "./../assets/img/city/city.jpg";
 import { useParams } from "react-router-dom";
 import { useBuildingGetInfo } from "../hooks/useBuildingGetInfo";
+import { ModalType } from "../../../shared/types/others/enum";
 
 const City = () => {
+    const refModal = useRef<ModalRef>(null);
     const { cityId } = useParams<{ cityId: string }>();
     const { data } = useBuildingGetInfo(Number(cityId));
 
@@ -29,6 +31,12 @@ const City = () => {
         { top: 685, left: 900 },
     ]);
 
+    useEffect(()=>{
+        // setTimeout(()=>{
+        //     refModal.current?.open(ModalType.Research);
+        // },1000)
+    },[])
+
     return (
         <>
             <Layout />
@@ -46,7 +54,7 @@ const City = () => {
                         }
                     </div>
                 </DragToScroll>
-                <Modal title="testing">
+                <Modal ref={refModal} >
                 </Modal>
             </div>
         </>

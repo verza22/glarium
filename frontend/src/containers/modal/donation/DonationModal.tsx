@@ -5,14 +5,27 @@ import IslandResources, { IslandData } from "./IslandResources";
 import IslandDonation from "./IslandDonation";
 import { useTranslation } from "react-i18next";
 
-interface DonacionesProps {
-    infop: IslandData;
+export interface DonationInfo extends IslandData {}
+
+export interface DonationRef {
+    setInfo: (info: IslandData) => void;
+}
+
+interface DonationProps {
+    ref: React.Ref<DonationRef>,
     close: () => void;
 }
 
-const Donaciones: React.FC<DonacionesProps> = ({ infop, close }) => {
+const Donation: React.FC<DonationProps> = ({ close, ref }) => {
     const { t } = useTranslation();
-    const [info, setInfo] = React.useState<IslandData>(infop);
+    const [info, setInfo] = React.useState<IslandData | null>(null);
+
+    React.useImperativeHandle(ref, () => ({
+        setInfo: (info: IslandData) => setInfo(info)
+    }), []);
+
+    if(info===null)
+        return null;
 
     const getTitle = () => {
         if (info.info.type === 1) return t("modal.donations.forest");
@@ -29,10 +42,6 @@ const Donaciones: React.FC<DonacionesProps> = ({ infop, close }) => {
                 return "";
         }
     };
-
-    React.useEffect(() => {
-        setInfo(infop);
-    }, [infop]);
 
     return (
         <div className="flex flex-col space-y-4">
@@ -54,4 +63,4 @@ const Donaciones: React.FC<DonacionesProps> = ({ infop, close }) => {
     );
 };
 
-export default Donaciones;
+export default Donation;

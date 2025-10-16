@@ -13,11 +13,12 @@ interface WindowRightProps {
 const WindowRight: React.FC<WindowRightProps> = ({ title, children }) => {
     return (
         <div
-            className="fixed bg-[beige] z-[100] w-[230px] rounded-lg shadow-lg touch-none left-[-950px] mx-auto mt-[120px]"
+            className="fixed top-0 bg-[beige] z-[100] w-[230px] rounded-lg shadow-lg touch-none left-[-950px] mx-auto mt-[120px]"
             style={{
                 borderStyle: "solid",
                 borderWidth: "0px 3px",
                 borderImage: `url(${borderImg}) 0% 50%`,
+                left: "15vw"
             }}
         >
 

@@ -34,9 +34,10 @@ const ResearchModal: React.FC<ResearchModalProps> = ({ close }) => {
   const changeCategory = (newCategory: number) => {
     setCategory(newCategory);
   };
+  
 
   return (
-    <div className="flex justify-center items-start space-x-4 p-4">
+    <>
       <WindowLeft title={t("modal.research.windowLeftTitle")} close={close}>
         <Research {...dummyResearch} />
       </WindowLeft>
@@ -44,7 +45,7 @@ const ResearchModal: React.FC<ResearchModalProps> = ({ close }) => {
       <WindowRight title={t("modal.research.windowRightTitle")}>
         <Categories changeCategory={changeCategory} />
       </WindowRight>
-    </div>
+    </>
   );
 };
 

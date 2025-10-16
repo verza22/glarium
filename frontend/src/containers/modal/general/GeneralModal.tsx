@@ -7,73 +7,84 @@ import Movements, { IMovement } from "./Movements";
 import closedImg from "../../../assets/img/icon/schriftrolle_closed.png";
 import openImg from "../../../assets/img/icon/schriftrolle_offen.png";
 
-
-interface GeneralModalProps {
-  close: () => void;
-  movements: IMovement[];
+export interface GeneralModalInfo {
+    movements: IMovement[]
 }
 
-const GeneralModal: React.FC<GeneralModalProps> = ({ close, movements }) => {
-  const { t } = useTranslation();
-  const [type, setType] = useState<number>(0);
+export interface GeneralModalRef {
+    setInfo: (info: GeneralModalInfo) => void;
+}
 
-  const change = (newType: number) => setType(newType);
+interface GeneralModalProps {
+    ref: React.Ref<GeneralModalRef>;
+    close: () => void;
+}
 
-  return (
-    <div className="mBorder">
-      <WindowLeft close={close} title={t("modal.general.militia")}>
-        <div className="box text-[0.83rem] leading-[0.83rem]">
-          <div className="flex mb-2">
-            <div
-              className={`flex-1 flex justify-center items-center py-1 cursor-pointer ${
-                type === 0 ? "bg-[#dfc594]" : ""
-              }`}
-              title={t("modal.general.receivedMessages")}
-              onClick={() => change(0)}
-            >
-              <div
-                className="w-[17px] h-[17px] bg-center bg-no-repeat inline-block mr-1"
-                style={{
-                  backgroundImage: `url(${
-                    type === 0 ? openImg : closedImg
-                  })`,
-                }}
-              />
-              <div>
-                {t("modal.general.movements", { count: movements.length })}
-              </div>
-            </div>
+const GeneralModal: React.FC<GeneralModalProps> = ({ close, ref }) => {
+    const { t } = useTranslation();
+    const [type, setType] = useState<number>(0);
+    const [info, setInfo] = React.useState<GeneralModalInfo | null>(null);
 
-            <div
-              className={`flex-1 flex justify-center items-center py-1 cursor-pointer ${
-                type === 1 ? "bg-[#dfc594]" : ""
-              }`}
-              title={t("modal.general.sentReports")}
-              onClick={() => change(1)}
-            >
-              <div
-                className="w-[17px] h-[17px] bg-center bg-no-repeat inline-block mr-1"
-                style={{
-                  backgroundImage: `url(${
-                    type === 1 ? openImg : closedImg
-                  })`,
-                }}
-              />
-              <div>{t("modal.general.warReports", { count: 0 })}</div>
-            </div>
-          </div>
+    React.useImperativeHandle(ref, () => ({
+        setInfo: (info: GeneralModalInfo) => setInfo(info)
+    }), []);
 
-          {movements.length > 0 ? (
-            <Movements movements={movements} />
-          ) : (
-            <div className="text-center my-5">
-              {t("modal.general.noMovements")}
-            </div>
-          )}
+    if (info === null)
+        return null;
+
+    const change = (newType: number) => setType(newType);
+
+    return (
+        <div className="mBorder">
+            <WindowLeft close={close} title={t("modal.general.militia")}>
+                <div className="box text-[0.83rem] leading-[0.83rem]">
+                    <div className="flex mb-2">
+                        <div
+                            className={`flex-1 flex justify-center items-center py-1 cursor-pointer ${type === 0 ? "bg-[#dfc594]" : ""
+                                }`}
+                            title={t("modal.general.receivedMessages")}
+                            onClick={() => change(0)}
+                        >
+                            <div
+                                className="w-[17px] h-[17px] bg-center bg-no-repeat inline-block mr-1"
+                                style={{
+                                    backgroundImage: `url(${type === 0 ? openImg : closedImg
+                                        })`,
+                                }}
+                            />
+                            <div>
+                                {t("modal.general.movements", { count: info.movements.length })}
+                            </div>
+                        </div>
+
+                        <div
+                            className={`flex-1 flex justify-center items-center py-1 cursor-pointer ${type === 1 ? "bg-[#dfc594]" : ""
+                                }`}
+                            title={t("modal.general.sentReports")}
+                            onClick={() => change(1)}
+                        >
+                            <div
+                                className="w-[17px] h-[17px] bg-center bg-no-repeat inline-block mr-1"
+                                style={{
+                                    backgroundImage: `url(${type === 1 ? openImg : closedImg
+                                        })`,
+                                }}
+                            />
+                            <div>{t("modal.general.warReports", { count: 0 })}</div>
+                        </div>
+                    </div>
+
+                    {info.movements.length > 0 ? (
+                        <Movements movements={info.movements} />
+                    ) : (
+                        <div className="text-center my-5">
+                            {t("modal.general.noMovements")}
+                        </div>
+                    )}
+                </div>
+            </WindowLeft>
         </div>
-      </WindowLeft>
-    </div>
-  );
+    );
 };
 
 export default GeneralModal;

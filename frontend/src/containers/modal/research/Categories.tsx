@@ -24,10 +24,10 @@ const Categories: React.FC<CategoriesProps> = ({ changeCategory }) => {
     <div className="box text-[0.83rem]">
       {categories.map((cat) => (
         <div key={cat.id} className="mb-2 categoria cursor-pointer">
-          <div onClick={() => changeCategory(cat.id)}>
+          <div onClick={() => changeCategory(cat.id)} title={t(`researchCategories.${cat.id}`)}>
             <img
               src={cat.img}
-              alt={t(`modal.research.researchCategories.${cat.id}`)}
+              alt={t(`researchCategories.${cat.id}`)}
               className="w-full h-auto select-none"
             />
           </div>

@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
 import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { ResponseGetResearchData } from '@shared/types/responses/research';
+import { validateFields } from '../utils/validateFields';
+import { RequestResearchCreate } from '@shared/types/requests';
 
 export class ResearchController {
 
-    public async getData(req: Request, res: Response) {
-        const userId = Number(req.params.userId);
+    public async getResearchData(req: Request, res: Response) {
+        const userId = req.authUser.userId;
 
         const research = await prisma.research.findMany({
             select: {
@@ -21,20 +24,31 @@ export class ResearchController {
             select: { researchId: true }
         });
 
-        return res.json({
-            research: research.map(r => ({
+        const userResource = await prisma.userResource.findUniqueOrThrow({ where: { userId } });
+
+        const { pi, totalScientists } = await UserResourceBL.getPiAndScientists(userId);
+
+        const response:ResponseGetResearchData = {
+            researchList: research.map(r => ({
                 id: r.id,
-                category_id: r.researchCategoryId,
+                categoryId: r.researchCategoryId,
                 level: r.level,
                 cost: r.cost
             })),
-            user_research: userResearch.map(ur => ur.researchId)
-        });
+            researchPoint: userResource.researchPoint,
+            researchPointHour: pi,
+            totalScientists,
+            userResearch: userResearch.map(ur => ur.researchId)
+        };
+
+        return res.json(response);
     }
 
     public async create(req: Request, res: Response) {
-        const researchId = Number(req.params.researchId);
-        const userId = Number(req.params.userId);
+        const { researchId }: RequestResearchCreate = validateFields(req, [
+            { name: "researchId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
         const research = await prisma.research.findUnique({ where: { id: researchId } });
         if (!research) return res.status(404).json({ error: "Research not found" });

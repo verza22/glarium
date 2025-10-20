@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes';
 import cityRoutes from './routes/cityRoutes';
 import islandRoutes from './routes/islandRoutes';
 import worldRoutes from './routes/worldRoutes';
+import researchRoutes from './routes/researchRoutes';
 
 import buildingRoutes from './routes/buildingRoutes';
 import { errorHandler } from "./middleware/errorHandler";
@@ -30,6 +31,7 @@ app.use('/api/city', cityRoutes);
 app.use('/api/building', buildingRoutes);
 app.use('/api/island', islandRoutes);
 app.use('/api/world', worldRoutes);
+app.use('/api/research', researchRoutes);
 
 app.use(errorHandler);
 

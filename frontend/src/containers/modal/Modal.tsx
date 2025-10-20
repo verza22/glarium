@@ -14,7 +14,12 @@ import { ModalType } from "../../../../shared/types/others";
 export interface ModalRef {
     open: (type: ModalType) => void,
     modal: {
-        buildingList: (info: BuildingListInfo) => void
+        buildingList: (info: BuildingListInfo) => void,
+        building: (info: BuildingInfo) => void,
+        donation: (info: DonationInfo) => void,
+        messages: (info: MessagesInfo) => void,
+        colonize: (info: ColonizeInfo) => void,
+        general: (info: GeneralModalInfo) => void
     }
 }
 
@@ -22,7 +27,7 @@ interface ModalProps {
     ref: React.Ref<ModalRef>
 }
 
-const Modal: React.FC<ModalProps> = ({ref}) => {
+const Modal: React.FC<ModalProps> = ({ ref }) => {
     const refBuildingList = React.useRef<BuildingsListModalRef>(null);
     const refBuilding = React.useRef<BuildingsModalRef>(null);
     const refDonation = React.useRef<DonationRef>(null);
@@ -30,8 +35,8 @@ const Modal: React.FC<ModalProps> = ({ref}) => {
     const refColonize = React.useRef<ColonizeRef>(null);
     const refGeneral = React.useRef<GeneralModalRef>(null);
 
-    const [ visible, setVisible ] = React.useState(false);
-    const [ type, setType ] = React.useState<ModalType>(0);
+    const [visible, setVisible] = React.useState(false);
+    const [type, setType] = React.useState<ModalType>(0);
 
     React.useImperativeHandle(ref, () => ({
         open: (type: ModalType) => {
@@ -46,7 +51,7 @@ const Modal: React.FC<ModalProps> = ({ref}) => {
             colonize: (info: ColonizeInfo) => refColonize.current?.setInfo(info),
             general: (info: GeneralModalInfo) => refGeneral.current?.setInfo(info),
         }
-    }),[]);
+    }), []);
 
     const close = () => {
         setVisible(false);
@@ -58,28 +63,28 @@ const Modal: React.FC<ModalProps> = ({ref}) => {
                 return <BuildingList close={close} ref={refBuildingList} />;
             case ModalType.Building:
                 return <Building close={close} ref={refBuilding} />;
-              case ModalType.Donation:
+            case ModalType.Donation:
                 return <Donation close={close} ref={refDonation} />;
-              case ModalType.Research:
+            case ModalType.Research:
                 return <Research close={close} />;
-            //   case ModalType.IslandCity:
-            //     return <IslandCity close={close} info={info} />;
-              case ModalType.Messages:
+            case ModalType.IslandCity:
+                return <IslandCity close={close} />;
+            case ModalType.Messages:
                 return <Messages close={close} ref={refMessages} />;
-              case ModalType.Colonize:
+            case ModalType.Colonize:
                 return <Colonize close={close} ref={refColonize} />;
-              case ModalType.General:
+            case ModalType.General:
                 return <General close={close} ref={refGeneral} />;
-            //   case ModalType.Mayor:
-            //     return <Mayor close={close} info={info} />;
+            case ModalType.Mayor:
+                return <Mayor close={close} />;
             default:
                 return null;
         }
     }
 
-    if(visible){
+    if (visible) {
         return modalContent();
-    }else{
+    } else {
         return null;
     }
 };

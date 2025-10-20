@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useUserStore } from "../store/userStore";
 
 interface ProtectedRouteProps {
-    children: React.JSX.Element;
+    children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {

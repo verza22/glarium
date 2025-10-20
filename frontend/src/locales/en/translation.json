@@ -128,12 +128,6 @@
             }
         },
         "research": {
-            "researchCategories": {
-                "1": "Seafaring",
-                "2": "Economy",
-                "3": "Knowledge",
-                "4": "Military"
-            },
             "scientistAlt": "Scientist icon",
             "piAlt": "PI icon",
             "researchTimeAlt": "Research time icon",
@@ -145,20 +139,6 @@
             "finished": "Finished",
             "researchButton": "Research",
             "notEnoughPoints": "Not enough points",
-            "research": {
-                "0": {
-                    "name": "Research 0",
-                    "text": "Description for Research 0"
-                },
-                "1": {
-                    "name": "Research 1",
-                    "text": "Description for Research 1"
-                },
-                "2": {
-                    "name": "Research 2",
-                    "text": "Description for Research 2"
-                }
-            },
             "windowLeftTitle": "Scientific Advisor",
             "windowRightTitle": "Research Area"
         },
@@ -350,5 +330,129 @@
         "max": "Maximum {{max}} characters",
         "invalidEmail": "Invalid email address",
         "passwordsNotMatch": "Passwords do not match"
+    },
+    "researchCategories": {
+        "1": "Seafaring",
+        "2": "Economy",
+        "3": "Knowledge",
+        "4": "Military"
+    },
+    "research": {
+        "1": {
+            "name": "Carpentry",
+            "text": "The forests of our islands offer excellent wood for building sturdy beams for the roofs of our most beautiful buildings. However, it is necessary to choose the pieces carefully and treat them. A city carpenter would ensure much less wood is wasted."
+        },
+        "2": {
+            "name": "Preservation",
+            "text": "We have learned how to store our raw materials well-protected for a long time. Additionally, part of our reserves is insured against theft by pirates and other villains!"
+        },
+        "3": {
+            "name": "Pulley",
+            "text": "A brilliant idea: A rope wrapped around a roller gives a man the strength of Hercules. This way, our workers can lift giant stones and erect our monumental buildings more easily!"
+        },
+        "4": {
+            "name": "Wellbeing",
+            "text": "The land is full of valuable treasures! We have learned to expand sulfur and crystals, and to mine valuable marble. On our slopes, beautiful vineyards grow, giving us exquisite wines! A new era of prosperity will be born if we make use of these treasures. In a store, we can offer goods to foreign merchants and buy the goods we need to live."
+        },
+        "5": {
+            "name": "Wine Culture",
+            "text": "The happiness of the population also comes from great parties where wine flows in abundance! Dionysus enjoys the joy that his gifts bring!"
+        },
+        "6": {
+            "name": "Improved Resource Collection",
+            "text": "Much time has passed since we learned how to use the resources of our island for our needs. Now we should educate our workers and allow each forest, quarry, vineyard, sulfur mine, and crystal mine to be managed by men who are both strong and skilled. This way we can obtain more resources and enrich our civilization!"
+        },
+        "7": {
+            "name": "Geometry",
+            "text": "Right angle, triangle, circle - some of the brightest minds can calculate how to build stronger and more splendid buildings. Soon our cities will be models to copy worldwide!"
+        },
+        "8": {
+            "name": "Architecture",
+            "text": "A good house can withstand the harshest elements. Even better when a brilliant mind designs it with some drawings and a bit of math in advance, so all walls are straight and the roof solid. Thanks to angles and compasses, our buildings will be much more stable and rain-protected. An Architect’s Office could save us a lot of marble—just imagine the savings when constructing a new building!"
+        },
+        "9": {
+            "name": "Day of Rest",
+            "text": "A well-rested worker is much more efficient than a tired one. That is why every citizen will have a day off per week, making our inhabitants happier!"
+        },
+        "10": {
+            "name": "Water Level",
+            "text": "Water always stays parallel to the ground—we should use this knowledge in building construction! Our city will shine even more, and we will spend much less wood and stone building!"
+        },
+        "11": {
+            "name": "Cellars",
+            "text": "Annual wine festivals bring the city to its feet! When the best grapes are pressed into wine, and liquid gold flows around, children enjoy themselves. With a skilled wine maker overseeing a wine press, we would waste much less. The wine master could also ensure proper storage so the wine matures well!"
+        },
+        "12": {
+            "name": "Cistern",
+            "text": "Eureka! A cistern in our settlement! Now we don’t have to wait for rain. Our inhabitants live better and the fields won’t suffer droughts!"
+        },
+        "13": {
+            "name": "Paper",
+            "text": "We have found a way to better archive our knowledge! Thanks to papyrus made from the cyperus papyrus plant, we no longer have to carve our wisdom into stones!"
+        },
+        "14": {
+            "name": "Ink",
+            "text": "Nature provides everything we need to write: the bird with its feathers; the sea with creatures that give ink. Now we can record our ideas more easily!"
+        },
+        "15": {
+            "name": "Optics",
+            "text": "When our scientists invent new things, much glass can break or get lost in the vastness of our laboratories. If an optician could ensure lenses and crystals are properly placed, we would waste much less glass!"
+        },
+        "16": {
+            "name": "Mechanical Pencil",
+            "text": "A clever device: a clever inventor has taught a machine to write. Now we can multiply our writings and accelerate the exchange of ideas and knowledge among our researchers!"
+        },
+        "17": {
+            "name": "Pneumatic Mail",
+            "text": "A wonderful system: now we can send our papyri through tubes, allowing them to reach our researchers faster! This saves long trips and reduces gold expenditure for communications!"
+        },
+        "18": {
+            "name": "Cartography",
+            "text": "Long marches through mountains and swamps wear down equipment. If we draw the most suitable paths for soldiers, they won’t lose time in undergrowth or mud, and uniforms will need less washing."
+        },
+        "19": {
+            "name": "Professional Army",
+            "text": "With a professional army, we can defend ourselves much better from pirates, barbarians, and other villains! It costs more than sending citizens to war, but our troops now know how to handle swords, spears, and shields."
+        },
+        "20": {
+            "name": "Siege",
+            "text": "With a metal-headed battering ram and the strength of ten men, we can even demolish entire city walls. Our soldiers will find it easier to conquer all cities!"
+        },
+        "21": {
+            "name": "Code of Honor",
+            "text": "Our soldiers are proud to serve their unit and island kingdom. They now treat their uniforms more carefully, reducing the need for repairs."
+        },
+        "22": {
+            "name": "Ballistics",
+            "text": "Finally, we know how to shoot arrows better at our enemies. With this knowledge, we should start training soldiers in this art. Soon archers will be deployed to war!"
+        },
+        "23": {
+            "name": "Lever Rule",
+            "text": "With this technique, we can unleash incredible forces, even hurl massive rocks through the air! If the rocks are large enough, we can also break down any city wall!"
+        },
+        "24": {
+            "name": "Pyrotechnics",
+            "text": "Sulfur is a truly terrible substance! With each new mixture, we can achieve an even greater impact. A safe practice ground allows our artificers to test inventions without endangering nearby buildings."
+        },
+        "25": {
+            "name": "Logistics",
+            "text": "Our soldiers can fight much better if they don’t have to carry so much equipment. Their uniforms also deteriorate less after long marches, reducing maintenance needs."
+        },
+        "26": {
+            "name": "Gunpowder",
+            "text": "This black mixture from the alchemist’s kitchen can ignite fire with great force, causing truly diabolical effects. Now we can load iron tubes with this powder to fire heavy cannonballs into the air."
+        },
+        "27": {
+            "name": "Robotics",
+            "text": "Our researchers have built a mechanical giant, with metal muscles and a steam heart! Only the bravest and most skilled soldiers can control such a monster, which terrorizes the enemy in the battlefield!"
+        },
+        "28": {
+            "name": "Cannon Foundry",
+            "text": "Our iron is getting heavier and harder! Now we can manufacture barrels to fire enormous balls at our enemies. With long-range bombs, enemy walls will tremble with fear!"
+        },
+        "29": {
+            "name": "Expansion",
+            "text": "The ocean surrounds us, but other islands await discovery. We are not alone! We can settle new territories, exploit new resources, and learn about other cultures! Our officials are happy to manage vast lands and their wealth."
+        }
     }
 }

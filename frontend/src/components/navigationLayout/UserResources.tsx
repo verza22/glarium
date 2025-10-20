@@ -38,7 +38,7 @@ const UserResources: React.FC<UserResourcesProps> = ({gold, ships, shipsAvailabl
                 title={t("resources.gold")}
                 style={{ backgroundImage: `url(${goldImg})`, backgroundPositionY: "0" }}
             >
-                <div>{gold}</div>
+                <div>{gold.toFixed(0)}</div>
             </div>
         </div>
     );

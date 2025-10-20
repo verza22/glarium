@@ -7,12 +7,30 @@ import packageJson from "../../package.json";
 import { useUserStore } from "../store/userStore";
 import { useNavigationLayout } from "../hooks/useNavigationLayout";
 import { useCityGetInfo } from "../hooks/useCityGetInfo";
+import { ModalType } from "../../../shared/types/others";
+import { useModal } from "../contexts/ModalContext";
 
 const Layout: React.FC = () => {
     const { t } = useTranslation();
     const navigationLayout = useNavigationLayout();
     const { clearUser, cityId } = useUserStore();
     const { data } = useCityGetInfo(cityId);
+    const { openModal } = useModal();
+
+    const hanleAdvisor = (type:  "mayor" | "general" | "scientist" | "diplomat") => {
+        switch(type){
+            case "mayor":
+                openModal(ModalType.Mayor);
+            break;
+            case "general":
+            break;
+            case "scientist":
+                openModal(ModalType.Research);
+            break;
+            case "diplomat":
+            break;
+        }
+    }
 
     return (
         <div className="fixed top-0 left-0 w-full z-20">
@@ -43,7 +61,7 @@ const Layout: React.FC = () => {
                 {
                     data && <NavigationLayout navigationLayout={navigationLayout} data={data}/>
                 }
-                <Advisors />
+                <Advisors hanleAdvisor={hanleAdvisor} />
             </div>
         </div>
     );

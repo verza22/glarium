@@ -5,7 +5,7 @@ import Register from "./../screens/Register";
 import City from "./../screens/City";
 import Island from "./../screens/Island";
 import World from "./../screens/World";
-import ProtectedRoute from "./ProtectedRoute";
+import AppRoute from "./AppRoute";
 
 const RoutesApp = () => <>
     <BrowserRouter>
@@ -14,9 +14,9 @@ const RoutesApp = () => <>
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<h1>404, Page not found</h1>} />
 
-            <Route path="/city/:cityId" element={<ProtectedRoute><City /></ProtectedRoute>} />
-            <Route path="/island/:islandId" element={<ProtectedRoute><Island /></ProtectedRoute>} />
-            <Route path="/world" element={<ProtectedRoute><World /></ProtectedRoute>} />
+            <Route path="/city/:cityId" element={<AppRoute><City /></AppRoute>} />
+            <Route path="/island/:islandId" element={<AppRoute><Island /></AppRoute>} />
+            <Route path="/world" element={<AppRoute><World /></AppRoute>} />
         </Routes>
     </BrowserRouter>
 </>;

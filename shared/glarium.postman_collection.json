@@ -51,7 +51,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}",
+							"raw": "{\n  \"email\": \"zuritabal@gmail.com\",\n  \"password\": \"1234\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -274,6 +274,76 @@
 							"path": [
 								"world",
 								"getIslands"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Research",
+			"item": [
+				{
+					"name": "GetResearchData",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_ROUTE}}api/research/getResearchData",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"research",
+								"getResearchData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateResearch",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"researchId\": 1}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/research/create",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"research",
+								"create"
 							]
 						}
 					},

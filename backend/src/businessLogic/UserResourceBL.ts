@@ -1,3 +1,4 @@
+import { Prisma } from "../dataAccess/prisma/generated/client";
 import prisma from "../dataAccess/prisma/prisma";
 import { PopulationBL } from "./populationBL";
 import { UnitBL } from "./unitBL";
@@ -14,7 +15,7 @@ export class UserResourceBL {
         const diffTime = (Date.now() - userResource.updatedAt.getTime()) / 1000 / 3600; // hours
 
         await this.updateGold(userResource, userId, diffTime);
-        await this.updateResearchPoint(userId, userResource, userId, diffTime);
+        await this.updateResearchPoint(userResource, userId, diffTime);
 
         await prisma.userResource.update({
             where: { id: userResource.id },
@@ -90,7 +91,15 @@ export class UserResourceBL {
         }
     }
 
-    private static async updateResearchPoint(authId: number, userResource: any, userId: number, diffTime: number) {
+    private static async updateResearchPoint(userResource: Prisma.UserResourceGetPayload<{}>, userId: number, diffTime: number) {
+        const { totalScientists, pi } = await this.getPiAndScientists(userId);
+
+        if (totalScientists > 0) {
+            userResource.researchPoint += pi * diffTime;
+        }
+    }
+
+    public static async getPiAndScientists(userId: number){
         const userCities = await prisma.userCity.findMany({
             where: { userId: userId },
             include: { city: true }
@@ -108,30 +117,31 @@ export class UserResourceBL {
             if (cp.city.userCities.find(c => c.capital && c.cityId === cp.cityId)) {
                 totalScientists += cp.scientists;
             } else {
-                const corruption = 1 - (await PopulationBL.getCorruption(authId, cp.city.id));
+                const corruption = 1 - (await PopulationBL.getCorruption(userId, cp.city.id));
                 totalScientists += corruption === 1 ? cp.scientists : cp.scientists * corruption;
             }
         }
 
-        if (totalScientists > 0) {
-            let pi = totalScientists; // base PI per scientist
-            const researchNames = ['Paper', 'Ink', 'Mechanical Pen'];
-            const researchIds = (await prisma.research.findMany({ where: { name: { in: researchNames } }, select: { id: true } })).map(r => r.id);
+        let pi = totalScientists; // base PI per scientist
+        const researchNames = ['Paper', 'Ink', 'Mechanical Pen'];
+        const researchIds = (await prisma.research.findMany({ where: { name: { in: researchNames } }, select: { id: true } })).map(r => r.id);
 
-            const userResearches = await prisma.userResearch.findMany({ where: { userId, researchId: { in: researchIds } }, include: { research: true } });
-            if (userResearches.length > 0) {
-                const researchBonus = 1 + userResearches.reduce((sum, ur) => {
-                    switch (ur.research.name) {
-                        case 'Paper': return sum + 0.02;
-                        case 'Ink': return sum + 0.04;
-                        case 'Mechanical Pen': return sum + 0.08;
-                        default: return sum;
-                    }
-                }, 0);
-                pi *= researchBonus;
-            }
+        const userResearches = await prisma.userResearch.findMany({ where: { userId, researchId: { in: researchIds } }, include: { research: true } });
+        if (userResearches.length > 0) {
+            const researchBonus = 1 + userResearches.reduce((sum, ur) => {
+                switch (ur.research.name) {
+                    case 'Paper': return sum + 0.02;
+                    case 'Ink': return sum + 0.04;
+                    case 'Mechanical Pen': return sum + 0.08;
+                    default: return sum;
+                }
+            }, 0);
+            pi *= researchBonus;
+        }
 
-            userResource.researchPoint += pi * diffTime;
+        return {
+            totalScientists,
+            pi
         }
     }
 }

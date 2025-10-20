@@ -6,7 +6,6 @@ import Layout from "../containers/Layout";
 import CityImg from "./../assets/img/city/city.jpg";
 import { useParams } from "react-router-dom";
 import { useBuildingGetInfo } from "../hooks/useBuildingGetInfo";
-import { ModalType } from "../../../shared/types/others/enum";
 
 const City = () => {
     const refModal = useRef<ModalRef>(null);
@@ -30,12 +29,6 @@ const City = () => {
         { top: 230, left: 700 },
         { top: 685, left: 900 },
     ]);
-
-    useEffect(()=>{
-        // setTimeout(()=>{
-        //     refModal.current?.open(ModalType.Research);
-        // },1000)
-    },[])
 
     return (
         <>

@@ -1,6 +1,8 @@
 import React from "react";
 
 import headerImg from "../../../assets/img/icon/modal_header.jpg";
+import closeImg from "../../../assets/img/icon/close.png";
+import closeHoverImg from "../../../assets/img/icon/close-hover.png";
 import footerImg from "../../../assets/img/icon/bg_maincontentbox_footer.png";
 import borderImg from "../../../assets/img/icon/bg_maincontentbox_left.png";
 
@@ -21,7 +23,7 @@ const WindowLeft: React.FC<WindowLeftProps> = ({ title, close, children }) => {
             }}
         >
             <div
-                className="flex items-center justify-between cursor-grab select-noneh-[26px] w-full bg-cover bg-no-repeat rounded-t-lg px-3"
+                className="flex items-center justify-between select-noneh-[26px] w-full bg-cover bg-no-repeat rounded-t-lg px-3"
                 style={{
                     backgroundImage: `url(${headerImg})`,
                 }}
@@ -31,7 +33,7 @@ const WindowLeft: React.FC<WindowLeftProps> = ({ title, close, children }) => {
                 </div>
                 <button
                     onClick={close}
-                    className="w-4 h-4 rounded-full bg-gray-400 hover:bg-gray-600transition-all ml-2"
+                    className={`w-4 h-4 rounded-full ml-2 cursor-pointer bg-[url(${closeImg})] hover:bg-[url(${closeHoverImg})]`}
                 />
             </div>
 

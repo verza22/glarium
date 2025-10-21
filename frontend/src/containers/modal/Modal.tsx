@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import BuildingList, { BuildingsListModalRef, BuildingListInfo } from "./BuildingsModal";
+import BuildingList, { BuildingsListModalRef } from "./BuildingsModal";
 import Building, { BuildingsModalRef, BuildingInfo } from "./building/Building";
 import Donation, { DonationRef, DonationInfo } from "./donation/DonationModal";
 import Research from "./research/ResearchModal";
@@ -14,7 +14,7 @@ import { ModalType } from "../../../../shared/types/others";
 export interface ModalRef {
     open: (type: ModalType) => void,
     modal: {
-        buildingList: (info: BuildingListInfo) => void,
+        buildingList: (position: number) => void,
         building: (info: BuildingInfo) => void,
         donation: (info: DonationInfo) => void,
         messages: (info: MessagesInfo) => void,
@@ -44,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
             setVisible(true);
         },
         modal: {
-            buildingList: (info: BuildingListInfo) => refBuildingList.current?.setInfo(info),
+            buildingList: (position: number) => refBuildingList.current?.setPosition(position),
             building: (info: BuildingInfo) => refBuilding.current?.setInfo(info),
             donation: (info: DonationInfo) => refDonation.current?.setInfo(info),
             messages: (info: MessagesInfo) => refMessages.current?.setInfo(info),

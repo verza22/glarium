@@ -21,7 +21,7 @@ const Cities: React.FC<CitiesProps> = ({cities}) => {
             >
                 {
                     cities.map(city=>
-                        <div className="relative top-[2px] left-[6px] text-[11px]">[{city.x}:{city.y}] {city.name}</div>
+                        <div key={city.id} className="relative top-[2px] left-[6px] text-[11px]">[{city.x}:{city.y}] {city.name}</div>
                     )
                 }
             </div>

@@ -3,8 +3,8 @@ import prisma from '../dataAccess/prisma/prisma'
 import { CityBL } from './../businessLogic/cityBL';
 import { BuildingBL } from './../businessLogic/buildingBL';
 import dayjs from 'dayjs';
-import { ResponseBuildingGetInfo } from '@shared/types/responses';
-import { RequestBuildingGetInfo } from '@shared/types/requests';
+import { ResponseBuildingAvailable, ResponseBuildingGetInfo } from '@shared/types/responses';
+import { RequestBuildingAvailable, RequestBuildingGetInfo } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
 
 export class BuildingController {
@@ -16,8 +16,8 @@ export class BuildingController {
         const userId = req.authUser.userId;
 
         //check permissions
-        const userCities = await prisma.userCity.findMany({where: { userId, cityId: cityId }});
-        if(userCities.length === 0)
+        const userCities = await prisma.userCity.findMany({ where: { userId, cityId: cityId } });
+        if (userCities.length === 0)
             throw new Error("User doesn't have permission for see this city");
 
         // Update construction time for the buildings of the cities
@@ -46,155 +46,152 @@ export class BuildingController {
         res.json(result);
     }
 
-    public async buildingsAvailable(req: Request, res: Response): Promise<void> {
-        try {
-            // Validate position param
-            const position = parseInt(req.body.position, 10);
-            const userId = Number(req.params.userId);
+    public async available(req: Request, res: Response): Promise<void> {
+        const { position, cityId }: RequestBuildingAvailable = validateFields(req, [
+            { name: "position", type: "number", required: true },
+            { name: "cityId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-            if (isNaN(position) || position < 1 || position > 15) {
-                res.status(400).json({ message: "Position must be between 1 and 15" });
-                return;
-            }
-
-            const cityId = parseInt(req.params.cityId, 10); // assuming :cityId comes from route
-            const city = await prisma.city.findUnique({
-                where: { id: cityId },
-                include: {
-                    userCities: true,
-                    islandCity: { include: { island: true } },
-                },
-            });
-
-            if (!city) {
-                res.status(404).json({ message: "City not found" });
-                return;
-            }
-
-            // Get researched technologies of the user
-            const researchedIds = await prisma.userResearch.findMany({
-                where: { userId },
-                select: { researchId: true },
-            });
-            const researchIds = researchedIds.map((r) => r.researchId);
-
-            // Get constructed buildings in the city
-            const cityBuildings = await prisma.cityBuilding.findMany({
-                where: { cityId: city.id },
-                include: { buildingLevel: true },
-            });
-            const builtBuildingIds = cityBuildings.map((b) => b.buildingLevel.buildingId);
-
-            // Buildings that require research not yet completed
-            const researchBuildings = await prisma.researchBuilding.findMany({
-                where: {
-                    researchId: { notIn: researchIds },
-                },
-                select: { buildingId: true, researchId: true },
-            });
-            const lockedBuildingIds = researchBuildings.map((rb) => rb.buildingId);
-
-            // Base query for available buildings
-            let availableBuildings = await prisma.building.findMany({
-                where: {
-                    id: { notIn: [...lockedBuildingIds, ...builtBuildingIds] },
-                },
-            });
-
-            // Base query for buildings pending research
-            let researchBuildingsFiltered = await prisma.researchBuilding.findMany({
-                where: {
-                    researchId: { notIn: researchIds },
-                    buildingId: { notIn: builtBuildingIds },
-                },
-                include: { building: true },
-            });
-
-            // Check if city is capital
-            if (city.userCities[0]?.capital === true) {
-                availableBuildings = availableBuildings.filter((b) => b.id !== 18);
-                researchBuildingsFiltered = researchBuildingsFiltered.filter((rb) => rb.buildingId !== 18);
-            } else {
-                availableBuildings = availableBuildings.filter((b) => b.id !== 17);
-                researchBuildingsFiltered = researchBuildingsFiltered.filter((rb) => rb.buildingId !== 17);
-            }
-
-            // Filter buildings depending on island type
-            let type = city.islandCity?.island.type;
-            type = type === undefined ? 0 : type;
-
-            const restrictions: Record<number, number[]> = {
-                1: [12, 13, 15],
-                2: [12, 13, 14],
-                3: [13, 14, 15],
-                4: [12, 14, 15],
-            };
-            const restrictedIds = restrictions[type] || [];
-            availableBuildings = availableBuildings.filter((b) => !restrictedIds.includes(b.id));
-            researchBuildingsFiltered = researchBuildingsFiltered.filter(
-                (rb) => !restrictedIds.includes(rb.buildingId)
-            );
-
-            // Filter buildings depending on position
-            switch (position) {
-                case 13:
-                    availableBuildings = availableBuildings.filter((b) => b.id === 19);
-                    researchBuildingsFiltered = researchBuildingsFiltered.filter((rb) => rb.buildingId === 19);
-                    break;
-                case 14:
-                    availableBuildings = availableBuildings.filter((b) => b.id === 16);
-                    researchBuildingsFiltered = researchBuildingsFiltered.filter((rb) => rb.buildingId === 16);
-                    break;
-                default:
-                    availableBuildings = availableBuildings.filter((b) => ![16, 19].includes(b.id));
-                    break;
-            }
-
-            // Map available buildings
-            const availableResult = await Promise.all(
-                availableBuildings.map(async (b) => {
-                    const buildingLevel = await prisma.buildingLevel.findFirst({
-                        where: { buildingId: b.id, level: 1 },
-                    });
-                    return {
-                        id: b.id,
-                        wood: buildingLevel?.wood ?? 0,
-                        wine: buildingLevel?.wine ?? 0,
-                        marble: buildingLevel?.marble ?? 0,
-                        glass: buildingLevel?.glass ?? 0,
-                        sulfur: buildingLevel?.sulfur ?? 0,
-                        time: buildingLevel?.time ?? 0,
-                        research: true,
-                    };
-                })
-            );
-
-            // Map research buildings
-            const researchResult = await Promise.all(
-                researchBuildingsFiltered.map(async (rb) => {
-                    const buildingLevel = await prisma.buildingLevel.findFirst({
-                        where: { buildingId: rb.buildingId, level: 1 },
-                    });
-                    return {
-                        id: rb.building.id,
-                        wood: buildingLevel?.wood ?? 0,
-                        wine: buildingLevel?.wine ?? 0,
-                        marble: buildingLevel?.marble ?? 0,
-                        glass: buildingLevel?.glass ?? 0,
-                        sulfur: buildingLevel?.sulfur ?? 0,
-                        time: buildingLevel?.time ?? 0,
-                        research: false,
-                        research_id: rb.researchId,
-                    };
-                })
-            );
-
-            const buildings = [...researchResult, ...availableResult];
-            res.json(buildings);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+        if (isNaN(position) || position < 1 || position > 15) {
+            res.status(400).json({ message: "Position must be between 1 and 15" });
+            return;
         }
+
+        const city = await prisma.city.findFirst({
+            where: { id: cityId },
+            include: {
+                userCities: true,
+                islandCity: { include: { island: true } },
+            },
+        });
+
+        if (!city) {
+            res.status(404).json({ message: "City not found" });
+            return;
+        }
+
+        // Get researched technologies of the user
+        const researchedIds = await prisma.userResearch.findMany({
+            where: { userId },
+            select: { researchId: true },
+        });
+        const researchIds = researchedIds.map((r) => r.researchId);
+
+        // Get constructed buildings in the city
+        const cityBuildings = await prisma.cityBuilding.findMany({
+            where: { cityId: city.id },
+            include: { buildingLevel: true },
+        });
+        const builtBuildingIds = cityBuildings.map((b) => b.buildingLevel.buildingId);
+
+        // Buildings that require research not yet completed
+        const researchBuildings = await prisma.researchBuilding.findMany({
+            where: {
+                researchId: { notIn: researchIds },
+            },
+            select: { buildingId: true, researchId: true },
+        });
+        const lockedBuildingIds = researchBuildings.map((rb) => rb.buildingId);
+
+        // Base query for available buildings
+        let availableBuildings = await prisma.building.findMany({
+            where: {
+                id: { notIn: [...lockedBuildingIds, ...builtBuildingIds] },
+            },
+        });
+
+        // Base query for buildings pending research
+        let researchBuildingsFiltered = await prisma.researchBuilding.findMany({
+            where: {
+                researchId: { notIn: researchIds },
+                buildingId: { notIn: builtBuildingIds },
+            },
+            include: { building: true },
+        });
+
+        // Check if city is capital
+        if (city.userCities[0]?.capital === true) {
+            availableBuildings = availableBuildings.filter((b) => b.id !== 18);
+            researchBuildingsFiltered = researchBuildingsFiltered.filter((rb) => rb.buildingId !== 18);
+        } else {
+            availableBuildings = availableBuildings.filter((b) => b.id !== 17);
+            researchBuildingsFiltered = researchBuildingsFiltered.filter((rb) => rb.buildingId !== 17);
+        }
+
+        // Filter buildings depending on island type
+        let type = city.islandCity?.island.type;
+        type = type === undefined ? 0 : type;
+
+        const restrictions: Record<number, number[]> = {
+            1: [12, 13, 15],
+            2: [12, 13, 14],
+            3: [13, 14, 15],
+            4: [12, 14, 15],
+        };
+        const restrictedIds = restrictions[type] || [];
+        availableBuildings = availableBuildings.filter((b) => !restrictedIds.includes(b.id));
+        researchBuildingsFiltered = researchBuildingsFiltered.filter(
+            (rb) => !restrictedIds.includes(rb.buildingId)
+        );
+
+        // Filter buildings depending on position
+        switch (position) {
+            case 13:
+                availableBuildings = availableBuildings.filter((b) => b.id === 19);
+                researchBuildingsFiltered = researchBuildingsFiltered.filter((rb) => rb.buildingId === 19);
+                break;
+            case 14:
+                availableBuildings = availableBuildings.filter((b) => b.id === 16);
+                researchBuildingsFiltered = researchBuildingsFiltered.filter((rb) => rb.buildingId === 16);
+                break;
+            default:
+                availableBuildings = availableBuildings.filter((b) => ![16, 19].includes(b.id));
+                break;
+        }
+
+        // Map available buildings
+        const availableResult = await Promise.all(
+            availableBuildings.map(async (b) => {
+                const buildingLevel = await prisma.buildingLevel.findFirst({
+                    where: { buildingId: b.id, level: 1 },
+                });
+                return {
+                    id: b.id,
+                    wood: buildingLevel?.wood ?? 0,
+                    wine: buildingLevel?.wine ?? 0,
+                    marble: buildingLevel?.marble ?? 0,
+                    glass: buildingLevel?.glass ?? 0,
+                    sulfur: buildingLevel?.sulfur ?? 0,
+                    time: buildingLevel?.time ?? 0,
+                    research: true,
+                    researchId: 0
+                };
+            })
+        );
+
+        // Map research buildings
+        const researchResult = await Promise.all(
+            researchBuildingsFiltered.map(async (rb) => {
+                const buildingLevel = await prisma.buildingLevel.findFirst({
+                    where: { buildingId: rb.buildingId, level: 1 },
+                });
+                return {
+                    id: rb.building.id,
+                    wood: buildingLevel?.wood ?? 0,
+                    wine: buildingLevel?.wine ?? 0,
+                    marble: buildingLevel?.marble ?? 0,
+                    glass: buildingLevel?.glass ?? 0,
+                    sulfur: buildingLevel?.sulfur ?? 0,
+                    time: buildingLevel?.time ?? 0,
+                    research: false,
+                    researchId: rb.researchId,
+                };
+            })
+        );
+
+        const buildings: ResponseBuildingAvailable[] = [...researchResult, ...availableResult];
+        res.json(buildings);
     }
 
     public async create(req: Request, res: Response): Promise<void> {

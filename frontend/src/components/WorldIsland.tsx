@@ -22,10 +22,10 @@ interface IslandsProps {
 
 // Map resource type to icon
 const resourceIcons: Record<number, string> = {
-    0: iconWine,
-    1: iconMarble,
-    2: iconGlass,
-    3: iconSulfur,
+    1: iconWine,
+    2: iconMarble,
+    3: iconGlass,
+    4: iconSulfur,
 };
 
 export const WorldIslands: React.FC<IslandsProps> = ({

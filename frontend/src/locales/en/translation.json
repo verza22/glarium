@@ -37,68 +37,80 @@
     },
     "buildings": {
         "1": {
-            "name": "Intendencia",
-            "text": "Manage your city's administration."
+            "name": "Town Hall",
+            "text": "At the heart of the town you can find the town hall through which the town grows and flourishes. The smart civil servants, who work here, love to give you information about your local population Every expansion of the town hall increases the maximum number of citizens in this town."
         },
         "2": {
-            "name": "Academia",
-            "text": "Train scientists to increase productivity."
+            "name": "Academy",
+            "text": "The academy is a sublime place full of knowledge which combines old traditions with modern technology. The wisest heads of your town await entrance! Consider that every scientist needs his own laboratory which costs money. The larger the academy the more scientists you can employ at the same time."
         },
         "3": {
-            "name": "Deposito",
-            "text": "Store your resources safely."
+            "name": "Warehouse",
+            "text": "Some of your supplies are protected from pillagers at the warehouse. It keeps rain, birds and other pests away. The warehouse keeper is also always well informed about your supplies. Expanding your warehouse allows you to protect and store more resources."
         },
         "4": {
-            "name": "Cuartel",
-            "text": "Train your army units here."
+            "name": "Barracks",
+            "text": "At the Barracks the boisterous youth are honed into keen fighters. Your soldiers know how to handle swords, spears and slings and are also able to lead the mightiest war machines safely over the field. Troops are trained more quickly when you expand your Barracks. There is a minimum training time of 1 second per unit and 10 seconds per training order."
         },
         "5": {
-            "name": "Taberna",
-            "text": "Serve wine to your citizens to increase happiness."
+            "name": "Tavern",
+            "text": "After a hard day`s work there is nothing more pleasant than a cool jug of wine. That`s why your citizens love to meet at the tavern. And when the last old songs have been sung at the end of the day, they set out merrily and cheerful to their homes. Every expansion of your tavern allows you to serve more wine."
         },
         "6": {
-            "name": "Reductor1",
-            "text": "Reduce building costs."
+            "name": "Carpenter`s Workshop",
+            "text": "Only the best lumber is used at the Carpenter’s Workshop. Our handy craftsmen use this to put together solid timber frameworks so our houses do not have to be repaired all the time. Every level of the Carpenter’s Workshop lowers your demand for building material by 1% of the base value, up to a maximum of 50%."
         },
         "7": {
-            "name": "Reductor2",
-            "text": "Reduce building costs."
+            "name": "Optician",
+            "text": "Lenses and magnifying glasses don’t just help our scientists to see clearly and to find important papers on their desk, but they are also necessary for inventing all those new technologies that make us so proud. The Optician keeps everything we need carefully stored in boxes, so that fewer things get lost. For every level of the building, the demand for crystal in your town is reduced by 1% of the base value, up to a maximum of 50%."
         },
         "8": {
-            "name": "Reductor3",
-            "text": "Reduce building costs."
+            "name": "Firework Test Area",
+            "text": "Constant firework tests don’t just light up the skies but sometimes also the surrounding buildings. However our scientists can only optimise the demand for sulphur if they keep testing new mixtures. For every level of the building, the demand for sulphur in your town is reduced by 1% of the base value, up to a maximum of 50%."
         },
         "9": {
-            "name": "Reductor4",
-            "text": "Reduce building costs."
+            "name": "Wine Press",
+            "text": "Only the purest wines mature in the town’s deep and cool cellars. The cellarer ensures that not a drop goes to waste and that all the wine can run down the throats of your citizens. For every level of the building, the demand for wine in your town is reduced by 1% of the base value, up to a maximum of 50%."
         },
         "10": {
-            "name": "Reductor5",
-            "text": "Reduce building costs."
+            "name": "Stonemason",
+            "text": "A trained Stonemason always quarries the right blocks of marble with his strong arms. Thus less is broken and our builders always have the material they need. For every level of expansion, this building increases your marble production by 2% of the base value, up to a maximum of 140%."
         },
         "11": {
-            "name": "Productor1",
-            "text": "Increase wood production."
+            "name": "Forester`s House",
+            "text": "Strong lumberjacks can chop down even the largest trees. But they also know that a forest must be cultivated and new trees planted so that we can continue to use only the best timber for our houses. Every level of the Forester’s House increases your production of building material by 2% of the base value, up to a maximum of 140%."
         },
         "12": {
-            "name": "Productor2",
-            "text": "Increase mine production."
+            "name": "Glassblower",
+            "text": "True masters of their art create sparkling pieces at the Glassblower’s house. The blow tubes, glasses and all sorts of other apparatus are only understood by our scientists. And they are so nimble, that barely anything ever gets broken. Every level of the Glassblower increases your production of crystal by 2% of the base value, up to a maximum of 140%."
         },
         "13": {
-            "name": "Productor3",
-            "text": "Increase mine production."
+            "name": "Alchemist`s Tower",
+            "text": "When the wind blows from the west, a smell fills the streets around the tower and not many citizens are seen leaving the house without a peg on their nose. Our alchemists work restlessly on finding the perfect mixture and ensuring that we can get the maximum amount of sulphur from the pit. For every level of the building, your sulphur production is increased by 2% of the base value, up to a maximum of 140%."
         },
         "14": {
-            "name": "Productor4",
-            "text": "Increase mine production."
+            "name": "Winery",
+            "text": "A winegrower only chooses the most sunny hills of the surrounding area to cover them with the comforting green of the vines. That’s how the vineyards produce plump fruits that make for a much better harvest. Every level of the Winery increases your wine production by 2% of the base value, up to a maximum of 140%."
         },
         "15": {
-            "name": "Productor5",
-            "text": "Increase mine production."
+            "name": "Stonemason",
+            "text": "A trained Stonemason always quarries the right blocks of marble with his strong arms. Thus less is broken and our builders always have the material they need. For every level of expansion, this building increases your marble production by 2% of the base value, up to a maximum of 140%."
         },
         "16": {
-            "name": "Puerto",
-            "text": "Manage ships and trade at your port."
+            "name": "Trading Port",
+            "text": "The port is your gate to the world. Here you can recruit transport ships and ready them for long journeys. If you have a Dockyard, you can also purchase Freighters here at the port. You can pick up precious goods from all over the world here. In larger ports, your ships will load faster. You can build another port, which increases your loading speed, as soon as you have completed the research dry-dock."
+        },
+        "17": {
+            "name": "Palace",
+            "text": "The Palace is an excellent place to lead your empire into the future! It also provides a gorgeous view of the sea. Every expansion of your capital’s Palace allows you to found an additional colony. Palace levels 21 and above do not permit any more cities to be built. The current maximum of 21 towns (1 capital + 20 colonies) remains, but these higher levels do allow enemy towns to be occupied even if you have reached the limit of your own towns."
+        },
+        "18": {
+            "name": "Governor`s Residence",
+            "text": "A governor in your colony guarantees that all the daily administrative tasks are done properly. He also lowers the level of corruption in your colony. The governor`s residence can be upgraded to a palace if you ever want to move your capital."
+        },
+        "19": {
+            "name": "Town Wall",
+            "text": "The town wall protects your citizens against your enemies and the sun. Beware! Enemies will try to tear holes into your wall or to climb over it. Every level increases the resistance of your town wall."
         }
     },
     "modal": {
@@ -228,6 +240,9 @@
         },
         "building": {
             "list_title": "Construction list",
+            "text": "A vast and empty place catches your eye. Which building should your citizens construct here?",
+            "research": "Required research:",
+            "buildNow": "Build now!",
             "building": "Under construction",
             "title": "Units scheduled for training",
             "no_units": "No units have been selected",

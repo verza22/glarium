@@ -1,16 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import DragToScroll from "../containers/DragToScroll";
-import Modal, { ModalRef } from "../containers/modal/Modal";
 import Building, { BuildingPosition } from "../components/Building";
 import Layout from "../containers/Layout";
 import CityImg from "./../assets/img/city/city.jpg";
 import { useParams } from "react-router-dom";
 import { useBuildingGetInfo } from "../hooks/useBuildingGetInfo";
+import { useModal } from "../contexts/ModalContext";
+import { ResponseBuildingGetInfo } from "@shared/types/responses";
+import { ModalType } from "../../../shared/types/others";
 
 const City = () => {
-    const refModal = useRef<ModalRef>(null);
     const { cityId } = useParams<{ cityId: string }>();
     const { data } = useBuildingGetInfo(Number(cityId));
+    const { openModal } = useModal();
 
     const [groundList] = useState<BuildingPosition[]>([
         { top: 370, left: 1100 },
@@ -30,6 +32,14 @@ const City = () => {
         { top: 685, left: 900 },
     ]);
 
+    const handleBuilding = (building: ResponseBuildingGetInfo|null, position: number) => {
+        if(building === null){
+            openModal(ModalType.BuildingList, position);
+        }else{
+
+        }
+    }
+
     return (
         <>
             <Layout />
@@ -43,12 +53,10 @@ const City = () => {
                     >
                         {
                             data &&
-                            <Building groundList={groundList} buildingList={data} />
+                            <Building groundList={groundList} buildingList={data} handleBuilding={handleBuilding} />
                         }
                     </div>
                 </DragToScroll>
-                <Modal ref={refModal} >
-                </Modal>
             </div>
         </>
     );

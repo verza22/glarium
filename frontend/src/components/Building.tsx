@@ -12,10 +12,11 @@ export interface BuildingPosition {
 
 interface BuildingProps {
     groundList: BuildingPosition[],
-    buildingList: ResponseBuildingGetInfo[]
+    buildingList: ResponseBuildingGetInfo[],
+    handleBuilding: (building: ResponseBuildingGetInfo|null, position: number) => void
 }
 
-const Building: React.FC<BuildingProps> = ({ groundList, buildingList }) => {
+const Building: React.FC<BuildingProps> = ({ groundList, buildingList, handleBuilding }) => {
 
     const getBuilding = (index: number) => {
         const buildingIndex = buildingList.findIndex(b => b.position === index);
@@ -26,6 +27,15 @@ const Building: React.FC<BuildingProps> = ({ groundList, buildingList }) => {
                 src={Ground}
                 style={{ width: '100%', height: '100%' }}
             />
+        }
+    }
+
+    const onClick = (index: number) => {
+        const buildingIndex = buildingList.findIndex(b => b.position === index);
+        if (buildingIndex >= 0) {
+            handleBuilding(buildingList[buildingIndex], index);
+        }else{
+            handleBuilding(null, index);
         }
     }
 
@@ -61,6 +71,7 @@ const Building: React.FC<BuildingProps> = ({ groundList, buildingList }) => {
                         top: building.top,
                         left: building.left
                     }}
+                    onClick={()=> onClick(index)}
                 >
                     {getBuilding(index)}
                 </div>

@@ -6,3 +6,15 @@ export interface ResponseBuildingGetInfo {
     level: number;
     constructedAt: Date;
 }
+
+export interface ResponseBuildingAvailable {
+    id: number;
+    wood: number;
+    wine: number;
+    marble: number;
+    glass: number;
+    sulfur: number;
+    time: number;
+    research: boolean;
+    researchId: number;
+}

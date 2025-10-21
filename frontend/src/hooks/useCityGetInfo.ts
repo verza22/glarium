@@ -5,6 +5,7 @@ export function useCityGetInfo(cityId: number) {
   return useQuery({
     queryKey: ["user", cityId],
     queryFn: () => fetchCityGetInfo({cityId}),
-    enabled: !!cityId
+    enabled: !!cityId,
+    refetchOnMount: false
   });
 }

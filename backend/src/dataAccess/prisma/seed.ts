@@ -786,7 +786,7 @@ function generateIslandMap() {
       for (let y = 0; y < 100; y++) {
         map[x][y] = {
             type: Math.random() < 0.5 ? 'i' : 'o', // 'i' = island, 'o' = sea
-            resource: Math.floor(Math.random() * 5), // random resource
+            resource: Math.floor(Math.random() * 4) + 1, // random resource
             sector: Math.floor(Math.random() * 10) + 1, // random sector between 1 and 10
         };
       }

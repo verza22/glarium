@@ -6,15 +6,17 @@ import { useTranslation } from "react-i18next";
 import packageJson from "../../package.json";
 import { useUserStore } from "../store/userStore";
 import { useNavigationLayout } from "../hooks/useNavigationLayout";
-import { useCityGetInfo } from "../hooks/useCityGetInfo";
+import { useCityGetInfoMutation } from "../hooks/useCityGetInfo";
 import { ModalType } from "../../../shared/types/others";
 import { useModal } from "../contexts/ModalContext";
+import { useCityStore } from "../store/cityStore";
 
 const Layout: React.FC = () => {
     const { t } = useTranslation();
     const navigationLayout = useNavigationLayout();
     const { clearUser, cityId } = useUserStore();
-    const { data } = useCityGetInfo(cityId);
+    const { mutate: cityGetInfo } = useCityGetInfoMutation();
+    const city = useCityStore();
     const { openModal } = useModal();
 
     const hanleAdvisor = (type:  "mayor" | "general" | "scientist" | "diplomat") => {
@@ -31,6 +33,10 @@ const Layout: React.FC = () => {
             break;
         }
     }
+
+    React.useEffect(()=>{
+        cityGetInfo(cityId);
+    }, [cityId])
 
     return (
         <div className="fixed top-0 left-0 w-full z-20">
@@ -59,7 +65,7 @@ const Layout: React.FC = () => {
 
             <div className="relative-bottom-6">
                 {
-                    data && <NavigationLayout navigationLayout={navigationLayout} data={data}/>
+                    city.cities.length > 0 && <NavigationLayout navigationLayout={navigationLayout} data={city} />
                 }
                 <Advisors hanleAdvisor={hanleAdvisor} />
             </div>

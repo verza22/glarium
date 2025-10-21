@@ -194,6 +194,80 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Available",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"position\": 1,\n  \"cityId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/building/available",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"building",
+								"available"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateBuilding",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"position\": 6,\n  \"cityId\": 1,\n  \"buildingId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/building/create",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"building",
+								"create"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

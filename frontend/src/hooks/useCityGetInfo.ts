@@ -1,11 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { fetchCityGetInfo } from "../services/cityService";
+import { ResponseCityGetInfo } from "@shared/types/responses";
+import { useCityStore } from "../store/cityStore";
 
-export function useCityGetInfo(cityId: number) {
-  return useQuery({
-    queryKey: ["user", cityId],
-    queryFn: () => fetchCityGetInfo({cityId}),
-    enabled: !!cityId,
-    refetchOnMount: false
-  });
+export function useCityGetInfoMutation() {
+    const setCity = useCityStore(state => state.setCity);
+
+    return useMutation({
+        mutationFn: (cityId: number) => fetchCityGetInfo({ cityId }),
+        onSuccess: (response: ResponseCityGetInfo) => {
+            setCity(response);
+        }
+    });
 }

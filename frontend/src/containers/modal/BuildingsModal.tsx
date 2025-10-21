@@ -31,6 +31,9 @@ import Building19 from '../../assets/img/city/19.png'
 
 import { useBuildingAvailable } from '../../hooks/useBuildingAvailable'
 import { ResponseBuildingAvailable } from '@shared/types/responses'
+import { useCityStore } from '../../store/cityStore'
+import { useUserStore } from '../../store/userStore'
+import { useBuildingCreate } from '../../hooks/useBuildingCreate'
 
 export interface BuildingsListModalRef {
     setPosition: (position: number) => void;
@@ -45,6 +48,8 @@ export default function BuildingsModal({ close, ref }: ModalProps) {
     const { t } = useTranslation();
     const [position, setPosition] = React.useState<number>(0);
     const { data } = useBuildingAvailable(position);
+    const { mutate: buildingCreate } = useBuildingCreate();
+    const { resources } = useCityStore();
 
     React.useImperativeHandle(ref, () => ({
         setPosition: (position: number) => {
@@ -96,6 +101,20 @@ export default function BuildingsModal({ close, ref }: ModalProps) {
         }
     }
 
+    const hasResources = (build: ResponseBuildingAvailable) => {
+        return resources.wood >= build.wood &&
+        resources.marble >= build.marble &&
+        resources.glass >= build.glass &&
+        resources.wine >= build.wine &&
+        resources.sulfur >= build.sulfur;
+    }
+
+    const handleBuild = (build: ResponseBuildingAvailable) => {
+        buildingCreate({position, buildingId: build.id}, { onSuccess: () => {
+            close();
+        }});
+    }
+
     return (
         <div className="border rounded p-4">
             <WindowLeft close={close} title={t('modal.building.list_title')}>
@@ -134,9 +153,13 @@ export default function BuildingsModal({ close, ref }: ModalProps) {
 
                             <div className="flex-1 flex flex-col items-center justify-center">
                                 {build.research ? (
-                                    <button className="bg-yellow-500 text-white px-3 py-1 rounded cursor-pointer">
-                                        {t('modal.building.buildNow')}
-                                    </button>
+                                    hasResources(build) ?
+                                        <button className="bg-yellow-500 text-white px-3 py-1 rounded cursor-pointer" onClick={()=> handleBuild(build)}>
+                                            {t('modal.building.buildNow')}
+                                        </button>
+                                    : <div className="text-center text-sm">
+                                        <div>{t('modal.building.noResources')}</div>
+                                    </div>
                                 ) : (
                                     <div className="text-center text-sm">
                                         <div>{t('modal.building.research')}</div>

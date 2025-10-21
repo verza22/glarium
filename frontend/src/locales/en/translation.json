@@ -243,6 +243,7 @@
             "text": "A vast and empty place catches your eye. Which building should your citizens construct here?",
             "research": "Required research:",
             "buildNow": "Build now!",
+            "noResources": "You don’t have enough resources",
             "building": "Under construction",
             "title": "Units scheduled for training",
             "no_units": "No units have been selected",

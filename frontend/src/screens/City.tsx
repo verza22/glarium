@@ -53,7 +53,7 @@ const City = () => {
                     >
                         {
                             data &&
-                            <Building groundList={groundList} buildingList={data} handleBuilding={handleBuilding} />
+                            <Building groundList={groundList} buildingList={data} handleBuilding={handleBuilding}/>
                         }
                     </div>
                 </DragToScroll>

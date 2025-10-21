@@ -4,7 +4,7 @@ export interface ResponseBuildingGetInfo {
     position: number;
     buildingId: number;
     level: number;
-    constructedAt: Date;
+    constructedAt: Date|null;
 }
 
 export interface ResponseBuildingAvailable {

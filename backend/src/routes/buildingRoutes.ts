@@ -7,5 +7,6 @@ const controller = new BuildingController();
 
 router.post('/getInfo', authenticate, controller.getInfo.bind(controller));
 router.post('/available', authenticate, controller.available.bind(controller));
+router.post('/create', authenticate, controller.create.bind(controller));
 
 export default router;

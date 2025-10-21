@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Ground from "./../assets/img/city/ground.png"
-
-
-import { ResponseBuildingGetInfo } from '@shared/types/responses';
-import BuildingImage from './BuildingImage';
+import React, { useEffect, useState } from "react";
+import Ground from "./../assets/img/city/ground.png";
+import Construct from "./../assets/img/city/construct.png";
+import { ResponseBuildingGetInfo } from "@shared/types/responses";
+import BuildingImage from "./BuildingImage";
+import { getRemainingTime } from "../utils/util";
 
 export interface BuildingPosition {
     top: number;
@@ -11,69 +11,86 @@ export interface BuildingPosition {
 }
 
 interface BuildingProps {
-    groundList: BuildingPosition[],
-    buildingList: ResponseBuildingGetInfo[],
-    handleBuilding: (building: ResponseBuildingGetInfo|null, position: number) => void
+    groundList: BuildingPosition[];
+    buildingList: ResponseBuildingGetInfo[];
+    handleBuilding: (building: ResponseBuildingGetInfo | null, position: number) => void;
 }
 
 const Building: React.FC<BuildingProps> = ({ groundList, buildingList, handleBuilding }) => {
+    const [currentTime, setCurrentTime] = useState(Date.now());
 
-    const getBuilding = (index: number) => {
-        const buildingIndex = buildingList.findIndex(b => b.position === index);
-        if (buildingIndex >= 0) {
-            return <BuildingImage buildingId={buildingList[buildingIndex].buildingId} />
-        } else {
-            return <img
-                src={Ground}
-                style={{ width: '100%', height: '100%' }}
-            />
-        }
-    }
+    useEffect(() => {
+        const hasConstruction = buildingList.some(
+            (b) => b.constructedAt !== null && new Date(b.constructedAt).getTime() > Date.now()
+        );
+
+        if (!hasConstruction) return;
+
+        const interval = setInterval(() => setCurrentTime(Date.now()), 1000);
+        return () => clearInterval(interval);
+    }, [buildingList]);
 
     const onClick = (index: number) => {
-        const buildingIndex = buildingList.findIndex(b => b.position === index);
-        if (buildingIndex >= 0) {
-            handleBuilding(buildingList[buildingIndex], index);
-        }else{
-            handleBuilding(null, index);
+        const building = buildingList.find((b) => b.position === index);
+        handleBuilding(building ?? null, index);
+    };
+
+    const getBuildingContent = (index: number) => {
+        const building = buildingList.find((b) => b.position === index);
+
+        if (!building) {
+            return <img src={Ground} className="w-full h-full" />;
         }
-    }
+
+        const isConstruction = building.constructedAt !== null && new Date(building.constructedAt).getTime() > currentTime;
+
+        if (isConstruction) {
+            return (
+                <div className="relative w-full h-full">
+                    <img src={Construct} className="w-full h-full" />
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-black/60 text-white text-xs px-2 py-1 rounded-md">
+                        {building.constructedAt && getRemainingTime(building.constructedAt)}
+                    </div>
+                </div>
+            );
+        }
+
+        return <BuildingImage buildingId={building.buildingId} />;
+    };
 
     const getBuildingStyle = (index: number) => {
-        const buildingIndex = buildingList.findIndex(b => b.position === index);
-        if (buildingIndex >= 0) {
-            switch(buildingList[buildingIndex].buildingId){
-                default:
-                    return { width: 140, height: 125 }
-                case 1:
-                    return { width: 190, height: 150 }
-                case 16:
-                    return { width: 143, height: 211 }
-                case 17:
-                    return { backgroundPositionX: 'center', height: 149, width: 169, position: 'relative', top: -25, left: -7 }
-                case 19:
-                    return { height: 102, width: 161, backgroundRepeat: 'no-repeat', position: 'relative', top: 6, right: 9 }
-            }
-        } else {
-            return { width: 140, height: 125 }
+        const building = buildingList.find((b) => b.position === index);
+        if (!building) return { width: 140, height: 125 };
+
+        switch (building.buildingId) {
+            default:
+                return { width: 140, height: 125 };
+            case 1:
+                return { width: 190, height: 150 };
+            case 16:
+                return { width: 143, height: 211 };
+            case 17:
+                return { height: 149, width: 169, position: "relative", top: -25, left: -7 };
+            case 19:
+                return { height: 102, width: 161, position: "relative", top: 6, right: 9 };
         }
-    }
+    };
 
     return (
-        <div className="divBuilds" style={{ position: 'relative', width: '100%', height: '100%' }}>
+        <div className="relative w-full h-full">
             {groundList.map((building, index) => (
                 <div
                     key={index}
-                    className="object"
+                    className="absolute cursor-pointer"
                     style={{
                         ...getBuildingStyle(index),
-                        position: 'absolute',
                         top: building.top,
-                        left: building.left
+                        left: building.left,
+                        position: "absolute"
                     }}
-                    onClick={()=> onClick(index)}
+                    onClick={() => onClick(index)}
                 >
-                    {getBuilding(index)}
+                    {getBuildingContent(index)}
                 </div>
             ))}
         </div>

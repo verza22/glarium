@@ -13,14 +13,17 @@ import Port from './Port'
 import Tavern from './Tavern'
 import Barracks from './barracks/Barracks'
 import UnitQueue from './barracks/UnitQueue'
+import { useBuildingNextLevel } from '../../../hooks/useBuildingNextLevel'
+import { ResponseBuildingNextLevel } from '@shared/types/responses'
+import { useBuildingUpgrade } from '../../../hooks/useBuildingUpgrade'
 
-export interface BuildingInfo {
-    buildingId: number
-    level: number
+export interface BuildingData {
+    buildingId: number,
+    position: number
 }
 
 export interface BuildingsModalRef {
-    setInfo: (info: BuildingInfo) => void;
+    setBuildingData: (data: BuildingData) => void;
 }
 
 interface Props {
@@ -30,25 +33,37 @@ interface Props {
 
 export default function Buildings({ ref, close }: Props) {
     const { t } = useTranslation();
-    const [info, setInfo] = React.useState<BuildingInfo | null>(null);
+    const [data, setData] = React.useState<ResponseBuildingNextLevel|null>(null);
+    const { mutate: getNextLevel } = useBuildingNextLevel();
+    const { mutate: upgradeBuilding } = useBuildingUpgrade();
 
     React.useImperativeHandle(ref, () => ({
-        setInfo: (info: BuildingInfo) => setInfo(info)
+        setBuildingData: (data: BuildingData) => {
+            getNextLevel(data, { onSuccess(response: ResponseBuildingNextLevel){
+                setData(response);
+            }})
+        }
     }), []);
 
-    if(info===null)
+    if(data===null)
         return null;
+
+    const upgrade = () => {
+        upgradeBuilding({ cityBuildingId: data.cityBuildingId }, { onSuccess(){ 
+            close();
+        }});
+    }
 
     return (
         <div className="border p-2 rounded">
-            <WindowLeft close={close} title={t(`buildings.${info.buildingId}.name`)}>
+            <WindowLeft close={close} title={t(`buildings.${data.buildingId}.name`)}>
                 <div className="text-justify font-normal mb-3">
-                    {t(`buildings.${info.buildingId}.text`)}
+                    {t(`buildings.${data.buildingId}.text`)}
                 </div>
 
-                {info.buildingId === 1 && <TownHall cityName="test" isCapital />}
-                {info.buildingId === 2 && <Academy />}
-                {info.buildingId === 3 && <Warehouse data={{
+                {data.buildingId === 1 && <TownHall cityName="test" isCapital />}
+                {data.buildingId === 2 && <Academy />}
+                {data.buildingId === 3 && <Warehouse data={{
                     level: 0,
                     maximum: false,
                     resources: {
@@ -62,7 +77,7 @@ export default function Buildings({ ref, close }: Props) {
                         wood: 0
                     }
                 }} />}
-                {info.buildingId === 4 && <Barracks data={{
+                {data.buildingId === 4 && <Barracks data={{
                     level: 0,
                     units: [],
                     resources: {
@@ -75,28 +90,19 @@ export default function Buildings({ ref, close }: Props) {
                         time: 0
                     }
                 }}  />}
-                {info.buildingId === 5 && <Tavern level={0} tavernWine={0} bonusTavern={0} bonusTavernConsume={0} />}
-                {info.buildingId >= 6 && info.buildingId <= 10 && <Reducers buildingName={''} level={0} />}
-                {info.buildingId >= 11 && info.buildingId <= 15 && <BuildingProducer data={{
+                {data.buildingId === 5 && <Tavern level={0} tavernWine={0} bonusTavern={0} bonusTavernConsume={0} />}
+                {data.buildingId >= 6 && data.buildingId <= 10 && <Reducers buildingName={''} level={0} />}
+                {data.buildingId >= 11 && data.buildingId <= 15 && <BuildingProducer data={{
                     buildingId: 0,
                     level: 0
                 }} />}
-                {info.buildingId === 16 && <Port speed={0} tradeShip={0} goldCost={0} gold={0} goldMissing={0} />}
+                {data.buildingId === 16 && <Port speed={0} tradeShip={0} goldCost={0} gold={0} goldMissing={0} />}
 
             </WindowLeft>
 
             <WindowRight title="Upgrade">
-                <UpgradeBuilding info={{
-                    maximum: false,
-                    level: 0,
-                    wood: 0,
-                    wine: 0,
-                    marble: 0,
-                    glass: 0,
-                    sulfur: 0,
-                    time: 0
-                }}  />
-                {info.buildingId === 4 && <UnitQueue />}
+                <UpgradeBuilding info={data} upgrade={upgrade} />
+                {data.buildingId === 4 && <UnitQueue />}
             </WindowRight>
         </div>
     )

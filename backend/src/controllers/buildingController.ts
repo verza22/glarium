@@ -3,8 +3,8 @@ import prisma from '../dataAccess/prisma/prisma'
 import { CityBL } from './../businessLogic/cityBL';
 import { BuildingBL } from './../businessLogic/buildingBL';
 import dayjs from 'dayjs';
-import { ResponseBuildingAvailable, ResponseBuildingGetInfo } from '@shared/types/responses';
-import { RequestBuildingAvailable, RequestBuildingCreate, RequestBuildingGetInfo } from '@shared/types/requests';
+import { ResponseBuildingAvailable, ResponseBuildingGetInfo, ResponseBuildingNextLevel } from '@shared/types/responses';
+import { RequestBuildingAvailable, RequestBuildingCreate, RequestBuildingGetInfo, RequestBuildingNextLevel, RequestBuildingUpgrade } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
 import { Resources } from '@shared/types/models';
 
@@ -55,8 +55,7 @@ export class BuildingController {
         const userId = req.authUser.userId;
 
         if (isNaN(position) || position < 1 || position > 15) {
-            res.status(400).json({ message: "Position must be between 1 and 15" });
-            return;
+            throw new Error("Position must be between 1 and 15");
         }
 
         const city = await prisma.city.findFirst({
@@ -68,8 +67,7 @@ export class BuildingController {
         });
 
         if (!city) {
-            res.status(404).json({ message: "City not found" });
-            return;
+            throw new Error("City not found");
         }
 
         // Get researched technologies of the user
@@ -213,13 +211,11 @@ export class BuildingController {
         });
 
         if (!city) {
-            res.status(404).json({ message: "City not found" });
-            return;
+            throw new Error("City not found");
         }
 
         if (city.userCities[0].userId !== userId) {
-            res.status(403).json({ message: "You do not own this city" });
-            return;
+            throw new Error("You do not own this city");
         }
 
         // Validate input
@@ -231,8 +227,7 @@ export class BuildingController {
             !buildingId ||
             isNaN(buildingId)
         ) {
-            res.status(400).json({ message: "Invalid position or building" });
-            return;
+            throw new Error("Invalid position or building");
         }
 
         // Get next level and zero level
@@ -244,15 +239,13 @@ export class BuildingController {
         });
 
         if (!nextLevel) {
-            res.status(400).json({ message: "This building does not exist" });
-            return;
+            throw new Error("This building does not exist");
         }
 
         // Check research requirements
         const hasResearch = await BuildingBL.checkResearch(userId, buildingId);
         if (!hasResearch) {
-            res.status(400).json({ message: "You do not have the research required to build this building" });
-            return;
+            throw new Error("You do not have the research required to build this building");
         }
 
         // Update construction times for the city
@@ -261,22 +254,19 @@ export class BuildingController {
         // Check if city is already constructing something
         const isConstructing = await BuildingBL.isConstructed(city.id);
         if (isConstructing) {
-            res.status(400).json({ message: "You are already constructing a building in this city" });
-            return;
+            throw new Error("You are already constructing a building in this city");
         }
 
         // Check if position already has a building
         const posExists = await BuildingBL.positionExist(city.id, position);
         if (posExists) {
-            res.status(400).json({ message: "There is already a building in this position" });
-            return;
+            throw new Error("There is already a building in this position");
         }
 
         // Check if the building already exists in another position
         const buildingExists = await BuildingBL.buildingExist(city.id, buildingId);
         if (buildingExists) {
-            res.status(400).json({ message: "This building already exists in another position" });
-            return;
+            throw new Error("This building already exists in another position");
         }
 
         // Validate resource-production buildings depending on island type
@@ -289,38 +279,32 @@ export class BuildingController {
             switch (buildingId) {
                 case 12: // Glass Blower
                     if (islandType !== 3) {
-                        res.status(400).json({ message: "You cannot build this on this island type" });
-                        return;
+                        throw new Error("You cannot build this on this island type");
                     }
                     break;
                 case 13: // Alchemist Tower
                     if (islandType !== 4) {
-                        res.status(400).json({ message: "You cannot build this on this island type" });
-                        return;
+                        throw new Error("You cannot build this on this island type");
                     }
                     break;
                 case 14: // Vineyard
                     if (islandType !== 1) {
-                        res.status(400).json({ message: "You cannot build this on this island type" });
-                        return;
+                        throw new Error("You cannot build this on this island type");
                     }
                     break;
                 case 15: // Stonemason
                     if (islandType !== 2) {
-                        res.status(400).json({ message: "You cannot build this on this island type" });
-                        return;
+                        throw new Error("You cannot build this on this island type");
                     }
                     break;
                 case 17: // Palace
                     if (userCity?.capital !== true) {
-                        res.status(400).json({ message: "You can only build this in the capital" });
-                        return;
+                        throw new Error("You can only build this in the capital");
                     }
                     break;
                 case 18: // Governor's Residence
                     if (userCity?.capital !== false) {
-                        res.status(400).json({ message: "You can only build this in colonies" });
-                        return;
+                        throw new Error("You can only build this in colonies");
                     }
                     break;
             }
@@ -332,8 +316,7 @@ export class BuildingController {
         // Compare resources
         const hasResources = await CityBL.compareResources(city.id, nextLevel);
         if (!hasResources) {
-            res.status(400).json({ message: "You do not have enough resources" });
-            return;
+            throw new Error("You do not have enough resources");
         }
 
         // Remove resources
@@ -364,141 +347,142 @@ export class BuildingController {
     }
 
     public async nextLevel(req: Request, res: Response): Promise<void> {
-        try {
-            const buildingId = parseInt(req.params.buildingId, 10);
-            const { level } = req.body;
+        const { position, buildingId, cityId }: RequestBuildingNextLevel = validateFields(req, [
+            { name: "position", type: "number", required: true },
+            { name: "buildingId", type: "number", required: true },
+            { name: "cityId", type: "number", required: true }
+        ]);
 
-            if (!level || isNaN(level) || level < 1) {
-                res.status(400).json({ message: "Level must be an integer >= 1" });
-                return;
-            }
+        // Update construction time for the buildings of the cities
+        await BuildingBL.updateConstructedTime(cityId, 1);
 
-            // Get next building level
-            let nextLevel = await prisma.buildingLevel.findFirst({
-                where: { buildingId, level: level + 1 },
+        const cityBuilding = await prisma.cityBuilding.findFirstOrThrow({ where: { cityId, position: position }, include: { buildingLevel: true } });
+        const level = cityBuilding.buildingLevel.level;
+
+        // Get next building level
+        let nextLevel = await prisma.buildingLevel.findFirst({
+            where: { buildingId, level: level + 1 }
+        });
+
+        let maximum = false;
+
+        if (!nextLevel) {
+            // If no next level, return the current level and mark as maximum
+            nextLevel = await prisma.buildingLevel.findFirst({
+                where: { buildingId, level },
+            });
+            maximum = true;
+        }
+
+        if (!nextLevel) {
+            throw new Error("Building level not found");
+        }
+
+        const result: ResponseBuildingNextLevel = { ...nextLevel, maximum, cityBuildingId: cityBuilding.id };
+
+        // If building is Barracks (id = 4), attach units data
+        if (buildingId === 4) {
+            const units = await prisma.unit.findMany({
+                select: {
+                    id: true,
+                    population: true,
+                    wood: true,
+                    wine: true,
+                    glass: true,
+                    sulfur: true,
+                    time: true,
+                    barrackLevel: true,
+                    gold: true,
+                },
             });
 
-            let maximum = false;
-
-            if (!nextLevel) {
-                // If no next level, return the current level and mark as maximum
-                nextLevel = await prisma.buildingLevel.findFirst({
-                    where: { buildingId, level },
-                });
-                maximum = true;
-            }
-
-            if (!nextLevel) {
-                res.status(404).json({ message: "Building level not found" });
-                return;
-            }
-
-            const result: any = { ...nextLevel, maximum };
-
-            // If building is Barracks (id = 4), attach units data
-            if (buildingId === 4) {
-                const units = await prisma.unit.findMany({
-                    select: {
-                        id: true,
-                        population: true,
-                        wood: true,
-                        wine: true,
-                        glass: true,
-                        sulfur: true,
-                        time: true,
-                        barrackLevel: true,
-                        gold: true,
-                    },
-                });
-
-                // Add trainer: 0 (default value, not persisted in DB)
-                result.units = units.map((u) => ({ ...u, trainer: 0 }));
-            }
-
-            res.json(result);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+            // Add trainer: 0 (default value, not persisted in DB)
+            result.units = units.map((u) => ({ ...u, trainer: 0 }));
         }
+
+        res.json(result);
     }
 
     public async upgrade(req: Request, res: Response): Promise<void> {
-        try {
-            const cityBuildingId = parseInt(req.params.cityBuildingId, 10);
-            const userId = Number(req.params.userId);
+        const { cityBuildingId }: RequestBuildingUpgrade = validateFields(req, [
+            { name: "cityBuildingId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-            const cityBuilding = await prisma.cityBuilding.findUnique({
-                where: { id: cityBuildingId },
-                include: {
-                    buildingLevel: true,
-                    city: {
-                        include: {
-                            userCities: true,
-                            islandCity: { include: { island: true } },
-                        },
+        const cityBuilding = await prisma.cityBuilding.findUnique({
+            where: { id: cityBuildingId },
+            include: {
+                buildingLevel: true,
+                city: {
+                    include: {
+                        userCities: true,
+                        islandCity: { include: { island: true } },
                     },
                 },
-            });
+            },
+        });
 
-            if (!cityBuilding) {
-                res.status(404).json({ message: "CityBuilding not found" });
-                return;
-            }
-
-            // Authorization: check if the city belongs to the user
-            if (cityBuilding.city.userCities[0].userId !== userId) {
-                res.status(403).json({ message: "You do not own this city" });
-                return;
-            }
-
-            const nowLevel = cityBuilding.buildingLevel;
-            const nextLevel = await prisma.buildingLevel.findFirst({
-                where: {
-                    buildingId: nowLevel.buildingId,
-                    level: nowLevel.level + 1,
-                },
-            });
-
-            if (!nextLevel) {
-                res.status(400).json({ message: "This building level does not exist" });
-                return;
-            }
-
-            // Update construction times
-            await BuildingBL.updateConstructedTime(cityBuilding.cityId);
-
-            // Check if something is already under construction
-            const isConstructing = await BuildingBL.isConstructed(cityBuilding.cityId);
-            if (isConstructing) {
-                res.status(400).json({ message: "You are already constructing something in this city" });
-                return;
-            }
-
-            // Apply research/building discounts
-            await BuildingBL.lessBuildingCost(cityBuilding.cityId, nextLevel.level);
-
-            // Check resources
-            const hasResources = await CityBL.compareResources(cityBuilding.cityId, nextLevel);
-            if (!hasResources) {
-                res.status(400).json({ message: "You do not have enough resources" });
-                return;
-            }
-
-            // Remove resources
-            await CityBL.removeResources(cityBuilding.cityId, nextLevel);
-
-            // Update building construction time (not immediately upgrade level)
-            await prisma.cityBuilding.update({
-                where: { id: cityBuilding.id },
-                data: {
-                    constructedAt: dayjs().add(nextLevel.time, "second").toDate(),
-                },
-            });
-
-            res.json({ message: "ok" });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Internal server error" });
+        if (!cityBuilding) {
+            throw new Error("CityBuilding not found");
         }
+
+        // Authorization: check if the city belongs to the user
+        if (cityBuilding.city.userCities[0].userId !== userId) {
+            throw new Error("You do not own this city");
+        }
+
+        const nowLevel = cityBuilding.buildingLevel;
+        const nextLevel = await prisma.buildingLevel.findFirst({
+            where: {
+                buildingId: nowLevel.buildingId,
+                level: nowLevel.level + 1,
+            },
+        });
+
+        if (!nextLevel) {
+            throw new Error("This building level does not exist");
+        }
+
+        // Update construction times
+        await BuildingBL.updateConstructedTime(cityBuilding.cityId);
+
+        // Check if something is already under construction
+        const isConstructing = await BuildingBL.isConstructed(cityBuilding.cityId);
+        if (isConstructing) {
+            throw new Error("You are already constructing something in this city");
+        }
+
+        // Apply research/building discounts
+        await BuildingBL.lessBuildingCost(cityBuilding.cityId, nextLevel.level);
+
+        // Check resources
+        const hasResources = await CityBL.compareResources(cityBuilding.cityId, nextLevel);
+        if (!hasResources) {
+            throw new Error("You do not have enough resources");
+        }
+
+        // Remove resources
+        await CityBL.removeResources(cityBuilding.cityId, nextLevel);
+
+        // Update building construction time (not immediately upgrade level)
+        await prisma.cityBuilding.update({
+            where: { id: cityBuilding.id },
+            data: {
+                constructedAt: dayjs().add(nextLevel.time, "second").toDate(),
+            },
+        });
+
+        //get resources
+        const cityUpdated = await prisma.city.findUniqueOrThrow({ where: { id: cityBuilding.cityId } });
+
+        const updatedResources: Resources = {
+            wood: cityUpdated.wood,
+            marble: cityUpdated.marble,
+            wine: cityUpdated.wine,
+            glass: cityUpdated.glass,
+            sulfur: cityUpdated.sulfur
+        }
+
+        res.json(updatedResources);
     }
 }

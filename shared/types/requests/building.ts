@@ -10,3 +10,11 @@ export interface RequestBuildingCreate {
     position: number,
     buildingId: number
 }
+export interface RequestBuildingNextLevel {
+    position: number,
+    buildingId: number,
+    cityId: number
+}
+export interface RequestBuildingUpgrade {
+    cityBuildingId: number
+}

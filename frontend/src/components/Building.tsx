@@ -68,7 +68,7 @@ const Building: React.FC<BuildingProps> = ({ groundList, buildingList, handleBui
             case 1:
                 return { width: 190, height: 150 };
             case 16:
-                return { width: 143, height: 211 };
+                return { width: 215, height: 150 };
             case 17:
                 return { height: 149, width: 169, position: "relative", top: -25, left: -7 };
             case 19:

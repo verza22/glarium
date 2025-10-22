@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import BuildingList, { BuildingsListModalRef } from "./BuildingsModal";
-import Building, { BuildingsModalRef, BuildingInfo } from "./building/Building";
+import Building, { BuildingsModalRef, BuildingData } from "./building/Building";
 import Donation, { DonationRef, DonationInfo } from "./donation/DonationModal";
 import Research from "./research/ResearchModal";
 import IslandCity from "./islandCity/IslandCityModal";
@@ -15,7 +15,7 @@ export interface ModalRef {
     open: (type: ModalType) => void,
     modal: {
         buildingList: (position: number) => void,
-        building: (info: BuildingInfo) => void,
+        building: (buildingData: BuildingData) => void,
         donation: (info: DonationInfo) => void,
         messages: (info: MessagesInfo) => void,
         colonize: (info: ColonizeInfo) => void,
@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
         },
         modal: {
             buildingList: (position: number) => refBuildingList.current?.setPosition(position),
-            building: (info: BuildingInfo) => refBuilding.current?.setInfo(info),
+            building: (buildingData: BuildingData) => refBuilding.current?.setBuildingData(buildingData),
             donation: (info: DonationInfo) => refDonation.current?.setInfo(info),
             messages: (info: MessagesInfo) => refMessages.current?.setInfo(info),
             colonize: (info: ColonizeInfo) => refColonize.current?.setInfo(info),

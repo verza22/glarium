@@ -36,7 +36,10 @@ const City = () => {
         if(building === null){
             openModal(ModalType.BuildingList, position);
         }else{
-
+            openModal(ModalType.Building, {
+                buildingId: building.buildingId,
+                position: building.position
+            });
         }
     }
 

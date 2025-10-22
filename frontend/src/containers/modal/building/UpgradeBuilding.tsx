@@ -20,10 +20,11 @@ type Props = {
     glass: number
     sulfur: number
     time: number
-  }
+  },
+  upgrade: () => void
 }
 
-export default function UpgradeBuilding({ info }: Props) {
+export default function UpgradeBuilding({ info, upgrade }: Props) {
   const { t } = useTranslation()
 
   // Dummy reducers for display
@@ -42,7 +43,7 @@ export default function UpgradeBuilding({ info }: Props) {
     <div className="bg-white p-4 rounded-md shadow-md text-sm mb-3">
       <div className="flex justify-center space-x-6">
         {!info.maximum && (
-          <div className="flex flex-col items-center cursor-pointer">
+          <div className="flex flex-col items-center cursor-pointer" onClick={upgrade}>
             <div className="w-10 h-10 mb-1">
               <img src={BtnUpgrade} alt="upgrade" className="w-full h-full" />
             </div>

@@ -18,3 +18,29 @@ export interface ResponseBuildingAvailable {
     research: boolean;
     researchId: number;
 }
+
+export interface ResponseBuildingNextLevel {
+    maximum: boolean;
+    level: number;
+    buildingId: number;
+    cityBuildingId: number;
+    id: number;
+    wood: number;
+    wine: number;
+    marble: number;
+    glass: number;
+    sulfur: number;
+    time: number;
+    units?: {
+        id: number,
+        population: number,
+        wood: number,
+        wine: number,
+        glass: number,
+        sulfur: number,
+        time: number,
+        barrackLevel: number,
+        gold: number,
+        trainer: number
+    }[]
+}

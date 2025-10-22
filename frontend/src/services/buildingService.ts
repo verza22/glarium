@@ -1,6 +1,6 @@
 import axios from "../utils/axios";
-import { ResponseBuildingAvailable, ResponseBuildingGetInfo } from "@shared/types/responses";
-import { RequestBuildingAvailable, RequestBuildingCreate, RequestBuildingGetInfo } from "@shared/types/requests";
+import { ResponseBuildingAvailable, ResponseBuildingGetInfo, ResponseBuildingNextLevel } from "@shared/types/responses";
+import { RequestBuildingAvailable, RequestBuildingCreate, RequestBuildingGetInfo, RequestBuildingNextLevel, RequestBuildingUpgrade } from "@shared/types/requests";
 import { Resources } from "@shared/types/models";
 
 export async function fetchBuildingGetInfo({ cityId }: RequestBuildingGetInfo): Promise<ResponseBuildingGetInfo[]> {
@@ -23,6 +23,22 @@ export async function buildingCreate({ cityId, position, buildingId }: RequestBu
         cityId,
         position,
         buildingId
+    });
+    return response.data;
+}
+
+export async function buildingNextLevel({ position, buildingId, cityId }: RequestBuildingNextLevel): Promise<ResponseBuildingNextLevel> {
+    const response = await axios.post<ResponseBuildingNextLevel>("building/nextLevel", {
+        position,
+        buildingId,
+        cityId
+    });
+    return response.data;
+}
+
+export async function buildingUpgrade({ cityBuildingId }: RequestBuildingUpgrade): Promise<Resources> {
+    const response = await axios.post<Resources>("building/upgrade", {
+        cityBuildingId
     });
     return response.data;
 }

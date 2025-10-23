@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { world } from '../config/world';
 import prisma from '../dataAccess/prisma/prisma'
 import { RequestUserConfig } from '@shared/types/requests';
-import { ResponseUserConfig } from '@shared/types/responses';
+import { ResponseUserBuyTradeShip, ResponseUserConfig } from '@shared/types/responses';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
 import { CityBL } from './../businessLogic/cityBL';
 
@@ -10,7 +10,7 @@ export class UserController {
 
     // GET /user/config
     public async config(req: Request, res: Response) {
-        const userId = (req as Request & RequestUserConfig).id;
+        const userId = req.authUser.userId;
 
         // General config
         const data: ResponseUserConfig = { world: world, research: [], user_research: [] };
@@ -58,16 +58,17 @@ export class UserController {
     }
 
     public async buyTradeShip(req: Request, res: Response) {
-        const userId = (req as Request & RequestUserConfig).id;
+        const userId = req.authUser.userId;
+
         await UserResourceBL.updateResources(userId);
 
         const userResource = await prisma.userResource.findFirst({
             where: { userId }
         });
-        if (!userResource) return res.json("User resources not found");
+        if (!userResource) throw new Error("User resources not found");
 
         if (userResource.tradeShip === 200) {
-            return res.json("You reached the maximum ship limit");
+             throw new Error("You reached the maximum ship limit");
         }
 
         const level = userResource.tradeShip + 1;
@@ -81,19 +82,29 @@ export class UserController {
         }
 
         if (goldCost > userResource.gold) {
-            return res.json("Not enough gold");
+             throw new Error("Not enough gold");
         }
+
+        const newGold = userResource.gold - goldCost;
+        const newTradeShip = userResource.tradeShip + 1;
+        const newTradeAvailableShip = userResource.tradeShipAvailable + 1;
 
         await prisma.userResource.update({
             where: { id: userResource.id },
             data: {
-                gold: userResource.gold - goldCost,
-                tradeShip: userResource.tradeShip + 1,
-                tradeShipAvailable: userResource.tradeShipAvailable + 1
+                gold: newGold,
+                tradeShip: newTradeShip,
+                tradeShipAvailable: newTradeAvailableShip
             }
         });
 
-        return res.json("ok");
+        const response: ResponseUserBuyTradeShip = {
+            newGold,
+            newTradeShip,
+            newTradeAvailableShip
+        };
+
+        return res.json(response);
     }
 
     public async sendMessage(req: Request, res: Response) {

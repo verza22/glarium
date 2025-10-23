@@ -15,7 +15,8 @@ export const useLogin = () => {
                 islandX: response.islandX,
                 islandY: response.islandY,
                 bearerToken: response.token,
-                email: email
+                email: email,
+                worldConfig: response.worldConfig
             });
         }
     });

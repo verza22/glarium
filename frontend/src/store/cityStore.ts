@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { ResponseCityGetInfo } from "@shared/types/responses";
+import { ResponseCityGetInfo, ResponseUserBuyTradeShip } from "@shared/types/responses";
 import { Resources } from "@shared/types/models";
 
 interface CityState extends ResponseCityGetInfo {
     setCity: (data: Partial<CityState>) => void,
-    updateResources: (resources: Resources) => void
+    updateResources: (resources: Resources) => void,
+    setTradeShip: (data: ResponseUserBuyTradeShip) => void
 };
 
 export const useCityStore = create<CityState>()(
@@ -34,7 +35,15 @@ export const useCityStore = create<CityState>()(
             },
 
             setCity: (data) => set((state) => ({ ...state, ...data })),
-            updateResources:  (resources: Resources) => set((state) => ({ ...state, resources })),
+            updateResources: (resources: Resources) => set((state) => ({ ...state, resources })),
+            setTradeShip: (data: ResponseUserBuyTradeShip) => set((state) => ({
+                ...state,
+                userResources: {
+                    gold: data.newGold,
+                    tradeShip: data.newTradeShip,
+                    tradeShipAvailable: data.newTradeAvailableShip
+                }
+            })),
         }),
         {
             name: "city-storage"

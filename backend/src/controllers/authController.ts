@@ -4,6 +4,7 @@ import { UserBL } from "../businessLogic/userBL";
 import { asyncHandler } from "../utils/asyncHandler";
 import { ResponseAuth } from "@shared/types/responses";
 import { RequestUserLogin, RequestUserRegister } from "@shared/types/requests";
+import { world } from '../config/world';
 
 export class AuthController {
 
@@ -24,7 +25,8 @@ export class AuthController {
             cityId,
             islandId,
             islandX: x,
-            islandY: y
+            islandY: y,
+            worldConfig: world
         };
         res.json(response);
     }
@@ -48,7 +50,8 @@ export class AuthController {
                 cityId,
                 islandId,
                 islandX: x,
-                islandY: y
+                islandY: y,
+                worldConfig: world
             };
             res.json(response);
         } else {

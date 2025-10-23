@@ -1,3 +1,4 @@
+import { WorldConfig } from "@shared/types/others";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -9,6 +10,7 @@ interface UserState {
     islandY: number,
     bearerToken: string,
     email: string,
+    worldConfig: WorldConfig ,
     setUser: (data: Partial<UserState>) => void,
     clearUser: () => void
 };
@@ -23,6 +25,39 @@ export const useUserStore = create<UserState>()(
             islandY: 0,
             bearerToken: "",
             email: "",
+            worldConfig: {
+                transport: 0,
+                load_speed: 0,
+                load_speed_base: 0,
+                load_attack_return: 0,
+                load_defend_return: 0,
+                bonus: {
+                    resources: 0,
+                    tavern: 0,
+                    tavern_consume: 0
+                },
+                warehouse: {
+                    resource_protected: 0,
+                    resource_protected_base: 0,
+                    capacity: 0,
+                    capacity_base: 0
+                },
+                distance: {
+                    same_island: 0
+                },
+                combat: {
+                    wall_bonus: 0
+                },
+                colonize: {
+                    wood: 0,
+                    gold: 0,
+                    population: 0
+                },
+                messages: {
+                    cant: 0,
+                    time: 0
+                }
+            },
 
             setUser: (data) => set((state) => ({ ...state, ...data })),
 
@@ -34,7 +69,40 @@ export const useUserStore = create<UserState>()(
                     islandX: 0,
                     islandY: 0,
                     bearerToken: "",
-                    email: ""
+                    email: "",
+                    worldConfig: {
+                        transport: 0,
+                        load_speed: 0,
+                        load_speed_base: 0,
+                        load_attack_return: 0,
+                        load_defend_return: 0,
+                        bonus: {
+                            resources: 0,
+                            tavern: 0,
+                            tavern_consume: 0
+                        },
+                        warehouse: {
+                            resource_protected: 0,
+                            resource_protected_base: 0,
+                            capacity: 0,
+                            capacity_base: 0
+                        },
+                        distance: {
+                            same_island: 0
+                        },
+                        combat: {
+                            wall_bonus: 0
+                        },
+                        colonize: {
+                            wood: 0,
+                            gold: 0,
+                            population: 0
+                        },
+                        messages: {
+                            cant: 0,
+                            time: 0
+                        }
+                    }
                 }),
         }),
         {

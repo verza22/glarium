@@ -14,5 +14,12 @@ export interface ResponseAuth {
     cityId: number,
     islandId: number,
     islandX: number,
-    islandY: number
+    islandY: number,
+    worldConfig: WorldConfig
+}
+
+export interface ResponseUserBuyTradeShip {
+    newGold: number,
+    newTradeShip: number,
+    newTradeAvailableShip: number
 }

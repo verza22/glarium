@@ -305,7 +305,8 @@
                 "tradeShipBuyText": "You can purchase trade ships to expand your trading capabilities.",
                 "tradeShipBuyBtn": "Buy Trade Ship",
                 "tradeShipBuyMissing1": "Not enough gold to buy a trade ship.",
-                "tradeShipBuyMissing2": "You need {{goldMissing}} more gold."
+                "tradeShipBuyMissing2": "You need {{goldMissing}} more gold.",
+                "cost": "Cost"
             },
             "buildingReducer": {
                 "building": "Building",

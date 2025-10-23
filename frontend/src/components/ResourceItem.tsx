@@ -52,7 +52,7 @@ const ResourceItem: React.FC<ResourceItemProps> = ({
     <div className="inline-block" title={t(`resources.${type}`)}>
       <img
         src={icons[type]}
-        className={`${disabled && amount === 0 ? 'opacity-50' : ''}`}
+        className={`m-auto ${disabled && amount === 0 ? 'opacity-50' : ''}`}
         alt={t(`resources.${type}`)}
       />
       <span className="ml-1">{amount}</span>

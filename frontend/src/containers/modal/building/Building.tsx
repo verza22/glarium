@@ -39,7 +39,7 @@ export default function Buildings({ ref, close }: Props) {
     const { mutate: getNextLevel } = useBuildingNextLevel();
     const { mutate: upgradeBuilding } = useBuildingUpgrade();
     const { mutate: buyTradeShip } = useBuyTradeShip();
-    const { population, userResources } = useCityStore();
+    const { population, userResources, resources } = useCityStore();
 
     React.useImperativeHandle(ref, () => ({
         setBuildingData: (data: BuildingData) => {
@@ -71,20 +71,7 @@ export default function Buildings({ ref, close }: Props) {
 
                 {data.buildingId === 1 && <TownHall cityName="test" isCapital />}
                 {data.buildingId === 2 && <Academy />}
-                {data.buildingId === 3 && <Warehouse data={{
-                    level: 0,
-                    maximum: false,
-                    resources: {
-                        glass: 0,
-                        gold: 0,
-                        marble: 0,
-                        population: 0,
-                        sulfur: 0,
-                        timec: 0,
-                        wine: 0,
-                        wood: 0
-                    }
-                }} />}
+                {data.buildingId === 3 && <Warehouse level={data.level - 1} resources={resources} />}
                 {data.buildingId === 4 && <Barracks data={{
                     level: 0,
                     units: [],

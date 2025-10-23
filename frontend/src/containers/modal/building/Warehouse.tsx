@@ -1,69 +1,59 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ResourceItem, { ResourceType } from './../../../components/ResourceItem'
+import { Resources } from '@shared/types/others'
+import { useUserStore } from '../../../store/userStore'
 
-type Props = {
-  data: {
-    level: number
-    maximum: boolean
-    resources: Record<ResourceType, number>
-  }
+interface WareHouseProps {
+    level: number,
+    resources: Resources
 }
 
-export default function Warehouse({ data }: Props) {
-  const { t } = useTranslation()
-  const [level, setLevel] = useState(0)
-  const [maxCapacity, setMaxCapacity] = useState(0)
-  const [protectedAmount, setProtectedAmount] = useState(0)
+export default function Warehouse({ level, resources }: WareHouseProps) {
+    const { t } = useTranslation();
+    const worldConfig = useUserStore(state => state.worldConfig);
 
-  // Dummy world warehouse config
-  const warehouseConfig = {
-    capacityBase: 1000,
-    capacityPerLevel: 200,
-    resourceProtectedBase: 50,
-    resourceProtectedPerLevel: 20
-  }
+    const warehouseConfig = {
+        capacityBase: worldConfig.warehouse.capacity_base,
+        capacityPerLevel: worldConfig.warehouse.capacity,
+        resourceProtectedBase: worldConfig.warehouse.resource_protected_base,
+        resourceProtectedPerLevel: worldConfig.warehouse.resource_protected
+    }
 
-  useEffect(() => {
-    const currentLevel = data.maximum ? data.level : data.level - 1
-    setLevel(currentLevel)
-    setMaxCapacity(warehouseConfig.capacityBase + currentLevel * warehouseConfig.capacityPerLevel)
-    setProtectedAmount(
-      warehouseConfig.resourceProtectedBase + currentLevel * warehouseConfig.resourceProtectedPerLevel
-    )
-  }, [data])
+    const maxCapacity = warehouseConfig.capacityBase + (level * warehouseConfig.capacityPerLevel);
+    const protectedAmount = warehouseConfig.resourceProtectedBase + level * warehouseConfig.resourceProtectedPerLevel;
 
-  const safeAmount = (amount: number) => (amount > protectedAmount ? amount - protectedAmount : 0)
+    const safeAmount = (amount: number) => (amount > protectedAmount ? amount - protectedAmount : 0)
 
-  const resources: ResourceType[] = ['wood', 'wine', 'marble', 'glass', 'sulfur']
+    const resourcesArray: (keyof Resources)[] = ['wood', 'wine', 'marble', 'glass', 'sulfur']
 
-  return (
-    <div className="p-3 text-sm">
-      <div className="text-center font-semibold mb-2">{t('warehouse.title')}</div>
+    return (
+        <div className="p-3 text-sm">
+            <div className="text-center font-semibold mb-2">{t('modal.building.warehouse.title')}</div>
 
-      <div className="flex text-center bg-yellow-200 py-1">
-        <div className="flex-1">{t('warehouse.safe')}</div>
-        <div className="flex-1">{t('warehouse.notSafe')}</div>
-        <div className="flex-1">{t('warehouse.total')}</div>
-        <div className="flex-1">{t('warehouse.capacity')}</div>
-      </div>
+            <div className="flex text-center bg-yellow-200 py-1">
+                <div className="flex-1">{t('modal.building.warehouse.safe')}</div>
+                <div className="flex-1">{t('modal.building.warehouse.notSafe')}</div>
+                <div className="flex-1">{t('modal.building.warehouse.total')}</div>
+                <div className="flex-1">{t('modal.building.warehouse.capacity')}</div>
+            </div>
 
-      {resources.map((type) => (
-        <div key={type} className="flex p-1">
-          <div className="flex-1">
-            <ResourceItem type={type} amount={protectedAmount} />
-          </div>
-          <div className="flex-1">
-            <ResourceItem type={type} amount={safeAmount(data.resources[type])} />
-          </div>
-          <div className="flex-1">
-            <ResourceItem type={type} amount={data.resources[type]} />
-          </div>
-          <div className="flex-1">
-            <ResourceItem type={type} amount={maxCapacity} />
-          </div>
+            {resourcesArray.map((type) => (
+                <div key={type} className="flex p-1 text-center">
+                    <div className="flex-1">
+                        <ResourceItem type={type} amount={protectedAmount} />
+                    </div>
+                    <div className="flex-1">
+                        <ResourceItem type={type} amount={safeAmount(resources[type])} />
+                    </div>
+                    <div className="flex-1">
+                        <ResourceItem type={type} amount={resources[type]} />
+                    </div>
+                    <div className="flex-1">
+                        <ResourceItem type={type} amount={maxCapacity} />
+                    </div>
+                </div>
+            ))}
         </div>
-      ))}
-    </div>
-  )
+    )
 }

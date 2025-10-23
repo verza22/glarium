@@ -6,7 +6,7 @@ import { MovementBL } from './../businessLogic/movementBL';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
 import { RequestCityGetInfo } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
-import { CityFlat, CityPopulation } from '@shared/types/models';
+import { CityFlat } from '@shared/types/models';
 import { ResponseCityGetInfo } from '@shared/types/responses';
 
 export class CityController {
@@ -73,7 +73,10 @@ export class CityController {
 
             return {
                 population: Math.floor(city.population.population),
-                populationAvailable: PopulationBL.getAvailablePopulation(city.population)
+                populationAvailable: PopulationBL.getAvailablePopulation(city.population),
+                workerForest: city.population.workerForest,
+                workerMine: city.population.workerMine,
+                scientists: city.population.scientists
             };
         } else {
             throw new Error("City population error");
@@ -89,6 +92,7 @@ export class CityController {
     }
 
     private async getUserResources(userId: number) {
+        await UserResourceBL.updateResources(userId);
         return prisma.userResource.findFirstOrThrow({ where: { userId }, select: { gold: true, tradeShip: true, tradeShipAvailable: true } });
     }
 

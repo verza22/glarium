@@ -14,7 +14,10 @@ export const useCityStore = create<CityState>()(
             cities: [],
             population: {
                 population: 0,
-                populationAvailable: 0
+                populationAvailable: 0,
+                workerForest: 0,
+                workerMine: 0,
+                scientists: 0
             },
             actionPoints: { pointMax: 0, point: 0 },
             resources: {

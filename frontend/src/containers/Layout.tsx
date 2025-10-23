@@ -10,6 +10,7 @@ import { useCityGetInfoMutation } from "../hooks/useCityGetInfo";
 import { ModalType } from "../../../shared/types/others";
 import { useModal } from "../contexts/ModalContext";
 import { useCityStore } from "../store/cityStore";
+import dayjs from 'dayjs';
 
 const Layout: React.FC = () => {
     const { t } = useTranslation();
@@ -18,6 +19,8 @@ const Layout: React.FC = () => {
     const { mutate: cityGetInfo } = useCityGetInfoMutation();
     const city = useCityStore();
     const { openModal } = useModal();
+
+    const formattedDate = dayjs().format('YYYY-MM-DD');
 
     const hanleAdvisor = (type:  "mayor" | "general" | "scientist" | "diplomat") => {
         switch(type){
@@ -48,19 +51,17 @@ const Layout: React.FC = () => {
                 <div className="px-6 py-1 cursor-pointer hover:underline">{t("layout.options")}</div>
                 <div className="px-6 py-1">
                     <a
-                        href="https://forum.glarium.com"
+                        href="https://github.com/verza22/glarium"
                         target="_blank"
                         rel="noreferrer"
                         className="hover:underline"
                     >
-                        {t("layout.board")}
+                        {t("layout.github")}
                     </a>
                 </div>
                 <div className="px-6 py-1 cursor-pointer hover:underline" onClick={clearUser}>{t("layout.logout")}</div>
                 <div className="px-6 py-1">v{packageJson.version}</div>
-                <div className="px-6 py-1 cursor-default relative">
-                    <span className="absolute">05/10/2025</span>
-                </div>
+                <div className="px-6 py-1 cursor-default">{formattedDate}</div>
             </div>
 
             <div className="relative-bottom-6">

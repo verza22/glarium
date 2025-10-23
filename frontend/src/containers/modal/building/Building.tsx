@@ -16,6 +16,7 @@ import UnitQueue from './barracks/UnitQueue'
 import { useBuildingNextLevel } from '../../../hooks/useBuildingNextLevel'
 import { ResponseBuildingNextLevel } from '@shared/types/responses'
 import { useBuildingUpgrade } from '../../../hooks/useBuildingUpgrade'
+import { useCityStore } from '../../../store/cityStore'
 
 export interface BuildingData {
     buildingId: number,
@@ -36,6 +37,7 @@ export default function Buildings({ ref, close }: Props) {
     const [data, setData] = React.useState<ResponseBuildingNextLevel|null>(null);
     const { mutate: getNextLevel } = useBuildingNextLevel();
     const { mutate: upgradeBuilding } = useBuildingUpgrade();
+    const { population, userResources } = useCityStore();
 
     React.useImperativeHandle(ref, () => ({
         setBuildingData: (data: BuildingData) => {
@@ -91,12 +93,9 @@ export default function Buildings({ ref, close }: Props) {
                     }
                 }}  />}
                 {data.buildingId === 5 && <Tavern level={0} tavernWine={0} bonusTavern={0} bonusTavernConsume={0} />}
-                {data.buildingId >= 6 && data.buildingId <= 10 && <Reducers buildingName={''} level={0} />}
-                {data.buildingId >= 11 && data.buildingId <= 15 && <BuildingProducer data={{
-                    buildingId: 0,
-                    level: 0
-                }} />}
-                {data.buildingId === 16 && <Port speed={0} tradeShip={0} goldCost={0} gold={0} goldMissing={0} />}
+                {data.buildingId >= 6 && data.buildingId <= 10 && <Reducers buildingId={data.buildingId} level={data.level-1} />}
+                {data.buildingId >= 11 && data.buildingId <= 15 && <BuildingProducer buildingId={data.buildingId} level={data.level-1} workerForest={population.workerForest} workerMine={population.workerMine} />}
+                {data.buildingId === 16 && <Port speed={0} tradeShip={userResources.tradeShip} goldCost={0} gold={userResources.gold} goldMissing={0} />}
 
             </WindowLeft>
 

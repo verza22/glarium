@@ -6,7 +6,7 @@
     "layout": {
         "highscore": "Highscore",
         "options": "Options",
-        "board": "Board",
+        "github": "Github",
         "logout": "Logout"
     },
     "navigation": {
@@ -308,8 +308,7 @@
                 "tradeShipBuyMissing2": "You need {{goldMissing}} more gold."
             },
             "buildingReducer": {
-                "building": "Building: {{building_id}}",
-                "unit": "Unit: {{building_id}}",
+                "building": "Building",
                 "costBase": "Base Cost",
                 "research": "Research"
             },

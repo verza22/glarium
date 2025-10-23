@@ -119,6 +119,34 @@
 			"name": "User",
 			"item": [
 				{
+					"name": "BuyTradeShip",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_ROUTE}}api/user/buyTradeShip",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"user",
+								"buyTradeShip"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Config",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -264,6 +292,80 @@
 							"path": [
 								"building",
 								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NextLevel",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"buildingId\": 16,\n  \"level\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/building/nextLevel",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"building",
+								"nextLevel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpgradeBuilding",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cityBuildingId\": 152\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/building/upgrade",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"building",
+								"upgrade"
 							]
 						}
 					},

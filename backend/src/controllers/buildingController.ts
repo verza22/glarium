@@ -400,6 +400,27 @@ export class BuildingController {
             result.units = units.map((u) => ({ ...u, trainer: 0 }));
         }
 
+        switch(buildingId){
+            case 5:
+                const cityTavern = await prisma.city.findFirstOrThrow({ where: { id: cityId }, include: { population: true } });
+                console.log({
+                    wine: cityTavern.population?.wine,
+                    wineMax: cityTavern.population?.wineMax
+                })
+                result.tavern = {
+                    wine: cityTavern.population?.wine ? cityTavern.population.wine : 0,
+                    wineMax: cityTavern.population?.wineMax ? cityTavern.population.wineMax : 0
+                }
+            break;
+            case 2:
+                const cityAcademy = await prisma.city.findFirstOrThrow({ where: { id: cityId }, include: { population: true } });
+                result.academy = {
+                    scientists: cityAcademy.population?.scientists ? cityAcademy.population.scientists : 0,
+                    scientistsMax: cityAcademy.population?.scientistsMax ? cityAcademy.population.scientistsMax : 0,
+                }
+            break;
+        }
+
         res.json(result);
     }
 

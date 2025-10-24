@@ -1,6 +1,7 @@
 import prisma from "../dataAccess/prisma/prisma";
 import { City } from "@shared/types/models";
 import { addSeconds } from 'date-fns';
+import { PopulationBL } from "./populationBL";
 
 export class BuildingBL {
     // Check if there is at least one constructed building in the city
@@ -113,6 +114,8 @@ export class BuildingBL {
                     }),
                 },
             });
+
+            await PopulationBL.setPopulationMax(cityBuilding.city.id, before.level, cityBuilding.buildingLevel.buildingId);
 
             // TODO: event(new UserNotification(...)) -> emit socket or push notification
         }

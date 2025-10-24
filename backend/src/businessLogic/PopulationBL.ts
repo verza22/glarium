@@ -91,7 +91,7 @@ export class PopulationBL {
         // Tavern bonuses
         if (cityBuilding) {
             const tavernLevel = cityBuilding.buildingLevel.level;
-            const perWine = cityPopulation.wine / cityPopulation.wineMax;
+            const perWine = cityPopulation.wineMax > 0 ? (cityPopulation.wine / cityPopulation.wineMax) : 1;
             const bonusWine = tavernLevel * 60 * perWine;
 
             bonuses += bonusWine * world.bonus.tavern;
@@ -135,12 +135,14 @@ export class PopulationBL {
         }
 
         let population = cityPopulation.population;
+        
         const diffTimeDecimal = diffTime - Math.floor(diffTime);
 
         // Integer part of time
         for (let i = 0; i < Math.floor(diffTime); i++) {
             const satisfaction = bonuses - deduction;
             const regeneration = satisfaction * 0.02;
+            
             population += regeneration;
             deduction = population + otherPopulation;
             if (population >= bonuses - 0.01) {
@@ -148,6 +150,8 @@ export class PopulationBL {
                 break;
             }
         }
+
+ 
 
         // Decimal part of time
         if (population < bonuses && population < maxPopulation) {
@@ -171,17 +175,15 @@ export class PopulationBL {
     /**
      * Update max population depending on the building.
      */
-    public static async setPopulationMax(cityBuilding: CityBuilding & { buildingLevel: { building: { name: string }, level: number } }): Promise<void> {
-        const building = cityBuilding.buildingLevel.building.name;
-        const level = cityBuilding.buildingLevel.level;
+    public static async setPopulationMax(cityId: number, level: number, buildingId: number): Promise<void> {
 
         const cityPopulation = await prisma.cityPopulation.findFirst({
-            where: { cityId: cityBuilding.cityId },
+            where: { cityId: cityId },
         });
         if (!cityPopulation) return;
 
-        switch (building) {
-            case "Town Hall": {
+        switch (buildingId) {
+            case 1: {
                 const populationMax = Math.floor((10 * Math.pow(level, 1.5)) * 2 + 40);
                 await prisma.cityPopulation.update({
                     where: { id: cityPopulation.id },
@@ -189,12 +191,12 @@ export class PopulationBL {
                 });
 
                 await prisma.city.update({
-                    where: { id: cityBuilding.cityId },
+                    where: { id: cityId },
                     data: { apoint: 3 + Math.floor(level / 4) },
                 });
                 break;
             }
-            case "Academy": {
+            case 2: {
                 const scientistsMax = Math.ceil(7 + Math.pow(level, 1.8));
                 await prisma.cityPopulation.update({
                     where: { id: cityPopulation.id },
@@ -202,7 +204,7 @@ export class PopulationBL {
                 });
                 break;
             }
-            case "Tavern": {
+            case 5: {
                 await prisma.cityPopulation.update({
                     where: { id: cityPopulation.id },
                     data: { wineMax: level * 12 },

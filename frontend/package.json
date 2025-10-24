@@ -10,6 +10,7 @@
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-i18next": "16.0.0",
+    "react-range-slider-input": "^3.2.1",
     "react-router-dom": "6.30.1"
   },
   "devDependencies": {

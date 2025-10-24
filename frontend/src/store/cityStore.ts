@@ -6,7 +6,9 @@ import { Resources } from "@shared/types/models";
 interface CityState extends ResponseCityGetInfo {
     setCity: (data: Partial<CityState>) => void,
     updateResources: (resources: Resources) => void,
-    setTradeShip: (data: ResponseUserBuyTradeShip) => void
+    setTradeShip: (data: ResponseUserBuyTradeShip) => void,
+    setWine: (wine: number) => void,
+    setScientist: (scientist: number) => void
 };
 
 export const useCityStore = create<CityState>()(
@@ -18,7 +20,8 @@ export const useCityStore = create<CityState>()(
                 populationAvailable: 0,
                 workerForest: 0,
                 workerMine: 0,
-                scientists: 0
+                scientists: 0,
+                wine: 0
             },
             actionPoints: { pointMax: 0, point: 0 },
             resources: {
@@ -36,6 +39,8 @@ export const useCityStore = create<CityState>()(
 
             setCity: (data) => set((state) => ({ ...state, ...data })),
             updateResources: (resources: Resources) => set((state) => ({ ...state, resources })),
+            setWine: (wine: number) => set((state) => ({ ...state, population: { ...state.population, wine } })),
+            setScientist: (scientists: number) => set((state) => ({ ...state, population: { ...state.population, scientists } })),
             setTradeShip: (data: ResponseUserBuyTradeShip) => set((state) => ({
                 ...state,
                 userResources: {

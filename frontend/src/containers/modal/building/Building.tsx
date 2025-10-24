@@ -18,6 +18,8 @@ import { ResponseBuildingNextLevel } from '@shared/types/responses'
 import { useBuildingUpgrade } from '../../../hooks/useBuildingUpgrade'
 import { useCityStore } from '../../../store/cityStore'
 import { useBuyTradeShip } from '../../../hooks/useBuyTradeShip'
+import { useCitySetWine } from '../../../hooks/useCitySetWine'
+import { useCitySetScientists } from '../../../hooks/useCitySetScientist'
 
 export interface BuildingData {
     buildingId: number,
@@ -35,31 +37,53 @@ interface Props {
 
 export default function Buildings({ ref, close }: Props) {
     const { t } = useTranslation();
-    const [data, setData] = React.useState<ResponseBuildingNextLevel|null>(null);
+    const [data, setData] = React.useState<ResponseBuildingNextLevel | null>(null);
     const { mutate: getNextLevel } = useBuildingNextLevel();
     const { mutate: upgradeBuilding } = useBuildingUpgrade();
     const { mutate: buyTradeShip } = useBuyTradeShip();
+    const { mutate: setWine } = useCitySetWine();
+    const { mutate: setScientists } = useCitySetScientists();
     const { population, userResources, resources } = useCityStore();
 
     React.useImperativeHandle(ref, () => ({
         setBuildingData: (data: BuildingData) => {
-            getNextLevel(data, { onSuccess(response: ResponseBuildingNextLevel){
-                setData(response);
-            }})
+            getNextLevel(data, {
+                onSuccess(response: ResponseBuildingNextLevel) {
+                    setData(response);
+                }
+            })
         }
     }), []);
 
-    if(data===null)
+    if (data === null)
         return null;
 
     const upgrade = () => {
-        upgradeBuilding({ cityBuildingId: data.cityBuildingId }, { onSuccess(){ 
-            close();
-        }});
+        upgradeBuilding({ cityBuildingId: data.cityBuildingId }, {
+            onSuccess() {
+                close();
+            }
+        });
     }
 
     const handleBuyTradeShip = () => {
         buyTradeShip();
+    }
+
+    const handleTavern = (wine: number) => {
+        setWine(wine, {
+            onSuccess() {
+                close();
+            }
+        });
+    }
+
+    const handleScients = (scientist: number) => {
+        setScientists(scientist, {
+            onSuccess() {
+                close();
+            }
+        });
     }
 
     return (
@@ -70,7 +94,7 @@ export default function Buildings({ ref, close }: Props) {
                 </div>
 
                 {data.buildingId === 1 && <TownHall cityName="test" isCapital />}
-                {data.buildingId === 2 && <Academy />}
+                {data.buildingId === 2 && <Academy scientist={data.academy?.scientists ? data.academy.scientists : 0} scientistMax={data.academy?.scientistsMax ? data.academy.scientistsMax : 0} handleScients={handleScients} />}
                 {data.buildingId === 3 && <Warehouse level={data.level - 1} resources={resources} />}
                 {data.buildingId === 4 && <Barracks data={{
                     level: 0,
@@ -84,11 +108,11 @@ export default function Buildings({ ref, close }: Props) {
                         gold: 0,
                         time: 0
                     }
-                }}  />}
-                {data.buildingId === 5 && <Tavern level={0} tavernWine={0} bonusTavern={0} bonusTavernConsume={0} />}
-                {data.buildingId >= 6 && data.buildingId <= 10 && <Reducers buildingId={data.buildingId} level={data.level-1} />}
-                {data.buildingId >= 11 && data.buildingId <= 15 && <BuildingProducer buildingId={data.buildingId} level={data.level-1} workerForest={population.workerForest} workerMine={population.workerMine} />}
-                {data.buildingId === 16 && <Port tradeShip={userResources.tradeShip} gold={userResources.gold} level={data.level-1} buyTradeShip={handleBuyTradeShip} />}
+                }} />}
+                {data.buildingId === 5 && <Tavern level={data.level - 1} tavernWine={data.tavern?.wine ? data.tavern.wine : 0} tavernWineMax={data.tavern?.wineMax ? data.tavern.wineMax : 0} handleTavern={handleTavern} />}
+                {data.buildingId >= 6 && data.buildingId <= 10 && <Reducers buildingId={data.buildingId} level={data.level - 1} />}
+                {data.buildingId >= 11 && data.buildingId <= 15 && <BuildingProducer buildingId={data.buildingId} level={data.level - 1} workerForest={population.workerForest} workerMine={population.workerMine} />}
+                {data.buildingId === 16 && <Port tradeShip={userResources.tradeShip} gold={userResources.gold} level={data.level - 1} buyTradeShip={handleBuyTradeShip} />}
 
             </WindowLeft>
 

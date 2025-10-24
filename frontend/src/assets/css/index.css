@@ -18,3 +18,11 @@ body {
 .custom-scroll::-webkit-scrollbar-thumb {
     background-image: url('../img/icon/scroll_mid.png');
 }
+
+.single-thumb .range-slider__thumb[data-lower] {
+    width: 0;
+}
+
+.single-thumb .range-slider__range {
+    border-radius: 6px;
+}

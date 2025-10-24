@@ -4,7 +4,7 @@ import { CityBL } from './../businessLogic/cityBL';
 import { PopulationBL } from './../businessLogic/populationBL';
 import { MovementBL } from './../businessLogic/movementBL';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
-import { RequestCityGetInfo } from '@shared/types/requests';
+import { RequestCityGetInfo, RequestCitySetScientists, RequestCitySetWine } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
 import { CityFlat } from '@shared/types/models';
 import { ResponseCityGetInfo } from '@shared/types/responses';
@@ -76,7 +76,8 @@ export class CityController {
                 populationAvailable: PopulationBL.getAvailablePopulation(city.population),
                 workerForest: city.population.workerForest,
                 workerMine: city.population.workerMine,
-                scientists: city.population.scientists
+                scientists: city.population.scientists,
+                wine: city.population.wine
             };
         } else {
             throw new Error("City population error");
@@ -111,18 +112,20 @@ export class CityController {
     }
 
     public async setScientists(req: Request, res: Response) {
-        const cityId = Number(req.params.cityId);
-        const userId = Number(req.params.userId);
-        const { scientists } = req.body;
+        const { cityId, scientists }: RequestCitySetScientists = validateFields(req, [
+            { name: "cityId", type: "number", required: true },
+            { name: "scientists", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
         const cityPopulation = await prisma.cityPopulation.findUnique({ where: { cityId } });
-        if (!cityPopulation) return res.status(404).json({ error: "City population not found" });
-        if (scientists > cityPopulation.scientistsMax) return res.status(400).json({ error: "Too many scientists" });
+        if (!cityPopulation) throw new Error("City population not found");
+        if (scientists > cityPopulation.scientistsMax) throw new Error("Too many scientists");
 
         await PopulationBL.satisfaction(userId, cityPopulation);
 
         const diff = scientists - cityPopulation.scientists;
-        if (diff > cityPopulation.population) return res.status(400).json({ error: "Not enough citizens" });
+        if (diff > cityPopulation.population) throw new Error("Not enough citizens");
 
         await UserResourceBL.updateResources(userId);
 
@@ -134,27 +137,29 @@ export class CityController {
             }
         });
 
-        return res.json("ok");
+        return res.json(scientists);
     }
 
     public async setWine(req: Request, res: Response) {
-        const cityId = Number(req.params.cityId);
-        const userId = Number(req.params.userId);
-        const { wine } = req.body;
+        const { cityId, wine }: RequestCitySetWine = validateFields(req, [
+            { name: "cityId", type: "number", required: true },
+            { name: "wine", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
         const cityPopulation = await prisma.cityPopulation.findUnique({ where: { cityId } });
         const city = await prisma.city.findUnique({ where: { id: cityId } });
 
-        if (!cityPopulation || !city) return res.status(404).json({ error: "City not found" });
-        if (wine > cityPopulation.wineMax) return res.status(400).json({ error: "Wine exceeds max" });
-        if (wine > city.wine) return res.status(400).json({ error: "Not enough wine in city" });
+        if (!cityPopulation || !city) throw new Error("City not found" );
+        if (wine > cityPopulation.wineMax) throw new Error("Wine exceeds max");
+        if (wine > city.wine) throw new Error("Not enough wine in city");
 
         await CityBL.updateResources(city.id);
         await PopulationBL.satisfaction(userId, cityPopulation);
         await prisma.cityPopulation.update({ where: { cityId }, data: { wine } });
         await UserResourceBL.updateResources(userId);
 
-        return res.json("ok");
+        return res.json(wine);
     }
 
     public async setName(req: Request, res: Response) {

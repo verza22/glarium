@@ -7,7 +7,8 @@ export interface ResponseCityGetInfo {
         populationAvailable: number,
         workerForest: number,
         workerMine: number,
-        scientists: number
+        scientists: number,
+        wine: number
     },
     actionPoints: { pointMax: number, point: number },
     resources: Resources,

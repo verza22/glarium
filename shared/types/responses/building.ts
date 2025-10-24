@@ -4,7 +4,7 @@ export interface ResponseBuildingGetInfo {
     position: number;
     buildingId: number;
     level: number;
-    constructedAt: Date|null;
+    constructedAt: Date | null;
 }
 
 export interface ResponseBuildingAvailable {
@@ -42,5 +42,13 @@ export interface ResponseBuildingNextLevel {
         barrackLevel: number,
         gold: number,
         trainer: number
-    }[]
+    }[];
+    tavern?: {
+        wine: number,
+        wineMax: number
+    },
+    academy?: {
+        scientists: number,
+        scientistsMax: number
+    }
 }

@@ -319,6 +319,10 @@
                 "citizensSatisfied": "Satisfied Citizens",
                 "noWine": "No wine",
                 "winePerHour": "wine per hour"
+            },
+            "barracks": {
+                "requiredLevel": "Requires building level {{level}}",
+                "max": "max"
             }
         }
     },
@@ -469,6 +473,32 @@
         "29": {
             "name": "Expansion",
             "text": "The ocean surrounds us, but other islands await discovery. We are not alone! We can settle new territories, exploit new resources, and learn about other cultures! Our officials are happy to manage vast lands and their wealth."
+        }
+    },
+    "units": {
+        "1": {
+            "name": "Spearman",
+            "text": "Spearmen are conscripts from the rural population, that go into battle with light armour and basic spears. They do not usually have a chance against professional soldiers."
+        },
+        "2": {
+            "name": "Slinger",
+            "text": "Slings are light and cheap weapons. They cannot inflict much damage on well-armed opponents, but at least their munition is readily available."
+        },
+        "3": {
+            "name": "Archer",
+            "text": "Bows are a very popular hunting equipment, so it is very easy to recruit archers amongst citizens. Military training turns simple citizens into formidable long-range combat troops."
+        },
+        "4": {
+            "name": "Hoplite",
+            "text": "Hoplites are heavily armoured spearmen from the towns` middle classes. They form the heart of every Greek army. In the so-called `Phalanx` formation they push forward in an unstoppable wall of spears and shields."
+        },
+        "5": {
+            "name": "Swordsman",
+            "text": "Sword fighters are usually barely armoured and fight without shields to retain their mobility. Thus they can circulate around the immobile Phalanx formation and attack from the flanks."
+        },
+        "6": {
+            "name": "Steam Giant",
+            "text": "This powerful machine moves like a person on the battlefield, but has a superhuman hit strength. Stones, arrows and swords simply bounce off it. Woe betide anyone who dares to oppose it!"
         }
     }
 }

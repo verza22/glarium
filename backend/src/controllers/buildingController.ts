@@ -7,6 +7,7 @@ import { ResponseBuildingAvailable, ResponseBuildingGetInfo, ResponseBuildingNex
 import { RequestBuildingAvailable, RequestBuildingCreate, RequestBuildingGetInfo, RequestBuildingNextLevel, RequestBuildingUpgrade } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
 import { Resources } from '@shared/types/models';
+import { UnitBL } from '../businessLogic/unitBL';
 
 export class BuildingController {
 
@@ -352,6 +353,7 @@ export class BuildingController {
             { name: "buildingId", type: "number", required: true },
             { name: "cityId", type: "number", required: true }
         ]);
+        const userId = req.authUser.userId;
 
         // Update construction time for the buildings of the cities
         await BuildingBL.updateConstructedTime(cityId, 1);
@@ -418,6 +420,9 @@ export class BuildingController {
                     scientists: cityAcademy.population?.scientists ? cityAcademy.population.scientists : 0,
                     scientistsMax: cityAcademy.population?.scientistsMax ? cityAcademy.population.scientistsMax : 0,
                 }
+            break;
+            case 4:
+                result.barracks = await UnitBL.getData(userId);
             break;
         }
 

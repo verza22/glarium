@@ -20,6 +20,7 @@ import { useCityStore } from '../../../store/cityStore'
 import { useBuyTradeShip } from '../../../hooks/useBuyTradeShip'
 import { useCitySetWine } from '../../../hooks/useCitySetWine'
 import { useCitySetScientists } from '../../../hooks/useCitySetScientist'
+import { useUnitCreate } from '../../../hooks/useUnitCreate'
 
 export interface BuildingData {
     buildingId: number,
@@ -43,6 +44,7 @@ export default function Buildings({ ref, close }: Props) {
     const { mutate: buyTradeShip } = useBuyTradeShip();
     const { mutate: setWine } = useCitySetWine();
     const { mutate: setScientists } = useCitySetScientists();
+
     const { population, userResources, resources } = useCityStore();
 
     React.useImperativeHandle(ref, () => ({
@@ -96,19 +98,7 @@ export default function Buildings({ ref, close }: Props) {
                 {data.buildingId === 1 && <TownHall />}
                 {data.buildingId === 2 && <Academy scientist={data.academy?.scientists ? data.academy.scientists : 0} scientistMax={data.academy?.scientistsMax ? data.academy.scientistsMax : 0} handleScients={handleScients} />}
                 {data.buildingId === 3 && <Warehouse level={data.level - 1} resources={resources} />}
-                {data.buildingId === 4 && <Barracks data={{
-                    level: 0,
-                    units: [],
-                    resources: {
-                        population: 0,
-                        wood: 0,
-                        wine: 0,
-                        glass: 0,
-                        sulfur: 0,
-                        gold: 0,
-                        time: 0
-                    }
-                }} />}
+                {data.buildingId === 4 && <Barracks level={data.level - 1} units={data?.units ? data.units : []} barracks={data?.barracks ? data.barracks : null} close={close} />}
                 {data.buildingId === 5 && <Tavern level={data.level - 1} tavernWine={data.tavern?.wine ? data.tavern.wine : 0} tavernWineMax={data.tavern?.wineMax ? data.tavern.wineMax : 0} handleTavern={handleTavern} />}
                 {data.buildingId >= 6 && data.buildingId <= 10 && <Reducers buildingId={data.buildingId} level={data.level - 1} />}
                 {data.buildingId >= 11 && data.buildingId <= 15 && <BuildingProducer buildingId={data.buildingId} level={data.level - 1} workerForest={population.workerForest} workerMine={population.workerMine} />}
@@ -118,7 +108,7 @@ export default function Buildings({ ref, close }: Props) {
 
             <WindowRight title="Upgrade">
                 <UpgradeBuilding info={data} upgrade={upgrade} />
-                {data.buildingId === 4 && <UnitQueue />}
+                {data.buildingId === 4 && <UnitQueue tails={data?.barracks?.tails ? data.barracks.tails : null} />}
             </WindowRight>
         </div>
     )

@@ -176,4 +176,46 @@ export class UnitBL {
             }
         }
     }
+
+    public static async getData(userId: number) {
+        await UnitBL.allConstructTails(userId);
+
+        const regiments = await prisma.regiment.findMany({
+            where: { userId },
+            include: {
+                regimentTails: true,
+                regimentsUnits: { include: { unit: true } },
+            },
+        });
+
+        const allTails: {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            deletedAt: Date | null;
+            constructedAt: Date | null;
+            regimentId: number;
+            unitId: number;
+            cant: number;
+            tail: number;
+        }[] = [];
+        const allUnits: {
+            cant: number;
+            unit_id: number;
+            size: number;
+        }[] = [];
+
+        for (const r of regiments) {
+            allTails.push(...r.regimentTails);
+            allUnits.push(
+                ...r.regimentsUnits.map((u) => ({
+                    cant: u.cant,
+                    unit_id: u.unitId,
+                    size: u.unit.size,
+                }))
+            );
+        }
+
+        return { tails: allTails, units: allUnits };
+    }
 }

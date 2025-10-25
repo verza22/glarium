@@ -8,7 +8,8 @@ interface CityState extends ResponseCityGetInfo {
     updateResources: (resources: Resources) => void,
     setTradeShip: (data: ResponseUserBuyTradeShip) => void,
     setWine: (wine: number) => void,
-    setScientist: (scientist: number) => void
+    setScientist: (scientist: number) => void,
+    setPopulation: (population: number, populationAvailable: number) => void
 };
 
 export const useCityStore = create<CityState>()(
@@ -41,6 +42,7 @@ export const useCityStore = create<CityState>()(
             updateResources: (resources: Resources) => set((state) => ({ ...state, resources })),
             setWine: (wine: number) => set((state) => ({ ...state, population: { ...state.population, wine } })),
             setScientist: (scientists: number) => set((state) => ({ ...state, population: { ...state.population, scientists } })),
+            setPopulation: (population: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, population, populationAvailable } })),
             setTradeShip: (data: ResponseUserBuyTradeShip) => set((state) => ({
                 ...state,
                 userResources: {

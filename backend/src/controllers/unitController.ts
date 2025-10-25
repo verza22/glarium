@@ -4,25 +4,27 @@ import { UnitBL } from './../businessLogic/unitBL';
 import { PopulationBL } from './../businessLogic/populationBL';
 import { BuildingModifierBL } from './../businessLogic/buildingModifierBL';
 import { CityBL } from './../businessLogic/cityBL';
+import { validateFields } from '../utils/validateFields';
+import { RequestUnitCreate } from '@shared/types/requests';
+import { Resources } from '@shared/types/others';
+import { ResponseUnitCreate } from '@shared/types/responses';
 
 export class UnitController {
 
     public async create(req: Request, res: Response) {
-        const cityId = Number(req.params.cityId);
-        const userId = Number(req.params.id);
-
-        const { units, cants } = req.body;
-        if (!Array.isArray(units) || !units.every((u: any) => Number.isInteger(u)) ||
-            !Array.isArray(cants) || !cants.every((c: any) => Number.isInteger(c))) {
-            return res.status(400).json({ error: "Invalid units or cants" });
-        }
+        const { units, cants, cityId }: RequestUnitCreate = validateFields(req, [
+            { name: "units", type: "number[]", required: true },
+            { name: "cants", type: "number[]", required: true },
+            { name: "cityId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
         if (units.length !== cants.length) {
-            return res.status(400).json({ error: "Units and cants array length mismatch" });
+            throw new Error("Units and cants array length mismatch");
         }
 
         const city = await prisma.city.findUnique({ where: { id: cityId }, include: { population: true } });
-        if (!city) return res.status(404).json({ error: "City not found" });
+        if (!city) throw new Error("City not found");
 
         // Check if regiment exists
         let regiment = await prisma.regiment.findFirst({
@@ -43,30 +45,30 @@ export class UnitController {
 
         const tails = await prisma.regimentTail.findMany({ where: { regimentId: regiment.id } });
         let maxTail = tails.length ? Math.max(...tails.map(t => t.tail)) + 1 : 0;
-        if (maxTail > 2) return res.status(400).json({ error: "Max number of tails reached" });
+        if (maxTail > 2) throw new Error("Max number of tails reached");
 
         const unitsDb = await prisma.unit.findMany({ where: { id: { in: units } } });
 
         const collect = UnitBL.newCollect();
         for (let i = 0; i < units.length; i++) {
             const unit = unitsDb.find(u => u.id === units[i]);
-            if (!unit) return res.status(400).json({ error: `Unit ${units[i]} does not exist` });
+            if (!unit) throw new Error(`Unit ${units[i]} does not exist`);
             if (!UnitBL.checkBarrackLevel(city.id, unit)) {
-                return res.status(400).json({ error: "Barrack level too low" });
+                throw new Error("Barrack level too low");
             }
             if (!UnitBL.checkResearch(unit.id, userId)) {
-                return res.status(400).json({ error: "Research requirements not met" });
+                throw new Error("Research requirements not met");
             }
             UnitBL.addCollect(collect, unit, cants[i]);
         }
 
         if (!PopulationBL.comparePopulation(city, collect)) {
-            return res.status(400).json({ error: "Not enough population" });
+            throw new Error("Not enough population");
         }
 
         await BuildingModifierBL.lessCost(userId, city.id, collect);
         if (!CityBL.compareResources(city.id, collect)) {
-            return res.status(400).json({ error: "Not enough resources" });
+            throw new Error("Not enough resources");
         }
 
         await CityBL.removeResources(city.id, collect);
@@ -86,32 +88,28 @@ export class UnitController {
                 });
         }
 
-        return res.json("ok");
-    }
+        //get resources
+        const cityUpdated = await prisma.city.findUniqueOrThrow({ where: { id: cityId } });
 
-    public async index(req: Request, res: Response) {
-        const userId = Number(req.params.id);
-        await UnitBL.allConstructTails(userId);
+        const updatedResources: Resources = {
+            wood: cityUpdated.wood,
+            marble: cityUpdated.marble,
+            wine: cityUpdated.wine,
+            glass: cityUpdated.glass,
+            sulfur: cityUpdated.sulfur
+        }
 
-        const regiments = await prisma.regiment.findMany({
-            where: { userId: userId },
-            include: {
-                regimentTails: true,
-                regimentsUnits: { include: { unit: true } }
+        //get population
+        const population = await prisma.cityPopulation.findUniqueOrThrow({ where: { cityId } });
+
+        const response: ResponseUnitCreate = {
+            resources: updatedResources,
+            population: {
+                populationAvailable: PopulationBL.getAvailablePopulation(population),
+                population: population.population
             }
-        });
+        }
 
-        const data = regiments.map(r => ({
-            id: r.id,
-            city_id: r.cityId,
-            tails: r.regimentTails,
-            units: r.regimentsUnits.map(u => ({
-                cant: u.cant,
-                unit_id: u.unitId,
-                size: u.unit.size
-            }))
-        }));
-
-        return res.json(data);
+        return res.json(response);
     }
 }

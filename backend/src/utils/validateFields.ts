@@ -1,9 +1,9 @@
 import { Request } from "express";
 
 interface FieldDefinition {
-    name: string;
-    type: "string" | "number" | "boolean";
-    required?: boolean;
+  name: string;
+  type: "string" | "number" | "boolean" | "number[]";
+  required?: boolean;
 }
 
 /**
@@ -11,36 +11,66 @@ interface FieldDefinition {
  *
  * @param req - Express request object
  * @param fields - List of fields to validate (name, type, required)
- * @returns string | null - Error message if invalid, otherwise null
+ * @returns - The validated body or throws an error
  */
 export function validateFields(req: Request, fields: FieldDefinition[]) {
-    let error = "";
-    if (!req.body || Object.keys(req.body).length === 0) {
-        error = "Request body is required";
+  if (!req.body || Object.keys(req.body).length === 0) {
+    throw new Error("Request body is required");
+  }
+
+  for (const field of fields) {
+    const value = req.body[field.name];
+
+    // Required field check
+    if (field.required && (value === undefined || value === null)) {
+      throw new Error(`Field '${field.name}' is required`);
     }
 
-    for (const field of fields) {
-        const value = req.body[field.name];
+    // Skip undefined optional fields
+    if (value === undefined || value === null) continue;
 
-        // Check if required field is missing
-        if (field.required && (value === undefined || value === null)) {
-            error = `Field '${field.name}' is required`;
+    switch (field.type) {
+      case "string":
+        if (typeof value !== "string") {
+          throw new Error(`Field '${field.name}' must be of type string`);
         }
+        if (value.trim() === "") {
+          throw new Error(`Field '${field.name}' cannot be empty`);
+        }
+        break;
 
-        // Check for type mismatch
-        if (value !== undefined && typeof value !== field.type) {
-            error = `Field '${field.name}' must be of type '${field.type}'`;
+      case "number":
+        if (typeof value !== "number" || isNaN(value)) {
+          throw new Error(`Field '${field.name}' must be a valid number`);
         }
+        break;
 
-        // Check for empty string
-        if (field.type === "string" && typeof value === "string" && value.trim() === "") {
-            error = `Field '${field.name}' cannot be empty`;
+      case "boolean":
+        if (typeof value !== "boolean") {
+          throw new Error(`Field '${field.name}' must be of type boolean`);
         }
+        break;
+
+      case "number[]":
+        if (!Array.isArray(value)) {
+          throw new Error(`Field '${field.name}' must be an array of numbers`);
+        }
+        if (value.length === 0) {
+          throw new Error(`Field '${field.name}' cannot be an empty array`);
+        }
+        for (const item of value) {
+          if (typeof item !== "number" || isNaN(item)) {
+            throw new Error(
+              `Field '${field.name}' must contain only valid numbers`
+            );
+          }
+        }
+        break;
+
+      default:
+        throw new Error(`Unsupported field type '${field.type}'`);
     }
+  }
 
-    if (error) {
-        throw new Error(error);
-    }
-
-    return req.body;
+  return req.body;
 }

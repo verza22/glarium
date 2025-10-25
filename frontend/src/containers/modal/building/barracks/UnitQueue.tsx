@@ -1,58 +1,59 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import unit_1 from '../../../../assets/img/unit/1.png'
-import unit_2 from '../../../../assets/img/unit/2.png'
-import unit_3 from '../../../../assets/img/unit/3.png'
-import unit_4 from '../../../../assets/img/unit/4.png'
+import unit1 from '../../../../assets/img/unit/1.png'
+import unit2 from '../../../../assets/img/unit/2.png'
+import unit3 from '../../../../assets/img/unit/3.png'
+import unit4 from '../../../../assets/img/unit/4.png'
+import unit5 from '../../../../assets/img/unit/5.png'
+import unit6 from '../../../../assets/img/unit/6.png'
+import dayjs from 'dayjs'
 
-type Unit = {
-  unitId: number
-  quantity: number
-}
-
-type Tail = {
-  tail: number // 0,1,2
-  constructedAt?: string
-  units: Unit[]
+const unitImages: Record<number, string> = {
+    1: unit1,
+    2: unit2,
+    3: unit3,
+    4: unit4,
+    5: unit5,
+    6: unit6
 }
 
 type Props = {
-  tails?: Tail[]
+    tails: {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedAt: Date | null;
+        constructedAt: Date | null;
+        regimentId: number;
+        unitId: number;
+        cant: number;
+        tail: number;
+    }[] | null;
 }
 
-export default function UnitQueue({ tails = [] }: Props) {
-  const { t } = useTranslation()
-
-  const unitImageMap: Record<number, string> = {
-    1: unit_1,
-    2: unit_2,
-    3: unit_3,
-    4: unit_4
-  }
+export default function UnitQueue({ tails }: Props) {
+  const { t } = useTranslation();
 
   return (
     <div className="p-0 text-sm">
-      {tails.length > 0 && (
+      {tails && tails.length > 0 && (
         <div className="mb-2">
           <hr className="mt-0 border-gray-300" />
           <div className="text-center font-semibold mb-2">{t('modal.building.list_title')}</div>
 
-          {[0, 1, 2].map((index) => {
-            const tail = tails.find((t) => t.tail === index)
+          {tails.map((tail, index) => {
             return (
-              <div key={index}>
+              <div key={tail.id}>
                 {tail && (
                   <div className="mb-4">
-                    <div className="mb-2 text-center">{t('modal.building.building')}: {tail.constructedAt ?? '—'}</div>
+                    <div className="mb-2 text-center">{t('modal.building.building')}: {tail.constructedAt ? dayjs(tail.constructedAt).format('YYYY-MM-DD HH:mm:ss') : '—'}</div>
 
                     <div className="flex justify-center flex-wrap gap-2">
-                      {tail.units.map((unit, i) => (
-                        <div key={i} className="flex items-center flex-col">
-                          <div className="w-10 h-10 bg-center bg-no-repeat bg-contain" style={{ backgroundImage: `url(${unitImageMap[unit.unitId] || unit_1})` }} />
-                          <div className="text-center text-xs mt-1">{unit.quantity}</div>
+                        <div className="flex items-center flex-col">
+                          <div className="w-10 h-10 bg-center bg-no-repeat bg-contain" style={{ backgroundImage: `url(${unitImages[tail.unitId]})` }} />
+                          <div className="text-center text-xs mt-1">{tail.cant}</div>
                         </div>
-                      ))}
                     </div>
                   </div>
                 )}
@@ -64,13 +65,3 @@ export default function UnitQueue({ tails = [] }: Props) {
     </div>
   )
 }
-
-/*
-  Example usage:
-  <UnitQueue
-    tails={[
-      { tail: 0, constructedAt: '2025-10-09T12:00:00Z', units: [{ unitId: 1, quantity: 5 }] },
-      { tail: 1, constructedAt: '2025-10-09T12:30:00Z', units: [{ unitId: 2, quantity: 3 }] }
-    ]}
-  />
-*/

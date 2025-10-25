@@ -50,5 +50,23 @@ export interface ResponseBuildingNextLevel {
     academy?: {
         scientists: number,
         scientistsMax: number
+    },
+    barracks?: {
+        tails: {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            deletedAt: Date | null;
+            constructedAt: Date | null;
+            regimentId: number;
+            unitId: number;
+            cant: number;
+            tail: number;
+        }[];
+        units: {
+            cant: number;
+            unit_id: number;
+            size: number;
+        }[];
     }
 }

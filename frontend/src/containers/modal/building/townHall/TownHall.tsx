@@ -5,36 +5,42 @@ import CityNameForm from './CityNameForm'
 import Information from './Information'
 import Notice from './Notice'
 import Satisfaction from './Satisfaction'
+import { useBuildingGetLevel } from '../../../../hooks/useBuildingGetLevel'
+import { useCityStore } from '../../../../store/cityStore'
+import { useUserStore } from '../../../../store/userStore'
+import { useGetCurrentCity } from '../../../../hooks/useGetCurrentCity'
 
-type Props = {
-    cityName: string
-    isCapital: boolean
-}
-
-export default function TownHall({ cityName, isCapital }: Props) {
+export default function TownHall() {
     const { t } = useTranslation()
-    const [showChangeCity, setShowChangeCity] = useState(false)
+    const [showChangeCity, setShowChangeCity] = useState(false);
+    const tavernLevel = useBuildingGetLevel(5);
+    const { population, userResources, actionPoints } = useCityStore();
+    const worldConfig = useUserStore(state=> state.worldConfig);
+
+    const city = useGetCurrentCity();
+    const cityName = city?.name ? city.name : '';
+    const isCapital = city?.capital ? city.capital : false;
 
     const dummyInformation = {
-        populationNow: 1200,
-        populationMax: 2000,
-        apoint: 15,
-        apointMax: 20,
-        populationProduce: 25,
-        totalGold: 5000,
-        corruption: 10
+        populationNow: population.populationAvailable,
+        populationMax: population.population,
+        apoint: actionPoints.point,
+        apointMax: actionPoints.pointMax,
+        populationProduce: 0,//TODO
+        totalGold: userResources.gold.toFixed(),
+        corruption: 0
     }
 
     const dummyNotice = {
-        corruption: 35
+        corruption: 0
     }
 
-    const dummySatisfaction = {
+    const satisfaction = {
         capital: isCapital,
-        tavern: 12,
-        wineBonus: 30,
-        populationNow: 1200,
-        corruption: 15
+        tavern: tavernLevel * 12,
+        wineBonus: (((population.wine*worldConfig.bonus.tavern)/12)),
+        populationNow: population.population,
+        corruption: 0
     }
 
     return (
@@ -57,7 +63,7 @@ export default function TownHall({ cityName, isCapital }: Props) {
 
             <Information {...dummyInformation} />
             <Notice {...dummyNotice} />
-            <Satisfaction {...dummySatisfaction} />
+            <Satisfaction {...satisfaction} />
         </div>
     )
 }

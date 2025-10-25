@@ -16,7 +16,7 @@ const Population: React.FC<PopulationProps> = ({population, populationAvailable}
                 className="w-[35px] h-[23px] mr-[5px] bg-cover"
                 style={{ backgroundImage: `url(${populationIcon})` }}
             ></div>
-            <div>{population} ({populationAvailable})</div>
+            <div>{populationAvailable} ({population})</div>
         </div>
     );
 };

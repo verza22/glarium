@@ -93,7 +93,7 @@ export default function Buildings({ ref, close }: Props) {
                     {t(`buildings.${data.buildingId}.text`)}
                 </div>
 
-                {data.buildingId === 1 && <TownHall cityName="test" isCapital />}
+                {data.buildingId === 1 && <TownHall />}
                 {data.buildingId === 2 && <Academy scientist={data.academy?.scientists ? data.academy.scientists : 0} scientistMax={data.academy?.scientistsMax ? data.academy.scientistsMax : 0} handleScients={handleScients} />}
                 {data.buildingId === 3 && <Warehouse level={data.level - 1} resources={resources} />}
                 {data.buildingId === 4 && <Barracks data={{

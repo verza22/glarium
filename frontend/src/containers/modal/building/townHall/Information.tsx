@@ -15,7 +15,7 @@ type Props = {
   apoint: number
   apointMax: number
   populationProduce: number
-  totalGold: number
+  totalGold: string
   corruption: number
 }
 
@@ -54,10 +54,10 @@ export default function Information({
       {/* Growth, Gold & Corruption */}
       <div className="flex-3 flex justify-center">
         <div className="space-y-1">
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <img src={growthIcon} alt="growth" className="w-4 h-4" />
             {t('modal.building.growth', { amount: populationProduce })}
-          </div>
+          </div> */}
           <div className="flex items-center gap-1">
             <img src={incomeIcon} alt="income" className="w-4 h-4" />
             {t('modal.building.total_gold', { amount: totalGold })}

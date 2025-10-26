@@ -9,8 +9,8 @@ export function useCitySetScientists() {
 
     return useMutation({
         mutationFn: (scientists: number) => citySetScientists({ cityId, scientists }),
-        onSuccess: (response) => {
-            setScientist(response);
+        onSuccess: (response, scientists) => {
+            setScientist(scientists, response);
         }
     });
 }

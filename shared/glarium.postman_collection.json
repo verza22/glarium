@@ -112,6 +112,80 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "SetWine",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"cityId\": 1, \"wine\": 12 }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/city/setWine",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"city",
+								"setWine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SetScientists",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"cityId\": 1, \"scientists\": 0 }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/city/setScientists",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"city",
+								"setScientists"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -412,6 +486,117 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GetData",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"islandId\": 1,\n  \"type\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/island/getData",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"island",
+								"getData"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SetWorker",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"workers\": 1,\n  \"type\": true,\n  \"cityId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/island/setWorker",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"island",
+								"setWorker"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SetDonation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"islandId\": 1,\n  \"type\": true,\n  \"cityId\": 1,\n  \"wood\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/island/setDonation",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"island",
+								"setDonation"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -519,6 +704,48 @@
 							],
 							"path": [
 								"research",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Unit",
+			"item": [
+				{
+					"name": "CreateUnit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cityId\": 1,\n  \"units\": [1],\n  \"cants\": [1]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/unit/create",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"unit",
 								"create"
 							]
 						}

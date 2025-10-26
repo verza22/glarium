@@ -8,11 +8,25 @@ import { useParams } from "react-router-dom";
 import { useIslandGetInfo } from "../hooks/useIslandGetInfo";
 import IslandCities from "../components/IslandCities";
 import IslandResources from "../components/IslandResources";
+import { useModal } from "../contexts/ModalContext";
+import { ModalType } from "../../../shared/types/others";
 
 const IslandUI: React.FC = () => {
 
     const { islandId } = useParams<{ islandId: string }>();
     const { data } = useIslandGetInfo(Number(islandId));
+    const { openModal } = useModal();
+
+    const handleDonationModal = (type: boolean) => {
+        openModal(ModalType.Donation, { info: { 
+            type, 
+            island_type: data?.type,
+            levelForest: data?.levelForest,
+            levelMine: data?.levelMine,
+            islandId: Number(islandId),
+            cities: data?.cities
+        }});
+    }
 
     return <>
         <Layout />
@@ -40,6 +54,7 @@ const IslandUI: React.FC = () => {
                                     islandId={data.id}
                                     levelForest={data.levelForest}
                                     levelMine={data.levelMine}
+                                    handleDonationModal={handleDonationModal}
                                 />
                             </>
                         }

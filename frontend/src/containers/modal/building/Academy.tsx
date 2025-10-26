@@ -7,6 +7,7 @@ import GoldIcon from '../../../assets/img/icon/icon_gold.png'
 import PiIcon from '../../../assets/img/icon/icon_pi.png'
 import RangeSlider from '../../../components/RangeSlider'
 import { useCityStore } from '../../../store/cityStore'
+import { usePopulationAvailable } from '../../../hooks/usePopulationAvailable'
 
 interface AcademyProps {
     scientist: number,
@@ -16,7 +17,7 @@ interface AcademyProps {
 
 export default function Academy({ scientist, scientistMax, handleScients }: AcademyProps) {
     const { t } = useTranslation();
-    const populationAvailable = useCityStore(state => state.population.populationAvailable);
+    const populationAvailable = usePopulationAvailable();
 
     const [value, setValue] = useState<number>(scientist);
     const scientistCost = 3;
@@ -38,7 +39,7 @@ export default function Academy({ scientist, scientistMax, handleScients }: Acad
             <div className="flex space-x-4">
                 <div className="flex-1 flex flex-col items-center relative">
                     <img src={CitizenIcon} className="mb-2" />
-                    <div className="absolute bottom-0 font-bold">{populationAvailable - value}</div>
+                    <div className="absolute bottom-0 font-bold">{(populationAvailable+scientist) - value}</div>
                 </div>
 
                 <div className="flex-3 flex flex-col space-y-4">

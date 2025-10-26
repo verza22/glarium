@@ -17,6 +17,7 @@ interface IslandResourcesProps {
   levelForest: number;
   levelMine: number;
   type: number;
+  handleDonationModal: (type: boolean) => void
 }
 
 const IslandResources: React.FC<IslandResourcesProps> = ({
@@ -24,6 +25,7 @@ const IslandResources: React.FC<IslandResourcesProps> = ({
   levelForest,
   levelMine,
   type,
+  handleDonationModal
 }) => {
   const { t } = useTranslation();
 
@@ -31,26 +33,22 @@ const IslandResources: React.FC<IslandResourcesProps> = ({
     let title = "";
     switch (type) {
       case 1:
-        title += t("island.vines");
+        title += t("modal.donations.vinesTitle");
         break;
       case 2:
-        title += t("island.quarry");
+        title += t("modal.donations.quarryTitle");
         break;
       case 3:
-        title += t("island.crystal");
+        title += t("modal.donations.crystalTitle");
         break;
       case 4:
-        title += t("island.sulfur");
+        title += t("modal.donations.sulfurTitle");
         break;
       default:
-        title += t("island.mine");
+        title += t("modal.donations.vinesTitle");
     }
     title += " " + levelMine;
     return title;
-  };
-
-  const openDonation = async (type: number) => {
-    console.log("openDonation", { islandId, type });
   };
 
   const mineImages = [
@@ -67,8 +65,8 @@ const IslandResources: React.FC<IslandResourcesProps> = ({
     <div>
       <div
         className="absolute top-[460px] right-[475px] w-[98px] h-[74px] cursor-pointer"
-        title={`${t("island.forest")} ${levelForest}`}
-        onClick={() => openDonation(1)}
+        title={`${t("modal.donations.forestTitle")} ${levelForest}`}
+        onClick={() => handleDonationModal(true)}
       >
         <div className="relative group">
           <img src={forest} alt="forest" className="w-[98px] h-[74px]" />
@@ -83,7 +81,7 @@ const IslandResources: React.FC<IslandResourcesProps> = ({
       <div
         className="absolute top-[486px] right-[648px] cursor-pointer group"
         title={mineTitle(type)}
-        onClick={() => openDonation(0)}
+        onClick={() => handleDonationModal(false)}
       >
         <img
           src={currentMine.normal}

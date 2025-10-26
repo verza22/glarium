@@ -8,8 +8,10 @@ interface CityState extends ResponseCityGetInfo {
     updateResources: (resources: Resources) => void,
     setTradeShip: (data: ResponseUserBuyTradeShip) => void,
     setWine: (wine: number) => void,
-    setScientist: (scientist: number) => void,
-    setPopulation: (population: number, populationAvailable: number) => void
+    setScientist: (scientist: number, populationAvailable: number) => void,
+    setPopulation: (population: number, populationAvailable: number) => void,
+    setWorkerForest: (workerForest: number, populationAvailable: number) => void,
+    setWorkerMine: (workerMine: number, populationAvailable: number) => void
 };
 
 export const useCityStore = create<CityState>()(
@@ -40,8 +42,10 @@ export const useCityStore = create<CityState>()(
 
             setCity: (data) => set((state) => ({ ...state, ...data })),
             updateResources: (resources: Resources) => set((state) => ({ ...state, resources })),
+            setWorkerForest: (workerForest: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, workerForest, populationAvailable } })),
+            setWorkerMine: (workerMine: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, workerMine, populationAvailable } })),
             setWine: (wine: number) => set((state) => ({ ...state, population: { ...state.population, wine } })),
-            setScientist: (scientists: number) => set((state) => ({ ...state, population: { ...state.population, scientists } })),
+            setScientist: (scientists: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, scientists, populationAvailable  } })),
             setPopulation: (population: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, population, populationAvailable } })),
             setTradeShip: (data: ResponseUserBuyTradeShip) => set((state) => ({
                 ...state,

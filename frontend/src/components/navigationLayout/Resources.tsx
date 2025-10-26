@@ -18,27 +18,27 @@ const Resources: React.FC<ResourcesProps> = ({wood, wine, marble, glass, sulfur}
         <div className="flex-1 flex select-none pl-[5px]">
             <div className="flex-1 flex items-center" title={t("resources.wood")}>
                 <img className="mr-1" src={woodIcon} />
-                <span>{wood}</span>
+                <span>{Math.floor(wood).toFixed()}</span>
             </div>
 
             <div className="flex-1 flex items-center" title={t("resources.wine")}>
                 <img className="mr-1" src={wineIcon} />
-                <span>{wine}</span>
+                <span>{Math.floor(wine).toFixed()}</span>
             </div>
 
             <div className="flex-1 flex items-center" title={t("resources.marble")}>
                 <img className="mr-1" src={marbleIcon} />
-                <span>{marble}</span>
+                <span>{Math.floor(marble).toFixed()}</span>
             </div>
 
             <div className="flex-1 flex items-center" title={t("resources.glass")}>
                 <img className="mr-1" src={glassIcon} />
-                <span>{glass}</span>
+                <span>{Math.floor(glass).toFixed()}</span>
             </div>
 
             <div className="flex-1 flex items-center" title={t("resources.sulfur")}>
                 <img className="mr-1" src={sulfurIcon} />
-                <span>{sulfur}</span>
+                <span>{Math.floor(sulfur).toFixed()}</span>
             </div>
         </div>
     );

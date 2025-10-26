@@ -8,10 +8,13 @@ import { UserResourceBL } from './../businessLogic/userResourceBL';
 import { UnitBL } from './../businessLogic/unitBL';
 import { addSeconds } from 'date-fns';
 import { validateFields } from '../utils/validateFields';
-import { RequestIslandGetInfo } from '@shared/types/requests';
-import { ResponseIslandGetInfo } from '@shared/types/responses';
+import { RequestIslandGetData, RequestIslandGetInfo, RequestIslandSetDonation, RequestIslandSetWorker } from '@shared/types/requests';
+import { ResponseIslandGetData, ResponseIslandGetInfo, ResponseIslandSetWorker } from '@shared/types/responses';
+import dayjs from 'dayjs';
+import { Resources } from '@shared/types/others';
 
 export class IslandController {
+
     public async getInfo(req: Request, res: Response) {
         const { islandId }: RequestIslandGetInfo = validateFields(req, [
             { name: "islandId", type: "number", required: true }
@@ -64,15 +67,15 @@ export class IslandController {
             cities: island.islandCity.map((islandCity) => {
                 const city = islandCity.city;
                 let level = 1;
-                const townHallIndex = islandCity.city.cityBuildings.findIndex(b=> b.buildingLevel.buildingId === 1);
-                if(townHallIndex >= 0)
+                const townHallIndex = islandCity.city.cityBuildings.findIndex(b => b.buildingLevel.buildingId === 1);
+                if (townHallIndex >= 0)
                     level = islandCity.city.cityBuildings[townHallIndex].buildingLevel.level;
 
                 return {
                     cityId: islandCity.cityId,
                     position: islandCity.position,
                     // If city not constructed, level = 0
-                    level:level,
+                    level: level,
                     constructedAt: city.constructedAt ? city.constructedAt : new Date(),
                     user: city.userCities[0]?.user?.name ?? null,
                     userId: city.userCities[0]?.userId ?? null,
@@ -183,145 +186,206 @@ export class IslandController {
         }
     }
 
-    public async setWorker(req: Request, res: Response) {
-        try {
-            const cityId = parseInt(req.params.id, 10);
-            const userId = Number(req.params.userId);
-            const { workers, type } = req.body; // type: boolean (true = forest, false = mine)
+    public async getData(req: Request, res: Response) {
+        const { islandId, type }: RequestIslandGetData = validateFields(req, [
+            { name: "islandId", type: "number", required: true },
+            { name: "type", type: "boolean", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-            // Validate input
-            if (typeof workers !== "number" || workers < 0) {
-                return res.status(400).json({ error: "workers must be a non-negative number" });
+        //check donations
+        await IslandBL.checkUpgrades(islandId);
+
+        const island = await prisma.island.findUniqueOrThrow({
+            where: { id: islandId },
+            include: { forest: true, mine: true },
+        });
+
+        // Check island workers capacity
+        const maxWorkers = type ? island.forest.workers : island.mine.workers;
+        const islandLevel = type ? island.forest.level : island.mine.level;
+        const constructedAtDate = type ? island.forestConstructedAt : island.mineConstructedAt;
+        const donated = type ? island.donatedForest : island.donatedMine;
+
+        let constructedAt = null;
+        if (constructedAtDate !== null)
+            constructedAt = dayjs(constructedAtDate).format('YYYY-MM-DD HH:mm:ss');
+
+        let nextWood = 0;
+        if (type) {
+            const nextForest = await prisma.forest.findFirst({ where: { level: islandLevel + 1 } });
+            if (nextForest) {
+                nextWood = nextForest.wood;
             }
-            if (typeof type !== "boolean") {
-                return res.status(400).json({ error: "type must be a boolean" });
+        } else {
+            const nextMine = await prisma.mine.findFirst({ where: { level: islandLevel + 1 } });
+            if (nextMine) {
+                nextWood = nextMine.wood;
             }
-
-            // Authorize (replace with your own auth logic)
-            // Example: check if city belongs to the logged user
-            // const userId = req.user?.id;
-            // const userCity = await prisma.userCity.findFirst({ where: { userId, cityId } });
-            // if (!userCity) return res.status(403).json({ error: "Forbidden" });
-
-            // Define type of workers
-            const targetType = type ? "forest" : "mine";
-            const workersKey = type ? "worker_forest" : "worker_mine";
-
-            // Get city population
-            const cityPopulation = await prisma.cityPopulation.findUnique({
-                where: { cityId: cityId },
-            });
-            if (!cityPopulation) {
-                return res.status(404).json({ error: "City population not found" });
-            }
-
-            // Get island of the city
-            const islandCity = await prisma.islandCity.findUnique({
-                where: { cityId: cityId },
-                include: { island: { include: { forest: true, mine: true } } },
-            });
-            if (!islandCity) {
-                return res.status(404).json({ error: "Island city not found" });
-            }
-
-            // Check island workers capacity
-            const islandWorkers =
-                targetType === "forest"
-                    ? islandCity.island.forest?.workers ?? 0
-                    : islandCity.island.mine?.workers ?? 0;
-
-            if (workers > islandWorkers) {
-                return res.status(400).json({
-                    error: "You cannot assign more workers than the island allows",
-                });
-            }
-
-            // Check population satisfaction
-            await PopulationBL.satisfaction(userId, cityPopulation);
-
-            // Calculate worker difference
-            const currentWorkers = (cityPopulation as any)[workersKey] ?? 0;
-            const workersDiff = workers - currentWorkers;
-
-            if (workersDiff > cityPopulation.population) {
-                return res.status(400).json({
-                    error: "You cannot assign more workers than available citizens",
-                });
-            }
-
-            // Update population and workers
-            const updatedPopulation = await prisma.cityPopulation.update({
-                where: { cityId: cityId },
-                data: {
-                    population: cityPopulation.population - workersDiff,
-                    [workersKey]: workers,
-                },
-            });
-
-            // Update city resources
-            const city = await prisma.city.findUnique({ where: { id: cityId } });
-            if (city) {
-                await CityBL.updateResources(city.id);
-            }
-
-            // Update user resources
-            await UserResourceBL.updateResources(userId);
-
-            return res.json({ message: "ok" });
-        } catch (error) {
-            console.error("Error in setWorker:", error);
-            return res.status(500).json({ error: "Internal server error" });
         }
+
+        let donations: {
+            id: number;
+            cityId: number;
+            donated: number;
+            workers?: number;
+        }[] = await prisma.islandDonation.findMany({ where: { islandId, type: type ? 1 : 0 }, select: { id: true, cityId: true, donated: true } });
+
+        const islandCities = await prisma.islandCity.findMany({ where: { islandId }, include: { city: { include: { population: true } } } });
+
+        islandCities.forEach(x => {
+            let index = donations.findIndex(y => y.cityId === x.cityId);
+            if (index >= 0)
+                donations[index].workers = type ? x.city.population?.workerForest : x.city.population?.workerMine;
+        });
+
+        const result: ResponseIslandGetData = {
+            donations,
+            maxWorkers,
+            nextWood,
+            constructedAt,
+            donated
+        }
+
+        return res.json(result);
+    }
+
+    public async setWorker(req: Request, res: Response) {
+        const { workers, type, cityId }: RequestIslandSetWorker = validateFields(req, [
+            { name: "workers", type: "number", required: true },
+            { name: "type", type: "boolean", required: true },
+            { name: "cityId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
+
+        // Validate input
+        if (typeof workers !== "number" || workers < 0) {
+            throw new Error("workers must be a non-negative number");
+        }
+        if (typeof type !== "boolean") {
+            throw new Error("type must be a boolean");
+        }
+
+        const userCity = await prisma.userCity.findFirst({ where: { userId, cityId } });
+        if (!userCity) throw new Error("Forbidden");
+
+        // Define type of workers
+        const targetType = type ? "forest" : "mine";
+        const workersKey = type ? "workerForest" : "workerMine";
+
+        // Get city population
+        const cityPopulation = await prisma.cityPopulation.findUnique({
+            where: { cityId: cityId },
+        });
+        if (!cityPopulation) {
+            throw new Error("City population not found");
+        }
+
+        // Get island of the city
+        const islandCity = await prisma.islandCity.findUnique({
+            where: { cityId: cityId },
+            include: { island: { include: { forest: true, mine: true } } },
+        });
+        if (!islandCity) {
+            throw new Error("Island city not found");
+        }
+
+        // Check island workers capacity
+        const islandWorkers =
+            targetType === "forest"
+                ? islandCity.island.forest?.workers ?? 0
+                : islandCity.island.mine?.workers ?? 0;
+
+        if (workers > islandWorkers) {
+            throw new Error("You cannot assign more workers than the island allows");
+        }
+
+        // Check population satisfaction
+        await PopulationBL.satisfaction(userId, cityPopulation);
+
+        // Calculate worker difference
+        const currentWorkers = (cityPopulation as any)[workersKey] ?? 0;
+        const workersDiff = workers - currentWorkers;
+
+        if (workersDiff > cityPopulation.population) {
+            throw new Error("You cannot assign more workers than available citizens");
+        }
+
+        // Update population and workers
+        const updatedPopulation = await prisma.cityPopulation.update({
+            where: { cityId: cityId },
+            data: {
+                population: cityPopulation.population - workersDiff,
+                [workersKey]: workers,
+            },
+        });
+
+        // Update city resources
+        const city = await prisma.city.findUnique({ where: { id: cityId } });
+        if (city) {
+            await CityBL.updateResources(city.id);
+        }
+
+        // Update user resources
+        await UserResourceBL.updateResources(userId);
+
+        //get populationAvailable
+        const newCityPopulation = await prisma.cityPopulation.findUniqueOrThrow({
+            where: { cityId: cityId },
+        });
+        const populationAvailable = PopulationBL.getAvailablePopulation(newCityPopulation);
+
+        const response: ResponseIslandSetWorker = {
+            populationAvailable
+        }
+
+        return res.json(response);
     }
 
     // Main entrypoint for donation
     public async setDonation(req: Request, res: Response) {
-        try {
-            const islandId = parseInt(req.params.id, 10);
-            const userId = Number(req.params.userId);
-            const { city, wood, type } = req.body; // type: boolean (true = forest, false = mine)
+        const { islandId, wood, type, cityId }: RequestIslandSetDonation = validateFields(req, [
+            { name: "islandId", type: "number", required: true },
+            { name: "type", type: "boolean", required: true },
+            { name: "cityId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-            // Validate input
-            if (!city || typeof city !== "number" || city < 1) {
-                return res.status(400).json({ error: "city must be an integer >= 1" });
-            }
-            if (!wood || typeof wood !== "number" || wood < 1) {
-                return res.status(400).json({ error: "wood must be an integer >= 1" });
-            }
-            if (typeof type !== "boolean") {
-                return res.status(400).json({ error: "type must be a boolean" });
-            }
-
-            if (!userId) {
-                return res.status(401).json({ error: "Unauthorized" });
-            }
-
-            // Verify city belongs to user
-            const userCity = await prisma.userCity.findFirst({
-                where: { userId: userId, cityId: city },
-            });
-            if (!userCity) {
-                return res.status(400).json({ error: "This city does not exist or does not belong to you" });
-            }
-
-            // Verify city is part of the island
-            const islandCity = await prisma.islandCity.findFirst({
-                where: { islandId: islandId, cityId: city },
-            });
-            if (!islandCity) {
-                return res.status(400).json({ error: "This city is not part of the island you want to donate to" });
-            }
-
-            // Dispatch based on type
-            if (type) {
-                return this.donatedForest(res, islandId, city, wood);
-            } else {
-                return this.donatedMine(res, islandId, city, wood);
-            }
-        } catch (error) {
-            console.error("Error in setDonation:", error);
-            return res.status(500).json({ error: "Internal server error" });
+        // Verify city belongs to user
+        const userCity = await prisma.userCity.findFirst({
+            where: { userId: userId, cityId: cityId },
+        });
+        if (!userCity) {
+            throw new Error("This city does not exist or does not belong to you");
         }
+
+        // Verify city is part of the island
+        const islandCity = await prisma.islandCity.findFirst({
+            where: { islandId: islandId, cityId: cityId },
+        });
+        if (!islandCity) {
+            throw new Error("This city is not part of the island you want to donate to");
+        }
+
+        // Dispatch based on type
+        if (type) {
+            await this.donatedForest(res, islandId, cityId, wood);
+        } else {
+            await this.donatedMine(res, islandId, cityId, wood);
+        }
+
+        //get resources
+        const cityUpdated = await prisma.city.findUniqueOrThrow({ where: { id: cityId } });
+
+        const updatedResources: Resources = {
+            wood: cityUpdated.wood,
+            marble: cityUpdated.marble,
+            wine: cityUpdated.wine,
+            glass: cityUpdated.glass,
+            sulfur: cityUpdated.sulfur
+        }
+
+        res.json(updatedResources);
     }
 
     // Donate to the forest
@@ -337,13 +401,13 @@ export class IslandController {
             include: { forest: true },
         });
 
-        if (!island) return res.status(404).json({ error: "Island not found" });
+        if (!island) throw new Error("Island not found");
         if (island.forestConstructedAt) {
-            return res.status(400).json({ error: "Forest is already under construction" });
+            throw new Error("Forest is already under construction");
         }
 
         const city = await prisma.city.findUnique({ where: { id: cityId } });
-        if (!city) return res.status(404).json({ error: "City not found" });
+        if (!city) throw new Error("City not found");
 
         // Update resources of the city
         await CityBL.updateResources(city.id);
@@ -354,14 +418,14 @@ export class IslandController {
 
         const hasResources = await CityBL.compareResources(city.id, collect);
         if (!hasResources) {
-            return res.status(400).json({ error: "Not enough resources" });
+            throw new Error("Not enough resources");
         }
 
         const nextLevel = await prisma.forest.findFirst({
             where: { level: island.forest.level + 1 },
         });
         if (!nextLevel) {
-            return res.status(400).json({ error: "Next forest level not found" });
+            throw new Error("Next forest level not found");
         }
 
         const needToUpgrade = nextLevel.wood - island.donatedForest;
@@ -419,7 +483,7 @@ export class IslandController {
             });
         }
 
-        return res.json({ message: "ok" });
+        return "ok";
     }
 
     // Donate to the mine
@@ -435,13 +499,13 @@ export class IslandController {
             include: { mine: true },
         });
 
-        if (!island) return res.status(404).json({ error: "Island not found" });
+        if (!island) throw new Error("Island not found");
         if (island.mineConstructedAt) {
-            return res.status(400).json({ error: "Mine is already under construction" });
+            throw new Error("Mine is already under construction");
         }
 
         const city = await prisma.city.findUnique({ where: { id: cityId } });
-        if (!city) return res.status(404).json({ error: "City not found" });
+        if (!city) throw new Error("City not found");
 
         // Update resources of the city
         await CityBL.updateResources(city.id);
@@ -452,14 +516,14 @@ export class IslandController {
 
         const hasResources = await CityBL.compareResources(city.id, collect);
         if (!hasResources) {
-            return res.status(400).json({ error: "Not enough resources" });
+            throw new Error("Not enough resources");
         }
 
         const nextLevel = await prisma.mine.findFirst({
             where: { level: island.mine.level + 1 },
         });
         if (!nextLevel) {
-            return res.status(400).json({ error: "Next mine level not found" });
+            throw new Error("Next mine level not found");
         }
 
         const needToUpgrade = nextLevel.wood - island.donatedMine;
@@ -517,6 +581,6 @@ export class IslandController {
             });
         }
 
-        return res.json({ message: "ok" });
+        return "ok";
     }
 }

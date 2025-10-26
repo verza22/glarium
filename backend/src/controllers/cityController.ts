@@ -72,7 +72,7 @@ export class CityController {
             await PopulationBL.satisfaction(userId, city.population, false);
 
             return {
-                population: Math.floor(city.population.population),
+                population: Math.floor(city.population.populationMax),
                 populationAvailable: PopulationBL.getAvailablePopulation(city.population),
                 workerForest: city.population.workerForest,
                 workerMine: city.population.workerMine,
@@ -137,7 +137,13 @@ export class CityController {
             }
         });
 
-        return res.json(scientists);
+        //get populationAvailable
+        const newCityPopulation = await prisma.cityPopulation.findUniqueOrThrow({
+            where: { cityId: cityId },
+        });
+        const populationAvailable = PopulationBL.getAvailablePopulation(newCityPopulation);
+
+        return res.json(populationAvailable);
     }
 
     public async setWine(req: Request, res: Response) {

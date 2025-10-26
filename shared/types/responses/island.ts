@@ -17,3 +17,20 @@ export interface ResponseIslandGetInfo {
         type: boolean;
     }[];
 }
+
+export interface ResponseIslandGetData {
+    donations: {
+        id: number;
+        cityId: number;
+        donated: number;
+        workers?: number;
+    }[];
+    maxWorkers: number;
+    nextWood: number;
+    constructedAt: string | null;
+    donated: number;
+}
+
+export interface ResponseIslandSetWorker {
+    populationAvailable: number
+}

@@ -33,6 +33,7 @@ const Layout: React.FC = () => {
                 openModal(ModalType.Research);
             break;
             case "diplomat":
+                openModal(ModalType.Messages);
             break;
         }
     }

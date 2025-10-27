@@ -5,7 +5,7 @@ import Building, { BuildingsModalRef, BuildingData } from "./building/Building";
 import Donation, { DonationRef, DonationInfo } from "./donation/DonationModal";
 import Research from "./research/ResearchModal";
 import IslandCity from "./islandCity/IslandCityModal";
-import Messages, { MessagesRef, MessagesInfo } from "./message/MessageModal";
+import Messages from "./message/MessageModal";
 import Colonize, { ColonizeRef, ColonizeInfo } from "./islandCity/Options/Colonize";
 import General, { GeneralModalRef, GeneralModalInfo } from "./general/GeneralModal";
 import Mayor from "./Mayor";
@@ -17,7 +17,6 @@ export interface ModalRef {
         buildingList: (position: number) => void,
         building: (buildingData: BuildingData) => void,
         donation: (info: DonationInfo) => void,
-        messages: (info: MessagesInfo) => void,
         colonize: (info: ColonizeInfo) => void,
         general: (info: GeneralModalInfo) => void
     }
@@ -31,7 +30,6 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
     const refBuildingList = React.useRef<BuildingsListModalRef>(null);
     const refBuilding = React.useRef<BuildingsModalRef>(null);
     const refDonation = React.useRef<DonationRef>(null);
-    const refMessages = React.useRef<MessagesRef>(null);
     const refColonize = React.useRef<ColonizeRef>(null);
     const refGeneral = React.useRef<GeneralModalRef>(null);
 
@@ -47,7 +45,6 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
             buildingList: (position: number) => refBuildingList.current?.setPosition(position),
             building: (buildingData: BuildingData) => refBuilding.current?.setBuildingData(buildingData),
             donation: (info: DonationInfo) => refDonation.current?.setInfo(info),
-            messages: (info: MessagesInfo) => refMessages.current?.setInfo(info),
             colonize: (info: ColonizeInfo) => refColonize.current?.setInfo(info),
             general: (info: GeneralModalInfo) => refGeneral.current?.setInfo(info),
         }
@@ -70,7 +67,7 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
             case ModalType.IslandCity:
                 return <IslandCity close={close} />;
             case ModalType.Messages:
-                return <Messages close={close} ref={refMessages} />;
+                return <Messages close={close} />;
             case ModalType.Colonize:
                 return <Colonize close={close} ref={refColonize} />;
             case ModalType.General:

@@ -7,5 +7,7 @@ const controller = new UserController();
 
 router.get('/config', authenticate, controller.config.bind(controller));
 router.post('/buyTradeShip', authenticate, controller.buyTradeShip.bind(controller));
+router.post('/getMayor', authenticate, controller.getMayor.bind(controller));
+router.post('/getMessages', authenticate, controller.getMessages.bind(controller));
 
 export default router;

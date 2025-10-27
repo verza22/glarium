@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { world } from '../config/world';
 import prisma from '../dataAccess/prisma/prisma'
-import { RequestUserConfig } from '@shared/types/requests';
-import { ResponseUserBuyTradeShip, ResponseUserConfig } from '@shared/types/responses';
+import { RequestUserConfig, RequestUserGetMayor, RequestUserGetMessages } from '@shared/types/requests';
+import { ResponseUserBuyTradeShip, ResponseUserConfig, ResponseUserGetMayor } from '@shared/types/responses';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
 import { CityBL } from './../businessLogic/cityBL';
+import { validateFields } from '../utils/validateFields';
 
 export class UserController {
 
@@ -168,14 +169,18 @@ export class UserController {
     }
 
     public async getMessages(req: Request, res: Response) {
-        const { type, page, userId } = req.body;
+        const { page, type }: RequestUserGetMessages = validateFields(req, [
+            { name: "page", type: "number", required: true },
+            { name: "type", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
         // Validation
         if (typeof type !== "number" || type < 0 || type > 1) {
-            return res.json("type must be 0 or 1");
+            throw new Error("type must be 0 or 1");
         }
         if (typeof page !== "number" || page < 0 || page > 999) {
-            return res.json("page must be between 0 and 999");
+            throw new Error("page must be between 0 and 999");
         }
 
         const cities = await CityBL.myCities(userId);
@@ -349,11 +354,13 @@ export class UserController {
     }
 
     public async getMayor(req: Request, res: Response) {
-        const userId = (req as Request & RequestUserConfig).id;
+        const { page }: RequestUserGetMayor = validateFields(req, [
+            { name: "page", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-        const page = Number(req.body.page);
         if (isNaN(page) || page < 0 || page > 999) {
-            return res.status(400).json({ error: "page must be 0-999" });
+            throw new Error("page must be 0-999");
         }
 
         const cities = await prisma.userCity.findMany({
@@ -377,7 +384,7 @@ export class UserController {
             data: { readed: 1 }
         });
 
-        const data = {
+        const data:ResponseUserGetMayor = {
             total,
             items: items.map(m => ({
                 fecha: m.createdAt.toISOString().slice(0, 16).replace("T", " "),
@@ -385,7 +392,7 @@ export class UserController {
                 city_name: m.city.name,
                 type: m.type,
                 readed: m.readed,
-                data: m.data
+                data: m.data ? JSON.parse(m.data.toString()) : null
             })),
             more: total > (page + 1) * 10,
             page

@@ -30,9 +30,6 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     case ModalType.Donation:
                         modalRef.current?.modal.donation(info);
                         break;
-                    case ModalType.Messages:
-                        modalRef.current?.modal.messages(info);
-                        break;
                     case ModalType.Colonize:
                         modalRef.current?.modal.colonize(info);
                         break;

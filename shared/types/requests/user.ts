@@ -12,3 +12,12 @@ export interface RequestUserRegister {
     email: string,
     password: string
 }
+
+export interface RequestUserGetMayor {
+    page: number
+}
+
+export interface RequestUserGetMessages {
+    page: number,
+    type: number
+}

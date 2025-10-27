@@ -6,6 +6,7 @@ import MessageList from './MessageList';
 
 import scrollClosed from '../../../assets/img/icon/schriftrolle_closed.png';
 import scrollOpen from '../../../assets/img/icon/schriftrolle_offen.png';
+import { useUserGetMessages } from '../../../hooks/useUserGetMessages';
 
 export interface MessagesInfo {
     totalNoReaded: number;
@@ -17,33 +18,20 @@ export interface MessagesInfo {
     more: boolean;
 };
 
-export interface MessagesRef {
-    setInfo: (info: MessagesInfo) => void;
-}
-
 type MessagesProps = {
-    ref: React.Ref<MessagesRef>,
     close: () => void;
 };
 
-const Messages: React.FC<MessagesProps> = ({ close, ref }) => {
+const Messages: React.FC<MessagesProps> = ({ close }) => {
     const { t } = useTranslation();
     const [type, setType] = useState(0); // 0 = inbox, 1 = outbox
-    const [data, setData] = useState<MessagesInfo|null>(null);
+    const [page, setPage] = useState(0);
+    const { data } = useUserGetMessages(page, type);
 
-    if(data === null)
+    if(!data)
         return null;
 
-    React.useImperativeHandle(ref, () => ({
-        setInfo: (info: MessagesInfo) => setData(info)
-    }), []);
-
-    const messages = type === 0 ? data.received : data.sended;
-
-    const changeType = (newType: number) => {
-        setType(newType);
-        // In UI-only version, we don't fetch new data
-    };
+    const messages = data?.received ? data.received : data.sended;
 
     return (
         <div className="border border-gray-300 p-2">
@@ -54,7 +42,7 @@ const Messages: React.FC<MessagesProps> = ({ close, ref }) => {
                             className={`flex-1 justify-center items-center flex p-1 cursor-pointer ${type === 0 ? 'bg-yellow-100' : ''
                                 }`}
                             title={t('modal.message.inbox_title')}
-                            onClick={() => changeType(0)}
+                            onClick={() => setType(0)}
                         >
                             <div
                                 className="w-4 h-4 inline-block"
@@ -73,7 +61,7 @@ const Messages: React.FC<MessagesProps> = ({ close, ref }) => {
                             className={`flex-1 justify-center items-center flex p-1 cursor-pointer ${type === 1 ? 'bg-yellow-100' : ''
                                 }`}
                             title={t('modal.message.outbox_title')}
-                            onClick={() => changeType(1)}
+                            onClick={() => setType(1)}
                         >
                             <div
                                 className="w-4 h-4 inline-block"

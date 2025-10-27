@@ -23,3 +23,17 @@ export interface ResponseUserBuyTradeShip {
     newTradeShip: number,
     newTradeAvailableShip: number
 }
+
+export interface ResponseUserGetMayor {
+    total: number;
+    items: {
+        fecha: string;
+        city_id: number;
+        city_name: string;
+        type: number;
+        readed: number;
+        data: any;
+    }[];
+    more: boolean;
+    page: number;
+}

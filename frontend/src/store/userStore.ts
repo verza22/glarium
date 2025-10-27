@@ -10,6 +10,7 @@ interface UserState {
     islandY: number,
     bearerToken: string,
     email: string,
+    name: string,
     worldConfig: WorldConfig ,
     setUser: (data: Partial<UserState>) => void,
     clearUser: () => void
@@ -25,6 +26,7 @@ export const useUserStore = create<UserState>()(
             islandY: 0,
             bearerToken: "",
             email: "",
+            name: "",
             worldConfig: {
                 transport: 0,
                 load_speed: 0,
@@ -70,6 +72,7 @@ export const useUserStore = create<UserState>()(
                     islandY: 0,
                     bearerToken: "",
                     email: "",
+                    name: "",
                     worldConfig: {
                         transport: 0,
                         load_speed: 0,

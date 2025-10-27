@@ -4,7 +4,7 @@ import BuildingList, { BuildingsListModalRef } from "./BuildingsModal";
 import Building, { BuildingsModalRef, BuildingData } from "./building/Building";
 import Donation, { DonationRef, DonationInfo } from "./donation/DonationModal";
 import Research from "./research/ResearchModal";
-import IslandCity from "./islandCity/IslandCityModal";
+import IslandCity, { IslandCityInfoRef, IslandCityInfo } from "./islandCity/IslandCityModal";
 import Messages from "./message/MessageModal";
 import Colonize, { ColonizeRef, ColonizeInfo } from "./islandCity/Options/Colonize";
 import General, { GeneralModalRef, GeneralModalInfo } from "./general/GeneralModal";
@@ -18,7 +18,8 @@ export interface ModalRef {
         building: (buildingData: BuildingData) => void,
         donation: (info: DonationInfo) => void,
         colonize: (info: ColonizeInfo) => void,
-        general: (info: GeneralModalInfo) => void
+        general: (info: GeneralModalInfo) => void,
+        islandCity: (info: IslandCityInfo) => void
     }
 }
 
@@ -32,6 +33,7 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
     const refDonation = React.useRef<DonationRef>(null);
     const refColonize = React.useRef<ColonizeRef>(null);
     const refGeneral = React.useRef<GeneralModalRef>(null);
+    const refIslandCity = React.useRef<IslandCityInfoRef>(null);
 
     const [visible, setVisible] = React.useState(false);
     const [type, setType] = React.useState<ModalType>(0);
@@ -47,6 +49,7 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
             donation: (info: DonationInfo) => refDonation.current?.setInfo(info),
             colonize: (info: ColonizeInfo) => refColonize.current?.setInfo(info),
             general: (info: GeneralModalInfo) => refGeneral.current?.setInfo(info),
+            islandCity: (info: IslandCityInfo) => refIslandCity.current?.setInfo(info)
         }
     }), []);
 
@@ -65,7 +68,7 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
             case ModalType.Research:
                 return <Research close={close} />;
             case ModalType.IslandCity:
-                return <IslandCity close={close} />;
+                return <IslandCity close={close} ref={refIslandCity} />;
             case ModalType.Messages:
                 return <Messages close={close} />;
             case ModalType.Colonize:

@@ -228,15 +228,19 @@
             "errorMessage": "Message cannot be empty.",
             "characters": "characters remaining",
             "send": "Send",
-            "transport": "Select which goods and how many you want to transport from {{city_from.name}} to {{data.city.name}}. Keep in mind the number of trade ships you’ll need for this operation!",
+            "transportMsg": "Select which goods and how many you want to transport from {{city_from.name}} to {{data.city.name}}. Keep in mind the number of trade ships you’ll need for this operation!",
             "name": "City",
             "player": "Player",
             "alliance": "Alliance",
             "points": "Points",
             "writeMessage": "Write Message",
             "transportResources": "Transport Resources",
-            "attack": "Attack",
-            "info": "Info"
+            "attack": "Pillage",
+            "info": "Info",
+            "diplomacy": "Diplomacy",
+            "defend": "Defend town!",
+            "transport": "Transport goods",
+            "actions": "Actions"
         },
         "building": {
             "list_title": "Construction list",

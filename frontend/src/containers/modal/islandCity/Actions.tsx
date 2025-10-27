@@ -25,7 +25,7 @@ const Actions: React.FC<ActionsProps> = ({ data, changeType, hasUnits }) => {
   return (
     <div>
       <div className="border-b border-yellow-600 mb-2">
-        <div className="text-lg font-bold text-center">{t("modal.islandCity.actions.title")}</div>
+        <div className="text-lg font-bold text-center">{t("modal.islandCity.actions")}</div>
       </div>
 
       <div className="py-2 flex flex-wrap justify-between">
@@ -37,10 +37,10 @@ const Actions: React.FC<ActionsProps> = ({ data, changeType, hasUnits }) => {
               onClick={() => changeType(1)}
             >
               <div
-                className="w-[50px] h-[34px] mx-auto bg-center bg-no-repeat bg-cover hover:bg-[position:center]"
+                className="w-[50px] h-[34px] mx-auto bg-top bg-no-repeat bg-cover hover:bg-[position:center]"
                 style={{ backgroundImage: `url(${diplomacyImg})` }}
               ></div>
-              <div className="mt-1">{t("modal.islandCity.actions.diplomacy")}</div>
+              <div className="mt-1">{t("modal.islandCity.diplomacy")}</div>
             </div>
           </div>
         )}
@@ -52,10 +52,10 @@ const Actions: React.FC<ActionsProps> = ({ data, changeType, hasUnits }) => {
             onClick={() => changeType(2)}
           >
             <div
-              className="w-[50px] h-[34px] mx-auto bg-center bg-no-repeat bg-cover hover:bg-[position:center]"
+              className="w-[50px] h-[34px] mx-auto bg-top bg-no-repeat bg-cover hover:bg-[position:center]"
               style={{ backgroundImage: `url(${transportImg})` }}
             ></div>
-            <div className="mt-1">{t("modal.islandCity.actions.transport")}</div>
+            <div className="mt-1">{t("modal.islandCity.transport")}</div>
           </div>
         </div>
 
@@ -68,12 +68,12 @@ const Actions: React.FC<ActionsProps> = ({ data, changeType, hasUnits }) => {
                 onClick={() => hasUnits && changeType(4)}
               >
                 <div
-                  className={`w-[50px] h-[34px] mx-auto bg-center bg-no-repeat bg-cover ${
+                  className={`w-[50px] h-[34px] mx-auto bg-top bg-no-repeat bg-cover ${
                     hasUnits ? "hover:bg-[position:center]" : "opacity-50"
                   }`}
                   style={{ backgroundImage: `url(${defendImg})` }}
                 ></div>
-                <div className="mt-1">{t("modal.islandCity.actions.defend")}</div>
+                <div className="mt-1">{t("modal.islandCity.defend")}</div>
               </div>
             </div>
 
@@ -84,12 +84,12 @@ const Actions: React.FC<ActionsProps> = ({ data, changeType, hasUnits }) => {
                 onClick={() => hasUnits && changeType(5)}
               >
                 <div
-                  className={`w-[50px] h-[34px] mx-auto bg-center bg-no-repeat bg-cover ${
+                  className={`w-[50px] h-[34px] mx-auto bg-top bg-no-repeat bg-cover ${
                     hasUnits ? "hover:bg-[position:center]" : "opacity-50"
                   }`}
                   style={{ backgroundImage: `url(${attackImg})` }}
                 ></div>
-                <div className="mt-1">{t("modal.islandCity.actions.attack")}</div>
+                <div className="mt-1">{t("modal.islandCity.attack")}</div>
               </div>
             </div>
           </>

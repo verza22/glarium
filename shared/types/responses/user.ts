@@ -15,6 +15,7 @@ export interface ResponseAuth {
     islandId: number,
     islandX: number,
     islandY: number,
+    name: string,
     worldConfig: WorldConfig
 }
 

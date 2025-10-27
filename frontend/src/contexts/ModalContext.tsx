@@ -36,6 +36,9 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     case ModalType.General:
                         modalRef.current?.modal.general(info);
                         break;
+                    case ModalType.IslandCity:
+                        modalRef.current?.modal.islandCity(info);
+                        break;
                 }
             })
         }

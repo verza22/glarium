@@ -9,7 +9,7 @@ import cityRedHover from "../assets/img/island/city_red_hover.png";
 import cityConstr from "../assets/img/island/city_constr.png";
 import flag from "../assets/img/island/flag.png";
 
-type City = ResponseIslandGetInfo["cities"][number] & {
+export type City = ResponseIslandGetInfo["cities"][number] & {
     extraField?: string;
 };
 
@@ -19,6 +19,7 @@ interface IslandCitiesProps {
     x: number;
     y: number;
     cities: City[];
+    handleCitiesModal: (city: City) => void
 }
 
 interface ObjectPosition {
@@ -26,7 +27,7 @@ interface ObjectPosition {
     left: number;
 }
 
-const IslandCities: React.FC<IslandCitiesProps> = ({ id, name, x, y, cities }) => {
+const IslandCities: React.FC<IslandCitiesProps> = ({ id, name, x, y, cities, handleCitiesModal }) => {
     const { t } = useTranslation();
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
@@ -83,6 +84,7 @@ const IslandCities: React.FC<IslandCitiesProps> = ({ id, name, x, y, cities }) =
     const openCityInfo = (city: City, index: number) => {
         if (city.constructedAt === null) return;
         setSelectedIndex(index);
+        handleCitiesModal(city);
         // onOpenModal({ type: 4, info: { city } });
     };
 
@@ -121,21 +123,28 @@ const IslandCities: React.FC<IslandCitiesProps> = ({ id, name, x, y, cities }) =
                                 onClick={() => openCityInfo(city, index)}
                             >
 
-                                <div
-                                    className={`absolute w-[70px] h-[70px] bg-no-repeat bg-center transition-all ${isActive ? "z-[3]" : ""
-                                        }`}
-                                    style={{
-                                        backgroundImage: `url(${isActive
-                                            ? color === "blue"
-                                                ? cityBlueHover
-                                                : cityRedHover
-                                            : color === "blue"
-                                                ? cityBlue
-                                                : cityRed
-                                            })`,
-                                        backgroundPosition: "-3px 0",
-                                    }}
-                                ></div>
+                                <div className="absolute w-[70px] h-[70px] bg-no-repeat bg-center">
+                                    <div
+                                        className="absolute inset-0 bg-no-repeat bg-center"
+                                        style={{
+                                            backgroundImage: `url(${color === "blue" ? cityBlue : cityRed})`,
+                                            backgroundPosition: "-3px 0",
+                                            zIndex: 1,
+                                            opacity: isActive ? 0.7 : 1
+                                        }}
+                                    ></div>
+
+                                    {isActive && (
+                                        <div
+                                            className="absolute inset-0 bg-no-repeat bg-center transition-all"
+                                            style={{
+                                                backgroundImage: `url(${color === "blue" ? cityBlueHover : cityRedHover})`,
+                                                backgroundPosition: "-3px 0",
+                                                zIndex: 3,
+                                            }}
+                                        ></div>
+                                    )}
+                                </div>
 
                                 {city.constructedAt ? (
                                     <div

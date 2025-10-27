@@ -14,7 +14,7 @@ export class AuthController {
             { name: "password", type: "string", required: true }
         ]);
 
-        const { userId, cityId, islandId, x, y } = await UserBL.login({ email, password });
+        const { userId, cityId, islandId, x, y, name } = await UserBL.login({ email, password });
 
         const token = UserBL.generateToken({ userId, email });
 
@@ -26,6 +26,7 @@ export class AuthController {
             islandId,
             islandX: x,
             islandY: y,
+            name,
             worldConfig: world
         };
         res.json(response);
@@ -51,6 +52,7 @@ export class AuthController {
                 islandId,
                 islandX: x,
                 islandY: y,
+                name,
                 worldConfig: world
             };
             res.json(response);

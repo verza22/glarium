@@ -15,6 +15,7 @@ export const useRegister = () => {
                 islandX: response.islandX,
                 islandY: response.islandY,
                 bearerToken: response.token,
+                name: response.name,
                 email: email
             });
         }

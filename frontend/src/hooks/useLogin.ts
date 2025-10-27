@@ -16,6 +16,7 @@ export const useLogin = () => {
                 islandY: response.islandY,
                 bearerToken: response.token,
                 email: email,
+                name: response.name,
                 worldConfig: response.worldConfig
             });
         }

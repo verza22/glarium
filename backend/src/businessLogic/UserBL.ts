@@ -29,7 +29,7 @@ export class UserBL {
         
         const { x, y, id } = island;
         
-        return { userId: user.id, cityId: userCity.cityId, islandId: id, x, y };
+        return { userId: user.id, cityId: userCity.cityId, islandId: id, x, y, name: user.name };
     }
 
     static async register({ name, email, password }: RequestUserRegister) {

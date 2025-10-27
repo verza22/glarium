@@ -221,6 +221,80 @@
 					"response": []
 				},
 				{
+					"name": "GetMayor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"page\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/user/getMayor",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"user",
+								"getMayor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetMessages",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"page\": 0,\n    \"type\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/user/getMessages",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"user",
+								"getMessages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Config",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true

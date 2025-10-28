@@ -21,3 +21,22 @@ export interface RequestUserGetMessages {
     page: number,
     type: number
 }
+
+export interface RequestUserSendMessage {
+    cityFromId: number,
+    message: string,
+    cityId: number
+}
+
+export interface RequestUserReadMessage {
+    messageId: number
+}
+
+export interface RequestUserUnreadOrReadAll {
+    readed: boolean
+}
+
+export interface RequestUserDeleteMessages {
+    messages: number[],
+    type: boolean
+}

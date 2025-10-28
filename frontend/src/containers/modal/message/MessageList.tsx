@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import btnMin from '../../../assets/img/icon/btn_min.png';
@@ -25,17 +25,74 @@ type Message = {
   date: string;
 };
 
-type MessageListProps = {
+interface MessageListProps {
   data: Message[];
   type: number; // 0 = received, 1 = sent
   page: number;
   more: boolean;
-};
+  handleReadMessage: (messageId: number) => void;
+  handleUnreadOrReadAll: (readed: boolean) => void;
+  handleDeleteMessages: (messages: number[]) => void;
+}
 
-const MessageList: React.FC<MessageListProps> = ({ data, type, page, more }) => {
+const MessageList: React.FC<MessageListProps> = ({
+  data,
+  type,
+  page,
+  more,
+  handleReadMessage,
+  handleUnreadOrReadAll,
+  handleDeleteMessages
+}) => {
   const { t } = useTranslation();
+  const [messageList, setMessageList] = useState<Message[]>(data);
+  const [openMessageId, setOpenMessageId] = useState<number | null>(null);
+  const [messagesSelected, setMessagesSelected] = useState<number[]>([]);
+
+  useEffect(() => {
+    setMessageList(data);
+  }, [data]);
+
+  const onClickMessage = (msg: Message) => {
+    if (openMessageId === msg.id) {
+      setOpenMessageId(null);
+      return;
+    }
+    const aux = [...messageList];
+    const i = aux.findIndex(x => x.id === msg.id);
+    if (i >= 0 && aux[i].readed === 0) {
+      aux[i].readed = 1;
+      setMessageList(aux);
+      handleReadMessage(msg.id);
+    }
+    setOpenMessageId(msg.id);
+  };
 
   const isUnread = (msg: Message) => (msg.readed === 0 ? 'font-bold' : '');
+
+  const toggleCheckbox = (id: number) => {
+    if (messagesSelected.includes(-1)) {
+      // Todos estaban seleccionados, ahora reemplazamos -1 por solo este id
+      setMessagesSelected([id]);
+    } else {
+      if (messagesSelected.includes(id)) {
+        setMessagesSelected(messagesSelected.filter(m => m !== id));
+      } else {
+        setMessagesSelected([...messagesSelected, id]);
+      }
+    }
+  };
+
+  const selectAll = () => {
+    if(messagesSelected.length === 1 && messagesSelected[0] === -1){
+        setMessagesSelected([]);
+    }else{
+        setMessagesSelected([-1]);
+    }
+  };
+
+  const isChecked = (id: number) =>
+    messagesSelected.includes(-1) || messagesSelected.includes(id);
 
   return (
     <div className="mt-3">
@@ -51,24 +108,44 @@ const MessageList: React.FC<MessageListProps> = ({ data, type, page, more }) => 
           </tr>
         </thead>
         <tbody>
-          {data.map((msg) => (
-            <tr key={msg.id} className={`${isUnread(msg)} cursor-pointer hover:bg-gray-100`}>
-              <td>
-                <input type="checkbox" name="check" />
-              </td>
-              <td className="text-center">
-                <div
-                  className="inline-block w-4 h-4 bg-no-repeat"
-                  style={{ backgroundImage: `url(${msgIcon})`, backgroundPositionY: '0px' }}
-                ></div>
-              </td>
-              <td>{msg.user.name}</td>
-              <td>{t('modal.message.message')}</td>
-              <td className="go hover:underline cursor-pointer" title={t('modal.message.go_to_city')}>
-                {msg.city.name} [{msg.city.x}:{msg.city.y}]
-              </td>
-              <td>{msg.date}</td>
-            </tr>
+          {messageList.map((msg) => (
+            <React.Fragment key={msg.id}>
+              <tr
+                className={`${isUnread(msg)} cursor-pointer hover:bg-gray-100`}
+                onClick={() => onClickMessage(msg)}
+              >
+                <td>
+                  <input
+                    type="checkbox"
+                    name="check"
+                    checked={isChecked(msg.id)}
+                    onChange={() => toggleCheckbox(msg.id)}
+                  />
+                </td>
+                <td className="text-center">
+                  <div
+                    className="inline-block w-4 h-4 bg-no-repeat"
+                    style={{ backgroundImage: `url(${msgIcon})`, backgroundPositionY: '0px' }}
+                  ></div>
+                </td>
+                <td>{msg.user.name}</td>
+                <td>{t('modal.message.message')}</td>
+                <td
+                  className="go hover:underline cursor-pointer"
+                  title={t('modal.message.go_to_city')}
+                >
+                  {msg.city.name} [{msg.city.x}:{msg.city.y}]
+                </td>
+                <td>{msg.date}</td>
+              </tr>
+              {openMessageId === msg.id && (
+                <tr className="bg-gray-50">
+                  <td colSpan={6} className="p-3 border-t border-gray-200">
+                    <div className="text-gray-800 whitespace-pre-wrap">{msg.message}</div>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
           ))}
         </tbody>
       </table>
@@ -90,26 +167,17 @@ const MessageList: React.FC<MessageListProps> = ({ data, type, page, more }) => 
       </div>
 
       <div className="mt-2 flex flex-wrap items-center space-x-2">
-        <div className="cursor-pointer hover:underline">{t('modal.message.all')}</div>
+        <div className="cursor-pointer hover:underline" onClick={selectAll}>{t('modal.message.all')}</div>
         {type === 0 && (
           <>
             <span> | </span>
-            <div className="cursor-pointer hover:underline">{t('modal.message.unread')}</div>
+            <div className="cursor-pointer hover:underline" onClick={() => handleUnreadOrReadAll(false)}>{t('modal.message.unread')}</div>
             <span> | </span>
-            <div className="cursor-pointer hover:underline">{t('modal.message.read')}</div>
+            <div className="cursor-pointer hover:underline" onClick={() => handleUnreadOrReadAll(true)}>{t('modal.message.read')}</div>
           </>
         )}
         <span> | </span>
-        <div className="cursor-pointer hover:underline">{t('modal.message.none')}</div>
-      </div>
-
-      {type === 0 && (
-        <div className="mt-2">
-          <button className="px-4 py-2 bg-gray-200 rounded">{t('modal.message.mark_read')}</button>
-        </div>
-      )}
-      <div className="mt-2">
-        <button className="px-4 py-2 bg-gray-200 rounded">{t('modal.message.remove')}</button>
+        <div className="cursor-pointer hover:underline" onClick={() => handleDeleteMessages(messagesSelected)}>{t('modal.message.remove')}</div>
       </div>
     </div>
   );

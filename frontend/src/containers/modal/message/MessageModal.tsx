@@ -7,6 +7,9 @@ import MessageList from './MessageList';
 import scrollClosed from '../../../assets/img/icon/schriftrolle_closed.png';
 import scrollOpen from '../../../assets/img/icon/schriftrolle_offen.png';
 import { useUserGetMessages } from '../../../hooks/useUserGetMessages';
+import { useUserReadMessage } from '../../../hooks/useUserReadMessage';
+import { useUserUnreadOrReadAll } from '../../../hooks/useUserUnreadOrReadAll';
+import { useUserDeleteMessages } from '../../../hooks/useUserDeleteMessages';
 
 export interface MessagesInfo {
     totalNoReaded: number;
@@ -27,11 +30,34 @@ const Messages: React.FC<MessagesProps> = ({ close }) => {
     const [type, setType] = useState(0); // 0 = inbox, 1 = outbox
     const [page, setPage] = useState(0);
     const { data } = useUserGetMessages(page, type);
+    const { mutate: readMessage } = useUserReadMessage();
+    const { mutate: unreadOrReadAll } = useUserUnreadOrReadAll();
+    const { mutate: deleteMessages } = useUserDeleteMessages();
 
-    if(!data)
+    if (!data)
         return null;
 
     const messages = data?.received ? data.received : data.sended;
+
+    const handleReadMessage = (messageId: number) => {
+        readMessage({ messageId });
+    }
+
+    const handleUnreadOrReadAll = (readed: boolean) => {
+        unreadOrReadAll({ readed });
+    }
+
+    const handleDeleteMessages = (messages: number[]) => {
+        if (messages.length > 0) {
+            if (messages.length === 0) {
+                alert("You must select at least one message.");
+            } else if (confirm("Are you sure you want to delete the selected messages?")) {
+                deleteMessages({ messages, type: type === 1 });
+            }
+        } else {
+            alert("You must select at least one message");
+        }
+    }
 
     return (
         <div className="border border-gray-300 p-2">
@@ -83,8 +109,10 @@ const Messages: React.FC<MessagesProps> = ({ close }) => {
                             type={type}
                             page={data.page}
                             more={data.more}
+                            handleReadMessage={handleReadMessage}
+                            handleUnreadOrReadAll={handleUnreadOrReadAll}
+                            handleDeleteMessages={handleDeleteMessages}
                         //   nextPage={nextPage}
-                        //   read={read}
                         //   remove={remove}
                         />
                     ) : (

@@ -9,6 +9,7 @@ import Diplomacy from "./Options/Diplomacy";
 import Transport from "./Options/Transport";
 import Defense from "./Options/Defense";
 import Attack from "./Options/Attack";
+import { useUserSendMessage } from "../../../hooks/useUserSendMessage";
 
 type CityData = {
     cityId: number;
@@ -35,6 +36,7 @@ const IslandCityModal: React.FC<IslandCityModalProps> = ({ close, ref }) => {
     const { t } = useTranslation();
     const [type, setType] = useState<number>(0);
     const [info, setInfo] = useState<IslandCityInfo | null>(null);
+    const { mutate: sendMessage } = useUserSendMessage();
 
     React.useImperativeHandle(ref, () => ({
         setInfo: (data: IslandCityInfo) => {
@@ -63,11 +65,17 @@ const IslandCityModal: React.FC<IslandCityModalProps> = ({ close, ref }) => {
         }
     };
 
+    const handleSendMessage = (message: string) => {
+        sendMessage({cityId: info.targetCity.cityId, message}, {onSuccess: () => {
+            close();
+        }});
+    }
+
     return (
         <div className="border border-gray-300 rounded-md p-2">
             {type !== 0 && (
                 <WindowLeft title={getTitle()} close={close}>
-                    {(type === 1 || type === 3) && <Diplomacy user={info.targetCity.name} cityId={info.targetCity.cityId} changeType={changeType} />}
+                    {(type === 1 || type === 3) && <Diplomacy user={info.targetCity.name} handleSendMessage={handleSendMessage} />}
                     {type === 2 && <Transport cityFrom={{ id: 1, name: "a" }} cityTo={{ id: 2, name: "b" }} />}
                     {type === 4 && <Defense />}
                     {type === 5 && <Attack data={info} changeType={changeType} />}

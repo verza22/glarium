@@ -2,14 +2,14 @@ import { WorldConfig } from "@shared/types/others";
 
 export const world: WorldConfig = {
     transport: 500, // Transport capacity of merchant ships
-    load_speed: 5000, // Load per port level
-    load_speed_base: 5000, // Base load of the port
+    load_speed: 500, // Load per port level
+    load_speed_base: 500, // Base load of the port
     load_attack_return: 5, // Time it takes to load resources from a raid
     load_defend_return: 5, // Time it takes to load troops returning from a defense
     bonus: { // Modifiers for resource speed, etc.
-      resources: 100,
-      tavern: 100,
-      tavern_consume: 100,
+      resources: 10,
+      tavern: 10,
+      tavern_consume: 10,
     },
     warehouse: {
       resource_protected: 400, // Resources protected per warehouse level

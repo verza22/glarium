@@ -50,6 +50,14 @@ const IslandUI: React.FC = () => {
         });
     }
 
+    const handleColonizeModal = (position: number) => {
+        openModal(ModalType.Colonize, {
+            position,
+            islandId: Number(islandId),
+            islandName: data?.name
+        });
+    }
+
     return <>
         <Layout />
         <div className="cursor-grab h-full w-full absolute overflow-hidden">
@@ -71,6 +79,7 @@ const IslandUI: React.FC = () => {
                                     y={data.y}
                                     cities={data.cities}
                                     handleCitiesModal={handleCitiesModal}
+                                    handleColonizeModal={handleColonizeModal}
                                 />
                                 <IslandResources
                                     type={data.type}

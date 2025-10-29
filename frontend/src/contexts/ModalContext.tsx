@@ -33,9 +33,6 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     case ModalType.Colonize:
                         modalRef.current?.modal.colonize(info);
                         break;
-                    case ModalType.General:
-                        modalRef.current?.modal.general(info);
-                        break;
                     case ModalType.IslandCity:
                         modalRef.current?.modal.islandCity(info);
                         break;

@@ -28,6 +28,7 @@ const Layout: React.FC = () => {
                 openModal(ModalType.Mayor);
             break;
             case "general":
+                openModal(ModalType.General);
             break;
             case "scientist":
                 openModal(ModalType.Research);

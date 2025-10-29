@@ -18,7 +18,7 @@ export const world: WorldConfig = {
       capacity_base: 2500, // Base storage capacity
     },
     distance: {
-      same_island: 600,
+      same_island: 750//seconds
     },
     combat: {
       wall_bonus: 0.01, // Wall bonus per level, 0.01 is 1%

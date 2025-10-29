@@ -10,80 +10,89 @@ import sulfurImg from "../../../assets/img/icon/icon_sulfur.png";
 import goldImg from "../../../assets/img/icon/icon_gold.png";
 
 interface Unit {
-  unit_id: number;
-  cant: number;
+    unit_id: number;
+    cant: number;
 }
 
 interface ResourcesProps {
-  movement: {
-    trade_ship: number;
-    resources: {
-      wood: number;
-      wine: number;
-      marble: number;
-      glass: number;
-      sulfur: number;
-      gold: number;
-      units: Unit[];
+    movement: {
+        trade_ship: number;
+        resources: {
+            wood?: number;
+            wine?: number;
+            marble?: number;
+            glass?: number;
+            sulfur?: number;
+            gold?: number;
+            units?: Unit[];
+        };
     };
-  };
-  close: () => void;
+    close: () => void;
 }
 
 const Resources: React.FC<ResourcesProps> = ({ movement, close }) => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
+    const divRef = React.useRef<HTMLDivElement>(null);
+    const [position, setPosition] = React.useState({x:0,y:0});
 
-  const renderResource = (amount: number, imgSrc: string, altKey: string) => {
-    if (amount > 0) {
-      return (
-        <div className="flex flex-col items-center px-2 mb-2">
-          <div className="flex items-center justify-center mb-1">
-            <img src={imgSrc} alt={t(`resources.${altKey}`)} className="w-6 h-6" />
-          </div>
-          <div>{amount}</div>
+    React.useEffect(() => {
+        if (divRef.current) {
+            const { x, y } = divRef.current.getBoundingClientRect();
+            setPosition({x,y});
+        }
+    }, []);
+
+    const renderResource = (amount: number, imgSrc: string, altKey: string) => {
+        if (amount > 0) {
+            return (
+                <div className="flex flex-col items-center px-2 mb-2">
+                    <div className="flex items-center justify-center mb-1">
+                        <img src={imgSrc} alt={t(`resources.${altKey}`)} className="w-6 h-6" />
+                    </div>
+                    <div>{amount}</div>
+                </div>
+            );
+        }
+        return null;
+    };
+
+    return <div ref={divRef}>
+        <div className="fixed" style={{top: position.y, left: position.x}}>
+            <div className="bg-[#FAE0AE] border border-[#E4B873] text-[#906646] p-2">
+                <div className="flex items-center mb-2">
+                    <div className="flex-1 mr-2 font-semibold">{t("text.shipment")}</div>
+                    <button onClick={close} className="text-[#906646] font-bold px-2">
+                        ✕
+                    </button>
+                </div>
+
+                <div className="flex flex-wrap items-center">
+                    <div className="flex flex-col items-center px-2 mb-2">
+                        <img src={shipImg} alt={t("resources.ships")} className="w-10 mb-1" />
+                        <div>{movement.trade_ship}</div>
+                    </div>
+
+                    {movement.resources.wood && renderResource(movement.resources.wood, woodImg, "wood")}
+                    {movement.resources.wine && renderResource(movement.resources.wine, wineImg, "wine")}
+                    {movement.resources.marble && renderResource(movement.resources.marble, marbleImg, "marble")}
+                    {movement.resources.glass && renderResource(movement.resources.glass, glassImg, "glass")}
+                    {movement.resources.sulfur && renderResource(movement.resources.sulfur, sulfurImg, "sulfur")}
+                    {movement.resources.gold && renderResource(movement.resources.gold, goldImg, "gold")}
+
+                    {movement.resources.units && movement.resources.units.map((unit, i) =>
+                        unit.cant > 0 ? (
+                            <div key={i} className="flex flex-col items-center px-2 mb-2">
+                                <div
+                                    className={`my-1 w-6 h-6 bg-[url('/src/assets/img/units/unit_${unit.unit_id}.png')] bg-contain bg-no-repeat`}
+                                />
+                                <div>{unit.cant}</div>
+                            </div>
+                        ) : null
+                    )}
+                </div>
+            </div>
         </div>
-      );
-    }
-    return null;
-  };
-
-  return (
-    <div className="absolute left-8 top-0 bottom-0 flex items-center">
-      <div className="bg-[#FAE0AE] border border-[#E4B873] text-[#906646] p-2">
-        <div className="flex items-center mb-2">
-          <div className="flex-1 mr-2 font-semibold">{t("text.shipment")}</div>
-          <button onClick={close} className="text-[#906646] font-bold px-2">
-            ✕
-          </button>
-        </div>
-
-        <div className="flex flex-wrap items-center">
-          <div className="flex flex-col items-center px-2 mb-2">
-            <img src={shipImg} alt={t("resources.ships")} className="w-10 mb-1" />
-            <div>{movement.trade_ship}</div>
-          </div>
-
-          {renderResource(movement.resources.wood, woodImg, "wood")}
-          {renderResource(movement.resources.wine, wineImg, "wine")}
-          {renderResource(movement.resources.marble, marbleImg, "marble")}
-          {renderResource(movement.resources.glass, glassImg, "glass")}
-          {renderResource(movement.resources.sulfur, sulfurImg, "sulfur")}
-          {renderResource(movement.resources.gold, goldImg, "gold")}
-
-          {movement.resources.units.map((unit, i) =>
-            unit.cant > 0 ? (
-              <div key={i} className="flex flex-col items-center px-2 mb-2">
-                <div
-                  className={`my-1 w-6 h-6 bg-[url('/src/assets/img/units/unit_${unit.unit_id}.png')] bg-contain bg-no-repeat`}
-                />
-                <div>{unit.cant}</div>
-              </div>
-            ) : null
-          )}
-        </div>
-      </div>
     </div>
-  );
 };
 
 export default Resources;

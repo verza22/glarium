@@ -13,8 +13,20 @@ export class MovementBL {
         let loaded = world.load_speed_base;
 
         // Get port building (buildingId 16) //Review
-        const building = await prisma.city.findFirstOrThrow({ where: { id: cityId }, include: { cityBuildings: { where: { buildingLevelId: 16 }, select: { buildingLevel: true } } } });
-        const level = building ? building.cityBuildings[0].buildingLevel.level : 0;
+        const building = await prisma.cityBuilding.findFirst({
+            where: {
+                cityId: cityId,
+                buildingLevel: {
+                    is: {
+                        buildingId: 16,
+                    },
+                },
+            },
+            include: {
+                buildingLevel: true
+            },
+        });
+        const level = building ? building.buildingLevel.level : 0;
 
         loaded += level * world.load_speed;
         const loadedPerMinute = loaded / 60;

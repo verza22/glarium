@@ -5,3 +5,4 @@ export * from './island';
 export * from './world';
 export * from './research';
 export * from './unit';
+export * from './movement';

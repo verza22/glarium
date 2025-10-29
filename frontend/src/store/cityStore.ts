@@ -1,12 +1,18 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { ResponseCityGetInfo, ResponseUserBuyTradeShip } from "@shared/types/responses";
+import { ResponseCityGetInfo } from "@shared/types/responses";
 import { Resources } from "@shared/types/models";
+
+interface UpdateUserResource {
+    newGold: number;
+    newTradeShip: number;
+    newTradeAvailableShip: number;
+}
 
 interface CityState extends ResponseCityGetInfo {
     setCity: (data: Partial<CityState>) => void,
     updateResources: (resources: Resources) => void,
-    setTradeShip: (data: ResponseUserBuyTradeShip) => void,
+    setTradeShip: (data: UpdateUserResource) => void,
     setWine: (wine: number) => void,
     setScientist: (scientist: number, populationAvailable: number) => void,
     setPopulation: (population: number, populationAvailable: number) => void,
@@ -45,9 +51,9 @@ export const useCityStore = create<CityState>()(
             setWorkerForest: (workerForest: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, workerForest, populationAvailable } })),
             setWorkerMine: (workerMine: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, workerMine, populationAvailable } })),
             setWine: (wine: number) => set((state) => ({ ...state, population: { ...state.population, wine } })),
-            setScientist: (scientists: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, scientists, populationAvailable  } })),
+            setScientist: (scientists: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, scientists, populationAvailable } })),
             setPopulation: (population: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, population, populationAvailable } })),
-            setTradeShip: (data: ResponseUserBuyTradeShip) => set((state) => ({
+            setTradeShip: (data: UpdateUserResource) => set((state) => ({
                 ...state,
                 userResources: {
                     gold: data.newGold,

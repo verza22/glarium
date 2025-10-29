@@ -7,7 +7,7 @@ import Research from "./research/ResearchModal";
 import IslandCity, { IslandCityInfoRef, IslandCityInfo } from "./islandCity/IslandCityModal";
 import Messages from "./message/MessageModal";
 import Colonize, { ColonizeRef, ColonizeInfo } from "./islandCity/Options/Colonize";
-import General, { GeneralModalRef, GeneralModalInfo } from "./general/GeneralModal";
+import General from "./general/GeneralModal";
 import Mayor from "./Mayor";
 import { ModalType } from "../../../../shared/types/others";
 
@@ -18,7 +18,6 @@ export interface ModalRef {
         building: (buildingData: BuildingData) => void,
         donation: (info: DonationInfo) => void,
         colonize: (info: ColonizeInfo) => void,
-        general: (info: GeneralModalInfo) => void,
         islandCity: (info: IslandCityInfo) => void
     }
 }
@@ -32,7 +31,6 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
     const refBuilding = React.useRef<BuildingsModalRef>(null);
     const refDonation = React.useRef<DonationRef>(null);
     const refColonize = React.useRef<ColonizeRef>(null);
-    const refGeneral = React.useRef<GeneralModalRef>(null);
     const refIslandCity = React.useRef<IslandCityInfoRef>(null);
 
     const [visible, setVisible] = React.useState(false);
@@ -48,7 +46,6 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
             building: (buildingData: BuildingData) => refBuilding.current?.setBuildingData(buildingData),
             donation: (info: DonationInfo) => refDonation.current?.setInfo(info),
             colonize: (info: ColonizeInfo) => refColonize.current?.setInfo(info),
-            general: (info: GeneralModalInfo) => refGeneral.current?.setInfo(info),
             islandCity: (info: IslandCityInfo) => refIslandCity.current?.setInfo(info)
         }
     }), []);
@@ -74,7 +71,7 @@ const Modal: React.FC<ModalProps> = ({ ref }) => {
             case ModalType.Colonize:
                 return <Colonize close={close} ref={refColonize} />;
             case ModalType.General:
-                return <General close={close} ref={refGeneral} />;
+                return <General close={close} />;
             case ModalType.Mayor:
                 return <Mayor close={close} />;
             default:

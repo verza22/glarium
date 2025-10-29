@@ -28,7 +28,7 @@ export class BuildingController {
         // Get city buildings that belong to the player's cities
         const buildings = await prisma.cityBuilding.findMany({
             where: {
-                cityId: userId,
+                cityId: cityId,
             },
             include: {
                 buildingLevel: true, // relation with building_level

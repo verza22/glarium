@@ -59,6 +59,10 @@ const Messages: React.FC<MessagesProps> = ({ close }) => {
         }
     }
 
+    const handlePage = (page: number) => {
+        setPage(page);
+    }
+
     return (
         <div className="border border-gray-300 p-2">
             <WindowLeft close={close} title={t('advisor.diplomat.title')}>
@@ -112,8 +116,9 @@ const Messages: React.FC<MessagesProps> = ({ close }) => {
                             handleReadMessage={handleReadMessage}
                             handleUnreadOrReadAll={handleUnreadOrReadAll}
                             handleDeleteMessages={handleDeleteMessages}
-                        //   nextPage={nextPage}
-                        //   remove={remove}
+                            totalReceived={data.totalNoReaded + data.totalReaded}
+                            totalSended={data.totalSended}
+                            handlePage={handlePage}
                         />
                     ) : (
                         <div className="text-center my-5">{t('modal.message.noMessage')}</div>

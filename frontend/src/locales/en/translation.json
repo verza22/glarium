@@ -240,7 +240,10 @@
             "diplomacy": "Diplomacy",
             "defend": "Defend town!",
             "transport": "Transport goods",
-            "actions": "Actions"
+            "actions": "Actions",
+            "colonizeTitle": "Colonize",
+            "colonizeInfo": "This place seems perfect for a new town! A shallow section of the coast provides access to the ocean and the fertile green hills in the area can feed a lot of people.",
+            "colonizeRequirements": "The founding of a colony requires:"
         },
         "building": {
             "list_title": "Construction list",

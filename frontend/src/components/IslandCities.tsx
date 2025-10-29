@@ -19,7 +19,8 @@ interface IslandCitiesProps {
     x: number;
     y: number;
     cities: City[];
-    handleCitiesModal: (city: City) => void
+    handleCitiesModal: (city: City) => void;
+    handleColonizeModal: (position: number) => void
 }
 
 interface ObjectPosition {
@@ -27,7 +28,7 @@ interface ObjectPosition {
     left: number;
 }
 
-const IslandCities: React.FC<IslandCitiesProps> = ({ id, name, x, y, cities, handleCitiesModal }) => {
+const IslandCities: React.FC<IslandCitiesProps> = ({ id, name, x, y, cities, handleCitiesModal, handleColonizeModal }) => {
     const { t } = useTranslation();
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
@@ -71,14 +72,7 @@ const IslandCities: React.FC<IslandCitiesProps> = ({ id, name, x, y, cities, han
         cities.find((x) => x.cityId === cityId);
 
     const openColonize = (index: number) => {
-        const obj = {
-            id: id,
-            name: name,
-            position: index,
-            x: x,
-            y: y,
-        };
-        // onOpenModal({ type: 6, info: obj });
+        handleColonizeModal(index);
     };
 
     const openCityInfo = (city: City, index: number) => {

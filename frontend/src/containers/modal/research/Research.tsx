@@ -27,7 +27,8 @@ const Research: React.FC<ResearchProps> = ({
 }) => {
     const { t } = useTranslation();
     const researchFiltered = researchList.filter(r => r.categoryId === categoryId);
-    const firstResearchFiltered = researchFiltered.filter(r => !userResearch.includes(r.id))[0];
+    let firstResearchFiltered = researchFiltered.filter(r => !userResearch.includes(r.id))[0];
+    firstResearchFiltered = typeof firstResearchFiltered === "undefined" ? researchFiltered[researchFiltered.length-1] : firstResearchFiltered;
 
     const getSelectedResearch = () => {
         return userResearch.length === 0 ? researchFiltered[0] : firstResearchFiltered;

@@ -2,6 +2,13 @@ import { WorldConfig } from "@shared/types/others";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export interface ChangeCity {
+    cityId: number,
+    islandId: number,
+    islandX: number,
+    islandY: number
+}
+
 interface UserState {
     userId: number,
     cityId: number,
@@ -13,6 +20,7 @@ interface UserState {
     name: string,
     worldConfig: WorldConfig ,
     setUser: (data: Partial<UserState>) => void,
+    changeCity: (data: ChangeCity) => void,
     clearUser: () => void
 };
 
@@ -62,6 +70,7 @@ export const useUserStore = create<UserState>()(
             },
 
             setUser: (data) => set((state) => ({ ...state, ...data })),
+            changeCity: (data) => set((state) => ({ ...state, ...data })),
 
             clearUser: () =>
                 set({

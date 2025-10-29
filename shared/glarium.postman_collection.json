@@ -274,7 +274,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"page\": 0,\n    \"type\": 0\n}",
+							"raw": "{\n    \"page\": 0,\n    \"type\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -295,10 +295,155 @@
 					"response": []
 				},
 				{
-					"name": "Config",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
+					"name": "SendMessage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cityFromId\": 1,\n    \"message\": \"Prueba\",\n    \"cityId\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/user/sendMessage",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"user",
+								"sendMessage"
+							]
+						}
 					},
+					"response": []
+				},
+				{
+					"name": "ReadMessage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messageId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/user/readMessage",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"user",
+								"readMessage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UnreadOrReadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"readed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/user/unreadOrReadAll",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"user",
+								"unreadOrReadAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteMessages",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [1],\n    \"type\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/user/deleteMessages",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"user",
+								"deleteMessages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Config",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -312,10 +457,6 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"123456\"\n}"
-						},
 						"url": {
 							"raw": "{{API_ROUTE}}api/user/config",
 							"host": [
@@ -821,6 +962,76 @@
 							"path": [
 								"unit",
 								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movement",
+			"item": [
+				{
+					"name": "Colonize",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"islandId\": 1,\n  \"cityId\": 1,\n  \"position\": 9\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/movement/colonize",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"movement",
+								"colonize"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetMovements",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_ROUTE}}api/movement/getMovements",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"movement",
+								"getMovements"
 							]
 						}
 					},

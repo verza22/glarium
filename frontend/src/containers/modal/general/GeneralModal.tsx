@@ -6,30 +6,18 @@ import Movements, { IMovement } from "./Movements";
 
 import closedImg from "../../../assets/img/icon/schriftrolle_closed.png";
 import openImg from "../../../assets/img/icon/schriftrolle_offen.png";
-
-export interface GeneralModalInfo {
-    movements: IMovement[]
-}
-
-export interface GeneralModalRef {
-    setInfo: (info: GeneralModalInfo) => void;
-}
+import { useGetMovements } from "../../../hooks/useGetMovements";
 
 interface GeneralModalProps {
-    ref: React.Ref<GeneralModalRef>;
     close: () => void;
 }
 
-const GeneralModal: React.FC<GeneralModalProps> = ({ close, ref }) => {
+const GeneralModal: React.FC<GeneralModalProps> = ({ close }) => {
     const { t } = useTranslation();
     const [type, setType] = useState<number>(0);
-    const [info, setInfo] = React.useState<GeneralModalInfo | null>(null);
+    const { data } = useGetMovements();
 
-    React.useImperativeHandle(ref, () => ({
-        setInfo: (info: GeneralModalInfo) => setInfo(info)
-    }), []);
-
-    if (info === null)
+    if (!data)
         return null;
 
     const change = (newType: number) => setType(newType);
@@ -53,7 +41,7 @@ const GeneralModal: React.FC<GeneralModalProps> = ({ close, ref }) => {
                                 }}
                             />
                             <div>
-                                {t("modal.general.movements", { count: info.movements.length })}
+                                {t("modal.general.movements", { count: data.length })}
                             </div>
                         </div>
 
@@ -74,8 +62,8 @@ const GeneralModal: React.FC<GeneralModalProps> = ({ close, ref }) => {
                         </div>
                     </div>
 
-                    {info.movements.length > 0 ? (
-                        <Movements movements={info.movements} />
+                    {data.length > 0 ? (
+                        <Movements movements={data} />
                     ) : (
                         <div className="text-center my-5">
                             {t("modal.general.noMovements")}

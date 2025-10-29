@@ -60,7 +60,7 @@ I would like other developers to be able to contribute to the project and help i
 
 ### Screenshots
 
-![](https://i.ibb.co/c20gwHg/2.png)  
+![](https://iili.io/K6Otr41.png)  
 
 ![](https://i.ibb.co/HdVHY7s/3.png)
 

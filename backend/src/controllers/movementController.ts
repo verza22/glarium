@@ -8,10 +8,13 @@ import dayjs from "dayjs";
 import { BuildingBL } from './../businessLogic/buildingBL';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
 import { PopulationBL } from './../businessLogic/populationBL';
-import { UserBL } from './../businessLogic/userBL';
+import { RequestMovementColonize } from '@shared/types/requests';
+import { validateFields } from '../utils/validateFields';
+import { ResponseMovementColonize } from '@shared/types/responses';
 
 export class MovementController {
-    static async transport(req: Request, res: Response) {
+
+    public async transport(req: Request, res: Response) {
         const userId = Number(req.params.userId);
         const cityId = Number(req.params.cityId);
         const cityToId = Number(req.params.cityToId);
@@ -119,7 +122,7 @@ export class MovementController {
         return res.send('ok');
     }
 
-    static async fromUpdate(req: Request, res: Response) {
+    public async fromUpdate(req: Request, res: Response) {
         const cityId = Number(req.params.cityId);
         const userId = Number(req.params.userId);
         const userCity = await prisma.userCity.findFirstOrThrow({ where: { cityId, userId } });
@@ -132,7 +135,7 @@ export class MovementController {
         return res.send('ok');
     }
 
-    static async toUpdate(req: Request, res: Response) {
+    public async toUpdate(req: Request, res: Response) {
         const cityId = Number(req.params.cityId);
         const userId = Number(req.params.userId);
         const userCity = await prisma.userCity.findFirstOrThrow({ where: { cityId, userId } });
@@ -145,14 +148,16 @@ export class MovementController {
         return res.send('ok');
     }
 
-    static async colonize(req: Request, res: Response) {
-        const userId = Number(req.params.userId);
-        const cityId = Number(req.params.cityId);
+    public async colonize(req: Request, res: Response) {
+        const { islandId, cityId, position }: RequestMovementColonize = validateFields(req, [
+            { name: "islandId", type: "number", required: true },
+            { name: "cityId", type: "number", required: true },
+            { name: "position", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-        const { island, position } = req.body;
-
-        if (!island || !position || position < 1 || position > 16) {
-            return res.status(400).send("Invalid island or position");
+        if (!islandId || !position || position < 1 || position > 16) {
+            throw new Error("Invalid island or position");
         }
 
         const userCity = await prisma.userCity.findFirstOrThrow({ where: { userId: userId, cityId: cityId }, include: { city: { include: { population: true } } } });
@@ -165,7 +170,7 @@ export class MovementController {
 
         // Validate palace existence
         if (!(await BuildingBL.buildingExist(capital.cityId, 17))) {
-            return res.send("You don't have a palace");
+            throw new Error("You don't have a palace");
         }
 
         const cityBuilding = await BuildingBL.building(capital.cityId, 17);
@@ -176,7 +181,7 @@ export class MovementController {
         // Validate colonization limit
         const userCitiesCount = await prisma.userCity.count({ where: { userId } });
         if (userCitiesCount > palaceLevel) {
-            return res.send("You must upgrade your palace to colonize another city");
+            throw new Error("You must upgrade your palace to colonize another city");
         }
 
         // Return merchants
@@ -184,10 +189,10 @@ export class MovementController {
 
         // Validate merchants available
         const userResource = await prisma.userResource.findFirst({ where: { userId } });
-        if (!userResource) return res.status(400).send("Resources not found");
+        if (!userResource) throw new Error("Resources not found");
 
         if (userResource.tradeShipAvailable < 3) {
-            return res.send("You don't have enough trade ships available");
+            throw new Error("You don't have enough trade ships available");
         }
 
         // Update resources
@@ -195,11 +200,12 @@ export class MovementController {
 
         // Validate gold
         if (userResource.gold < world.colonize.gold) {
-            return res.send("You don't have enough gold to colonize");
+            throw new Error("You don't have enough gold to colonize");
         }
 
         if (!city.population)
-            return res.send("Error city population not found");
+            throw new Error("Error city population not found");
+
 
         // Population satisfaction check
         await PopulationBL.satisfaction(userId, city.population);
@@ -210,29 +216,29 @@ export class MovementController {
 
         // Validate population
         if (!(await PopulationBL.comparePopulation(city, collect))) {
-            return res.send("You don't have enough citizens to colonize");
+            throw new Error("You don't have enough citizens to colonize");
         }
 
         // Validate wood
         if (city.wood < collect.wood) {
-            return res.send("You don't have enough wood to colonize");
+            throw new Error("You don't have enough wood to colonize");
         }
 
         // Validate action points
         const apoint = await MovementBL.getActionPoint(city.id, userId);
         if (apoint >= city.apoint) {
-            return res.send("You reached the maximum action points for this city");
+            throw new Error("You reached the maximum action points for this city");
         }
 
         // Check island position availability
-        const targetIsland = await prisma.island.findUniqueOrThrow({ where: { id: island }, include: { islandCity: true } });
-        if (!targetIsland) return res.status(404).send("Island not found");
+        const targetIsland = await prisma.island.findUniqueOrThrow({ where: { id: islandId }, include: { islandCity: true } });
+        if (!targetIsland) throw new Error("Island not found");
 
         const isOccupied = targetIsland.islandCity.some(
             (c: any) => c.position === position
         );
         if (isOccupied) {
-            return res.send("There is already a city in this position");
+            throw new Error("There is already a city in this position");
         }
 
         // Calculate times
@@ -251,12 +257,16 @@ export class MovementController {
         await CityBL.removeResources(city.id, collect);
         await PopulationBL.removePopulation(city.id, collect);
 
+        const newGold = userResource.gold - world.colonize.gold;
+        const newTradeShip = userResource.tradeShip;
+        const newTradeAvailableShip = userResource.tradeShipAvailable - 3;
 
         await prisma.userResource.update({
             where: { id: userResource.id },
-            data: { gold: userResource.gold - world.colonize.gold, tradeShipAvailable: userResource.tradeShipAvailable - 3 },
+            data: { gold: newGold, tradeShipAvailable: newTradeAvailableShip },
         });
 
+        
         // Create new city
         const cityTo = await CityBL.createCity(userId, targetIsland.id, position);
 
@@ -275,116 +285,128 @@ export class MovementController {
             }
         });
 
-        return res.send("ok");
-    }
+        //response
+        const cityUpdated = await prisma.city.findUniqueOrThrow({ where: { id: cityId } });
 
-
-    static async getMovement(req: Request, res: Response) {
-        try {
-            const userId = Number(req.params.userId);
-
-            await MovementBL.returnMovementResourcesAll(userId);
-
-            const cities = await prisma.userCity.findMany({ where: { userId: userId } });
-            const cityIds = cities.map(c => c.id);
-
-            // 3. Fetch all relevant movements with Prisma
-            const movements = await prisma.movement.findMany({
-                where: {
-                    OR: [
-                        { userId: userId },
-                        { cityToId: { in: cityIds } }
-                    ]
-                },
-                include: {
-                    resources: true,
-                    movementRegiments: {
-                        include: {
-                            regiment: {
-                                include: { regimentsUnits: true }
-                            }
-                        }
-                    },
-                    cityTo: {
-                        include: { userCities: { include: { user: true } } }
-                    },
-                    cityFrom: {
-                        include: { userCities: { include: { user: true } } }
-                    }
-                }
-            });
-
-            // 4. Map results to structured response
-            const data = movements
-                .map(movement => {
-                    // Skip delivered movements going to user's city (except colonization)
-                    if (
-                        cityIds.includes(movement.cityTo.id) &&
-                        movement.movementTypeId !== 4 &&
-                        movement.delivered === true
-                    ) {
-                        return null;
-                    }
-
-                    const result: any = {
-                        id: movement.id,
-                        start_at: movement.startAt,
-                        end_at: movement.endAt,
-                        return_at: movement.returnAt,
-                        delivered: movement.delivered,
-                        user_id: movement.userId,
-                        movementTypeId: movement.movementTypeId,
-                        trade_ship: movement.tradeShip,
-                        resources: {},
-                        city_to: {
-                            id: movement.cityTo.id,
-                            name: movement.cityTo.name,
-                            user: movement.cityTo.userCities[0].user.name
-                        },
-                        city_from: {
-                            id: movement.cityFrom.id,
-                            name: movement.cityFrom.name,
-                            user: movement.cityFrom.userCities[0].user.name
-                        }
-                    };
-
-                    // Add resources if available
-                    if (movement.resources) {
-                        result.resources = {
-                            wood: movement.resources.wood,
-                            wine: movement.resources.wine,
-                            marble: movement.resources.marble,
-                            glass: movement.resources.glass,
-                            sulfur: movement.resources.sulfur
-                        };
-                    }
-
-                    // Add units for attack/defense
-                    if (movement.movementTypeId === 2 || movement.movementTypeId === 3) {
-                        result.resources.units = movement.movementRegiments[0].regiment.regimentsUnits.map(u => ({
-                            unit_id: u.unitId,
-                            cant: u.cant
-                        }));
-                    }
-
-                    // Add colonization resources
-                    if (movement.movementTypeId === 4) {
-                        result.resources.wood = world.colonize.wood;
-                        result.resources.gold = world.colonize.gold;
-                    }
-
-                    return result;
-                })
-                .filter(m => m !== null);
-
-            return res.json(data);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "Error fetching movements" });
+        const response: ResponseMovementColonize = {
+            resources: {
+                wood: cityUpdated.wood,
+                marble: cityUpdated.marble,
+                wine: cityUpdated.wine,
+                glass: cityUpdated.glass,
+                sulfur: cityUpdated.sulfur
+            },
+            userResources: {
+                newGold,
+                newTradeShip,
+                newTradeAvailableShip
+            }
         }
+
+        return res.send(response);
     }
 
-    static async removeMovement(req: Request, res: Response) {
+    public async getMovements(req: Request, res: Response) {
+        const userId = req.authUser.userId;
+
+        await MovementBL.returnMovementResourcesAll(userId);
+
+        const cities = await prisma.userCity.findMany({ where: { userId: userId } });
+        const cityIds = cities.map(c => c.id);
+
+        // 3. Fetch all relevant movements with Prisma
+        const movements = await prisma.movement.findMany({
+            where: {
+                OR: [
+                    { userId: userId },
+                    { cityToId: { in: cityIds } }
+                ]
+            },
+            include: {
+                resources: true,
+                movementRegiments: {
+                    include: {
+                        regiment: {
+                            include: { regimentsUnits: true }
+                        }
+                    }
+                },
+                cityTo: {
+                    include: { userCities: { include: { user: true } } }
+                },
+                cityFrom: {
+                    include: { userCities: { include: { user: true } } }
+                }
+            }
+        });
+
+        // 4. Map results to structured response
+        const data = movements
+            .map(movement => {
+                // Skip delivered movements going to user's city (except colonization)
+                if (
+                    cityIds.includes(movement.cityTo.id) &&
+                    movement.movementTypeId !== 4 &&
+                    movement.delivered === true
+                ) {
+                    return null;
+                }
+
+                const result: any = {
+                    id: movement.id,
+                    start_at: movement.startAt,
+                    end_at: movement.endAt,
+                    return_at: movement.returnAt,
+                    delivered: movement.delivered,
+                    user_id: movement.userId,
+                    movementTypeId: movement.movementTypeId,
+                    trade_ship: movement.tradeShip,
+                    resources: {},
+                    city_to: {
+                        id: movement.cityTo.id,
+                        name: movement.cityTo.name,
+                        user: movement.cityTo.userCities[0].user.name
+                    },
+                    city_from: {
+                        id: movement.cityFrom.id,
+                        name: movement.cityFrom.name,
+                        user: movement.cityFrom.userCities[0].user.name
+                    }
+                };
+
+                // Add resources if available
+                if (movement.resources) {
+                    result.resources = {
+                        wood: movement.resources.wood,
+                        wine: movement.resources.wine,
+                        marble: movement.resources.marble,
+                        glass: movement.resources.glass,
+                        sulfur: movement.resources.sulfur
+                    };
+                }
+
+                // Add units for attack/defense
+                if (movement.movementTypeId === 2 || movement.movementTypeId === 3) {
+                    result.resources.units = movement.movementRegiments[0].regiment.regimentsUnits.map(u => ({
+                        unit_id: u.unitId,
+                        cant: u.cant
+                    }));
+                }
+
+                // Add colonization resources
+                if (movement.movementTypeId === 4) {
+                    result.resources.wood = world.colonize.wood;
+                    result.resources.gold = world.colonize.gold;
+                }
+
+                return result;
+            })
+            .filter(m => m !== null);
+
+        return res.json(data);
+    }
+
+    public async removeMovement(req: Request, res: Response) {
         try {
             const movementId = req.params.id;
             const userId = Number(req.params.userId);

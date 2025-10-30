@@ -13,6 +13,7 @@ interface CityState extends ResponseCityGetInfo {
     setCity: (data: Partial<CityState>) => void,
     updateResources: (resources: Resources) => void,
     setTradeShip: (data: UpdateUserResource) => void,
+    setTradeAvailableShip: (tradeShipAvailable: number) => void,
     setWine: (wine: number) => void,
     setScientist: (scientist: number, populationAvailable: number) => void,
     setPopulation: (population: number, populationAvailable: number) => void,
@@ -53,6 +54,7 @@ export const useCityStore = create<CityState>()(
             setWine: (wine: number) => set((state) => ({ ...state, population: { ...state.population, wine } })),
             setScientist: (scientists: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, scientists, populationAvailable } })),
             setPopulation: (population: number, populationAvailable: number) => set((state) => ({ ...state, population: { ...state.population, population, populationAvailable } })),
+            setTradeAvailableShip: (tradeShipAvailable: number) => set((state) => ({ ...state, userResources: { ...state.userResources, tradeShipAvailable } })),
             setTradeShip: (data: UpdateUserResource) => set((state) => ({
                 ...state,
                 userResources: {

@@ -11,6 +11,7 @@ import unit4 from '../../../../assets/img/unit/4.png'
 import unit5 from '../../../../assets/img/unit/5.png'
 import unit6 from '../../../../assets/img/unit/6.png'
 import { useCityStore } from '../../../../store/cityStore';
+import { useCombatMovement } from '../../../../hooks/useCombatMovement';
 
 const unitImages: Record<number, string> = {
     1: unit1,
@@ -32,11 +33,13 @@ interface AttackProps {
     targetCityName: string;
     targetCityId: number;
     changeType?: (type: number) => void;
+    close: () => void;
 };
 
-const Attack: React.FC<AttackProps> = ({ targetCityName, targetCityId }) => {
+const Attack: React.FC<AttackProps> = ({ targetCityName, targetCityId, close }) => {
     const { t } = useTranslation();
     const { data } = useGetUnitCity();
+    const { mutate: combatMovement } = useCombatMovement();
 
     const [units, setUnits] = useState<Unit[]>([]);
 
@@ -49,9 +52,9 @@ const Attack: React.FC<AttackProps> = ({ targetCityName, targetCityId }) => {
     const handleUnitChange = (index: number, value: number) => {
         const newUnits = [...units];
 
-        if(value < 0)
+        if (value < 0)
             value = 0;
-        if(value>newUnits[index].cant)
+        if (value > newUnits[index].cant)
             value = newUnits[index].cant;
 
         newUnits[index].cant_aux = value;
@@ -59,7 +62,18 @@ const Attack: React.FC<AttackProps> = ({ targetCityName, targetCityId }) => {
     };
 
     const handleBtn = (ships: number) => {
-
+        const unitsAux = units.map(x => x.unit_id);
+        const cantsAux = units.map(x => typeof x.cant_aux === "undefined" ? 0 : x.cant_aux);
+        combatMovement({
+            cityId: targetCityId,
+            tradeShip: ships,
+            units: unitsAux,
+            cants: cantsAux
+        }, {
+            onSuccess: () => {
+                close();
+            }
+        });
     }
 
     return (
@@ -97,6 +111,7 @@ const Attack: React.FC<AttackProps> = ({ targetCityName, targetCityId }) => {
                 isChangeShip={true}
                 btnTitle={t('modal.islandCity.plunder')}
                 objetivo={targetCityName}
+                handleBtn={handleBtn}
             />
         </div>
     );

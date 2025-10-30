@@ -72,7 +72,7 @@ export class CombatBL {
                 if (defenseData.power >= attackData.power) {
                     // Defender wins
                     const survivors = Math.ceil((defenseData.power - attackData.power) / defenseData.unit.value);
-                    await prisma.regimentUnit.delete({ where: { id: attackData.unit.id } });
+                    await prisma.regimentUnit.update({ where: { id: attackData.unit.id }, data: { deletedAt: new Date() } });
                     await prisma.regimentUnit.update({ where: { id: defenseData.unit.id }, data: { cant: survivors } });
 
                     await prisma.combatReportDetail.create({
@@ -92,7 +92,7 @@ export class CombatBL {
                 } else {
                     // Attacker wins
                     const survivors = Math.ceil((attackData.power - defenseData.power) / attackData.unit.value);
-                    await prisma.regimentUnit.delete({ where: { id: defenseData.unit.id } });
+                    await prisma.regimentUnit.update({ where: { id: defenseData.unit.id }, data: { deletedAt: new Date() } });
                     await prisma.regimentUnit.update({ where: { id: attackData.unit.id }, data: { cant: survivors } });
 
                     await prisma.combatReportDetail.create({
@@ -261,8 +261,9 @@ export class CombatBL {
 
         } else {
             // Ganó el defensor
-            await prisma.regiment.delete({
-                where: { id: movement.movementRegiments[0].regiment.id }
+            await prisma.regiment.update({
+                where: { id: movement.movementRegiments[0].regiment.id },
+                data: { deletedAt: new Date() }
             });
 
             await prisma.userResource.update({
@@ -272,7 +273,7 @@ export class CombatBL {
                 }
             });
 
-            await prisma.movement.delete({ where: { id: movement.id } });
+            await prisma.movement.update({ where: { id: movement.id }, data: { deletedAt: new Date() } });
         }
 
         await UserResourceBL.updateResources(movement.userId);
@@ -339,9 +340,9 @@ export class CombatBL {
                         }
                     });
                 }
-                await prisma.regimentUnit.delete({ where: { id: regUnit.id } });
+                await prisma.regimentUnit.update({ where: { id: regUnit.id }, data: { deletedAt: new Date() } });
             }
-            await prisma.regiment.delete({ where: { id: regiment.id } });
+            await prisma.regiment.update({ where: { id: regiment.id }, data: { deletedAt: new Date() } });
         } else {
             await prisma.regiment.update({
                 where: { id: regiment.id },
@@ -369,7 +370,7 @@ export class CombatBL {
 
         // await EventHelper.notifyUser(movement.userId, 'advisors', 'mayor');
 
-        await prisma.movement.delete({ where: { id: movement.id } });
+        await prisma.movement.update({ where: { id: movement.id }, data: { deletedAt: new Date() } });
     }
 
     static async endAndReturnAttackFromCity(cityId: number) {
@@ -472,7 +473,7 @@ export class CombatBL {
                 where: { userId: movement.userId },
                 data: { tradeShipAvailable: { increment: movement.tradeShip } },
             });
-            await prisma.movement.delete({ where: { id: movement.id } });
+            await prisma.movement.update({ where: { id: movement.id }, data: { deletedAt: new Date() } });
         }
     }
 
@@ -487,7 +488,7 @@ export class CombatBL {
             data: { tradeShipAvailable: { increment: movement.tradeShip } },
         });
 
-        await prisma.movement.delete({ where: { id: movement.id } });
+        await prisma.movement.update({ where: { id: movement.id }, data: { deletedAt: new Date() } });
     }
 
     static async endAndReturnDefendCity(cityId: number, type: "cityFromId" | "cityToId") {
@@ -545,12 +546,12 @@ export class CombatBL {
         for (const movement of movements) {
             const regiment = movement.movementRegiments[0].regiment;
             if (regiment.regimentsUnits.length === 0) {
-                await prisma.regiment.delete({ where: { id: regiment.id } });
+                await prisma.regiment.update({ where: { id: regiment.id }, data: { deletedAt: new Date() } });
                 await prisma.userResource.updateMany({
                     where: { userId: movement.userId },
                     data: { tradeShipAvailable: { increment: movement.tradeShip } },
                 });
-                await prisma.movement.delete({ where: { id: movement.id } });
+                await prisma.movement.update({ where: { id: movement.id }, data: { deletedAt: new Date() } });
             }
         }
     }

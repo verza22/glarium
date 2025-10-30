@@ -79,7 +79,7 @@ const IslandCityModal: React.FC<IslandCityModalProps> = ({ close, ref }) => {
                     {(type === 1 || type === 3) && <Diplomacy user={info.targetCity.name} handleSendMessage={handleSendMessage} />}
                     {type === 2 && <Transport cityFrom={{ id: info.city.cityId, name: info.city.name }} cityTo={{ id: info.targetCity.cityId, name: info.targetCity.name }} close={close} />}
                     {type === 4 && <Defense />}
-                    {type === 5 && <Attack targetCityName={info.targetCity.name} targetCityId={info.targetCity.cityId} changeType={changeType} />}
+                    {type === 5 && <Attack targetCityName={info.targetCity.name} targetCityId={info.targetCity.cityId} changeType={changeType} close={close} />}
                 </WindowLeft>
             )}
 

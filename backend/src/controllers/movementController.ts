@@ -8,21 +8,28 @@ import dayjs from "dayjs";
 import { BuildingBL } from './../businessLogic/buildingBL';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
 import { PopulationBL } from './../businessLogic/populationBL';
-import { RequestMovementColonize } from '@shared/types/requests';
+import { RequestMovementColonize, RequestMovementRemove, RequestMovementTransport } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
-import { ResponseMovementColonize } from '@shared/types/responses';
+import { ResponseMovementColonize, ResponseMovementTransport } from '@shared/types/responses';
 
 export class MovementController {
 
     public async transport(req: Request, res: Response) {
-        const userId = Number(req.params.userId);
-        const cityId = Number(req.params.cityId);
-        const cityToId = Number(req.params.cityToId);
+        const { cityId, cityToId, wood, wine, marble, glass, sulfur }: RequestMovementTransport = validateFields(req, [
+            { name: "cityId", type: "number", required: true },
+            { name: "cityToId", type: "number", required: true },
+            { name: "wood", type: "number", required: true },
+            { name: "wine", type: "number", required: true },
+            { name: "marble", type: "number", required: true },
+            { name: "glass", type: "number", required: true },
+            { name: "sulfur", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
+
+
         const userCity = await prisma.userCity.findFirstOrThrow({ where: { userId: userId, cityId: cityId }, include: { city: true } });
 
-        // Validate request
-        const { wood = 0, wine = 0, marble = 0, glass = 0, sulfur = 0 } = req.body;
-        if (cityToId === undefined || cityToId < 0) return res.status(400).send('Invalid city_to');
+        if (cityToId === undefined || cityToId < 0) throw new Error('Invalid city_to');
 
         // Return movements
         // MovementHelper.returnMovementResources(city);
@@ -31,7 +38,7 @@ export class MovementController {
 
         // Check action points
         const apoint = await MovementBL.getActionPoint(city.id, userId);
-        if (apoint >= city.apoint) return res.send('You reached the max action points of the city');
+        if (apoint >= city.apoint) throw new Error('You reached the max action points of the city');
 
         // Verify destination city exists
         const userCityTo = await prisma.userCity.findFirstOrThrow({ where: { userId: userId, cityId: cityToId }, include: { city: true } });
@@ -39,12 +46,12 @@ export class MovementController {
         const cityTo = userCityTo.city;
 
         // Verify cities are different
-        if (city.id === cityTo.id) return res.send('You cannot send a movement to the same origin city');
+        if (city.id === cityTo.id) throw new Error('You cannot send a movement to the same origin city');
 
         // Verify at least one merchant available
         const userResource = await prisma.userResource.findFirst({ where: { userId } });
         if (!userResource || userResource.tradeShipAvailable < 1)
-            return res.send('No merchants available');
+            throw new Error('No merchants available');
 
         const collect = UnitBL.newCollect();
         collect.wood += wood;
@@ -54,17 +61,17 @@ export class MovementController {
         collect.sulfur += sulfur;
 
         // Verify the city has the resources
-        if (!CityBL.compareResources(city.id, collect)) return res.send('Not enough resources');
+        if (!CityBL.compareResources(city.id, collect)) throw new Error('Not enough resources');
 
         const total = collect.wood + collect.wine + collect.marble + collect.glass + collect.sulfur;
 
         // Verify capacity is not zero
-        if (total === 0) return res.send('You must transport some resources');
+        if (total === 0) throw new Error('You must transport some resources');
 
         // Verify ship capacity
         const maxCapacity = world.transport * userResource.tradeShipAvailable;
         if (total > maxCapacity)
-            return res.send('Cannot transport more than max capacity, buy more merchants');
+            throw new Error('Cannot transport more than max capacity, buy more merchants');
 
         const usedShips = Math.ceil(total / world.transport);
 
@@ -113,13 +120,35 @@ export class MovementController {
             }
         });
 
+        const newGold = userResource.gold;
+        const newTradeShip = userResource.tradeShip;
+        const newTradeAvailableShip = userResource.tradeShipAvailable - usedShips;
+
         // Remove merchant ships
-        await prisma.userResource.update({ where: { id: userResource.id }, data: { tradeShipAvailable: userResource.tradeShipAvailable - usedShips } });
+        await prisma.userResource.update({ where: { id: userResource.id }, data: { tradeShipAvailable: newTradeAvailableShip } });
 
         // Notify destination general
         // UserNotification.dispatch('advisors', 'general', cityTo.userCity.userId);
 
-        return res.send('ok');
+        //response
+        const cityUpdated = await prisma.city.findUniqueOrThrow({ where: { id: cityId } });
+
+        const response: ResponseMovementTransport = {
+            resources: {
+                wood: cityUpdated.wood,
+                marble: cityUpdated.marble,
+                wine: cityUpdated.wine,
+                glass: cityUpdated.glass,
+                sulfur: cityUpdated.sulfur
+            },
+            userResources: {
+                newGold,
+                newTradeShip,
+                newTradeAvailableShip
+            }
+        }
+
+        return res.send(response);
     }
 
     public async fromUpdate(req: Request, res: Response) {
@@ -179,7 +208,7 @@ export class MovementController {
             palaceLevel = 0;
 
         // Validate colonization limit
-        const userCitiesCount = await prisma.userCity.count({ where: { userId } });
+        const userCitiesCount = await prisma.userCity.count({ where: { userId, city: { deletedAt: null } } });
         if (userCitiesCount > palaceLevel) {
             throw new Error("You must upgrade your palace to colonize another city");
         }
@@ -231,11 +260,11 @@ export class MovementController {
         }
 
         // Check island position availability
-        const targetIsland = await prisma.island.findUniqueOrThrow({ where: { id: islandId }, include: { islandCity: true } });
+        const targetIsland = await prisma.island.findUniqueOrThrow({ where: { id: islandId }, include: { islandCity: { include: { city: true } } } });
         if (!targetIsland) throw new Error("Island not found");
 
         const isOccupied = targetIsland.islandCity.some(
-            (c: any) => c.position === position
+            (c) => c.position === position && c.city.deletedAt === null
         );
         if (isOccupied) {
             throw new Error("There is already a city in this position");
@@ -266,7 +295,7 @@ export class MovementController {
             data: { gold: newGold, tradeShipAvailable: newTradeAvailableShip },
         });
 
-        
+
         // Create new city
         const cityTo = await CityBL.createCity(userId, targetIsland.id, position);
 
@@ -320,7 +349,8 @@ export class MovementController {
                 OR: [
                     { userId: userId },
                     { cityToId: { in: cityIds } }
-                ]
+                ],
+                deletedAt: null
             },
             include: {
                 resources: true,
@@ -407,100 +437,97 @@ export class MovementController {
     }
 
     public async removeMovement(req: Request, res: Response) {
-        try {
-            const movementId = req.params.id;
-            const userId = Number(req.params.userId);
+        const { movementId }: RequestMovementRemove = validateFields(req, [
+            { name: "movementId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-            // 1. Fetch the movement including related data
-            const movement = await prisma.movement.findUnique({
-                where: { id: Number(movementId) },
-                include: {
-                    resources: true,
-                    cityFrom: { include: { population: true } },
-                    cityTo: true
-                }
-            });
-
-            if (!movement) return res.status(404).json({ message: "Movement not found" });
-
-            // 2. Check ownership
-            if (movement.userId !== userId) {
-                return res.status(403).json({ message: "You cannot cancel movements that do not belong to you" });
+        // 1. Fetch the movement including related data
+        const movement = await prisma.movement.findUnique({
+            where: { id: Number(movementId) },
+            include: {
+                resources: true,
+                cityFrom: { include: { population: true } },
+                cityTo: true
             }
+        });
 
-            const now = new Date();
+        if (!movement) throw new Error("Movement not found");
 
-            // 3. Cancel movement that is still loading (start_at in the future)
-            if (movement.startAt && movement.startAt > now) {
-                // Restore user's available trade ships
-                const userResource = await prisma.userResource.findUniqueOrThrow({ where: { userId: userId } });
-                await prisma.userResource.update({
-                    where: { userId: userId },
-                    data: { tradeShipAvailable: userResource.tradeShipAvailable + movement.tradeShip }
-                });
-
-                switch (movement.movementTypeId) {
-                    case 1:
-                        // Return resources to origin city
-                        if (movement.resources) {
-                            await CityBL.addResources(movement.cityFromId, movement.resources);
-                        }
-                        break;
-                    case 4:
-                        // Colonization rollback
-                        const collect = UnitBL.newCollect();
-                        collect.wood = world.colonize.wood;
-                        await CityBL.addResources(movement.cityFromId, collect);
-
-                        await prisma.userResource.update({
-                            where: { userId: userId },
-                            data: { gold: { increment: world.colonize.gold } }
-                        });
-
-                        if (movement.cityFrom.population) {
-                            await prisma.cityPopulation.update({
-                                where: { id: movement.cityFrom.population.id },
-                                data: { population: movement.cityFrom.population.population + world.colonize.population }
-                            });
-                        }
-
-
-                        // Delete the colonized city
-                        await prisma.city.delete({ where: { id: movement.cityToId } });
-                        break;
-                }
-
-                // Delete the movement
-                await prisma.movement.delete({ where: { id: movement.id } });
-                return res.json({ message: "ok1" });
-            }
-
-            // 4. Check if movement has already ended
-            if (movement.endAt && movement.endAt < now) {
-                return res.status(400).json({ message: "The movement can no longer be cancelled" });
-            }
-
-            // 5. Check if already cancelled
-            if (movement.cancelled) {
-                return res.status(400).json({ message: "The movement was already cancelled" });
-            }
-
-            // 6. Cancel ongoing movement
-            const seconds = movement.startAt ? Math.floor((movement.startAt.getTime() - now.getTime()) / 1000) : 0;
-            await prisma.movement.update({
-                where: { id: movement.id },
-                data: {
-                    endAt: now,
-                    returnAt: new Date(now.getTime() + seconds * 1000),
-                    cancelled: true,
-                    delivered: true
-                }
-            });
-
-            return res.json({ message: "ok2" });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "Error removing movement" });
+        // 2. Check ownership
+        if (movement.userId !== userId) {
+            throw new Error("You cannot cancel movements that do not belong to you");
         }
+
+        const now = new Date();
+
+        // 3. Cancel movement that is still loading (start_at in the future)
+        if (movement.startAt && movement.startAt > now) {
+            // Restore user's available trade ships
+            const userResource = await prisma.userResource.findUniqueOrThrow({ where: { userId: userId } });
+            await prisma.userResource.update({
+                where: { userId: userId },
+                data: { tradeShipAvailable: userResource.tradeShipAvailable + movement.tradeShip }
+            });
+
+            switch (movement.movementTypeId) {
+                case 1:
+                    // Return resources to origin city
+                    if (movement.resources) {
+                        await CityBL.addResources(movement.cityFromId, movement.resources);
+                    }
+                    break;
+                case 4:
+                    // Colonization rollback
+                    const collect = UnitBL.newCollect();
+                    collect.wood = world.colonize.wood;
+                    await CityBL.addResources(movement.cityFromId, collect);
+
+                    await prisma.userResource.update({
+                        where: { userId: userId },
+                        data: { gold: { increment: world.colonize.gold } }
+                    });
+
+                    if (movement.cityFrom.population) {
+                        await prisma.cityPopulation.update({
+                            where: { id: movement.cityFrom.population.id },
+                            data: { population: movement.cityFrom.population.population + world.colonize.population }
+                        });
+                    }
+
+
+                    // Delete the colonized city
+                    await prisma.city.update({ where: { id: movement.cityToId }, data: { deletedAt: new Date() } });
+                    break;
+            }
+
+            // Delete the movement
+            await prisma.movement.update({ where: { id: movement.id }, data: { deletedAt: new Date() }  });
+            return res.json({ message: "ok" });
+        }
+
+        // 4. Check if movement has already ended
+        if (movement.endAt && movement.endAt < now) {
+            throw new Error("The movement can no longer be cancelled");
+        }
+
+        // 5. Check if already cancelled
+        if (movement.cancelled) {
+            throw new Error("The movement was already cancelled");
+        }
+
+        // 6. Cancel ongoing movement
+        const seconds = movement.startAt ? Math.floor((movement.startAt.getTime() - now.getTime()) / 1000) : 0;
+        await prisma.movement.update({
+            where: { id: movement.id },
+            data: {
+                endAt: now,
+                returnAt: new Date(now.getTime() + seconds * 1000),
+                cancelled: true,
+                delivered: true
+            }
+        });
+
+        return res.json({ message: "ok" });
     };
 }

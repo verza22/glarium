@@ -13,3 +13,5 @@ export interface ResponseMovementColonize {
         newTradeAvailableShip: number;
     }
 }
+
+export interface ResponseMovementTransport extends ResponseMovementColonize {}

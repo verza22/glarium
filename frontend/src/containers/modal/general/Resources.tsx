@@ -42,8 +42,8 @@ const Resources: React.FC<ResourcesProps> = ({ movement, close }) => {
         }
     }, []);
 
-    const renderResource = (amount: number, imgSrc: string, altKey: string) => {
-        if (amount > 0) {
+    const renderResource = (amount: number|undefined, imgSrc: string, altKey: string) => {
+        if (amount && amount > 0) {
             return (
                 <div className="flex flex-col items-center px-2 mb-2">
                     <div className="flex items-center justify-center mb-1">
@@ -72,12 +72,12 @@ const Resources: React.FC<ResourcesProps> = ({ movement, close }) => {
                         <div>{movement.trade_ship}</div>
                     </div>
 
-                    {movement.resources.wood && renderResource(movement.resources.wood, woodImg, "wood")}
-                    {movement.resources.wine && renderResource(movement.resources.wine, wineImg, "wine")}
-                    {movement.resources.marble && renderResource(movement.resources.marble, marbleImg, "marble")}
-                    {movement.resources.glass && renderResource(movement.resources.glass, glassImg, "glass")}
-                    {movement.resources.sulfur && renderResource(movement.resources.sulfur, sulfurImg, "sulfur")}
-                    {movement.resources.gold && renderResource(movement.resources.gold, goldImg, "gold")}
+                    {renderResource(movement.resources.wood, woodImg, "wood")}
+                    {renderResource(movement.resources.wine, wineImg, "wine")}
+                    {renderResource(movement.resources.marble, marbleImg, "marble")}
+                    {renderResource(movement.resources.glass, glassImg, "glass")}
+                    {renderResource(movement.resources.sulfur, sulfurImg, "sulfur")}
+                    {renderResource(movement.resources.gold, goldImg, "gold")}
 
                     {movement.resources.units && movement.resources.units.map((unit, i) =>
                         unit.cant > 0 ? (

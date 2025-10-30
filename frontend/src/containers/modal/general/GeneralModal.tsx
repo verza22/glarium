@@ -63,7 +63,7 @@ const GeneralModal: React.FC<GeneralModalProps> = ({ close }) => {
                     </div>
 
                     {data.length > 0 ? (
-                        <Movements movements={data} />
+                        <Movements movements={data} close={close} />
                     ) : (
                         <div className="text-center my-5">
                             {t("modal.general.noMovements")}

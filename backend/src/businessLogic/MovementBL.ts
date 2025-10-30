@@ -47,7 +47,7 @@ export class MovementBL {
     public static async getActionPoint(cityFromId: number, userId: number): Promise<number> {
         // Count active movements from a city by user
         return await prisma.movement.count({
-            where: { cityFromId: cityFromId, userId: userId },
+            where: { cityFromId: cityFromId, userId: userId, deletedAt: null },
         });
     }
 
@@ -81,7 +81,8 @@ export class MovementBL {
                 userId: userId,
                 movementTypeId: 2,
                 endAt: { lt: new Date() },
-                delivered: false
+                delivered: false,
+                deletedAt: null
             },
         });
 
@@ -98,7 +99,8 @@ export class MovementBL {
                 userId: userId,
                 movementTypeId: 2,
                 returnAt: { lt: new Date() },
-                delivered: true
+                delivered: true,
+                deletedAt: null
             },
         });
 
@@ -110,7 +112,7 @@ export class MovementBL {
 
     public static async deliveredResourcesReturn(cities: number[]): Promise<void> {
         const now = new Date();
-        const limit = new Date(now.getTime() + 3000); // +3 seconds window
+        const limit = new Date(now.getTime());
 
         // Get finished trade movements returning to cities
         const movements = await prisma.movement.findMany({
@@ -119,6 +121,7 @@ export class MovementBL {
                 movementTypeId: 1,
                 delivered: true,
                 returnAt: { lt: limit },
+                deletedAt: null
             },
             include: {
                 resources: { select: { wood: true, wine: true, marble: true, sulfur: true, glass: true } }
@@ -137,50 +140,51 @@ export class MovementBL {
                 data: { tradeShipAvailable: userResource.tradeShipAvailable }
             });
 
-            if (!movement.resources)
-                return;
-
-            let resources: Resources = {
-                ...movement.resources
+            if (movement.resources){
+                let resources: Resources = {
+                    ...movement.resources
+                }
+    
+                let data: any;
+                if (movement.cancelled === true) {
+                    // If cancelled, return resources to city
+                    await CityBL.addResources(movement.cityFromId, resources);
+                    data = {
+                        trade_ship: movement.tradeShip,
+                        city_id: movement.cityFromId,
+                        resources: {
+                            wood: resources.wood,
+                            wine: resources.wine,
+                            marble: resources.marble,
+                            glass: resources.glass,
+                            sulfur: resources.sulfur,
+                        },
+                        status: 4,
+                    };
+                } else {
+                    // If successful, only notify status
+                    data = {
+                        trade_ship: movement.tradeShip,
+                        status: 1,
+                    };
+                }
             }
 
-            let data: any;
-            if (movement.cancelled === true) {
-                // If cancelled, return resources to city
-                await CityBL.addResources(movement.cityFromId, resources);
-                data = {
-                    trade_ship: movement.tradeShip,
-                    city_id: movement.cityFromId,
-                    resources: {
-                        wood: resources.wood,
-                        wine: resources.wine,
-                        marble: resources.marble,
-                        glass: resources.glass,
-                        sulfur: resources.sulfur,
-                    },
-                    status: 4,
-                };
-            } else {
-                // If successful, only notify status
-                data = {
-                    trade_ship: movement.tradeShip,
-                    status: 1,
-                };
-            }
 
             // Send notification to user TODO
             //   UserNotification.emit("movements", data, movement.user_id);
 
             // Delete movement record
-            await prisma.movement.delete({
-                where: { id: movement.id }
-            });
+            // await prisma.movement.delete({
+            //     where: { id: movement.id }
+            // });
+            await prisma.movement.update({where: {id: movement.id}, data: {deletedAt: new Date()}});
         }
     }
 
     public static async deliveredResourcesFrom(cities: number[]): Promise<void> {
         const now = new Date();
-        const limit = new Date(now.getTime() + 3000); // +3 seconds window
+        const limit = new Date(now.getTime()); // +3 seconds window
 
         const movements = await prisma.movement.findMany({
             where: {
@@ -188,6 +192,7 @@ export class MovementBL {
                 movementTypeId: 1,
                 delivered: false,
                 endAt: { lt: limit },
+                deletedAt: null
             },
             include: {
                 cityTo: true,
@@ -264,7 +269,7 @@ export class MovementBL {
     // Update resources arriving to a city
     public static async deliveredResourcesTo(cities: number[]): Promise<void> {
         const now = new Date();
-        const limit = new Date(now.getTime() + 3000);
+        const limit = new Date(now.getTime());
 
         const movements = await prisma.movement.findMany({
             where: {
@@ -272,6 +277,7 @@ export class MovementBL {
                 movementTypeId: 1,
                 delivered: false,
                 endAt: { lt: limit },
+                deletedAt: null
             },
             include: { cityTo: true, resources: true },
         });
@@ -302,7 +308,7 @@ export class MovementBL {
     // Handle colonization end or cancellation
     public static async endUserColonize(cities: number[]): Promise<void> {
         const now = new Date();
-        const limit = new Date(now.getTime() + 3000);
+        const limit = new Date(now.getTime());
 
         // Successful colonization
         const colonizeMovements = await prisma.movement.findMany({
@@ -311,6 +317,7 @@ export class MovementBL {
                 movementTypeId: 4,
                 cancelled: false,
                 endAt: { lt: limit },
+                deletedAt: null
             },
             include: { cityTo: true },
         });
@@ -323,6 +330,7 @@ export class MovementBL {
                 movementTypeId: 4,
                 cancelled: true,
                 returnAt: { lt: limit },
+                deletedAt: null
             },
             include: { cityTo: true, cityFrom: true },
         });
@@ -367,8 +375,8 @@ export class MovementBL {
             // UserNotification.emit("movements", data, movement.user_id);
 
             // Delete movement and destination city
-            await prisma.city.delete({ where: { id: movement.cityToId } });
-            await prisma.movement.delete({ where: { id: movement.id } });
+            await prisma.city.update({ where: { id: movement.cityToId }, data: { deletedAt: new Date() }  });
+            await prisma.movement.update({ where: { id: movement.id }, data: { deletedAt: new Date() }  });
         }
     }
 
@@ -411,7 +419,7 @@ export class MovementBL {
             // UserNotification.emit("movements", data, movement.user_id);
 
             // Delete movement
-            await prisma.movement.delete({ where: { id: movement.id } });
+            await prisma.movement.update({ where: { id: movement.id }, data: { deletedAt: new Date() }  });
         }
     }
 }

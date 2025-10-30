@@ -10,6 +10,7 @@ import colonizeImg from "../../../assets/img/icon/movement/4.png";
 
 import magnifyImg from "../../../assets/img/icon/movement/magnifySmall.png";
 import abortImg from "../../../assets/img/icon/movement/btn_abort.png";
+import { useMovementRemove } from "../../../hooks/useMovementRemove";
 
 interface City {
     id: number;
@@ -42,6 +43,7 @@ export interface IMovement {
 
 interface MovementsProps {
     movements: IMovement[];
+    close: () => void
 }
 
 const movementTypeMap: Record<number, { img: string; altKey: string }> = {
@@ -51,11 +53,12 @@ const movementTypeMap: Record<number, { img: string; altKey: string }> = {
     4: { img: colonizeImg, altKey: "colonize" },
 };
 
-const Movements: React.FC<MovementsProps> = ({ movements }) => {
+const Movements: React.FC<MovementsProps> = ({ movements, close }) => {
     const { t } = useTranslation();
 
     const [detailMovements, setDetailMovements] = useState<number[]>([]);
-    const [confirmMovements, setConfirmMovements] = useState<number[]>([]);
+    const [confirmMovements, setConfirmMovements] = useState<number>(0);
+    const { mutate: movementRemove } = useMovementRemove();
 
     const toggleDetail = (id: number) => {
         setDetailMovements((prev) =>
@@ -64,9 +67,12 @@ const Movements: React.FC<MovementsProps> = ({ movements }) => {
     };
 
     const toggleConfirm = (id: number) => {
-        setConfirmMovements((prev) =>
-            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-        );
+        movementRemove({ movementId: id }, {
+            onSuccess: () => {
+                close();
+            }
+        });
+        setConfirmMovements(0);
     };
 
     return (
@@ -134,12 +140,12 @@ const Movements: React.FC<MovementsProps> = ({ movements }) => {
                                         src={abortImg}
                                         alt={t("modal.general.withdraw")}
                                         className="cursor-pointer mx-auto w-5 h-5"
-                                        onClick={() => toggleConfirm(movement.id)}
+                                        onClick={() => setConfirmMovements(movement.id)}
                                     />
-                                    {confirmMovements.includes(movement.id) && (
+                                    {confirmMovements === movement.id && (
                                         <Confirm
                                             data={movement}
-                                            close={() => toggleConfirm(movement.id)}
+                                            close={() => setConfirmMovements(0)}
                                             confirm={() => toggleConfirm(movement.id)}
                                         />
                                     )}

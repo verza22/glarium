@@ -55,6 +55,9 @@ export class IslandController {
         });
         const userCityIds = userCities.map((uc) => uc.cityId);
 
+        //TODO improve this for remove cities in batch process
+        const cities = island.islandCity.filter(x=> x.city.deletedAt === null);
+
         // Build island data
         const data: ResponseIslandGetInfo = {
             id: island.id,
@@ -64,7 +67,7 @@ export class IslandController {
             type: island.type,
             levelForest: island.forest?.level ?? 0,
             levelMine: island.mine?.level ?? 0,
-            cities: island.islandCity.map((islandCity) => {
+            cities: cities.map((islandCity) => {
                 const city = islandCity.city;
                 let level = 1;
                 const townHallIndex = islandCity.city.cityBuildings.findIndex(b => b.buildingLevel.buildingId === 1);

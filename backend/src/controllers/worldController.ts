@@ -23,7 +23,7 @@ export class WorldController {
                 islandCity: {
                     include: {
                         city: {
-                            select: { id: true }
+                            select: { id: true, deletedAt: true }
                         }
                     }
                 }
@@ -36,7 +36,7 @@ export class WorldController {
             x: i.x,
             y: i.y,
             type: i.type,
-            cities: i.islandCity.filter(ic => ic.city).length
+            cities: i.islandCity.filter(ic => ic.city && ic.city.deletedAt === null).length
         }));
 
         return res.json(result);

@@ -7,3 +7,11 @@ export interface ResponseUnitCreate {
         population: number;
     };
 }
+
+export interface ResponseUnitCity {
+    units: {
+        cant: number;
+        unit_id: number;
+        size: number;
+    }[];
+}

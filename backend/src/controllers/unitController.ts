@@ -5,9 +5,9 @@ import { PopulationBL } from './../businessLogic/populationBL';
 import { BuildingModifierBL } from './../businessLogic/buildingModifierBL';
 import { CityBL } from './../businessLogic/cityBL';
 import { validateFields } from '../utils/validateFields';
-import { RequestUnitCreate } from '@shared/types/requests';
+import { RequestUnitCreate, RequestUnitCity } from '@shared/types/requests';
 import { Resources } from '@shared/types/others';
-import { ResponseUnitCreate } from '@shared/types/responses';
+import { ResponseUnitCreate, ResponseUnitCity } from '@shared/types/responses';
 
 export class UnitController {
 
@@ -111,5 +111,19 @@ export class UnitController {
         }
 
         return res.json(response);
+    }
+
+    public async city(req: Request, res: Response){
+        const { cityId }: RequestUnitCity = validateFields(req, [
+            { name: "cityId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
+
+        const data = await UnitBL.getData(userId, cityId);
+        const response: ResponseUnitCity = {
+            units: data.units.filter(u=> u.cant > 0)
+        };
+
+        res.json(response);
     }
 }

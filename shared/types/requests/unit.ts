@@ -3,3 +3,7 @@ export interface RequestUnitCreate {
     units: number[],
     cants: number[]
 }
+
+export interface RequestUnitCity {
+    cityId: number
+}

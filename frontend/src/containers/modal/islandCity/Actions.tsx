@@ -10,6 +10,10 @@ interface CityData {
   city: {
     name: string;
     type?: boolean;
+    userId: number;
+  };
+  targetCity: {
+    userId: number;
   };
 }
 
@@ -29,7 +33,7 @@ const Actions: React.FC<ActionsProps> = ({ data, changeType, hasUnits }) => {
       </div>
 
       <div className="py-2 flex flex-wrap justify-between">
-        {!data.city.type && (
+        {data.city.userId !== data.targetCity.userId && (
           <div className="w-[49%] text-center">
             <div
               className="inline-block p-2 text-sm cursor-pointer"
@@ -59,7 +63,7 @@ const Actions: React.FC<ActionsProps> = ({ data, changeType, hasUnits }) => {
           </div>
         </div>
 
-        {!data.city.type && (
+        {data.city.userId !== data.targetCity.userId && (
           <>
             <div className="w-[49%] text-center">
               <div

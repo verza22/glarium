@@ -219,7 +219,7 @@
             "target": "Target",
             "attackInfo": "Other cities may have treasures better stored in our depot. Units outside your city pay double upkeep. Think carefully before sending your troops to plunder.",
             "sendArmy": "Send Army",
-            "attackWarning": "Command your Polis troops to plunder the city Wine 2. Keep the target city port free of enemy ships, or your troops may be captured by merchant ships!",
+            "attackWarning": "Command your Polis troops to plunder the city. Keep the target city port free of enemy ships, or your troops may be captured by merchant ships!",
             "plunder": "Plunder!",
             "text": "Send a message to another city.",
             "receiver": "Receiver",

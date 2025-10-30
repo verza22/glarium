@@ -18,7 +18,7 @@ const IslandUI: React.FC = () => {
     const { islandId } = useParams<{ islandId: string }>();
     const { data } = useIslandGetInfo(Number(islandId));
     const city = useGetCurrentCity();
-    const userName = useUserStore(state=> state.name);
+    const { name, userId } = useUserStore();
     const { openModal } = useModal();
 
     const handleDonationModal = (type: boolean) => {
@@ -39,13 +39,15 @@ const IslandUI: React.FC = () => {
             city: {
                 cityId: city?.id,
                 name: city?.name,
-                user: userName
+                user: name,
+                userId: userId
             },
             targetCity: {
                 cityId: targetcity.cityId,
                 name: targetcity.name,
                 user: targetcity.user,
-                level: targetcity.level
+                level: targetcity.level,
+                userId: targetcity.userId
             }
         });
     }

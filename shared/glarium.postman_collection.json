@@ -492,7 +492,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"cityId\": 1\n}",
+							"raw": "{\n  \"cityId\": 5\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -966,6 +966,43 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "UnitCity",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cityId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/unit/city",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"unit",
+								"city"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1010,6 +1047,80 @@
 					"response": []
 				},
 				{
+					"name": "Transport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cityId\": 1,\n  \"cityToId\": 5,\n  \"wood\": 100,\n  \"wine\": 0,\n  \"marble\": 0,\n  \"glass\": 0,\n  \"sulfur\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/movement/transport",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"movement",
+								"transport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveMovement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"movementId\": 7\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/movement/removeMovement",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"movement",
+								"removeMovement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "GetMovements",
 					"request": {
 						"auth": {
@@ -1032,6 +1143,48 @@
 							"path": [
 								"movement",
 								"getMovements"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Combat",
+			"item": [
+				{
+					"name": "CombatMovement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cityFromId\": 1,\n  \"cityId\": 2,\n  \"units\": [1],\n  \"cants\": [10],\n  \"tradeShip\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_ROUTE}}api/combat/combatMovement",
+							"host": [
+								"{{API_ROUTE}}api"
+							],
+							"path": [
+								"combat",
+								"combatMovement"
 							]
 						}
 					},

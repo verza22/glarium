@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import dayjs from 'dayjs'
 
 import unit1 from '../../../../assets/img/unit/1.png'
 import unit2 from '../../../../assets/img/unit/2.png'
@@ -7,7 +8,6 @@ import unit3 from '../../../../assets/img/unit/3.png'
 import unit4 from '../../../../assets/img/unit/4.png'
 import unit5 from '../../../../assets/img/unit/5.png'
 import unit6 from '../../../../assets/img/unit/6.png'
-import dayjs from 'dayjs'
 
 const unitImages: Record<number, string> = {
     1: unit1,

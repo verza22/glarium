@@ -6,5 +6,6 @@ const router = Router();
 const controller = new UnitController();
 
 router.post('/create', authenticate, controller.create.bind(controller));
+router.post('/city', authenticate, controller.city.bind(controller));
 
 export default router;

@@ -177,11 +177,11 @@ export class UnitBL {
         }
     }
 
-    public static async getData(userId: number) {
+    public static async getData(userId: number, cityId: number) {
         await UnitBL.allConstructTails(userId);
 
         const regiments = await prisma.regiment.findMany({
-            where: { userId },
+            where: { userId, cityId },
             include: {
                 regimentTails: true,
                 regimentsUnits: { include: { unit: true } },

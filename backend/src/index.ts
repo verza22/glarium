@@ -8,6 +8,7 @@ import worldRoutes from './routes/worldRoutes';
 import researchRoutes from './routes/researchRoutes';
 import unitRoutes from './routes/unitRoutes';
 import movementRoutes from './routes/movementRoutes';
+import combatRoutes from './routes/combatRoutes';
 
 import buildingRoutes from './routes/buildingRoutes';
 import { errorHandler } from "./middleware/errorHandler";
@@ -36,6 +37,7 @@ app.use('/api/world', worldRoutes);
 app.use('/api/research', researchRoutes);
 app.use('/api/unit', unitRoutes);
 app.use('/api/movement', movementRoutes);
+app.use('/api/combat', combatRoutes);
 
 app.use(errorHandler);
 

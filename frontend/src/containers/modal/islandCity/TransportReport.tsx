@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import shipIcon from '../../../assets/img/icon/ship_transport.png';
@@ -11,7 +11,7 @@ type TransportReportProps = {
     objetivo: string;
     btnTitle: string;
     isChangeShip?: boolean;
-    handleBtn?: () => void;
+    handleBtn?: (ships: number) => void;
     tradeShip?: number;
 };
 
@@ -25,6 +25,17 @@ const TransportReport: React.FC<TransportReportProps> = ({
     const { t } = useTranslation();
     const { userResources } = useCityStore();
     const worldConfig = useUserStore(state => state.worldConfig);
+    const [ships, setShips] = React.useState(1);
+
+    const handleShips = (e: ChangeEvent<HTMLInputElement>) => {
+        let value = parseInt(e.target.value);
+        if(value < 1)
+            value = 1;
+        if(value > userResources.tradeShipAvailable)
+            value = userResources.tradeShipAvailable;
+
+        setShips(value);
+    }
 
     return (
         <div>
@@ -35,15 +46,15 @@ const TransportReport: React.FC<TransportReportProps> = ({
             <div className="flex mt-4 space-x-4">
                 <div className="flex-1 flex justify-center items-center space-x-2">
                     <img className="max-w-[60px]" src={shipIcon} alt={t('modal.islandCity.ship')} />
-                    <div>{tradeShip}/{userResources.tradeShipAvailable}</div>
                     {isChangeShip && (
                         <input
                             type="number"
                             className="w-16 px-1 border rounded"
-                            value={5}
-                            readOnly
+                            value={ships}
+                            onChange={handleShips}
                         />
                     )}
+                    <div>{`${isChangeShip ? " of " : tradeShip+"/"}${userResources.tradeShipAvailable}`}</div>
                 </div>
 
                 <div className="flex-1 flex items-center justify-center space-x-2">
@@ -63,7 +74,7 @@ const TransportReport: React.FC<TransportReportProps> = ({
             </div>
 
             <div className="text-center mt-3">
-                <button className="px-4 py-2 bg-yellow-500 rounded cursor-pointer" onClick={() => handleBtn()}>{btnTitle}</button>
+                <button className="px-4 py-2 bg-yellow-500 rounded cursor-pointer" onClick={() => handleBtn(ships)}>{btnTitle}</button>
             </div>
         </div>
     );

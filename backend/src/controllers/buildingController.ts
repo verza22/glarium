@@ -422,7 +422,7 @@ export class BuildingController {
                 }
             break;
             case 4:
-                result.barracks = await UnitBL.getData(userId);
+                result.barracks = await UnitBL.getData(userId, cityId);
             break;
         }
 

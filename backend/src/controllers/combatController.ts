@@ -3,53 +3,59 @@ import prisma from '../dataAccess/prisma/prisma'
 import { MovementBL } from './../businessLogic/movementBL';
 import { world } from './../config';
 import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { validateFields } from '../utils/validateFields';
+import { RequestCombatMovement } from '@shared/types/requests';
 
 export class CombatController {
 
-    private async combatMovement(req: Request, res: Response, cityId: number, type: number) {
-        const userId = Number(req.params.userId);
+    public async combatMovement(req: Request, res: Response) {
+        const { cityFromId, units, cants, tradeShip, cityId }: RequestCombatMovement = validateFields(req, [
+            { name: "cityFromId", type: "number", required: true },
+            { name: "units", type: "number[]", required: true },
+            { name: "cants", type: "number[]", required: true },
+            { name: "tradeShip", type: "number", required: true },
+            { name: "cityId", type: "number", required: true }
+        ]);
+        const userId = req.authUser.userId;
 
-        // Validate input
-        const { city_from, units, cants, trade_ship, hours } = req.body;
 
-        if (!city_from || !units || !cants || !trade_ship) {
-            return res.status(400).json({ error: "Missing required parameters" });
+        let type = 2;//2 attack, 3 defense
+        let hours = 0;
+
+        if (!cityFromId || !units || !cants || !tradeShip) {
+            throw new Error("Missing required parameters");
         }
 
-        if (type === 3 && (!hours || hours < 1 || hours > 24)) {
-            return res.status(400).json({ error: "Invalid hours for defense" });
-        }
-
-        if (city_from === cityId) {
-            return res.status(400).json({ error: "Cannot attack your own city" });
+        if (cityFromId === cityId) {
+            throw new Error("Cannot attack your own city");
         }
 
         // Check regiment exists and not traveling
         let regiment = await prisma.regiment.findFirst({
-            where: { userId, cityId: city_from, travel: 0 },
+            where: { userId, cityId: cityFromId, travel: 0 },
             include: { regimentsUnits: { include: { unit: true } } }
         });
-        if (!regiment) return res.status(404).json({ error: "No regiment in this city" });
+        if (!regiment) throw new Error("No regiment in this city");
         let regimentId: number = regiment.id;
 
-        const cityFrom = await prisma.city.findUnique({ where: { id: city_from } });
-        if (!cityFrom) return res.status(404).json({ error: "Origin city not found" });
+        const cityFrom = await prisma.city.findUnique({ where: { id: cityFromId } });
+        if (!cityFrom) throw new Error("Origin city not found");
 
         // Check action points
         const apoint = await MovementBL.getActionPoint(cityFrom.id, userId);
         if (apoint >= cityFrom.apoint) {
-            return res.status(400).json({ error: "Reached max action points" });
+            throw new Error("Reached max action points");
         }
 
         // Check trade ships
         const userResource = await prisma.userResource.findUnique({ where: { userId } });
-        if (!userResource || trade_ship > userResource.tradeShipAvailable) {
-            return res.status(400).json({ error: "Not enough trade ships" });
+        if (!userResource || tradeShip > userResource.tradeShipAvailable) {
+            throw new Error("Not enough trade ships");
         }
 
         // Validate units and cants
         if (units.length !== cants.length) {
-            return res.status(400).json({ error: "Units and counts mismatch" });
+            throw new Error("Units and counts mismatch");
         }
 
         let newRegiment = false;
@@ -60,21 +66,21 @@ export class CombatController {
             const cant = cants[i];
             const regimentUnit = regiment.regimentsUnits.find(u => u.unitId === unitAux);
 
-            if (!regimentUnit) return res.status(400).json({ error: `Unit ${unitAux} not found in regiment` });
+            if (!regimentUnit) throw new Error(`Unit ${unitAux} not found in regiment`);
 
             sizeRegiment += regimentUnit.unit.size * cant;
 
-            if (cant > regimentUnit.cant) return res.status(400).json({ error: "Not enough troops" });
+            if (cant > regimentUnit.cant) throw new Error("Not enough troops");
             if (cant !== regimentUnit.cant) newRegiment = true;
         }
 
-        if (sizeRegiment > trade_ship * world.transport) {
-            return res.status(400).json({ error: "Not enough transport capacity" });
+        if (sizeRegiment > tradeShip * world.transport) {
+            throw new Error("Not enough transport capacity");
         }
 
         // Create new regiment if needed
         if (newRegiment) {
-            const newRegimentRec = await prisma.regiment.create({ data: { userId, cityId: city_from, travel: 0 } });
+            const newRegimentRec = await prisma.regiment.create({ data: { userId, cityId: cityFromId, travel: 0 } });
             for (let i = 0; i < units.length; i++) {
                 const regimentUnit = regiment.regimentsUnits.find(u => u.unitId === units[i]);
                 if (regimentUnit) {
@@ -109,10 +115,10 @@ export class CombatController {
                 endAt,
                 returnAt,
                 userId,
-                cityFromId: city_from,
+                cityFromId: cityFromId,
                 cityToId: cityId,
                 movementTypeId: type,
-                tradeShip: trade_ship,
+                tradeShip: tradeShip,
                 delivered: false,
                 cancelled: false
             }
@@ -125,20 +131,20 @@ export class CombatController {
         // Update resources and regiment travel status
         await UserResourceBL.updateResources(userId);
         await prisma.regiment.update({ where: { id: regimentId }, data: { travel: 1 } });
-        await prisma.userResource.update({ where: { userId }, data: { tradeShipAvailable: userResource.tradeShipAvailable - trade_ship } });
+        await prisma.userResource.update({ where: { userId }, data: { tradeShipAvailable: userResource.tradeShipAvailable - tradeShip } });
 
         return res.json("ok");
     }
 
-    public async attack(req: Request, res: Response) {
-        const cityId = Number(req.params.cityId);
-        return this.combatMovement(req, res, cityId, 2);
-    }
+    // public async attack(req: Request, res: Response) {
+    //     const cityId = Number(req.params.cityId);
+    //     return this.combatMovement(req, res, cityId, 2);
+    // }
 
-    public async defend(req: Request, res: Response) {
-        const cityId = Number(req.params.cityId);
-        return this.combatMovement(req, res, cityId, 3);
-    }
+    // public async defend(req: Request, res: Response) {
+    //     const cityId = Number(req.params.cityId);
+    //     return this.combatMovement(req, res, cityId, 3);
+    // }
 
     public async index(req: Request, res: Response) {
         const userId = Number(req.params.userId);

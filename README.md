@@ -17,6 +17,9 @@ Glarium is a project that originally started as a clone of the MMORTS **Ikariam*
 
 ### Installation
 
+- Clone this project
+- Copy `backend/.env.example` to `backend/.env`
+
 To start the project, simply run:  
 
 ```bash
@@ -24,6 +27,8 @@ docker-compose up --build
 ```
 
 This will automatically build and start all containers: backend, frontend, and MySQL. Once the process finishes, the app will be ready to use.
+
+Then open <http://localhost:3000/> to create an accout and play the game.
 
 ---
 

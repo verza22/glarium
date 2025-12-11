@@ -3,8 +3,8 @@ import { world } from '../config/world';
 import prisma from '../dataAccess/prisma/prisma'
 import { RequestUserConfig, RequestUserDeleteMessages, RequestUserGetMayor, RequestUserGetMessages, RequestUserReadMessage, RequestUserSendMessage, RequestUserUnreadOrReadAll } from '@shared/types/requests';
 import { ResponseUserBuyTradeShip, ResponseUserConfig, ResponseUserGetMayor } from '@shared/types/responses';
-import { UserResourceBL } from './../businessLogic/userResourceBL';
-import { CityBL } from './../businessLogic/cityBL';
+import { UserResourceBL } from './../businessLogic/UserResourceBL';
+import { CityBL } from './../businessLogic/CityBL';
 import { validateFields } from '../utils/validateFields';
 
 export class UserController {

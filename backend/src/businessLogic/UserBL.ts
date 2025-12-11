@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { RequestUserLogin, RequestUserRegister } from '@shared/types/requests';
 import prisma from "../dataAccess/prisma/prisma";
 import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/jwtConfig";
-import { CityBL } from "./cityBL";
+import { CityBL } from "./CityBL";
 
 
 interface GenerateToken {

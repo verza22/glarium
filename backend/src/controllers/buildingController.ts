@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { CityBL } from './../businessLogic/cityBL';
-import { BuildingBL } from './../businessLogic/buildingBL';
+import { CityBL } from './../businessLogic/CityBL';
+import { BuildingBL } from './../businessLogic/BuildingBL';
 import dayjs from 'dayjs';
 import { ResponseBuildingAvailable, ResponseBuildingGetInfo, ResponseBuildingNextLevel } from '@shared/types/responses';
 import { RequestBuildingAvailable, RequestBuildingCreate, RequestBuildingGetInfo, RequestBuildingNextLevel, RequestBuildingUpgrade } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
 import { Resources } from '@shared/types/models';
-import { UnitBL } from '../businessLogic/unitBL';
+import { UnitBL } from '../businessLogic/UnitBL';
 
 export class BuildingController {
 

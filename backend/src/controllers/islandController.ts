@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { BuildingBL } from './../businessLogic/buildingBL';
-import { IslandBL } from './../businessLogic/islandBL';
-import { PopulationBL } from './../businessLogic/populationBL';
-import { CityBL } from './../businessLogic/cityBL';
-import { UserResourceBL } from './../businessLogic/userResourceBL';
-import { UnitBL } from './../businessLogic/unitBL';
+import { BuildingBL } from './../businessLogic/BuildingBL';
+import { IslandBL } from './../businessLogic/IslandBL';
+import { PopulationBL } from './../businessLogic/PopulationBL';
+import { CityBL } from './../businessLogic/CityBL';
+import { UserResourceBL } from './../businessLogic/UserResourceBL';
+import { UnitBL } from './../businessLogic/UnitBL';
 import { addSeconds } from 'date-fns';
 import { validateFields } from '../utils/validateFields';
 import { RequestIslandGetData, RequestIslandGetInfo, RequestIslandSetDonation, RequestIslandSetWorker } from '@shared/types/requests';

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { CityBL } from './../businessLogic/cityBL';
-import { PopulationBL } from './../businessLogic/populationBL';
-import { MovementBL } from './../businessLogic/movementBL';
-import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { CityBL } from './../businessLogic/CityBL';
+import { PopulationBL } from './../businessLogic/PopulationBL';
+import { MovementBL } from './../businessLogic/MovementBL';
+import { UserResourceBL } from './../businessLogic/UserResourceBL';
 import { RequestCityGetInfo, RequestCitySetScientists, RequestCitySetWine } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
 import { CityFlat } from '@shared/types/models';

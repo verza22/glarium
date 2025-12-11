@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { UnitBL } from './../businessLogic/unitBL';
-import { PopulationBL } from './../businessLogic/populationBL';
-import { BuildingModifierBL } from './../businessLogic/buildingModifierBL';
-import { CityBL } from './../businessLogic/cityBL';
+import { UnitBL } from './../businessLogic/UnitBL';
+import { PopulationBL } from './../businessLogic/PopulationBL';
+import { BuildingModifierBL } from './../businessLogic/BuildingModifierBL';
+import { CityBL } from './../businessLogic/CityBL';
 import { validateFields } from '../utils/validateFields';
 import { RequestUnitCreate, RequestUnitCity } from '@shared/types/requests';
 import { Resources } from '@shared/types/others';

@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { world } from '../config/world';
 import prisma from '../dataAccess/prisma/prisma'
-import { MovementBL } from './../businessLogic/movementBL';
-import { UnitBL } from './../businessLogic/unitBL';
-import { CityBL } from './../businessLogic/cityBL';
+import { MovementBL } from './../businessLogic/MovementBL';
+import { UnitBL } from './../businessLogic/UnitBL';
+import { CityBL } from './../businessLogic/CityBL';
 import dayjs from "dayjs";
-import { BuildingBL } from './../businessLogic/buildingBL';
-import { UserResourceBL } from './../businessLogic/userResourceBL';
-import { PopulationBL } from './../businessLogic/populationBL';
+import { BuildingBL } from './../businessLogic/BuildingBL';
+import { UserResourceBL } from './../businessLogic/UserResourceBL';
+import { PopulationBL } from './../businessLogic/PopulationBL';
 import { RequestMovementColonize, RequestMovementRemove, RequestMovementTransport } from '@shared/types/requests';
 import { validateFields } from '../utils/validateFields';
 import { ResponseMovementColonize, ResponseMovementTransport } from '@shared/types/responses';

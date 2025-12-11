@@ -1,7 +1,7 @@
 import { Prisma } from "../dataAccess/prisma/generated/client";
 import prisma from "../dataAccess/prisma/prisma";
-import { PopulationBL } from "./populationBL";
-import { UnitBL } from "./unitBL";
+import { PopulationBL } from "./PopulationBL";
+import { UnitBL } from "./UnitBL";
 
 export class UserResourceBL {
     // Update user resources: gold and research points

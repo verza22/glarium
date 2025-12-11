@@ -1,6 +1,6 @@
 import prisma from "../dataAccess/prisma/prisma";
 import { Prisma } from "./../dataAccess/prisma/generated/client";
-import { UserResourceBL } from "./userResourceBL";
+import { UserResourceBL } from "./UserResourceBL";
 import { world } from "../config";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";

@@ -1,12 +1,12 @@
 import prisma from "../dataAccess/prisma/prisma";
 import { Prisma } from "./../dataAccess/prisma/generated/client";
 import { City, Island, Movement, UserResource, UserCity } from "@shared/types/models";
-import { CombatBL } from "./combatBL";
-import { CityBL } from "./cityBL";
+import { CombatBL } from "./CombatBL";
+import { CityBL } from "./CityBL";
 // import { UserNotification } from "../events/UserNotification";
 import { world } from "../config";
 import { Resources } from "@shared/types/others";
-import { UnitBL } from "./unitBL";
+import { UnitBL } from "./UnitBL";
 
 export class MovementBL {
     public static async loadedSpeed(cityId: number, size: number): Promise<number> {

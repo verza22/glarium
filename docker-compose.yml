@@ -10,6 +10,11 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+
   backend:
     build: ./backend
     depends_on:

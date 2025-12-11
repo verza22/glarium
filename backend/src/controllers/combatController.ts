@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { MovementBL } from './../businessLogic/movementBL';
+import { MovementBL } from './../businessLogic/MovementBL';
 import { world } from './../config';
-import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { UserResourceBL } from './../businessLogic/UserResourceBL';
 import { validateFields } from '../utils/validateFields';
 import { RequestCombatMovement } from '@shared/types/requests';
 

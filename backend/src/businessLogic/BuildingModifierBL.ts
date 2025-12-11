@@ -1,6 +1,6 @@
 import prisma from "../dataAccess/prisma/prisma";
 import { Resources } from "@shared/types/others";
-import { BuildingBL } from "./buildingBL";
+import { BuildingBL } from "./BuildingBL";
 
 export class BuildingModifierBL {
     // Apply discounts to city resources based on building levels and research

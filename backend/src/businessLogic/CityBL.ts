@@ -1,9 +1,9 @@
 import prisma from "../dataAccess/prisma/prisma";
 import { world } from "../config";
-import { BuildingModifierBL } from "./buildingModifierBL";
+import { BuildingModifierBL } from "./BuildingModifierBL";
 import { Resources } from "@shared/types/others";
-import { PopulationBL } from "./populationBL";
-import { UnitBL } from "./unitBL";
+import { PopulationBL } from "./PopulationBL";
+import { UnitBL } from "./UnitBL";
 
 export class CityBL {
 

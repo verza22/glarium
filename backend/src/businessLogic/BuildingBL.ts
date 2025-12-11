@@ -1,7 +1,7 @@
 import prisma from "../dataAccess/prisma/prisma";
 import { City } from "@shared/types/models";
 import { addSeconds } from 'date-fns';
-import { PopulationBL } from "./populationBL";
+import { PopulationBL } from "./PopulationBL";
 
 export class BuildingBL {
     // Check if there is at least one constructed building in the city

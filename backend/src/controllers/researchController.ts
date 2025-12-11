@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../dataAccess/prisma/prisma'
-import { UserResourceBL } from './../businessLogic/userResourceBL';
+import { UserResourceBL } from './../businessLogic/UserResourceBL';
 import { ResponseGetResearchData } from '@shared/types/responses/research';
 import { validateFields } from '../utils/validateFields';
 import { RequestResearchCreate } from '@shared/types/requests';

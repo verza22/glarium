@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { validateFields } from "../utils/validateFields";
-import { UserBL } from "../businessLogic/userBL";
+import { UserBL } from "../businessLogic/UserBL";
 import { asyncHandler } from "../utils/asyncHandler";
 import { ResponseAuth } from "@shared/types/responses";
 import { RequestUserLogin, RequestUserRegister } from "@shared/types/requests";
